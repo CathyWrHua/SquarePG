@@ -73,6 +73,7 @@ public class SelectScreen extends Screen implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent event) {
+		//TODO: (cathy.hua) fix form validation logic
 		if (event.getSource() == redButton) {
 			SquarePG.heroClass= PlayerClass.RED;
             nameTextField.setEditable(true);

@@ -82,7 +82,6 @@ public class SquarePG extends JFrame {
 		loop.start();
 	}
 	
-	
 	public static void main(String[] args) {
 		SquarePG game = new SquarePG();
 		game.run();

@@ -7,7 +7,7 @@ public class BlueHero extends Hero {
 	public BlueHero (String name){
 		super(name, 100, 200, 80, 70, 100, 100);
 		playerClass = PlayerClass.BLUE;
-		heroAvatar = new ImageIcon(this.getClass().getResource("blue.png"));
+		heroAvatar = new ImageIcon("src/Assets/blue.png");
 	}
 	
 	public boolean evolve(int path){
