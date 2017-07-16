@@ -1,4 +1,4 @@
-package SquarePG;
+package characterEntities;
 
 import javax.swing.ImageIcon;
 

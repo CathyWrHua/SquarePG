@@ -1,4 +1,4 @@
-package SquarePG;
+package characterEntities;
 
 import java.awt.*;
 import javax.swing.*;

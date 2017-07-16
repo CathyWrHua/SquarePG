@@ -1,4 +1,4 @@
-package SquarePG;
+package characterEntities;
 
 public enum PlayerClass {
 	RED, BLUE, YELLOW,

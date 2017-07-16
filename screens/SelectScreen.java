@@ -1,4 +1,4 @@
-package SquarePG;
+package screens;
 
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
@@ -7,6 +7,9 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
+
+import SquarePG.*;
+import characterEntities.PlayerClass;
 
 public class SelectScreen extends Screen implements ActionListener {
 	private JLabel selectionLabel = new JLabel("Let's get started!");
@@ -88,8 +91,9 @@ public class SelectScreen extends Screen implements ActionListener {
             redButton.setSelected(false);
             yellowButton.setSelected(false);
         } 
-		if (event.getSource() == nameTextField && event.getActionCommand().length() > 0) {
-            SquarePG.playerName = event.getActionCommand();
+		if (event.getSource() == nameTextField && nameTextField.getText().length() > 0) {
+			//TODO: (cathy.hua) add document listener to listen for text changed, setenable() that way
+            SquarePG.playerName = event.getActionCommand(); 
             startButton.setEnabled(true);
         } 
 		if (event.getSource() == startButton) {

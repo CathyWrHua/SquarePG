@@ -1,4 +1,4 @@
-package SquarePG;
+package screens;
 
 import javax.swing.JPanel;
 

@@ -1,4 +1,4 @@
-package SquarePG;
+package screens;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -6,6 +6,8 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
+
+import SquarePG.*;
 
 public class AboutScreen extends Screen implements ActionListener {
 

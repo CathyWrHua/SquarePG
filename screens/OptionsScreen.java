@@ -1,9 +1,11 @@
-package SquarePG;
+package screens;
 
 import javax.swing.JLabel;
 import java.awt.event.ActionEvent;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+
+import SquarePG.*;
 
 public class OptionsScreen extends Screen implements ActionListener{
 	

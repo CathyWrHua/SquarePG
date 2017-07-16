@@ -1,13 +1,13 @@
-package SquarePG;
+package characterEntities;
 
 import javax.swing.ImageIcon;
 
-public class YellowHero extends Hero {
+public class RedHero extends Hero {
 	
-	public YellowHero (String name){
-		super(name, 200, 120, 70, 60, 100, 100);
-		playerClass = PlayerClass.YELLOW;
-		heroAvatar = new ImageIcon(this.getClass().getResource("yellow.png"));
+	public RedHero(String name){
+		super(name, 300, 50, 55, 45, 100, 100);
+		playerClass = PlayerClass.RED;
+		heroAvatar = new ImageIcon(this.getClass().getResource("red.png"));
 	}
 	
 	public boolean evolve(int path){
@@ -18,15 +18,15 @@ public class YellowHero extends Hero {
 			//Need to also set imageIcon
 			switch(path){
 			case Hero.PATH_RED:
-				playerClass= PlayerClass.AMBER;
+				playerClass= PlayerClass.SCARLET;
 				evolutionIncrease(Hero.PATH_RED);
 				break;
 			case Hero.PATH_YELLOW:
-				playerClass = PlayerClass.GOLD;
+				playerClass = PlayerClass.VERMILLION;
 				evolutionIncrease(Hero.PATH_YELLOW);
 				break;
 			case Hero.PATH_BLUE:
-				playerClass = PlayerClass.LIME;
+				playerClass = PlayerClass.MAGENTA;
 				evolutionIncrease(Hero.PATH_BLUE);
 				break;
 			default:

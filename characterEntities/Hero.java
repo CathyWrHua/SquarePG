@@ -1,8 +1,9 @@
-package SquarePG;
+package characterEntities;
 
 import java.awt.*;
 import javax.swing.ImageIcon;
 import java.awt.geom.Rectangle2D;
+import SquarePG.GameState;
 
 public abstract class Hero extends Entity {
 	protected int posX, posY;
@@ -19,15 +20,12 @@ public abstract class Hero extends Entity {
 	
 	
 	public Hero (String name, int maxHealth, int maxMana, int maxDamage, int minDamage, int posX, int posY){
-		this.name = name;
-		this.maxHealth = maxHealth;
-		currentHealth = maxHealth;
-		this.maxMana = maxMana;
-		currentMana = maxMana;
-		this.maxDamage = maxDamage;
-		this.minDamage = minDamage;
-		gold = 1000;
+		super(name, maxHealth, maxMana, maxDamage, minDamage);
+		this.posX = posX;
+		this.posY = posY;
 		numberEvolutions = 0;
+		equipment = new Equipment();
+		consumables = new Consumables();
 	}
 	
 	public abstract boolean evolve(int path);

@@ -1,4 +1,4 @@
-package SquarePG;
+package characterEntities;
 
 public class Item {
 	private int gainHealth, gainMP;

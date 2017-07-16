@@ -3,8 +3,10 @@ package SquarePG;
 import java.awt.BorderLayout;
 import java.util.EmptyStackException;
 import java.util.Stack;
-
 import javax.swing.JFrame;
+
+import screens.*;
+import characterEntities.*;
 
 public class SquarePG extends JFrame {
 	public static ScreenState screenState = ScreenState.WAIT;

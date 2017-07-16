@@ -5,4 +5,4 @@
  * @author Cathy
  *
  */
-package SquarePG;
+package characterEntities;

@@ -1,4 +1,4 @@
-package SquarePG;
+package characterEntities;
 
 import java.awt.Graphics;
 import java.util.Random;
@@ -10,6 +10,23 @@ public abstract class Entity {
 	protected int maxDamage, minDamage;
 	protected int gold;
 	protected Random random = new Random();
+	
+	public Entity() {
+		name = "Unknown";
+		maxHealth = currentHealth = 100;
+		maxMana = currentHealth = 100;
+		maxDamage = minDamage = 50;
+		gold = 1000;
+	}
+	
+	public Entity(String name, int maxHealth, int maxMana, int maxDamage, int minDamage) {
+		this.name = name;
+		currentHealth = this.maxHealth = maxHealth;
+		currentMana = this.maxMana = maxMana;
+		this.maxDamage = maxDamage;
+		this.minDamage = minDamage;
+		gold = 1000;
+	}
 	
 	public boolean inflict (int damageTaken){
 		currentHealth -= damageTaken;

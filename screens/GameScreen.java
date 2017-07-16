@@ -1,6 +1,7 @@
-package SquarePG;
+package screens;
 
 import javax.swing.JPanel;
+import characterEntities.*;
 
 public class GameScreen extends Screen {
 	

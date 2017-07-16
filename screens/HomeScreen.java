@@ -1,4 +1,4 @@
-package SquarePG;
+package screens;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
@@ -9,6 +9,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.*;
+
+import SquarePG.*;
 
 public class HomeScreen extends Screen implements ActionListener{
 
