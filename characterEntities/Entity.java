@@ -40,6 +40,10 @@ public abstract class Entity {
 		currentHealth = (currentHealth > maxHealth)? maxHealth : currentHealth;
 		return true;
 	}
+
+	public void setAvatar(String filename) {
+        avatar = new ImageIcon(filename);
+    }
 	
     public int getDamage() {
         return (minDamage+random.nextInt(maxDamage-minDamage));

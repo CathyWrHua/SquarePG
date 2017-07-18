@@ -1,18 +1,16 @@
 package characterEntities;
 
-import java.awt.*;
-import javax.swing.ImageIcon;
 import SquarePG.GameState;
 
 public abstract class Hero extends Entity {
 	private GameState gameState = GameState.WORLDMAP;
-	private int numberEvolutions;
-	private PlayerClass playerClass;
+	protected int numberEvolutions;
+	protected PlayerClass playerClass;
 	
 	
-	private static final int PATH_RED = 0;
-	private static final int PATH_YELLOW = 1;
-	private static final int PATH_BLUE = 2;
+	protected static final int PATH_RED = 0;
+	protected static final int PATH_YELLOW = 1;
+	protected static final int PATH_BLUE = 2;
 	
 	
 	public Hero(String name, int maxHealth, int maxDamage, int minDamage, int posX, int posY){
@@ -22,7 +20,7 @@ public abstract class Hero extends Entity {
 	
 	public abstract boolean evolve(int path);
 	
-	private boolean evolutionIncrease(int path){
+	protected boolean evolutionIncrease(int path){
 //		switch(path){
 //		case PATH_RED:
 //			maxHealth += 210;
