@@ -27,7 +27,7 @@ public class SquarePG extends JFrame {
 		add(currentScreen);
 	}
 	
-	public void run(){
+	private void run(){
 		Thread loop = new Thread(){
 			public void run(){
 				while(true){
@@ -74,7 +74,7 @@ public class SquarePG extends JFrame {
 		                try{
 		                    Thread.sleep(time);
 		                }
-		                catch (Exception e){}
+		                catch (Exception e) {}
 		            }
 		        }
 			}
