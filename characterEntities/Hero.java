@@ -166,23 +166,7 @@ public abstract class Hero extends Entity {
     //Renders to screen
     public void draw(Graphics g) {
         Graphics2D g2d = (Graphics2D)g;
-        
-        switch (gameState) {
-            case COMBAT:
-                g2d.setPaint(Color.WHITE);
-                g2d.fill(new Rectangle2D.Double(300, 40, 175, 45));
-                g2d.setPaint(Color.GRAY);
-                g2d.fill(new Rectangle2D.Double(310, 60, 155, 15));
-                g2d.setPaint(Color.RED);
-                g2d.fill(new Rectangle2D.Double(310, 60, (currentHealth*1.0/maxHealth*155), 15));
-                g2d.setPaint(Color.BLACK);
-                g2d.drawString(name, 310, 55);
-                g2d.drawString((currentHealth+"/"+maxHealth+" HP"), 312, 72);
-                g2d.drawImage(heroAvatar.getImage(), 350, 250, null);
-                break;
-            case WORLDMAP:
-                g2d.drawImage(heroAvatar.getImage(), posX, posY, null);
-                break;
-        }
+        g2d.drawImage(heroAvatar.getImage(), posX, posY, null);
+
     }
 }
