@@ -8,6 +8,7 @@ public class BlueHero extends Hero {
 		super(name, 100, 200, 80, 70, 100, 100);
 		playerClass = PlayerClass.BLUE;
 		heroAvatar = new ImageIcon("src/Assets/blue.png");
+		System.out.println('tiger is great');
 	}
 	
 	public boolean evolve(int path){
