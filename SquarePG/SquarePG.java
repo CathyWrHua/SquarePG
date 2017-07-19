@@ -14,7 +14,7 @@ public class SquarePG extends JFrame {
 	public static PlayerClass heroClass;
 	private Screen currentScreen; 
 	private Stack<Screen> screenStack = new Stack();
-	private final int FPS = 30;
+	private final int FPS = 60;
 	
 	public SquarePG(){
 		super("SquarePG");

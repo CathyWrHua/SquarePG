@@ -62,14 +62,16 @@ public class GameScreen extends Screen implements KeyListener{
 		Integer code = new Integer(e.getKeyCode());
 		motionKeys.add(code);
 
-		if (code.intValue() == KeyEvent.VK_UP) {
-			up();
-		} else if (code.intValue() == KeyEvent.VK_DOWN) {
-			down();
-		} else if (code.intValue() == KeyEvent.VK_LEFT) {
-			left();
-		} else if (code.intValue() == KeyEvent.VK_RIGHT) {
-			right();
+		for (Integer key : motionKeys) {
+			if (key.intValue() == KeyEvent.VK_UP) {
+				up();
+			} else if (key.intValue() == KeyEvent.VK_DOWN) {
+				down();
+			} else if (key.intValue() == KeyEvent.VK_LEFT) {
+				left();
+			} else if (key.intValue() == KeyEvent.VK_RIGHT) {
+				right();
+			}
 		}
 	}
 
