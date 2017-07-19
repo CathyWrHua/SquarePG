@@ -27,16 +27,16 @@ public class SquarePG extends JFrame {
 		add(currentScreen);
 	}
 	
-	public void run(){
-		Thread loop = new Thread(){
-			public void run(){
-				while(true){
+	private void run(){
+		Thread loop = new Thread() {
+			public void run() {
+				while(true) {
 		            long time = System.currentTimeMillis();
 		            
 		            currentScreen.update();
 		            
 		            //Screen switching function: screenState is in Wait, unless a change screen button is pressed (eg. back, enter buttons)
-		            if (screenState != ScreenState.WAIT){
+		            if (screenState != ScreenState.WAIT) {
 		            	remove(currentScreen);
 		            	if (screenState == ScreenState.HOME){
 		            		currentScreen = screenStack.pop();
@@ -74,7 +74,7 @@ public class SquarePG extends JFrame {
 		                try{
 		                    Thread.sleep(time);
 		                }
-		                catch (Exception e){}
+		                catch (Exception e) {}
 		            }
 		        }
 			}

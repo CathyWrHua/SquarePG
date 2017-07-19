@@ -5,9 +5,9 @@ import javax.swing.ImageIcon;
 public class YellowHero extends Hero {
 	
 	public YellowHero (String name){
-		super(name, 200, 120, 70, 60, 100, 100);
+		super(name, 200, 70, 60, 100, 100);
 		playerClass = PlayerClass.YELLOW;
-		heroAvatar = new ImageIcon("src/Assets/yellow.png");
+		setAvatar("src/Assets/yellow.png");
 	}
 	
 	public boolean evolve(int path){

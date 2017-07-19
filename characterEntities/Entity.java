@@ -1,31 +1,32 @@
 package characterEntities;
 
-import java.awt.Graphics;
+import javax.swing.*;
+import java.awt.*;
 import java.util.Random;
 
 public abstract class Entity {
-	protected String name;
-	protected int maxHealth, currentHealth;
-	protected int maxMana, currentMana;
-	protected int maxDamage, minDamage;
-	protected int gold;
-	protected Random random = new Random();
+	private String name;
+    private int posX, posY;
+	private int maxHealth, currentHealth;
+	private int maxDamage, minDamage;
+	private ImageIcon avatar;
+    private HealthBar healthBar;
+	private Random random = new Random();
 	
 	public Entity() {
 		name = "Unknown";
 		maxHealth = currentHealth = 100;
-		maxMana = currentHealth = 100;
 		maxDamage = minDamage = 50;
-		gold = 1000;
 	}
 	
-	public Entity(String name, int maxHealth, int maxMana, int maxDamage, int minDamage) {
+	public Entity(String name, int maxHealth, int maxDamage, int minDamage, int posX, int posY) {
 		this.name = name;
 		currentHealth = this.maxHealth = maxHealth;
-		currentMana = this.maxMana = maxMana;
 		this.maxDamage = maxDamage;
 		this.minDamage = minDamage;
-		gold = 1000;
+        this.posX = posX;
+        this.posY = posY;
+		this.healthBar = new HealthBar(posX, posY, maxHealth);
 	}
 	
 	public boolean inflict (int damageTaken){
@@ -39,19 +40,10 @@ public abstract class Entity {
 		currentHealth = (currentHealth > maxHealth)? maxHealth : currentHealth;
 		return true;
 	}
-	
-	public boolean useMana (int manaUsed) {
-		if (manaUsed > currentMana){
-			return false;
-		}
-		else {
-			currentMana -= manaUsed;
-			if (currentMana > maxMana){
-				currentMana = maxMana;
-			}
-			return true;
-		}
-	}
+
+	public void setAvatar(String filename) {
+        avatar = new ImageIcon(filename);
+    }
 	
     public int getDamage() {
         return (minDamage+random.nextInt(maxDamage-minDamage));
@@ -68,33 +60,21 @@ public abstract class Entity {
     public int getMaxHealth() {
         return maxHealth;
     }
-    
-    public int getCurrentMana(){
-        return currentMana;
+
+    public int getPosX() {
+        return posX;
     }
-    
-    public int getMaxMana() {
-        return maxMana;
-    }
-    
-    public int getGold(){
-        return gold;
+
+    public int getPosY() {
+        return posY;
     }
     
     public void setCurrentHealth(int currentHealth) {
         this.currentHealth = currentHealth;
     }
     
-    public void setCurrentMana(int currentMana){
-        this.currentMana = currentMana;
-    }
-    
     public void setMaxHealth(int maxHealth) {
         this.maxHealth = maxHealth; 
-    }
-    
-    public void setMaxMana(int maxMana) {
-        this.maxMana = maxMana;
     }
     
     public void setDamageMax(int damageMax) {
@@ -104,6 +84,18 @@ public abstract class Entity {
     public void setDamageMin(int damageMin) {
         this.minDamage = damageMin;
     }
+
+    public void setPosX(int posX) {
+        this.posX = posX;
+    }
+
+    public void setPosY(int posY) {
+        this.posY = posY;
+    }
    
-    public abstract void draw(Graphics g);
+    public void draw(Graphics g) {
+	    //TODO: draw the entity name label
+        Graphics2D g2d = (Graphics2D)g;
+        g2d.drawImage(avatar.getImage(), 350, 250, null);
+    }
 }
