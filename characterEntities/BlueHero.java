@@ -4,17 +4,16 @@ import javax.swing.ImageIcon;
 
 public class BlueHero extends Hero {
 	
-	public BlueHero (String name){
+	public BlueHero (String name) {
 		super(name, 100, 80, 70, 100, 100);
 		playerClass = PlayerClass.BLUE;
-		setAvatar("src/Assets/blue.png");
+		setAvatar("src/assets/blue.png");
 	}
 	
-	public boolean evolve(int path){
-		if (numberEvolutions != 0){
+	public boolean evolve(int path) {
+		if (numberEvolutions != 0) {
 			return false;
-		}
-		else{
+		} else {
 			//Need to also set imageIcon
 			switch(path){
 			case Hero.PATH_RED:

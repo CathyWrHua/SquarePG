@@ -16,7 +16,7 @@ public class SquarePG extends JFrame {
 	private Stack<Screen> screenStack = new Stack();
 	private final int FPS = 60;
 	
-	public SquarePG(){
+	public SquarePG() {
 		super("SquarePG");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(500, 700);
@@ -27,7 +27,7 @@ public class SquarePG extends JFrame {
 		add(currentScreen);
 	}
 	
-	private void run(){
+	private void run() {
 		Thread loop = new Thread() {
 			public void run() {
 				while(true) {
@@ -40,8 +40,7 @@ public class SquarePG extends JFrame {
 		            	remove(currentScreen);
 		            	if (screenState == ScreenState.HOME){
 		            		currentScreen = screenStack.pop();
-		            	}
-		            	else{
+		            	} else {
 		            		screenStack.push(currentScreen);
 		            		switch(screenState){
 		            		case ABOUT:

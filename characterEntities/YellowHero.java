@@ -7,7 +7,7 @@ public class YellowHero extends Hero {
 	public YellowHero (String name){
 		super(name, 200, 70, 60, 100, 100);
 		playerClass = PlayerClass.YELLOW;
-		setAvatar("src/Assets/yellow.png");
+		setAvatar("src/assets/yellow.png");
 	}
 	
 	public boolean evolve(int path){
