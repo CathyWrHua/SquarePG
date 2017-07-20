@@ -29,7 +29,7 @@ public class Animation {
 
     public void update () {
         if (currentFrame < totalFrames) {
-            String filePath = "src/assets/" + animationName + entity.getDirection() + (currentFrame++);
+            String filePath = "src/assets/" + animationName + entity.getDirection() + (currentFrame++) + ".png";
             this.image = new ImageIcon(filePath);
         } else {
             this.done = true;
