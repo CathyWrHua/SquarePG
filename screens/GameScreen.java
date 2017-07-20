@@ -20,18 +20,18 @@ public class GameScreen extends Screen implements KeyListener{
 	private Set<Integer> motionKeys = new HashSet<Integer>();
 	
 	//TODO:depending on map design, make background class for collision detection
-	private Background background;
-	private int mapNumber = 9;
+	private GameMap map;
+	private int level = 1;
 	private Hero player;
 	
 	public GameScreen(String playerName, PlayerClass playerClass) {
 		super();
-		setPreferredSize(new Dimension(450, 300));
+		setPreferredSize(new Dimension(1000, 1000));
 		addKeyListener(this);
 		setFocusable(true);
 		setFocusTraversalKeysEnabled(false);
 		
-		background = new Background("map9.png");
+		map = new GameMap(level);
 		createPlayer(playerName, playerClass);
 	}
 
@@ -73,6 +73,12 @@ public class GameScreen extends Screen implements KeyListener{
 				right();
 			}
 		}
+
+		if (code == KeyEvent.VK_J) {
+			map.setMap(1);
+		} else if (code == KeyEvent.VK_K) {
+			map.setMap(2);
+		}
 	}
 
 	@Override
@@ -93,7 +99,7 @@ public class GameScreen extends Screen implements KeyListener{
 	
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		background.draw(g);
+		map.draw(g);
 		player.draw(g);
 	}
 	
