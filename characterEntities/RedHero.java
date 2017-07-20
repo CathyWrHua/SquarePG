@@ -1,24 +1,22 @@
 package characterEntities;
 
-import javax.swing.ImageIcon;
-
 public class RedHero extends Hero {
 	
-	public RedHero(String name){
+	public RedHero (String name) {
 		super(name, 300, 55, 45, 100, 100);
 		playerClass = PlayerClass.RED;
-		setAvatar("src/Assets/red.png");
+		setAvatar("src/assets/red.png");
 	}
 	
-	public boolean evolve(int path){
-		if (numberEvolutions != 0){
+	public boolean evolve (int path) {
+		if (numberEvolutions != 0) {
 			return false;
 		}
-		else{
+		else {
 			//Need to also set imageIcon
-			switch(path){
+			switch (path) {
 			case Hero.PATH_RED:
-				playerClass= PlayerClass.SCARLET;
+				playerClass = PlayerClass.SCARLET;
 				evolutionIncrease(Hero.PATH_RED);
 				break;
 			case Hero.PATH_YELLOW:
@@ -33,6 +31,23 @@ public class RedHero extends Hero {
 				return false;
 			}
 			return true;
+		}
+	}
+
+	public void attack (int ability) {
+		switch (ability) {
+			case 0:
+				break;
+			case 1:
+				break;
+			case 2:
+				break;
+			case 3:
+				break;
+			case 4:
+				break;
+			default:
+				break;
 		}
 	}
 }

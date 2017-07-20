@@ -20,7 +20,7 @@ public class SelectScreen extends Screen implements ActionListener {
     private JToggleButton blueButton = new JToggleButton("Blue");
     private JButton startButton = new JButton("Start!");
 	
-	public SelectScreen(){
+	public SelectScreen() {
 		super();
 		
 		redButton.addActionListener(this);

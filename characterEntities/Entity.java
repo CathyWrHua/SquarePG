@@ -2,21 +2,16 @@ package characterEntities;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.Random;
 
 public abstract class Entity {
-    private static final int NORTH = 0;
-    private static final int EAST = 1;
-    private static final int SOUTH = 2;
-    private static final int WEST = 3;
-
 	private String name;
     private int posX, posY;
 	private int maxHealth, currentHealth;
 	private int maxDamage, minDamage;
-	private int direction = EAST;
-	private ArrayList<Animation> animations;
+	private String direction = "East";
+	private Animation currentAnimation = null;
+    private Animation[] animations = new Animation[5];
 	private ImageIcon avatar;
     private HealthBar healthBar;
 	private Random random = new Random();
@@ -26,13 +21,13 @@ public abstract class Entity {
 	
 	private final int velocity = 2;
 	
-	public Entity() {
+	public Entity () {
 		name = "Unknown";
 		maxHealth = currentHealth = 100;
 		maxDamage = minDamage = 50;
 	}
 	
-	public Entity(String name, int maxHealth, int maxDamage, int minDamage, int posX, int posY) {
+	public Entity (String name, int maxHealth, int maxDamage, int minDamage, int posX, int posY) {
 		this.name = name;
 		currentHealth = this.maxHealth = maxHealth;
 		this.maxDamage = maxDamage;
@@ -40,35 +35,9 @@ public abstract class Entity {
         this.posX = posX;
         this.posY = posY;
 		this.healthBar = new HealthBar(posX, posY, maxHealth);
-		this.animations = new ArrayList<Animation>();
 	}
-
-	private void playAnimation(int key) {
-	    // 0 - Default attack
-        // 1 - Ability 1
-        // 2 - Ability 2
-        // 3 - Ability 3
-        // 4 - Ultimate Ability
-	    Animation newAnimation = null;
-	    switch (key) {
-            case 0:
-                break;
-            case 1:
-                break;
-            case 2:
-                break;
-            case 3:
-                break;
-            case 4:
-                break;
-            default:
-                break;
-        }
-        if (newAnimation != null)
-            animations.add(newAnimation);
-    }
 	
-	public boolean inflict (int damageTaken){
+	public boolean inflict (int damageTaken) {
 		currentHealth -= damageTaken;
         currentHealth = (currentHealth < 0) ? 0 : currentHealth;
         healthBar.inflict(damageTaken);
@@ -81,7 +50,7 @@ public abstract class Entity {
 		return true;
 	}
 	
-	public void update() {
+	public void update () {
 		switch (lrMotionState) {
 		case LEFT:
 			posX -= velocity;
@@ -97,57 +66,65 @@ public abstract class Entity {
 		case DOWN:
 			posY += velocity;
 		}
+		if (currentAnimation != null)
+		    currentAnimation.update();
+		else if (currentAnimation.isDone())
+		    currentAnimation = null;
 	}
 
-	public void setAvatar(String filename) {
+	public void setAvatar (String filename) {
         avatar = new ImageIcon(filename);
     }
 	
-    public int getDamage() {
+    public int getDamage () {
         return (minDamage+random.nextInt(maxDamage-minDamage));
     }
     
-    public String getName() {
+    public String getName () {
         return name;
     }
     
-    public int getCurrentHealth() {
+    public int getCurrentHealth () {
         return currentHealth;
     }
     
-    public int getMaxHealth() {
+    public int getMaxHealth () {
         return maxHealth;
     }
 
-    public int getPosX() {
+    public int getPosX () {
         return posX;
     }
 
-    public int getPosY() {
+    public int getPosY () {
         return posY;
     }
+
+    public String getDirection () {
+	    return direction;
+    }
     
-    public void setCurrentHealth(int currentHealth) {
+    public void setCurrentHealth (int currentHealth) {
         this.currentHealth = currentHealth;
     }
     
-    public void setMaxHealth(int maxHealth) {
+    public void setMaxHealth (int maxHealth) {
         this.maxHealth = maxHealth; 
     }
     
-    public void setDamageMax(int damageMax) {
+    public void setDamageMax (int damageMax) {
         this.maxDamage = damageMax;
     }
     
-    public void setDamageMin(int damageMin) {
+    public void setDamageMin (int damageMin) {
         this.minDamage = damageMin;
     }
 
-    public void setPosX(int posX) {
+    public void setPosX (int posX) {
         this.posX = posX;
     }
 
-    public void setPosY(int posY) {
+    public void setPosY (int posY) {
         this.posY = posY;
     }
     
@@ -158,13 +135,16 @@ public abstract class Entity {
     public void setUDMotionState (MotionStateUpDown state) {
     	udMotionState = state;
     }
+
+    public void setAnimation (int index, Animation animation) {
+	    animations[index] = animation;
+    }
    
-    public void draw(Graphics g) {
+    public void draw (Graphics g) {
 	    //TODO: draw the entity name label
         Graphics2D g2d = (Graphics2D)g;
-        for (Animation animation : animations) {
-            
-        }
+        if (currentAnimation != null)
+            currentAnimation.draw(g);
         g2d.drawImage(avatar.getImage(), posX, posY, null);
     }
 }

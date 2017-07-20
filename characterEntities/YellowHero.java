@@ -4,21 +4,21 @@ import javax.swing.ImageIcon;
 
 public class YellowHero extends Hero {
 	
-	public YellowHero (String name){
+	public YellowHero (String name) {
 		super(name, 200, 70, 60, 100, 100);
 		playerClass = PlayerClass.YELLOW;
-		setAvatar("src/Assets/yellow.png");
+		setAvatar("src/assets/yellow.png");
 	}
 	
-	public boolean evolve(int path){
-		if (numberEvolutions != 0){
+	public boolean evolve (int path) {
+		if (numberEvolutions != 0) {
 			return false;
 		}
-		else{
+		else {
 			//Need to also set imageIcon
-			switch(path){
+			switch(path) {
 			case Hero.PATH_RED:
-				playerClass= PlayerClass.AMBER;
+				playerClass = PlayerClass.AMBER;
 				evolutionIncrease(Hero.PATH_RED);
 				break;
 			case Hero.PATH_YELLOW:
@@ -33,6 +33,23 @@ public class YellowHero extends Hero {
 				return false;
 			}
 			return true;
+		}
+	}
+
+	public void attack (int ability) {
+		switch (ability) {
+			case 0:
+				break;
+			case 1:
+				break;
+			case 2:
+				break;
+			case 3:
+				break;
+			case 4:
+				break;
+			default:
+				break;
 		}
 	}
 }

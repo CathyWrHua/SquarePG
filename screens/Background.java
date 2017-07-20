@@ -10,15 +10,15 @@ public class Background {
 	private ImageIcon background;
 	
 	public Background() {
-		background = new ImageIcon("src/Assets/map1.png");
+		background = new ImageIcon("src/assets/map1.png");
 	}
 	
 	public Background(String imageName) {
-		background = new ImageIcon("src/Assets/" + imageName);
+		background = new ImageIcon("src/assets/" + imageName);
 	}
 	
 	public void setBackground(String imageName) {
-		background = new ImageIcon("src/Assets/" + imageName);
+		background = new ImageIcon("src/assets/" + imageName);
 	}
 	
 	public void draw(Graphics g) {
