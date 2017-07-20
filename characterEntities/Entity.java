@@ -13,6 +13,11 @@ public abstract class Entity {
     private HealthBar healthBar;
 	private Random random = new Random();
 	
+	private MotionStateLeftRight lrMotionState = MotionStateLeftRight.IDLE;
+	private MotionStateUpDown udMotionState = MotionStateUpDown.IDLE;
+	
+	private final int velocity = 2;
+	
 	public Entity() {
 		name = "Unknown";
 		maxHealth = currentHealth = 100;
@@ -39,6 +44,24 @@ public abstract class Entity {
 		currentHealth += amountHealed;
 		currentHealth = (currentHealth > maxHealth)? maxHealth : currentHealth;
 		return true;
+	}
+	
+	public void update() {
+		switch (lrMotionState) {
+		case LEFT:
+			posX -= velocity;
+			break;
+		case RIGHT:
+			posX += velocity;
+		}
+		
+		switch (udMotionState) {
+		case UP:
+			posY -= velocity;
+			break;
+		case DOWN:
+			posY += velocity;
+		}
 	}
 
 	public void setAvatar(String filename) {
@@ -92,10 +115,18 @@ public abstract class Entity {
     public void setPosY(int posY) {
         this.posY = posY;
     }
+    
+    public void setLRMotionState (MotionStateLeftRight state) {
+    	lrMotionState = state;
+    }
+    
+    public void setUDMotionState (MotionStateUpDown state) {
+    	udMotionState = state;
+    }
    
     public void draw(Graphics g) {
 	    //TODO: draw the entity name label
         Graphics2D g2d = (Graphics2D)g;
-        g2d.drawImage(avatar.getImage(), 350, 250, null);
+        g2d.drawImage(avatar.getImage(), posX, posY, null);
     }
 }

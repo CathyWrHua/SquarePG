@@ -5,6 +5,8 @@ import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.Console;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
@@ -15,11 +17,7 @@ import characterEntities.*;
 
 public class GameScreen extends Screen implements KeyListener{
 	private GameState gameState = GameState.WORLDMAP;
-	
-	//TODO:motion state machine might be useful for real-time motion
-	//Remove if not needed
-	private MotionStateLeftRight lrMotionState = MotionStateLeftRight.IDLE;
-	private MotionStateUpDown udMotionState = MotionStateUpDown.IDLE;
+	private Set<Integer> motionKeys = new HashSet<Integer>();
 	
 	//TODO:depending on map design, make background class for collision detection
 	private Background background;
@@ -41,7 +39,7 @@ public class GameScreen extends Screen implements KeyListener{
 	public void update() {
 		//HACK: have something that requests focus not so frequently
 		requestFocus(true);
-
+		player.update();
 	}
 	
 	private void createPlayer(String playerName, PlayerClass playerClass) {
@@ -61,23 +59,34 @@ public class GameScreen extends Screen implements KeyListener{
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		int code = e.getKeyCode();
-		if (code == KeyEvent.VK_UP) {
-			up();
-		} 
-		if (code == KeyEvent.VK_DOWN) {
-			down();
-		} 
-		if (code == KeyEvent.VK_LEFT) {
-			left();
-		} 
-		if (code == KeyEvent.VK_RIGHT) {
-			right();
+		Integer code = new Integer(e.getKeyCode());
+		motionKeys.add(code);
+
+		for (Integer key : motionKeys) {
+			if (key.intValue() == KeyEvent.VK_UP) {
+				up();
+			} else if (key.intValue() == KeyEvent.VK_DOWN) {
+				down();
+			} else if (key.intValue() == KeyEvent.VK_LEFT) {
+				left();
+			} else if (key.intValue() == KeyEvent.VK_RIGHT) {
+				right();
+			}
 		}
 	}
 
 	@Override
-	public void keyReleased(KeyEvent arg0) { }
+	public void keyReleased(KeyEvent e) { 
+		Integer code = new Integer(e.getKeyCode());
+		
+		if (code.intValue() == KeyEvent.VK_DOWN || code.intValue() == KeyEvent.VK_UP) {
+			player.setUDMotionState(MotionStateUpDown.IDLE);
+		} else if (code.intValue() == KeyEvent.VK_LEFT || code.intValue() == KeyEvent.VK_RIGHT) {
+			player.setLRMotionState(MotionStateLeftRight.IDLE);
+		}
+		
+		motionKeys.remove(code);
+	}
 
 	@Override
 	public void keyTyped(KeyEvent arg0) { }
@@ -89,26 +98,18 @@ public class GameScreen extends Screen implements KeyListener{
 	}
 	
 	public void up() {
-		player.setPosY(player.getPosY() - 10);
+		player.setUDMotionState(MotionStateUpDown.UP);
 	}
 	
 	public void down() {
-		player.setPosY(player.getPosY() + 10);
+		player.setUDMotionState(MotionStateUpDown.DOWN);
 	}
 	
 	public void left() {
-		player.setPosX(player.getPosX() - 10);
+		player.setLRMotionState(MotionStateLeftRight.LEFT);
 	}
 	
 	public void right() {
-		player.setPosX(player.getPosX() + 10);
+		player.setLRMotionState(MotionStateLeftRight.RIGHT);
 	}
-}
-
-enum MotionStateLeftRight {
-	IDLE, LEFT, RIGHT;
-}
-
-enum MotionStateUpDown {
-	IDLE, UP, DOWN;
 }
