@@ -2,13 +2,21 @@ package characterEntities;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.Random;
 
 public abstract class Entity {
+    private static final int NORTH = 0;
+    private static final int EAST = 1;
+    private static final int SOUTH = 2;
+    private static final int WEST = 3;
+
 	private String name;
     private int posX, posY;
 	private int maxHealth, currentHealth;
 	private int maxDamage, minDamage;
+	private int direction = EAST;
+	private ArrayList<Animation> animations;
 	private ImageIcon avatar;
     private HealthBar healthBar;
 	private Random random = new Random();
@@ -32,12 +40,39 @@ public abstract class Entity {
         this.posX = posX;
         this.posY = posY;
 		this.healthBar = new HealthBar(posX, posY, maxHealth);
+		this.animations = new ArrayList<Animation>();
 	}
+
+	private void playAnimation(int key) {
+	    // 0 - Default attack
+        // 1 - Ability 1
+        // 2 - Ability 2
+        // 3 - Ability 3
+        // 4 - Ultimate Ability
+	    Animation newAnimation = null;
+	    switch (key) {
+            case 0:
+                break;
+            case 1:
+                break;
+            case 2:
+                break;
+            case 3:
+                break;
+            case 4:
+                break;
+            default:
+                break;
+        }
+        if (newAnimation != null)
+            animations.add(newAnimation);
+    }
 	
 	public boolean inflict (int damageTaken){
 		currentHealth -= damageTaken;
-        currentHealth = (currentHealth < 0)? 0: currentHealth;
-        return (currentHealth == 0) ? (false) : (true);
+        currentHealth = (currentHealth < 0) ? 0 : currentHealth;
+        healthBar.inflict(damageTaken);
+        return !(currentHealth == 0);
 	}
 	
 	public boolean heal (int amountHealed) {
@@ -127,6 +162,9 @@ public abstract class Entity {
     public void draw(Graphics g) {
 	    //TODO: draw the entity name label
         Graphics2D g2d = (Graphics2D)g;
+        for (Animation animation : animations) {
+            
+        }
         g2d.drawImage(avatar.getImage(), posX, posY, null);
     }
 }

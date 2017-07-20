@@ -54,8 +54,12 @@ public class GameScreen extends Screen implements KeyListener{
 			player = new YellowHero(playerName);
 			break;
 		default:
-		};
+		}
 	}
+
+	private void createEnemy() {}
+
+	private void createProjectile() {}
 
 	@Override
 	public void keyPressed(KeyEvent e) {

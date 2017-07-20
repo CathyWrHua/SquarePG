@@ -17,6 +17,10 @@ public abstract class Hero extends Entity {
 		super(name, maxHealth, maxDamage, minDamage, posX, posY);
 		numberEvolutions = 0;
 	}
+
+	public void basicAttack() {
+
+	}
 	
 	public abstract boolean evolve(int path);
 	

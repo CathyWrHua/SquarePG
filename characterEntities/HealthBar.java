@@ -22,7 +22,7 @@ public class HealthBar {
         this.posY = posY;
     }
 
-    public int damage(int value) {
+    public int inflict(int value) {
         currentHealth -= value;
         if (currentHealth < 0) {
             currentHealth = 0;
@@ -33,7 +33,7 @@ public class HealthBar {
     }
 
     public int heal(int value) {
-        return damage(-value);
+        return inflict(-value);
     }
 
     public void draw(Graphics g) {
