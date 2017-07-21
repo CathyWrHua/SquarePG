@@ -14,7 +14,7 @@ public class AboutScreen extends Screen implements ActionListener {
 	private JLabel aboutLabel = new JLabel("<html><center>ABOUT<br><br>Authors:<br>Tiger Dong, Cathy Hua<br><br>Last Revised:<br>DATE HERE<br><br>Compiler:<br>JDK 1.8.0_101<br><br>Version:<br>Java SE 8<br> <br></html>");
     private JButton back;
 	
-	public AboutScreen(){
+	public AboutScreen() {
 		super();
 		back = new JButton("Back");
 		back.addActionListener(this);
@@ -39,7 +39,7 @@ public class AboutScreen extends Screen implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent event) {
-		if (event.getSource() == back){
+		if (event.getSource() == back) {
 			SquarePG.screenState = ScreenState.HOME;
 		}
 	}
