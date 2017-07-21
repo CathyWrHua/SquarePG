@@ -40,8 +40,7 @@ public class SquarePG extends JFrame {
 		            	remove(currentScreen);
 		            	if (screenState == ScreenState.HOME) {
 		            		currentScreen = screenStack.pop();
-		            	}
-		            	else {
+		            	} else {
 		            		screenStack.push(currentScreen);
 		            		switch(screenState) {
 		            		case ABOUT:
