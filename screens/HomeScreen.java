@@ -16,7 +16,7 @@ public class HomeScreen extends Screen implements ActionListener{
 
 	private JButton play, options, about, back;
 	
-    public HomeScreen(){
+    public HomeScreen() {
     	super();
     	play = new JButton("Play");
         options = new JButton("Options");
@@ -51,13 +51,13 @@ public class HomeScreen extends Screen implements ActionListener{
 
 	@Override
 	public void actionPerformed(ActionEvent event) {
-		if (event.getSource() == play){
+		if (event.getSource() == play) {
 			SquarePG.screenState = ScreenState.CHARACTER_SELECT;
 		}
-		if (event.getSource() == options){
+		if (event.getSource() == options) {
 			SquarePG.screenState = ScreenState.OPTIONS;
 		}
-		if (event.getSource() == about){
+		if (event.getSource() == about) {
 			SquarePG.screenState = ScreenState.ABOUT;
 		}
 		

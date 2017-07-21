@@ -12,7 +12,7 @@ public class OptionsScreen extends Screen implements ActionListener{
 	private JButton back;
 	private JLabel placeHolder = new JLabel ("Options will go here");
 	
-	public OptionsScreen (){
+	public OptionsScreen () {
 		super();
 		
 		back = new JButton ("Back");
@@ -24,14 +24,14 @@ public class OptionsScreen extends Screen implements ActionListener{
 	}
 	
 	@Override
-	public void update(){
+	public void update() {
 		validate();
 		repaint();
 	}
 	
 	@Override
-	public void actionPerformed (ActionEvent event){
-		if (event.getSource()== back){
+	public void actionPerformed (ActionEvent event) {
+		if (event.getSource()== back) {
 			SquarePG.screenState = ScreenState.HOME;
 		}
 	}
