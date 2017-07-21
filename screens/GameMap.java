@@ -43,15 +43,15 @@ public class GameMap {
 		for (int h = 0; h < 10; h++) {
 			for (int w = 0; w < 10; w++) {
 				if (((h > 1 && h < 4) || (h > 5 && h < 8)) && ((w > 1 && w < 4) || (w > 5 && w < 8))) {
-					gameMapLevelOne[h][w] = new ImageIcon("src/assets/background2.png");
+					gameMapLevelOne[h][w] = new ImageIcon("src/assets/maps/background2.png");
 				} else {
-					gameMapLevelOne[h][w] = new ImageIcon("src/assets/background1.png");
+					gameMapLevelOne[h][w] = new ImageIcon("src/assets/maps/background1.png");
 				}
 
 				if ((h > 2 && h < 7) && (w > 2 && w < 7)) {
-					gameMapLevelTwo[h][w] = new ImageIcon("src/assets/background2.png");
+					gameMapLevelTwo[h][w] = new ImageIcon("src/assets/maps/background2.png");
 				} else {
-					gameMapLevelTwo[h][w] = new ImageIcon("src/assets/background1.png");
+					gameMapLevelTwo[h][w] = new ImageIcon("src/assets/maps/background1.png");
 				}
 			}
 		}
