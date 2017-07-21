@@ -24,7 +24,7 @@ public abstract class Entity {
 	private EntityState entityState = EntityState.DEFAULT;
 	
 	private static final int VELOCITY = 2;
-	private static final int STUN_TIME = 20;
+	private static final int STUN_TIME = 10;
 	
 	public Entity (String name, int maxHealth, int maxDamage, int minDamage, int posX, int posY) {
 		this.name = name;
@@ -193,7 +193,7 @@ public abstract class Entity {
 
         if (!facingEast) {
             x += width;
-            width = - width;
+            width = -width;
         }
 
         g2d.drawImage(image, x, posY, width, image.getHeight(null), null);

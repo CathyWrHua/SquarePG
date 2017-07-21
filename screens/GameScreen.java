@@ -75,10 +75,6 @@ public class GameScreen extends Screen implements KeyListener{
 				left();
 			} else if (key.intValue() == KeyEvent.VK_RIGHT) {
 				right();
-			} else if (key.intValue() == KeyEvent.VK_A) {
-				player.attack(Hero.Ability.DEFAULT);
-			} else if (key.intValue() == KeyEvent.VK_Z) {
-				player.inflict(25);
 			}
 		}
 
@@ -86,6 +82,10 @@ public class GameScreen extends Screen implements KeyListener{
 			map.setMap(1);
 		} else if (code == KeyEvent.VK_K) {
 			map.setMap(2);
+		} else if (code == KeyEvent.VK_A) {
+			player.attack(Hero.Ability.DEFAULT);
+		} else if (code == KeyEvent.VK_Z) {
+			player.inflict(25);
 		}
 	}
 

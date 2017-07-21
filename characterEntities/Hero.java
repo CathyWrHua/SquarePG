@@ -41,7 +41,6 @@ public abstract class Hero extends Entity {
 				break;
 		}
 		filepath += ".png";
-		System.out.println(filepath);
 		this.setAvatar(filepath);
 	}
 	
