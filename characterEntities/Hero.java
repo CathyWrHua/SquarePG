@@ -25,7 +25,7 @@ public abstract class Hero extends Entity {
 	public void setEntityState(EntityState entityState) {
 		super.setEntityState(entityState);
 		String filepath = "src/assets/hero/";
-		filepath += this.colour + this.getDirection();
+		filepath += this.colour;
 		switch (this.getEntityState()) {
 			case DEFAULT:
 				filepath += "Neutral";
@@ -41,6 +41,7 @@ public abstract class Hero extends Entity {
 				break;
 		}
 		filepath += ".png";
+		System.out.println(filepath);
 		this.setAvatar(filepath);
 	}
 	

@@ -9,8 +9,8 @@ public class Animation {
     private int counter = 0;
     private Entity entity;
     private String animationName;
-    private ImageIcon image = null;
-    private boolean hasDirection = false;
+    private ImageIcon imageIcon = null;
+    private boolean hasDirection = true;
     private boolean done = false;
 
     private static final int OFFSET = 75;
@@ -30,34 +30,43 @@ public class Animation {
         }
     }
 
-    public boolean isDone () {
+    public boolean isDone() {
         return done;
     }
 
     public void update () {
-        if (counter++ % ANIMATION_SPEED == 0 && currentFrame < totalFrames && !done) {
+        done = false;
+        if (counter++ % ANIMATION_SPEED == 0 && currentFrame < totalFrames) {
             String filePath = "src/assets/animations/" + animationName;
-            filePath += hasDirection ? "" : entity.getDirection();
             filePath += (currentFrame++) + ".png";
-            this.image = new ImageIcon(filePath);
+            this.imageIcon = new ImageIcon(filePath);
         } else if (currentFrame >= totalFrames && counter++ % ANIMATION_SPEED == 0) {
-            this.done = true;
+            reset();
+            done = true;
         }
     }
 
     public void reset () {
         this.counter = 0;
         this.currentFrame = 0;
-        this.done = false;
     }
 
     public void draw (Graphics g) {
         Graphics2D g2d = (Graphics2D)g;
-        int offset = hasDirection ? 0 :
-                (entity.getDirection().equals("East")) ? OFFSET : -OFFSET;
+        Image image = imageIcon.getImage();
+        int x = entity.getPosX();
+        int width = image.getWidth(null);
 
-        if (!done && image != null) {
-            g2d.drawImage(image.getImage(), entity.getPosX()+offset, entity.getPosY(), null);
+        int offset = !hasDirection ? 0 :
+                (entity.getFacingEast()) ? OFFSET : -OFFSET;
+
+        if (hasDirection && !entity.getFacingEast()) {
+            x += width;
+            width = -width;
+        }
+
+        if (currentFrame < totalFrames && imageIcon != null) {
+            g2d.drawImage(image, x+offset, entity.getPosY(), width, image.getHeight(null), null);
         }
     }
 }

@@ -78,8 +78,7 @@ public class GameScreen extends Screen implements KeyListener{
 			} else if (key.intValue() == KeyEvent.VK_A) {
 				player.attack(Hero.Ability.DEFAULT);
 			} else if (key.intValue() == KeyEvent.VK_Z) {
-				player.inflict(1);
-				System.out.println(player.getCurrentHealth());
+				player.inflict(25);
 			}
 		}
 
@@ -121,16 +120,20 @@ public class GameScreen extends Screen implements KeyListener{
 	}
 	
 	public void left() {
-		player.setLRMotionState(MotionStateLeftRight.LEFT);
-		if (player.getEntityState() == Entity.EntityState.DEFAULT) {
-			player.faceWest();
+		if (player.getEntityState() != Entity.EntityState.DAMAGED && player.getEntityState() != Entity.EntityState.DEAD) {
+			player.setLRMotionState(MotionStateLeftRight.LEFT);
+			if (player.getEntityState() == Entity.EntityState.DEFAULT) {
+				player.faceWest();
+			}
 		}
 	}
 	
 	public void right() {
-		player.setLRMotionState(MotionStateLeftRight.RIGHT);
-		if (player.getEntityState() == Entity.EntityState.DEFAULT) {
-			player.faceEast();
+		if (player.getEntityState() != Entity.EntityState.DAMAGED && player.getEntityState() != Entity.EntityState.DEAD) {
+			player.setLRMotionState(MotionStateLeftRight.RIGHT);
+			if (player.getEntityState() == Entity.EntityState.DEFAULT) {
+				player.faceEast();
+			}
 		}
 	}
 }

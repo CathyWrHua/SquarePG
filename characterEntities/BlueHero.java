@@ -5,7 +5,7 @@ public class BlueHero extends Hero {
 		super(name, 100, 80, 70, 100, 100);
 		colour = "blue";
 		playerClass = PlayerClass.BLUE;
-		setAvatar("src/assets/hero/blueEastNeutral.png");
+		setAvatar("src/assets/hero/blueNeutral.png");
 	}
 	
 	public boolean evolve(int path) {

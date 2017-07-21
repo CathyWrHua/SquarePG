@@ -9,7 +9,8 @@ public abstract class Entity {
     private int posX, posY;
 	private int maxHealth, currentHealth;
 	private int maxDamage, minDamage;
-	private String direction = "East";
+	private int stunCounter = STUN_TIME;
+	private boolean facingEast = true;
 	private Animation currentAnimation = null;
     private Animation[] animations = new Animation[5];
 	private ImageIcon avatar;
@@ -22,7 +23,8 @@ public abstract class Entity {
 	public enum EntityState {DEFAULT, ATTACKING, DAMAGED, DEAD}
 	private EntityState entityState = EntityState.DEFAULT;
 	
-	private final int velocity = 2;
+	private static final int VELOCITY = 2;
+	private static final int STUN_TIME = 20;
 	
 	public Entity (String name, int maxHealth, int maxDamage, int minDamage, int posX, int posY) {
 		this.name = name;
@@ -37,6 +39,15 @@ public abstract class Entity {
 	public boolean inflict (int damageTaken) {
 		currentHealth -= damageTaken;
         currentHealth = (currentHealth < 0) ? 0 : currentHealth;
+        if (currentAnimation != null) {
+            currentAnimation.reset();
+            currentAnimation = null;
+        }
+        if (currentHealth > 0) {
+            setEntityState(EntityState.DAMAGED);
+        } else {
+            setEntityState(EntityState.DEAD);
+        }
         return !(currentHealth == 0);
 	}
 	
@@ -52,27 +63,35 @@ public abstract class Entity {
     }
 
 	public void update () {
-		switch (lrMotionState) {
-		case LEFT:
-			posX -= velocity;
-			break;
-		case RIGHT:
-			posX += velocity;
-		}
-		
-		switch (udMotionState) {
-		case UP:
-			posY -= velocity;
-			break;
-		case DOWN:
-			posY += velocity;
-		}
+	    if (entityState == EntityState.DEFAULT || entityState == EntityState.ATTACKING) {
+            switch (lrMotionState) {
+                case LEFT:
+                    posX -= VELOCITY;
+                    break;
+                case RIGHT:
+                    posX += VELOCITY;
+            }
+
+            switch (udMotionState) {
+                case UP:
+                    posY -= VELOCITY;
+                    break;
+                case DOWN:
+                    posY += VELOCITY;
+            }
+        }
+
+		if (entityState == EntityState.DAMAGED && stunCounter > 0) {
+		    stunCounter--;
+        } else if (stunCounter <= 0) {
+		    setEntityState(EntityState.DEFAULT);
+		    stunCounter = STUN_TIME;
+        }
 
 		if (currentAnimation != null) {
             currentAnimation.update();
             if (currentAnimation.isDone()) {
                 setEntityState(EntityState.DEFAULT);
-                currentAnimation.reset();
                 currentAnimation = null;
             }
         }
@@ -83,10 +102,11 @@ public abstract class Entity {
     }
 
     public void faceEast () {
-	    direction = "East";
+	    facingEast = true;
     }
+
     public void faceWest () {
-        direction = "West";
+	    facingEast = false;
     }
 	
     public int getDamage () {
@@ -113,8 +133,8 @@ public abstract class Entity {
         return posY;
     }
 
-    public String getDirection () {
-	    return direction;
+    public boolean getFacingEast () {
+	    return facingEast;
     }
 
     public EntityState getEntityState () {
@@ -162,11 +182,20 @@ public abstract class Entity {
     }
    
     public void draw (Graphics g) {
-	    //TODO: draw the entity name label
         Graphics2D g2d = (Graphics2D)g;
+        Image image = avatar.getImage();
+        int x = posX;
+        int width = image.getWidth(null);
+
         if (currentAnimation != null)
             currentAnimation.draw(g);
         healthBar.draw(g);
-        g2d.drawImage(avatar.getImage(), posX, posY, null);
+
+        if (!facingEast) {
+            x += width;
+            width = - width;
+        }
+
+        g2d.drawImage(image, x, posY, width, image.getHeight(null), null);
     }
 }
