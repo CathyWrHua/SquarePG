@@ -77,6 +77,9 @@ public class GameScreen extends Screen implements KeyListener{
 				right();
 			} else if (key.intValue() == KeyEvent.VK_A) {
 				player.attack(Hero.Ability.DEFAULT);
+			} else if (key.intValue() == KeyEvent.VK_Z) {
+				player.inflict(1);
+				System.out.println(player.getCurrentHealth());
 			}
 		}
 

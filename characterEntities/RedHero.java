@@ -1,11 +1,11 @@
 package characterEntities;
 
 public class RedHero extends Hero {
-	
 	public RedHero (String name) {
 		super(name, 300, 55, 45, 100, 100);
+		colour = "red";
 		playerClass = PlayerClass.RED;
-		setAvatar("src/assets/hero/red.png");
+		setAvatar("src/assets/hero/redEastNeutral.png");
 	}
 	
 	public boolean evolve (int path) {

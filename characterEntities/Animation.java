@@ -54,7 +54,7 @@ public class Animation {
     public void draw (Graphics g) {
         Graphics2D g2d = (Graphics2D)g;
         int offset = hasDirection ? 0 :
-                (entity.getDirection() == "East") ? OFFSET : -OFFSET;
+                (entity.getDirection().equals("East")) ? OFFSET : -OFFSET;
 
         if (!done && image != null) {
             g2d.drawImage(image.getImage(), entity.getPosX()+offset, entity.getPosY(), null);

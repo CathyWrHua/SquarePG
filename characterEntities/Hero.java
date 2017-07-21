@@ -1,9 +1,11 @@
 package characterEntities;
 
-import SquarePG.GameState;
+import SquarePG.GameState;\
 
 public abstract class Hero extends Entity {
 	private GameState gameState = GameState.WORLDMAP;
+
+	protected String colour = "";
 	protected int numberEvolutions;
 	protected PlayerClass playerClass;
 	
@@ -17,6 +19,29 @@ public abstract class Hero extends Entity {
 		super(name, maxHealth, maxDamage, minDamage, posX, posY);
 		setAnimation(0, new Animation(Animation.AnimationType.DEFAULT, this));
 		numberEvolutions = 0;
+	}
+
+	@Override
+	public void setEntityState(EntityState entityState) {
+		super.setEntityState(entityState);
+		String filepath = "src/assets/hero/";
+		filepath += this.colour + this.getDirection();
+		switch (this.getEntityState()) {
+			case DEFAULT:
+				filepath += "Neutral";
+				break;
+			case ATTACKING:
+				filepath += "Attacking";
+				break;
+			case DAMAGED:
+				filepath += "Damaged";
+				break;
+			case DEAD:
+				filepath += "Dead";
+				break;
+		}
+		filepath += ".png";
+		this.setAvatar(filepath);
 	}
 
 	public void basicAttack () {}

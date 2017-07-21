@@ -1,11 +1,11 @@
 package characterEntities;
 
 public class BlueHero extends Hero {
-	
 	public BlueHero (String name) {
 		super(name, 100, 80, 70, 100, 100);
+		colour = "blue";
 		playerClass = PlayerClass.BLUE;
-		setAvatar("src/assets/hero/blue.png");
+		setAvatar("src/assets/hero/blueEastNeutral.png");
 	}
 	
 	public boolean evolve(int path) {

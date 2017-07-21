@@ -1,13 +1,11 @@
 package characterEntities;
 
-import javax.swing.ImageIcon;
-
 public class YellowHero extends Hero {
-	
 	public YellowHero (String name) {
 		super(name, 200, 70, 60, 100, 100);
+		colour = "yellow";
 		playerClass = PlayerClass.YELLOW;
-		setAvatar("src/assets/hero/yellow.png");
+		setAvatar("src/assets/hero/yellowEastNeutral.png");
 	}
 	
 	public boolean evolve (int path) {

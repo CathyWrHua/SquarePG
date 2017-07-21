@@ -71,7 +71,7 @@ public abstract class Entity {
 		if (currentAnimation != null) {
             currentAnimation.update();
             if (currentAnimation.isDone()) {
-                entityState = EntityState.DEFAULT;
+                setEntityState(EntityState.DEFAULT);
                 currentAnimation.reset();
                 currentAnimation = null;
             }
