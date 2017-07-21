@@ -66,10 +66,11 @@ public abstract class Entity {
 		case DOWN:
 			posY += velocity;
 		}
-		if (currentAnimation != null)
-		    currentAnimation.update();
-		else if (currentAnimation.isDone())
-		    currentAnimation = null;
+		if (currentAnimation != null) {
+            currentAnimation.update();
+            if (currentAnimation.isDone())
+                currentAnimation = null;
+        }
 	}
 
 	public void setAvatar (String filename) {
