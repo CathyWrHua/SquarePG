@@ -10,10 +10,12 @@ public abstract class Hero extends Entity {
 	protected static final int PATH_RED = 0;
 	protected static final int PATH_YELLOW = 1;
 	protected static final int PATH_BLUE = 2;
+
+	public enum Ability {DEFAULT, FIRST, SECOND, THIRD, ULTIMATE}
 	
 	public Hero (String name, int maxHealth, int maxDamage, int minDamage, int posX, int posY) {
 		super(name, maxHealth, maxDamage, minDamage, posX, posY);
-		setAnimation(0, new Animation("default", this));
+		setAnimation(0, new Animation(Animation.AnimationType.DEFAULT, this));
 		numberEvolutions = 0;
 	}
 
@@ -21,7 +23,7 @@ public abstract class Hero extends Entity {
 	
 	public abstract boolean evolve (int path);
 
-	public abstract void attack (int ability);
+	public abstract void attack (Ability ability);
 	
 	protected boolean evolutionIncrease (int path) {
 //		switch (path) {

@@ -76,7 +76,7 @@ public class GameScreen extends Screen implements KeyListener{
 			} else if (key.intValue() == KeyEvent.VK_RIGHT) {
 				right();
 			} else if (key.intValue() == KeyEvent.VK_A) {
-				player.attack(0);
+				player.attack(Hero.Ability.DEFAULT);
 			}
 		}
 	}

@@ -24,12 +24,6 @@ public abstract class Entity {
 	
 	private final int velocity = 2;
 	
-	public Entity () {
-		name = "Unknown";
-		maxHealth = currentHealth = 100;
-		maxDamage = minDamage = 50;
-	}
-	
 	public Entity (String name, int maxHealth, int maxDamage, int minDamage, int posX, int posY) {
 		this.name = name;
 		currentHealth = this.maxHealth = maxHealth;

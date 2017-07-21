@@ -16,7 +16,7 @@ public class YellowHero extends Hero {
 		}
 		else {
 			//Need to also set imageIcon
-			switch(path) {
+			switch (path) {
 			case Hero.PATH_RED:
 				playerClass = PlayerClass.AMBER;
 				evolutionIncrease(Hero.PATH_RED);
@@ -36,20 +36,24 @@ public class YellowHero extends Hero {
 		}
 	}
 
-	public void attack (int ability) {
+	public void attack (Ability ability) {
 		if (getEntityState() == EntityState.DEFAULT) {
-			playAnimation(ability);
 			setEntityState(EntityState.ATTACKING);
 			switch (ability) {
-				case 0:
+				case DEFAULT:
+					playAnimation(0);
 					break;
-				case 1:
+				case FIRST:
+					playAnimation(1);
 					break;
-				case 2:
+				case SECOND:
+					playAnimation(2);
 					break;
-				case 3:
+				case THIRD:
+					playAnimation(3);
 					break;
-				case 4:
+				case ULTIMATE:
+					playAnimation(4);
 					break;
 				default:
 					break;
