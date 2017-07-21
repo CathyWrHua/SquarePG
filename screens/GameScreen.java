@@ -75,6 +75,8 @@ public class GameScreen extends Screen implements KeyListener{
 				left();
 			} else if (key.intValue() == KeyEvent.VK_RIGHT) {
 				right();
+			} else if (key.intValue() == KeyEvent.VK_A) {
+				player.attack(0);
 			}
 		}
 	}
@@ -111,9 +113,15 @@ public class GameScreen extends Screen implements KeyListener{
 	
 	public void left() {
 		player.setLRMotionState(MotionStateLeftRight.LEFT);
+		if (player.getEntityState() == Entity.EntityState.DEFAULT) {
+			player.faceWest();
+		}
 	}
 	
 	public void right() {
 		player.setLRMotionState(MotionStateLeftRight.RIGHT);
+		if (player.getEntityState() == Entity.EntityState.DEFAULT) {
+			player.faceEast();
+		}
 	}
 }

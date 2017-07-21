@@ -7,7 +7,7 @@ public class YellowHero extends Hero {
 	public YellowHero (String name) {
 		super(name, 200, 70, 60, 100, 100);
 		playerClass = PlayerClass.YELLOW;
-		setAvatar("src/assets/yellow.png");
+		setAvatar("src/assets/hero/yellow.png");
 	}
 	
 	public boolean evolve (int path) {
@@ -37,19 +37,23 @@ public class YellowHero extends Hero {
 	}
 
 	public void attack (int ability) {
-		switch (ability) {
-			case 0:
-				break;
-			case 1:
-				break;
-			case 2:
-				break;
-			case 3:
-				break;
-			case 4:
-				break;
-			default:
-				break;
+		if (getEntityState() == EntityState.DEFAULT) {
+			playAnimation(ability);
+			setEntityState(EntityState.ATTACKING);
+			switch (ability) {
+				case 0:
+					break;
+				case 1:
+					break;
+				case 2:
+					break;
+				case 3:
+					break;
+				case 4:
+					break;
+				default:
+					break;
+			}
 		}
 	}
 }

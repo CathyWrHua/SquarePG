@@ -5,7 +5,7 @@ public class BlueHero extends Hero {
 	public BlueHero (String name) {
 		super(name, 100, 80, 70, 100, 100);
 		playerClass = PlayerClass.BLUE;
-		setAvatar("src/assets/blue.png");
+		setAvatar("src/assets/hero/blue.png");
 	}
 	
 	public boolean evolve(int path) {
@@ -35,19 +35,23 @@ public class BlueHero extends Hero {
 	}
 
 	public void attack (int ability) {
-		switch (ability) {
-			case 0:
-				break;
-			case 1:
-				break;
-			case 2:
-				break;
-			case 3:
-				break;
-			case 4:
-				break;
-			default:
-				break;
+		if (getEntityState() == EntityState.DEFAULT) {
+			playAnimation(ability);
+			setEntityState(EntityState.ATTACKING);
+			switch (ability) {
+				case 0:
+					break;
+				case 1:
+					break;
+				case 2:
+					break;
+				case 3:
+					break;
+				case 4:
+					break;
+				default:
+					break;
+			}
 		}
 	}
 }
