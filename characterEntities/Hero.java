@@ -1,6 +1,6 @@
 package characterEntities;
 
-import SquarePG.GameState;\
+import SquarePG.GameState;
 
 public abstract class Hero extends Entity {
 	private GameState gameState = GameState.WORLDMAP;
@@ -43,8 +43,6 @@ public abstract class Hero extends Entity {
 		filepath += ".png";
 		this.setAvatar(filepath);
 	}
-
-	public void basicAttack () {}
 	
 	public abstract boolean evolve (int path);
 
