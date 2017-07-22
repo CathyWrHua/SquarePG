@@ -98,6 +98,7 @@ public abstract class Entity {
             currentAnimation.update();
             if (currentAnimation.isDone()) {
                 setEntityState(EntityState.DEFAULT);
+                setEntityDirection();
                 currentAnimation = null;
             }
         }
@@ -170,9 +171,24 @@ public abstract class Entity {
     public void setPosY (int posY) {
         this.posY = posY;
     }
-    
+
+    public void setPoint (Point newPoint) {
+	    if (newPoint != null) {
+            posX = newPoint.x;
+            posY = newPoint.y;
+        }
+    }
+
     public void setLRMotionState (MotionStateLeftRight state) {
     	lrMotionState = state;
+
+    	if (entityState != EntityState.DEFAULT) return;
+
+    	if (state == MotionStateLeftRight.RIGHT) {
+    	    facingEast = true;
+        } else if (state == MotionStateLeftRight.LEFT) {
+    	    facingEast = false;
+        }
     }
     
     public void setUDMotionState (MotionStateUpDown state) {
@@ -203,5 +219,13 @@ public abstract class Entity {
         }
 
         g2d.drawImage(image, x, posY, width, image.getHeight(null), null);
+    }
+
+    private void setEntityDirection() {
+        if (lrMotionState == MotionStateLeftRight.LEFT) {
+            facingEast = false;
+        } else if (lrMotionState == MotionStateLeftRight.RIGHT) {
+            facingEast = true;
+        }
     }
 }

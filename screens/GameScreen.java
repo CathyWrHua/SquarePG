@@ -1,18 +1,16 @@
 package screens;
 
-import java.awt.Dimension;
-import java.awt.Graphics;
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.ArrayList;
 import characterEntities.*;
 
 public class GameScreen extends Screen implements KeyListener{
-	private Set<Integer> motionKeys = new HashSet<Integer>();
-	
-	//TODO:depending on map design, make background class for collision detection
+	private Set<Integer> motionKeys = new LinkedHashSet<>();
+
 	private GameMap map;
 	private int level = 1;
 	private Hero player;
@@ -34,10 +32,18 @@ public class GameScreen extends Screen implements KeyListener{
 	public void update() {
 		//HACK: have something that requests focus not so frequently
 		requestFocus(true);
-		for (Entity enemy: enemies) {
-			enemy.update();
-		}
+		//TODO:Remove all magic width and heights with actual ones
+
+		Rectangle originalPlayer = new Rectangle(player.getPosX(), player.getPosY(),75,  75);
 		player.update();
+
+		for (Entity enemy: enemies) {
+			Rectangle originalEnemy = new Rectangle(enemy.getPosX(), enemy.getPosY(), 75, 75);
+			enemy.update();
+			enemy.setPoint(map.determineMotion(enemy.getPosX(), enemy.getPosY(), originalEnemy));
+		}
+		map.setCurrentEntityList(enemies);
+		player.setPoint(map.determineMotion(player.getPosX(), player.getPosY(), originalPlayer));
 	}
 	
 	private void createPlayer(String playerName, PlayerClass playerClass) {
@@ -64,8 +70,12 @@ public class GameScreen extends Screen implements KeyListener{
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		Integer code = e.getKeyCode();
-		motionKeys.add(code);
+
+		//maintains proper order
+		if (motionKeys.contains(e.getKeyCode())) {
+			motionKeys.remove(e.getKeyCode());
+		}
+		motionKeys.add(e.getKeyCode());
 
 		for (Integer key : motionKeys) {
 			if (key == KeyEvent.VK_UP) {
@@ -79,13 +89,13 @@ public class GameScreen extends Screen implements KeyListener{
 			}
 		}
 
-		if (code == KeyEvent.VK_J) {
+		if (e.getKeyCode() == KeyEvent.VK_J) {
 			map.setMap(1);
-		} else if (code == KeyEvent.VK_K) {
+		} else if (e.getKeyCode() == KeyEvent.VK_K) {
 			map.setMap(2);
-		} else if (code == KeyEvent.VK_A) {
+		} else if (e.getKeyCode() == KeyEvent.VK_A) {
 			player.attack(Hero.Ability.DEFAULT, enemies);
-		} else if (code == KeyEvent.VK_Z) {
+		} else if (e.getKeyCode() == KeyEvent.VK_Z) {
 			player.inflict(25);
 		}
 	}
@@ -94,10 +104,14 @@ public class GameScreen extends Screen implements KeyListener{
 	public void keyReleased(KeyEvent e) { 
 		Integer code = e.getKeyCode();
 		
-		if (code == KeyEvent.VK_DOWN || code == KeyEvent.VK_UP) {
-			player.setUDMotionState(MotionStateUpDown.IDLE);
-		} else if (code == KeyEvent.VK_LEFT || code == KeyEvent.VK_RIGHT) {
-			player.setLRMotionState(MotionStateLeftRight.IDLE);
+		if (code == KeyEvent.VK_DOWN ) {
+			player.setUDMotionState(motionKeys.contains(KeyEvent.VK_UP)? MotionStateUpDown.UP : MotionStateUpDown.IDLE);
+		} else if (code == KeyEvent.VK_UP){
+			player.setUDMotionState(motionKeys.contains(KeyEvent.VK_DOWN)? MotionStateUpDown.DOWN : MotionStateUpDown.IDLE);
+		} else if (code == KeyEvent.VK_LEFT) {
+			player.setLRMotionState(motionKeys.contains(KeyEvent.VK_RIGHT)? MotionStateLeftRight.RIGHT : MotionStateLeftRight.IDLE);
+		} else if (code == KeyEvent.VK_RIGHT) {
+			player.setLRMotionState(motionKeys.contains(KeyEvent.VK_LEFT)? MotionStateLeftRight.LEFT : MotionStateLeftRight.IDLE);
 		}
 		
 		motionKeys.remove(code);
@@ -124,20 +138,10 @@ public class GameScreen extends Screen implements KeyListener{
 	}
 	
 	private void left() {
-		if (player.getEntityState() != Entity.EntityState.DAMAGED && player.getEntityState() != Entity.EntityState.DEAD) {
-			player.setLRMotionState(MotionStateLeftRight.LEFT);
-			if (player.getEntityState() == Entity.EntityState.DEFAULT) {
-				player.faceWest();
-			}
-		}
+		player.setLRMotionState(MotionStateLeftRight.LEFT);
 	}
 	
 	private void right() {
-		if (player.getEntityState() != Entity.EntityState.DAMAGED && player.getEntityState() != Entity.EntityState.DEAD) {
-			player.setLRMotionState(MotionStateLeftRight.RIGHT);
-			if (player.getEntityState() == Entity.EntityState.DEFAULT) {
-				player.faceEast();
-			}
-		}
+		player.setLRMotionState(MotionStateLeftRight.RIGHT);
 	}
 }
