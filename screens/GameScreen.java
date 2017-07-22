@@ -5,7 +5,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.HashSet;
 import java.util.Set;
-
+import java.util.ArrayList;
 import characterEntities.*;
 
 public class GameScreen extends Screen implements KeyListener{
@@ -15,6 +15,7 @@ public class GameScreen extends Screen implements KeyListener{
 	private GameMap map;
 	private int level = 1;
 	private Hero player;
+	private ArrayList<Entity> enemies = new ArrayList<>();
 	
 	public GameScreen(String playerName, PlayerClass playerClass) {
 		super();
@@ -25,6 +26,7 @@ public class GameScreen extends Screen implements KeyListener{
 		
 		map = new GameMap(level);
 		createPlayer(playerName, playerClass);
+		createEnemy("dummy", 1000);
 	}
 
 	@Override
@@ -32,6 +34,9 @@ public class GameScreen extends Screen implements KeyListener{
 		//HACK: have something that requests focus not so frequently
 		requestFocus(true);
 		Rectangle originalPlayer = new Rectangle(player.getPosX(), player.getPosY(),75,  75);
+		for (Entity enemy: enemies) {
+			enemy.update();
+		}
 		player.update();
 		player.setPoint(map.determineMotion(player.getPosX(), player.getPosY(), originalPlayer));
 	}
@@ -51,7 +56,10 @@ public class GameScreen extends Screen implements KeyListener{
 		}
 	}
 
-	private void createEnemy() {}
+	private void createEnemy(String name, int health) {
+		Enemy dummy = new Enemy(name, health, 0, 0);
+		enemies.add(dummy);
+	}
 
 	private void createProjectile() {}
 
@@ -78,6 +86,10 @@ public class GameScreen extends Screen implements KeyListener{
 			map.setMap(1);
 		} else if (e.getKeyCode() == KeyEvent.VK_K) {
 			map.setMap(2);
+		} else if (code == KeyEvent.VK_A) {
+			player.attack(Hero.Ability.DEFAULT, enemies);
+		} else if (code == KeyEvent.VK_Z) {
+			player.inflict(25);
 		}
 	}
 
@@ -100,28 +112,35 @@ public class GameScreen extends Screen implements KeyListener{
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		map.draw(g);
+		for (Entity enemy : enemies) {
+			enemy.draw(g);
+		}
 		player.draw(g);
 	}
 	
-	public void up() {
+	private void up() {
 		player.setUDMotionState(MotionStateUpDown.UP);
 	}
 	
-	public void down() {
+	private void down() {
 		player.setUDMotionState(MotionStateUpDown.DOWN);
 	}
 	
-	public void left() {
-		player.setLRMotionState(MotionStateLeftRight.LEFT);
-		if (player.getEntityState() == Entity.EntityState.DEFAULT) {
-			player.faceWest();
+	private void left() {
+		if (player.getEntityState() != Entity.EntityState.DAMAGED && player.getEntityState() != Entity.EntityState.DEAD) {
+			player.setLRMotionState(MotionStateLeftRight.LEFT);
+			if (player.getEntityState() == Entity.EntityState.DEFAULT) {
+				player.faceWest();
+			}
 		}
 	}
 	
-	public void right() {
-		player.setLRMotionState(MotionStateLeftRight.RIGHT);
-		if (player.getEntityState() == Entity.EntityState.DEFAULT) {
-			player.faceEast();
+	private void right() {
+		if (player.getEntityState() != Entity.EntityState.DAMAGED && player.getEntityState() != Entity.EntityState.DEAD) {
+			player.setLRMotionState(MotionStateLeftRight.RIGHT);
+			if (player.getEntityState() == Entity.EntityState.DEFAULT) {
+				player.faceEast();
+			}
 		}
 	}
 }
