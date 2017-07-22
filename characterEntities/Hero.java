@@ -40,8 +40,8 @@ public abstract class Hero extends Entity {
 		this.playerClass = playerClass;
 	}
 	
-	public Hero (int maxHealth, int maxDamage, int minDamage, int posX, int posY) {
-		super(maxHealth, maxDamage, minDamage, posX, posY);
+	Hero (int maxHealth, int maxDamage, int minDamage, int posX, int posY, int velocity) {
+		super(maxHealth, maxDamage, minDamage, posX, posY, velocity);
 		setAnimation(0, new Animation(Animation.AnimationType.DEFAULT, this));
 		numberEvolutions = 0;
 	}
@@ -64,6 +64,8 @@ public abstract class Hero extends Entity {
 				break;
 			case DEAD:
 				filepath += "Dead";
+				break;
+			default:
 				break;
 		}
 		filepath += ".png";

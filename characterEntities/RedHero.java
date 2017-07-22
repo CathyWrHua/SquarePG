@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class RedHero extends Hero {
 	public RedHero () {
-		super(300, 55, 45, 100, 100);
+		super(300, 55, 45, 100, 100, 5);
 		setColour("red");
 		setPlayerClass(PlayerClass.RED);
 		setAvatar("src/assets/hero/redNeutral.png");
@@ -44,17 +44,13 @@ public class RedHero extends Hero {
                 switch (ability) {
                     case DEFAULT:
                         if (isHit(ability, target)) {
-                            target.inflict(getDamage());
+                            target.inflict(getDamage(), this.getFacingEast());
                         }
                         break;
                     case FIRST:
-                        break;
                     case SECOND:
-                        break;
                     case THIRD:
-                        break;
                     case ULTIMATE:
-                        break;
                     default:
                         break;
                 }

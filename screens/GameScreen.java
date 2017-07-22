@@ -24,7 +24,9 @@ public class GameScreen extends Screen implements KeyListener{
 		
 		map = new GameMap(level);
 		createPlayer(playerClass);
-		createEnemy(1000);
+		createEnemy(1000, 0, 0, 200, 100 ,1);
+		createDummy(400, 100, true);
+		createDummy(600, 100, false);
 	}
 
 	@Override
@@ -60,9 +62,15 @@ public class GameScreen extends Screen implements KeyListener{
 		}
 	}
 
-	private void createEnemy(int health) {
-		Enemy dummy = new Enemy(health, 0, 0);
+	private void createEnemy(int health, int maxDamage, int minDamage, int posX, int posY, int velocity) {
+		Grunt grunt = new Grunt(health, maxDamage, minDamage, posX, posY, velocity);
+		enemies.add(grunt);
+	}
+
+	private void createDummy(int posX, int posY, boolean facingEast) {
+		Dummy dummy = new Dummy(posX, posY, facingEast);
 		enemies.add(dummy);
+
 	}
 
 	private void createProjectile() {}
@@ -95,7 +103,9 @@ public class GameScreen extends Screen implements KeyListener{
 		} else if (e.getKeyCode() == KeyEvent.VK_A) {
 			player.attack(Hero.Ability.DEFAULT, enemies);
 		} else if (e.getKeyCode() == KeyEvent.VK_Z) {
-			player.inflict(25);
+			player.inflict(25, true);
+		} else if (e.getKeyCode() == KeyEvent.VK_X) {
+			player.heal(25);
 		}
 	}
 

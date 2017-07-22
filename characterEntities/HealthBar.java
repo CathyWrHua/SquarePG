@@ -13,11 +13,13 @@ class HealthBar {
     private static final int BORDER_OFFSET_X = -15;
 
     private ImageIcon border;
+    private ImageIcon dead;
     private Entity entity;
 
     HealthBar(Entity entity) {
         this.entity = entity;
         this.border = new ImageIcon("src/assets/gui/healthbar.png");
+        this.dead = new ImageIcon("src/assets/gui/dead.png");
     }
 
     void draw(Graphics g) {
@@ -28,5 +30,8 @@ class HealthBar {
         g2d.fill(new Rectangle2D.Double(entity.getPosX()+OFFSET_X, entity.getPosY()+OFFSET_Y,
                 (int)((1.0*entity.getCurrentHealth()/entity.getMaxHealth())*BAR_WIDTH), BAR_HEIGHT));
         g2d.drawImage(border.getImage(), entity.getPosX()+BORDER_OFFSET_X, entity.getPosY()+BORDER_OFFSET_Y, null);
+        if (entity.getCurrentHealth() <= 0) {
+            g2d.drawImage(dead.getImage(),entity.getPosX()+BORDER_OFFSET_X, entity.getPosY()+BORDER_OFFSET_Y, null);
+        }
     }
 }
