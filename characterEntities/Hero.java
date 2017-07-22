@@ -1,12 +1,7 @@
 package characterEntities;
-
-import SquarePG.GameState;
-
 import java.util.ArrayList;
 
 public abstract class Hero extends Entity {
-	private GameState gameState = GameState.WORLDMAP;
-
 	protected String colour = "";
 	protected int numberEvolutions;
 	protected PlayerClass playerClass;
@@ -88,8 +83,4 @@ public abstract class Hero extends Entity {
 //		}
 		return true;
 	}
-    
-    public void setGameState (GameState gameState) {
-        this.gameState = gameState;
-    }
 }

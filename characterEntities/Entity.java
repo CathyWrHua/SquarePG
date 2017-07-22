@@ -59,14 +59,15 @@ public abstract class Entity {
                     break;
                 case RIGHT:
                     posX += VELOCITY;
+                    break;
             }
-
             switch (udMotionState) {
                 case UP:
                     posY -= VELOCITY;
                     break;
                 case DOWN:
                     posY += VELOCITY;
+                    break;
             }
         }
 
@@ -92,9 +93,6 @@ public abstract class Entity {
 		    setEntityState(EntityState.DEFAULT);
 		    stunCounter = STUN_TIME;
         }
-
-        if (entityState != EntityState.DEAD && currentHealth <= 0)
-            setEntityState(EntityState.DEAD);
 
 		if (currentAnimation != null) {
             currentAnimation.update();
