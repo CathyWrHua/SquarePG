@@ -1,9 +1,6 @@
 package characterEntities;
 
-import SquarePG.GameState;
-
 public abstract class Hero extends Entity {
-	private GameState gameState = GameState.WORLDMAP;
 	protected int numberEvolutions;
 	protected PlayerClass playerClass;
 	
@@ -47,8 +44,4 @@ public abstract class Hero extends Entity {
 //		}
 		return true;
 	}
-    
-    public void setGameState (GameState gameState) {
-        this.gameState = gameState;
-    }
 }

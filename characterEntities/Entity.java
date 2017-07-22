@@ -144,7 +144,14 @@ public abstract class Entity {
     public void setPosY (int posY) {
         this.posY = posY;
     }
-    
+
+    public void setPoint (Point newPoint) {
+	    if (newPoint != null) {
+            posX = newPoint.x;
+            posY = newPoint.y;
+        }
+    }
+
     public void setLRMotionState (MotionStateLeftRight state) {
     	lrMotionState = state;
     }
