@@ -3,7 +3,7 @@ package characterEntities;
 import javax.swing.*;
 import java.awt.*;
 
-public class Animation {
+public class AbilityAnimation {
     private int totalFrames;
     private int counter = 0;
     private Entity entity;
@@ -17,7 +17,7 @@ public class Animation {
     
     public enum AnimationType {DEFAULT}
 
-    public Animation(AnimationType animationType, Entity entity) {
+    public AbilityAnimation(AnimationType animationType, Entity entity) {
         this.entity = entity;
         switch(animationType) {
             case DEFAULT:

@@ -1,5 +1,7 @@
 package characterEntities;
 
+import screens.GameScreen;
+
 import java.awt.*;
 
 public class Dummy extends Entity {
@@ -7,14 +9,15 @@ public class Dummy extends Entity {
 
     private static final int STUN_TIME = 15;
 
-    public Dummy(int posX, int posY, boolean facingEast) {
-        super(1, 0, 0, posX, posY, 0);
+    public Dummy(GameScreen game, int posX, int posY, boolean facingEast) {
+        super(game, 1, 0, 0, posX, posY, 0);
         setImageIcon("src/assets/enemies/dummyNeutral.png");
         setFacingEast(facingEast);
     }
 
     @Override
     public void inflict(int damageTaken, boolean attackerFacingEast) {
+        getGame().createDamageMarker(damageTaken, getPosX(), getPosY());
         setAttackerFacingEast(attackerFacingEast);
         setEntityState(EntityState.DAMAGED);
     }

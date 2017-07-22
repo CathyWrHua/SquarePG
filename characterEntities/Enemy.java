@@ -1,10 +1,17 @@
 package characterEntities;
 
+import screens.GameScreen;
+
 public class Enemy extends Entity {
+	private int deletionCounter = DELETION_TIME;
+	private boolean done;
 	private String shape;
+
+	private static final int DELETION_TIME = 90;
 	
-	Enemy(int maxHealth, int maxDamage, int minDamage, int posX, int posY, int velocity) {
-		super(maxHealth, maxDamage, minDamage, posX, posY, velocity);
+	Enemy(GameScreen game, int maxHealth, int maxDamage, int minDamage, int posX, int posY, int velocity) {
+		super(game, maxHealth, maxDamage, minDamage, posX, posY, velocity);
+		done = false;
 	}
 
 	void setShape(String shape) {
@@ -13,6 +20,17 @@ public class Enemy extends Entity {
 
 	public String getShape() {
 		return shape;
+	}
+
+	public boolean isDone() {
+		return done;
+	}
+
+	public void update() {
+		super.update();
+		if (getEntityState() == EntityState.DEAD && deletionCounter-- <= 0) {
+			done = true;
+		}
 	}
 
 	@Override

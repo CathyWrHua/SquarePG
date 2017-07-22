@@ -1,5 +1,7 @@
 package characterEntities;
 
+import screens.GameScreen;
+
 import java.util.ArrayList;
 
 public abstract class Hero extends Entity {
@@ -40,9 +42,9 @@ public abstract class Hero extends Entity {
 		this.playerClass = playerClass;
 	}
 	
-	Hero(int maxHealth, int maxDamage, int minDamage, int posX, int posY, int velocity) {
-		super(maxHealth, maxDamage, minDamage, posX, posY, velocity);
-		setAnimation(0, new Animation(Animation.AnimationType.DEFAULT, this));
+	Hero(GameScreen game, int maxHealth, int maxDamage, int minDamage, int posX, int posY, int velocity) {
+		super(game, maxHealth, maxDamage, minDamage, posX, posY, velocity);
+		setAnimation(0, new AbilityAnimation(AbilityAnimation.AnimationType.DEFAULT, this));
 		numberEvolutions = 0;
 	}
 

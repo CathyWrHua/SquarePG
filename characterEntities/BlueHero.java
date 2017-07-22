@@ -1,10 +1,12 @@
 package characterEntities;
 
+import screens.GameScreen;
+
 import java.util.ArrayList;
 
 public class BlueHero extends Hero {
-	public BlueHero() {
-		super(100, 80, 70, 100, 100, 5);
+	public BlueHero(GameScreen game) {
+		super(game, 100, 80, 70, 100, 100, 5);
 		setColour("blue");
 		setPlayerClass(PlayerClass.BLUE);
 		setImageIcon("src/assets/hero/blueNeutral.png");
@@ -69,9 +71,9 @@ public class BlueHero extends Hero {
 		int y2 = target.getPosY();
 		switch (ability) {
 			case DEFAULT:
-				if (((getFacingEast() && x2 >= x1 && x2 <= x1+SQUARE_LENGTH+DEFAULT_RANGE) ||
-						(!getFacingEast() && x2 <= x1 && x2 >= x1-SQUARE_LENGTH-DEFAULT_RANGE)) &&
-						y2 >= y1-DEFAULT_RANGE && y2 <= y1+DEFAULT_RANGE)
+				if (((getFacingEast() && x2 > x1 && x2 < x1+SQUARE_LENGTH+DEFAULT_RANGE) ||
+						(!getFacingEast() && x2 < x1 && x2 > x1-SQUARE_LENGTH-DEFAULT_RANGE)) &&
+						y2 >= y1-DEFAULT_RANGE && y2 < y1+DEFAULT_RANGE)
 					hit = true;
 				break;
 			case FIRST:

@@ -3,6 +3,7 @@ package screens;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.ArrayList;
@@ -12,8 +13,11 @@ public class GameScreen extends Screen implements KeyListener{
 	private GameMap map;
 	private int level = 1;
 	private Hero player;
-	private ArrayList<Entity> enemies = new ArrayList<>();
-	private Set<Integer> motionKeys = new LinkedHashSet<>();
+	private ArrayList<Entity> targets;
+	private ArrayList<Enemy> enemies;
+	private ArrayList<Dummy> dummies;
+	private ArrayList<DamageMarker> damageMarkers;
+	private Set<Integer> motionKeys;
 	
 	public GameScreen(Hero.PlayerClass playerClass) {
 		super();
@@ -21,56 +25,51 @@ public class GameScreen extends Screen implements KeyListener{
 		addKeyListener(this);
 		setFocusable(true);
 		setFocusTraversalKeysEnabled(false);
-		
+
+		targets = new ArrayList<>();
+		enemies = new ArrayList<>();
+		dummies = new ArrayList<>();
+		damageMarkers = new ArrayList<>();
+		motionKeys = new LinkedHashSet<>();
 		map = new GameMap(level);
+
 		createPlayer(playerClass);
-		createEnemy(1000, 0, 0, 200, 100 ,1);
+		createEnemy(300, 0, 0, 200, 100 ,1);
 		createDummy(400, 100, true);
 		createDummy(600, 100, false);
-	}
-
-	@Override
-	public void update() {
-		//HACK: have something that requests focus not so frequently
-		requestFocus(true);
-		//TODO:Remove all magic width and heights with actual ones
-
-		Rectangle originalPlayer = new Rectangle(player.getPosX(), player.getPosY(),75,  75);
-		player.update();
-
-		for (Entity enemy: enemies) {
-			Rectangle originalEnemy = new Rectangle(enemy.getPosX(), enemy.getPosY(), 75, 75);
-			enemy.update();
-			enemy.setPoint(map.determineMotion(enemy.getPosX(), enemy.getPosY(), originalEnemy));
-		}
-		map.setCurrentEntityList(enemies);
-		player.setPoint(map.determineMotion(player.getPosX(), player.getPosY(), originalPlayer));
 	}
 	
 	private void createPlayer(Hero.PlayerClass playerClass) {
 		switch (playerClass) {
 		case RED:
-			player = new RedHero();
+			player = new RedHero(this);
 			break;
 		case BLUE:
-			player = new BlueHero();
+			player = new BlueHero(this);
 			break;
 		case YELLOW:
-			player = new YellowHero();
+			player = new YellowHero(this);
 			break;
 		default:
 		}
 	}
 
 	private void createEnemy(int health, int maxDamage, int minDamage, int posX, int posY, int velocity) {
-		Grunt grunt = new Grunt(health, maxDamage, minDamage, posX, posY, velocity);
+		Grunt grunt = new Grunt(this, health, maxDamage, minDamage, posX, posY, velocity);
 		enemies.add(grunt);
+		targets.add(grunt);
 	}
 
 	private void createDummy(int posX, int posY, boolean facingEast) {
-		Dummy dummy = new Dummy(posX, posY, facingEast);
-		enemies.add(dummy);
+		Dummy dummy = new Dummy(this, posX, posY, facingEast);
+		dummies.add(dummy);
+		targets.add(dummy);
 
+	}
+
+	public void createDamageMarker(int damage, int posX, int posY) {
+		DamageMarker marker = new DamageMarker(damage, posX, posY);
+		damageMarkers.add(marker);
 	}
 
 	private void createProjectile() {}
@@ -101,7 +100,7 @@ public class GameScreen extends Screen implements KeyListener{
 		} else if (e.getKeyCode() == KeyEvent.VK_K) {
 			map.setMap(2);
 		} else if (e.getKeyCode() == KeyEvent.VK_A) {
-			player.attack(Hero.Ability.DEFAULT, enemies);
+			player.attack(Hero.Ability.DEFAULT, targets);
 		} else if (e.getKeyCode() == KeyEvent.VK_Z) {
 			player.inflict(25, true);
 		} else if (e.getKeyCode() == KeyEvent.VK_X) {
@@ -128,14 +127,51 @@ public class GameScreen extends Screen implements KeyListener{
 
 	@Override
 	public void keyTyped(KeyEvent arg0) { }
+
+	@Override
+	public void update() {
+		//HACK: have something that requests focus not so frequently
+		requestFocus(true);
+		//TODO:Remove all magic width and heights with actual ones
+
+		Rectangle originalPlayer = new Rectangle(player.getPosX(), player.getPosY(),75,  75);
+		player.update();
+
+		for (Iterator<Enemy> iterator = enemies.iterator(); iterator.hasNext();) {
+			Enemy enemy = iterator.next();
+			Rectangle originalEnemy = new Rectangle(enemy.getPosX(), enemy.getPosY(), 75, 75);
+			enemy.update();
+			enemy.setPoint(map.determineMotion(enemy.getPosX(), enemy.getPosY(), originalEnemy));
+			if (enemy.isDone()) {
+				System.out.println(targets.remove(enemy));
+				iterator.remove();
+			}
+		}
+		for (Dummy dummy : dummies) {
+			dummy.update();
+		}
+		map.setCurrentEntityList(targets);
+		player.setPoint(map.determineMotion(player.getPosX(), player.getPosY(), originalPlayer));
+
+		for(Iterator<DamageMarker> iterator = damageMarkers.iterator(); iterator.hasNext();) {
+			DamageMarker marker = iterator.next();
+			marker.update();
+			if (marker.isDone()) {
+				iterator.remove();
+			}
+		}
+	}
 	
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		map.draw(g);
-		for (Entity enemy : enemies) {
-			enemy.draw(g);
+		for (Entity target : targets) {
+			target.draw(g);
 		}
 		player.draw(g);
+		for(DamageMarker marker : damageMarkers) {
+			marker.draw(g);
+		}
 	}
 	
 	private void up() {

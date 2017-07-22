@@ -1,5 +1,7 @@
 package characterEntities;
 
+import screens.GameScreen;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.Random;
@@ -13,11 +15,12 @@ public abstract class Entity {
 	private int velocity;
 	private boolean attackerFacingEast;
 	private boolean facingEast;
-	private Animation currentAnimation;
-    private Animation[] animations;
+	private AbilityAnimation currentAbilityAnimation;
+    private AbilityAnimation[] abilityAnimations;
 	private ImageIcon imageIcon;
     private HealthBar healthBar;
 	private Random random;
+	private GameScreen game;
 
     public enum EntityState {DEFAULT, ATTACKING, DAMAGED, DEAD}
     public enum MotionStateUpDown {IDLE, UP, DOWN}
@@ -31,7 +34,8 @@ public abstract class Entity {
 	private static final int STUN_TIME = 15;
 	private static final int KNOCK_BACK_DUR = 1;
 	
-	public Entity(int maxHealth, int maxDamage, int minDamage, int posX, int posY, int velocity) {
+	public Entity(GameScreen game, int maxHealth, int maxDamage, int minDamage, int posX, int posY, int velocity) {
+	    this.game = game;
 		this.currentHealth = this.maxHealth = maxHealth;
 		this.maxDamage = maxDamage;
 		this.minDamage = minDamage;
@@ -42,8 +46,8 @@ public abstract class Entity {
         this.facingEast = true;
         this.velocity = velocity;
 
-        this.animations = new Animation[NUM_ANIMATIONS];
-        this.currentAnimation = null;
+        this.abilityAnimations = new AbilityAnimation[NUM_ANIMATIONS];
+        this.currentAbilityAnimation = null;
 		this.healthBar = new HealthBar(this);
 		this.random = new Random();
 
@@ -53,6 +57,7 @@ public abstract class Entity {
 	}
 	
 	public void inflict(int damageTaken, boolean attackerFacingEast) {
+	    this.game.createDamageMarker(damageTaken, posX, posY);
 	    this.damageTaken = damageTaken;
 	    this.attackerFacingEast = attackerFacingEast;
 	}
@@ -65,8 +70,8 @@ public abstract class Entity {
 	}
 
 	void playAnimation(int index) {
-	    if (index >= 0 && index < animations.length)
-	        currentAnimation = animations[index];
+	    if (index >= 0 && index < abilityAnimations.length)
+	        currentAbilityAnimation = abilityAnimations[index];
     }
 
 	public void update() {
@@ -98,9 +103,9 @@ public abstract class Entity {
         if (damageTaken > 0) {
             currentHealth -= damageTaken;
             currentHealth = (currentHealth < 0) ? 0 : currentHealth;
-            if (currentAnimation != null) {
-                currentAnimation.resetCounter();
-                currentAnimation = null;
+            if (currentAbilityAnimation != null) {
+                currentAbilityAnimation.resetCounter();
+                currentAbilityAnimation = null;
             }
             if (currentHealth > 0) {
                 setEntityState(EntityState.DAMAGED);
@@ -122,18 +127,22 @@ public abstract class Entity {
 		    stunCounter = STUN_TIME;
         }
 
-		if (currentAnimation != null) {
-            currentAnimation.update();
-            if (currentAnimation.isDone()) {
+		if (currentAbilityAnimation != null) {
+            currentAbilityAnimation.update();
+            if (currentAbilityAnimation.isDone()) {
                 setEntityState(EntityState.DEFAULT);
                 setEntityDirection();
-                currentAnimation = null;
+                currentAbilityAnimation = null;
             }
         }
 	}
 
 	ImageIcon getImageIcon() {
 	    return imageIcon;
+    }
+
+    GameScreen getGame() {
+	    return game;
     }
 	
     int getDamage() {
@@ -231,8 +240,8 @@ public abstract class Entity {
 	    this.attackerFacingEast = attackerFacingEast;
     }
 
-    void setAnimation(int index, Animation animation) {
-	    animations[index] = animation;
+    void setAnimation(int index, AbilityAnimation abilityAnimation) {
+	    abilityAnimations[index] = abilityAnimation;
     }
    
     public void draw(Graphics g) {
@@ -241,8 +250,8 @@ public abstract class Entity {
         int x = posX;
         int width = image.getWidth(null);
 
-        if (currentAnimation != null)
-            currentAnimation.draw(g);
+        if (currentAbilityAnimation != null)
+            currentAbilityAnimation.draw(g);
         healthBar.draw(g);
 
         if (!facingEast) {

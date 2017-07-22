@@ -1,10 +1,12 @@
 package characterEntities;
 
+import screens.GameScreen;
+
 import java.util.ArrayList;
 
 public class YellowHero extends Hero {
-	public YellowHero() {
-		super(200, 70, 60, 100, 100, 5);
+	public YellowHero(GameScreen game) {
+		super(game, 200, 70, 60, 100, 100, 5);
 		setColour("yellow");
 		setPlayerClass(PlayerClass.YELLOW);
 		setImageIcon("src/assets/hero/yellowNeutral.png");
@@ -70,9 +72,9 @@ public class YellowHero extends Hero {
 		int y2 = target.getPosY();
 		switch (ability) {
 			case DEFAULT:
-				if (((getFacingEast() && x2 >= x1 && x2 <= x1+SQUARE_LENGTH+DEFAULT_RANGE) ||
-						(!getFacingEast() && x2 <= x1 && x2 >= x1-SQUARE_LENGTH-DEFAULT_RANGE)) &&
-						y2 >= y1-DEFAULT_RANGE && y2 <= y1+DEFAULT_RANGE)
+				if (((getFacingEast() && x2 > x1 && x2 < x1+SQUARE_LENGTH+DEFAULT_RANGE) ||
+						(!getFacingEast() && x2 < x1 && x2 > x1-SQUARE_LENGTH-DEFAULT_RANGE)) &&
+						y2 >= y1-DEFAULT_RANGE && y2 < y1+DEFAULT_RANGE)
 					hit = true;
 				break;
 			case FIRST:
