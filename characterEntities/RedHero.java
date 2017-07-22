@@ -3,14 +3,14 @@ package characterEntities;
 import java.util.ArrayList;
 
 public class RedHero extends Hero {
-	public RedHero () {
+	public RedHero() {
 		super(300, 55, 45, 100, 100, 5);
 		setColour("red");
 		setPlayerClass(PlayerClass.RED);
-		setAvatar("src/assets/hero/redNeutral.png");
+		setImageIcon("src/assets/hero/redNeutral.png");
 	}
 	
-	public boolean evolve (int path) {
+	public boolean evolve(int path) {
 		if (numberEvolutions != 0) {
 			return false;
 		}
@@ -36,7 +36,7 @@ public class RedHero extends Hero {
 		}
 	}
 
-	public void attack (Ability ability, ArrayList<Entity> targets) {
+	public void attack(Ability ability, ArrayList<Entity> targets) {
 		if (getEntityState() == EntityState.DEFAULT) {
 			setEntityState(EntityState.ATTACKING);
             playAnimation(ability.getValue());
@@ -58,7 +58,7 @@ public class RedHero extends Hero {
 		}
 	}
 
-	protected boolean isHit (Ability ability, Entity target) {
+	protected boolean isHit(Ability ability, Entity target) {
 		boolean hit = false;
         int x1 = getPosX();
         int y1 = getPosY();

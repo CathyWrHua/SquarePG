@@ -7,14 +7,14 @@ public class Dummy extends Entity {
 
     private static final int STUN_TIME = 15;
 
-    public Dummy (int posX, int posY, boolean facingEast) {
+    public Dummy(int posX, int posY, boolean facingEast) {
         super(1, 0, 0, posX, posY, 0);
-        setAvatar("src/assets/enemies/dummyNeutral.png");
+        setImageIcon("src/assets/enemies/dummyNeutral.png");
         setFacingEast(facingEast);
     }
 
     @Override
-    public void inflict (int damageTaken, boolean attackerFacingEast) {
+    public void inflict(int damageTaken, boolean attackerFacingEast) {
         setAttackerFacingEast(attackerFacingEast);
         setEntityState(EntityState.DAMAGED);
     }
@@ -41,7 +41,7 @@ public class Dummy extends Entity {
                 break;
         }
         filepath += ".png";
-        this.setAvatar(filepath);
+        this.setImageIcon(filepath);
     }
 
     @Override
@@ -55,9 +55,9 @@ public class Dummy extends Entity {
     }
 
     @Override
-    public void draw (Graphics g) {
+    public void draw(Graphics g) {
         Graphics2D g2d = (Graphics2D)g;
-        Image image = getAvatar().getImage();
+        Image image = getImageIcon().getImage();
         int x = getPosX();
         int width = image.getWidth(null);
 

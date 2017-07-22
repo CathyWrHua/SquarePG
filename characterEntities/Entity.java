@@ -15,7 +15,7 @@ public abstract class Entity {
 	private boolean facingEast;
 	private Animation currentAnimation;
     private Animation[] animations;
-	private ImageIcon avatar;
+	private ImageIcon imageIcon;
     private HealthBar healthBar;
 	private Random random;
 
@@ -31,7 +31,7 @@ public abstract class Entity {
 	private static final int STUN_TIME = 15;
 	private static final int KNOCK_BACK_DUR = 1;
 	
-	public Entity (int maxHealth, int maxDamage, int minDamage, int posX, int posY, int velocity) {
+	public Entity(int maxHealth, int maxDamage, int minDamage, int posX, int posY, int velocity) {
 		this.currentHealth = this.maxHealth = maxHealth;
 		this.maxDamage = maxDamage;
 		this.minDamage = minDamage;
@@ -52,12 +52,12 @@ public abstract class Entity {
 		setUDMotionState(MotionStateUpDown.IDLE);
 	}
 	
-	public void inflict (int damageTaken, boolean attackerFacingEast) {
+	public void inflict(int damageTaken, boolean attackerFacingEast) {
 	    this.damageTaken = damageTaken;
 	    this.attackerFacingEast = attackerFacingEast;
 	}
 	
-	public void heal (int amountHealed) {
+	public void heal(int amountHealed) {
 	    if (entityState != EntityState.DEAD) {
             currentHealth += amountHealed;
             currentHealth = (currentHealth > maxHealth) ? maxHealth : currentHealth;
@@ -69,7 +69,7 @@ public abstract class Entity {
 	        currentAnimation = animations[index];
     }
 
-	public void update () {
+	public void update() {
 	    if (entityState == EntityState.DEFAULT || entityState == EntityState.ATTACKING) {
             switch (lrMotionState) {
                 case LEFT:
@@ -132,70 +132,70 @@ public abstract class Entity {
         }
 	}
 
-	ImageIcon getAvatar () {
-	    return avatar;
+	ImageIcon getImageIcon() {
+	    return imageIcon;
     }
 	
-    int getDamage () {
+    int getDamage() {
         return (minDamage+random.nextInt(maxDamage-minDamage));
     }
     
-    int getCurrentHealth () {
+    int getCurrentHealth() {
         return currentHealth;
     }
     
-    int getMaxHealth () {
+    int getMaxHealth() {
         return maxHealth;
     }
 
-    public int getPosX () {
+    public int getPosX() {
         return posX;
     }
 
-    public int getPosY () {
+    public int getPosY() {
         return posY;
     }
 
-    boolean getFacingEast () {
+    boolean getFacingEast() {
 	    return facingEast;
     }
 
-    boolean getAttackerFacingEast () {
+    boolean getAttackerFacingEast() {
 	    return attackerFacingEast;
     }
 
-    EntityState getEntityState () {
+    EntityState getEntityState() {
 	    return entityState;
     }
 
-    void setAvatar (String filename) {
-        avatar = new ImageIcon(filename);
+    void setImageIcon(String filename) {
+        imageIcon = new ImageIcon(filename);
     }
     
-    public void setCurrentHealth (int currentHealth) {
+    public void setCurrentHealth(int currentHealth) {
         this.currentHealth = currentHealth;
     }
     
-    public void setMaxHealth (int maxHealth) {
+    public void setMaxHealth(int maxHealth) {
         this.maxHealth = maxHealth; 
     }
     
-    public void setDamageMax (int damageMax) {
+    public void setDamageMax(int damageMax) {
         this.maxDamage = damageMax;
     }
     
-    public void setDamageMin (int damageMin) {
+    public void setDamageMin(int damageMin) {
         this.minDamage = damageMin;
     }
 
-    public void setPoint (Point newPoint) {
+    public void setPoint(Point newPoint) {
 	    if (newPoint != null) {
             posX = newPoint.x;
             posY = newPoint.y;
         }
     }
 
-    public void setLRMotionState (MotionStateLeftRight state) {
+    public void setLRMotionState(MotionStateLeftRight state) {
     	lrMotionState = state;
 
     	if (entityState != EntityState.DEFAULT) return;
@@ -207,11 +207,11 @@ public abstract class Entity {
         }
     }
     
-    public void setUDMotionState (MotionStateUpDown state) {
+    public void setUDMotionState(MotionStateUpDown state) {
     	udMotionState = state;
     }
 
-    public void setEntityState (EntityState state) {
+    public void setEntityState(EntityState state) {
 	    entityState = state;
     }
 
@@ -231,13 +231,13 @@ public abstract class Entity {
 	    this.attackerFacingEast = attackerFacingEast;
     }
 
-    void setAnimation (int index, Animation animation) {
+    void setAnimation(int index, Animation animation) {
 	    animations[index] = animation;
     }
    
-    public void draw (Graphics g) {
+    public void draw(Graphics g) {
         Graphics2D g2d = (Graphics2D)g;
-        Image image = avatar.getImage();
+        Image image = imageIcon.getImage();
         int x = posX;
         int width = image.getWidth(null);
 

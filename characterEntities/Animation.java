@@ -17,7 +17,7 @@ public class Animation {
     
     public enum AnimationType {DEFAULT}
 
-    public Animation (AnimationType animationType, Entity entity) {
+    public Animation(AnimationType animationType, Entity entity) {
         this.entity = entity;
         switch(animationType) {
             case DEFAULT:
@@ -33,7 +33,7 @@ public class Animation {
         return done;
     }
 
-    public void update () {
+    public void update() {
         done = false;
         String filePath = "src/assets/animations/" + animationName;
         filePath += (counter/ANIMATION_SPEED) + ".png";
@@ -46,11 +46,11 @@ public class Animation {
         counter++;
     }
 
-    public void resetCounter () {
+    public void resetCounter() {
         this.counter = 0;
     }
 
-    public void draw (Graphics g) {
+    public void draw(Graphics g) {
         if (imageIcon == null) {
             return;
         }

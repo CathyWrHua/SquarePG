@@ -23,7 +23,7 @@ public abstract class Hero extends Entity {
 		DEFAULT(0), FIRST(1), SECOND(2), THIRD(3), ULTIMATE(4);
 		private int value;
 
-		Ability (int value) {
+		Ability(int value) {
 			this.value = value;
 		}
 
@@ -32,7 +32,7 @@ public abstract class Hero extends Entity {
 		}
 	}
 
-	void setColour (String colour) {
+	void setColour(String colour) {
 		this.colour = colour;
 	}
 
@@ -40,7 +40,7 @@ public abstract class Hero extends Entity {
 		this.playerClass = playerClass;
 	}
 	
-	Hero (int maxHealth, int maxDamage, int minDamage, int posX, int posY, int velocity) {
+	Hero(int maxHealth, int maxDamage, int minDamage, int posX, int posY, int velocity) {
 		super(maxHealth, maxDamage, minDamage, posX, posY, velocity);
 		setAnimation(0, new Animation(Animation.AnimationType.DEFAULT, this));
 		numberEvolutions = 0;
@@ -69,16 +69,16 @@ public abstract class Hero extends Entity {
 				break;
 		}
 		filepath += ".png";
-		this.setAvatar(filepath);
+		this.setImageIcon(filepath);
 	}
 	
-	public abstract boolean evolve (int path);
+	public abstract boolean evolve(int path);
 
-	public abstract void attack (Ability ability, ArrayList<Entity> targets);
+	public abstract void attack(Ability ability, ArrayList<Entity> targets);
 
-	protected abstract boolean isHit (Ability ability, Entity target);
+	protected abstract boolean isHit(Ability ability, Entity target);
 	
-	protected boolean evolutionIncrease (int path) {
+	protected boolean evolutionIncrease(int path) {
 //		switch (path) {
 //		case PATH_RED:
 //			maxHealth += 210;

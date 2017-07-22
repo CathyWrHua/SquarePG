@@ -5,16 +5,16 @@ import java.awt.*;
 import java.awt.geom.Rectangle2D;
 
 class HealthBar {
+    private ImageIcon border;
+    private ImageIcon dead;
+    private Entity entity;
+
     private static final int BAR_WIDTH = 95;
     private static final int BAR_HEIGHT = 17;
     private static final int OFFSET_Y = 85;
     private static final int OFFSET_X = -9;
     private static final int BORDER_OFFSET_Y = 80;
     private static final int BORDER_OFFSET_X = -15;
-
-    private ImageIcon border;
-    private ImageIcon dead;
-    private Entity entity;
 
     HealthBar(Entity entity) {
         this.entity = entity;

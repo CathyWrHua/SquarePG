@@ -3,7 +3,7 @@ package characterEntities;
 public class Enemy extends Entity {
 	private String shape;
 	
-	Enemy (int maxHealth, int maxDamage, int minDamage, int posX, int posY, int velocity) {
+	Enemy(int maxHealth, int maxDamage, int minDamage, int posX, int posY, int velocity) {
 		super(maxHealth, maxDamage, minDamage, posX, posY, velocity);
 	}
 
@@ -37,7 +37,7 @@ public class Enemy extends Entity {
 				break;
 		}
 		filepath += ".png";
-		this.setAvatar(filepath);
+		this.setImageIcon(filepath);
 	}
 
 }

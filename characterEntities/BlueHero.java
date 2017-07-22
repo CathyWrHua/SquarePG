@@ -3,11 +3,11 @@ package characterEntities;
 import java.util.ArrayList;
 
 public class BlueHero extends Hero {
-	public BlueHero () {
+	public BlueHero() {
 		super(100, 80, 70, 100, 100, 5);
 		setColour("blue");
 		setPlayerClass(PlayerClass.BLUE);
-		setAvatar("src/assets/hero/blueNeutral.png");
+		setImageIcon("src/assets/hero/blueNeutral.png");
 	}
 	
 	public boolean evolve(int path) {
@@ -35,7 +35,7 @@ public class BlueHero extends Hero {
 		}
 	}
 
-	public void attack (Ability ability, ArrayList<Entity> targets) {
+	public void attack(Ability ability, ArrayList<Entity> targets) {
 		if (getEntityState() == EntityState.DEFAULT) {
 			setEntityState(EntityState.ATTACKING);
 			playAnimation(ability.getValue());
@@ -61,7 +61,7 @@ public class BlueHero extends Hero {
 		}
 	}
 
-	protected boolean isHit (Ability ability, Entity target) {
+	protected boolean isHit(Ability ability, Entity target) {
 		boolean hit = false;
 		int x1 = getPosX();
 		int y1 = getPosY();
