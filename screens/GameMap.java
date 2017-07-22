@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
+import javax.sound.midi.SysexMessage;
 import javax.swing.ImageIcon;
 
 public class GameMap {
@@ -68,33 +69,127 @@ public class GameMap {
 			int hitRectBottom = rect.y + rect.height;
 			int hitRectTop = rect.y;
 
-			if (!(objectSize.y + objectSize.height == hitRectTop || objectSize.y == hitRectBottom)) {
+			if ((displacementX != 0 || displacementY != 0) &&
+					hitRectLeft < objectRight &&
+					hitRectRight > objectLeft &&
+					hitRectTop < objectBottom &&
+					hitRectBottom > objectTop) {
+				//collision
+
 				if (displacementX > 0) {
-					if (objectRight > hitRectLeft && objectRight < hitRectRight && !(objectBottom <= hitRectTop || objectTop >= hitRectBottom)) {
-						newX = rect.x - objectSize.width;
-						objectRight = newX + objectSize.width;
-						objectLeft = newX;
+					if (objectLeft < hitRectLeft) {
+						if (displacementY == 0) {
+							newX = rect.x - objectSize.width;
+							objectRight = newX + objectSize.width;
+							objectLeft = newX;
+						} else if (displacementY > 0) {
+							int collisionWidth = objectRight - hitRectLeft;
+							int collisionHeight = objectBottom - hitRectTop;
+							if (collisionHeight > collisionWidth) {
+								newX = rect.x - objectSize.width;
+								objectRight = newX + objectSize.width;
+								objectLeft = newX;
+							} else if (collisionHeight == collisionWidth) {
+								newX = rect.x - objectSize.width;
+								objectRight = newX + objectSize.width;
+								objectLeft = newX;
+
+								newY = rect.y - objectSize.height;
+								objectTop = newY;
+								objectBottom = newY + objectSize.height;
+							} else {
+								newY = rect.y - objectSize.height;
+								objectTop = newY;
+								objectBottom = newY + objectSize.height;
+							}
+						} else {
+							int collisionWidth = objectRight - hitRectLeft;
+							int collisionHeight = hitRectBottom - objectTop;
+							if (collisionHeight > collisionWidth) {
+								newX = rect.x - objectSize.width;
+								objectRight = newX + objectSize.width;
+								objectLeft = newX;
+							} else if (collisionHeight == collisionWidth) {
+								newX = rect.x - objectSize.width;
+								objectRight = newX + objectSize.width;
+								objectLeft = newX;
+
+								newY = hitRectBottom;
+								objectTop = newY;
+								objectBottom = newY + objectSize.height;
+							} else {
+								newY =hitRectBottom;
+								objectTop = newY;
+								objectBottom = newY + objectSize.height;
+							}
+						}
+						continue;
 					}
 				} else if (displacementX < 0) {
-					if (objectLeft > hitRectLeft && objectLeft < hitRectRight && !(objectBottom <= hitRectTop || objectTop >= hitRectBottom)) {
-						newX = hitRectRight;
-						objectRight = newX + objectSize.width;
-						objectLeft = newX;
+					if (objectRight > hitRectRight) {
+						if (displacementY == 0) {
+							newX = hitRectRight;
+							objectRight = newX + objectSize.width;
+							objectLeft = newX;
+						} else if (displacementY > 0) {
+							int collisionWidth = hitRectRight - objectLeft;
+							int collisionHeight = objectBottom - hitRectTop;
+							if (collisionHeight > collisionWidth) {
+								newX = hitRectRight;
+								objectRight = newX + objectSize.width;
+								objectLeft = newX;
+							} else if (collisionHeight == collisionWidth) {
+								newX = hitRectRight;
+								objectRight = newX + objectSize.width;
+								objectLeft = newX;
+
+								newY = rect.y - objectSize.height;
+								objectTop = newY;
+								objectBottom = newY + objectSize.height;
+							} else {
+								newY = rect.y - objectSize.height;
+								objectTop = newY;
+								objectBottom = newY + objectSize.height;
+							}
+						} else {
+							int collisionWidth = hitRectRight - objectLeft;
+							int collisionHeight = hitRectBottom - objectTop;
+							if (collisionHeight > collisionWidth) {
+								newX = hitRectRight;
+								objectRight = newX + objectSize.width;
+								objectLeft = newX;
+							} else if (collisionHeight == collisionWidth) {
+								newX = hitRectRight;
+								objectRight = newX + objectSize.width;
+								objectLeft = newX;
+
+								newY = hitRectBottom;
+								objectTop = newY;
+								objectBottom = newY + objectSize.height;
+							} else {
+								newY = hitRectBottom;
+								objectTop = newY;
+								objectBottom = newY + objectSize.height;
+							}
+						}
+						continue;
 					}
 				}
-			}
 
-			if (displacementY > 0) {
-				if (objectBottom > hitRectTop && objectBottom < hitRectBottom && !(objectRight <= hitRectLeft || objectLeft >= hitRectRight)) {
-					newY = hitRectTop - objectSize.height;
-					objectTop = newY;
-					objectBottom = newY + objectSize.height;
-				}
-			} else if (displacementY < 0) {
-				if (objectTop < hitRectBottom && objectTop > hitRectTop && !(objectRight <= hitRectLeft || objectLeft >= hitRectRight)) {
-					newY = hitRectBottom;
-					objectTop = newY;
-					objectBottom = newY + objectSize.height;
+				if (displacementY > 0) {
+					if (objectTop < hitRectTop) {
+						newY = rect.y - objectSize.height;
+						objectTop = newY;
+						objectBottom = newY + objectSize.height;
+						continue;
+					}
+				} else if (displacementY < 0) {
+					if (objectBottom > hitRectBottom) {
+						newY = hitRectBottom;
+						objectTop = newY;
+						objectBottom = newY + objectSize.height;
+						continue;
+					}
 				}
 			}
 		}

@@ -22,7 +22,10 @@ public class OptionsScreen extends Screen implements ActionListener{
 		add(back);
 		
 	}
-	
+
+	@Override
+	public void init() {}
+
 	@Override
 	public void update() {
 		validate();

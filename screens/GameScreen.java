@@ -29,9 +29,12 @@ public class GameScreen extends Screen implements KeyListener{
 	}
 
 	@Override
-	public void update() {
-		//HACK: have something that requests focus not so frequently
+	public void init() {
 		requestFocus(true);
+	}
+
+	@Override
+	public void update() {
 		//TODO:Remove all magic width and heights with actual ones
 
 		Rectangle originalPlayer = new Rectangle(player.getPosX(), player.getPosY(),75,  75);

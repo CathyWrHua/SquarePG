@@ -41,7 +41,9 @@ public class HomeScreen extends Screen implements ActionListener{
         add(about, c);
         
     }
-	
+
+    @Override
+    public void init() {}
 
 	@Override
 	public void update() {
