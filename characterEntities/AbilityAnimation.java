@@ -3,7 +3,7 @@ package characterEntities;
 import javax.swing.*;
 import java.awt.*;
 
-public class Animation {
+public class AbilityAnimation {
     private int totalFrames;
     private int counter = 0;
     private Entity entity;
@@ -17,7 +17,7 @@ public class Animation {
     
     public enum AnimationType {DEFAULT}
 
-    public Animation (AnimationType animationType, Entity entity) {
+    public AbilityAnimation(AnimationType animationType, Entity entity) {
         this.entity = entity;
         switch(animationType) {
             case DEFAULT:
@@ -33,7 +33,7 @@ public class Animation {
         return done;
     }
 
-    public void update () {
+    public void update() {
         done = false;
         String filePath = "src/assets/animations/" + animationName;
         filePath += (counter/ANIMATION_SPEED) + ".png";
@@ -46,28 +46,31 @@ public class Animation {
         counter++;
     }
 
-    public void resetCounter () {
+    public void resetCounter() {
         this.counter = 0;
     }
 
-    public void draw (Graphics g) {
+    public void draw(Graphics g) {
+        if (imageIcon == null) {
+            return;
+        }
+
         Graphics2D g2d = (Graphics2D)g;
-        if (imageIcon != null) {
-            Image image = imageIcon.getImage();
-            int x = entity.getPosX();
-            int width = image.getWidth(null);
 
-            int offset = !hasDirection ? 0 :
-                    (entity.getFacingEast()) ? OFFSET : -OFFSET;
+        Image image = imageIcon.getImage();
+        int x = entity.getPosX();
+        int width = image.getWidth(null);
 
-            if (hasDirection && !entity.getFacingEast()) {
-                x += width;
-                width = -width;
-            }
+        int offset = !hasDirection ? 0 :
+                (entity.getFacingEast()) ? OFFSET : -OFFSET;
 
-            if (counter/ANIMATION_SPEED < totalFrames) {
-                g2d.drawImage(image, x + offset, entity.getPosY(), width, image.getHeight(null), null);
-            }
+        if (hasDirection && !entity.getFacingEast()) {
+            x += width;
+            width = -width;
+        }
+
+        if (counter/ANIMATION_SPEED < totalFrames) {
+            g2d.drawImage(image, x + offset, entity.getPosY(), width, image.getHeight(null), null);
         }
     }
 }

@@ -1,23 +1,31 @@
 package characterEntities;
 
+import screens.GameScreen;
+
 import java.util.ArrayList;
 
 public abstract class Hero extends Entity {
-	protected String colour = "";
-	protected int numberEvolutions;
-	protected PlayerClass playerClass;
-	
-	protected static final int PATH_RED = 0;
-	protected static final int PATH_YELLOW = 1;
-	protected static final int PATH_BLUE = 2;
-	protected static final int SQUARE_LENGTH = 75;
-	protected static final int DEFAULT_RANGE = SQUARE_LENGTH;
+	public enum PlayerClass {
+		RED, BLUE, YELLOW,
+		VERMILLION, MAGENTA, SCARLET,
+		VIOLET, TURQUOISE, ULTRAMARINE,
+		LIME, AMBER, GOLD
+	}
+	private String colour = "";
+	private PlayerClass playerClass;
+	int numberEvolutions;
+
+	static final int PATH_RED = 0;
+	static final int PATH_YELLOW = 1;
+	static final int PATH_BLUE = 2;
+	static final int SQUARE_LENGTH = 75;
+	static final int DEFAULT_RANGE = SQUARE_LENGTH;
 
 	public enum Ability {
 		DEFAULT(0), FIRST(1), SECOND(2), THIRD(3), ULTIMATE(4);
 		private int value;
 
-		Ability (int value) {
+		Ability(int value) {
 			this.value = value;
 		}
 
@@ -25,10 +33,18 @@ public abstract class Hero extends Entity {
 			return value;
 		}
 	}
+
+	void setColour(String colour) {
+		this.colour = colour;
+	}
+
+	void setPlayerClass(PlayerClass playerClass) {
+		this.playerClass = playerClass;
+	}
 	
-	public Hero (String name, int maxHealth, int maxDamage, int minDamage, int posX, int posY) {
-		super(name, maxHealth, maxDamage, minDamage, posX, posY);
-		setAnimation(0, new Animation(Animation.AnimationType.DEFAULT, this));
+	Hero(GameScreen game, int maxHealth, int maxDamage, int minDamage, int posX, int posY, int velocity) {
+		super(game, maxHealth, maxDamage, minDamage, posX, posY, velocity);
+		setAnimation(0, new AbilityAnimation(AbilityAnimation.AnimationType.DEFAULT, this));
 		numberEvolutions = 0;
 	}
 
@@ -51,18 +67,20 @@ public abstract class Hero extends Entity {
 			case DEAD:
 				filepath += "Dead";
 				break;
+			default:
+				break;
 		}
 		filepath += ".png";
-		this.setAvatar(filepath);
+		this.setImageIcon(filepath);
 	}
 	
-	public abstract boolean evolve (int path);
+	public abstract boolean evolve(int path);
 
-	public abstract void attack (Ability ability, ArrayList<Entity> targets);
+	public abstract void attack(Ability ability, ArrayList<Entity> targets);
 
-	protected abstract boolean isHit (Ability ability, Entity target);
+	protected abstract boolean isHit(Ability ability, Entity target);
 	
-	protected boolean evolutionIncrease (int path) {
+	protected boolean evolutionIncrease(int path) {
 //		switch (path) {
 //		case PATH_RED:
 //			maxHealth += 210;

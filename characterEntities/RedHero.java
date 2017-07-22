@@ -1,16 +1,18 @@
 package characterEntities;
 
+import screens.GameScreen;
+
 import java.util.ArrayList;
 
 public class RedHero extends Hero {
-	public RedHero (String name) {
-		super(name, 300, 55, 45, 100, 100);
-		colour = "red";
-		playerClass = PlayerClass.RED;
-		setAvatar("src/assets/hero/redNeutral.png");
+	public RedHero(GameScreen game) {
+		super(game, 300, 55, 45, 100, 100, 5);
+		setColour("red");
+		setPlayerClass(PlayerClass.RED);
+		setImageIcon("src/assets/hero/redNeutral.png");
 	}
 	
-	public boolean evolve (int path) {
+	public boolean evolve(int path) {
 		if (numberEvolutions != 0) {
 			return false;
 		}
@@ -18,15 +20,15 @@ public class RedHero extends Hero {
 			//Need to also set imageIcon
 			switch (path) {
 			case Hero.PATH_RED:
-				playerClass = PlayerClass.SCARLET;
+				setPlayerClass(PlayerClass.SCARLET);
 				evolutionIncrease(Hero.PATH_RED);
 				break;
 			case Hero.PATH_YELLOW:
-				playerClass = PlayerClass.VERMILLION;
+				setPlayerClass(PlayerClass.VERMILLION);
 				evolutionIncrease(Hero.PATH_YELLOW);
 				break;
 			case Hero.PATH_BLUE:
-				playerClass = PlayerClass.MAGENTA;
+				setPlayerClass(PlayerClass.MAGENTA);
 				evolutionIncrease(Hero.PATH_BLUE);
 				break;
 			default:
@@ -36,7 +38,7 @@ public class RedHero extends Hero {
 		}
 	}
 
-	public void attack (Ability ability, ArrayList<Entity> targets) {
+	public void attack(Ability ability, ArrayList<Entity> targets) {
 		if (getEntityState() == EntityState.DEFAULT) {
 			setEntityState(EntityState.ATTACKING);
             playAnimation(ability.getValue());
@@ -44,17 +46,13 @@ public class RedHero extends Hero {
                 switch (ability) {
                     case DEFAULT:
                         if (isHit(ability, target)) {
-                            target.inflict(getDamage());
+                            target.inflict(getDamage(), this.getFacingEast());
                         }
                         break;
                     case FIRST:
-                        break;
                     case SECOND:
-                        break;
                     case THIRD:
-                        break;
                     case ULTIMATE:
-                        break;
                     default:
                         break;
                 }
@@ -62,7 +60,7 @@ public class RedHero extends Hero {
 		}
 	}
 
-	protected boolean isHit (Ability ability, Entity target) {
+	protected boolean isHit(Ability ability, Entity target) {
 		boolean hit = false;
         int x1 = getPosX();
         int y1 = getPosY();
@@ -70,9 +68,9 @@ public class RedHero extends Hero {
         int y2 = target.getPosY();
 		switch (ability) {
 			case DEFAULT:
-                if (((getFacingEast() && x2 >= x1 && x2 <= x1+SQUARE_LENGTH+DEFAULT_RANGE) ||
-                        (!getFacingEast() && x2 <= x1 && x2 >= x1-SQUARE_LENGTH-DEFAULT_RANGE)) &&
-                        y2 >= y1-DEFAULT_RANGE && y2 <= y1+DEFAULT_RANGE)
+                if (((getFacingEast() && x2 > x1 && x2 < x1+SQUARE_LENGTH+DEFAULT_RANGE) ||
+                        (!getFacingEast() && x2 < x1 && x2 > x1-SQUARE_LENGTH-DEFAULT_RANGE)) &&
+                        y2 >= y1-DEFAULT_RANGE && y2 < y1+DEFAULT_RANGE)
                     hit = true;
 				break;
 			case FIRST:

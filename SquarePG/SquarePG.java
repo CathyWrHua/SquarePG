@@ -1,7 +1,6 @@
 package SquarePG;
 
 import java.awt.BorderLayout;
-import java.util.EmptyStackException;
 import java.util.Stack;
 import javax.swing.JFrame;
 
@@ -11,7 +10,7 @@ import characterEntities.*;
 public class SquarePG extends JFrame {
 	public static ScreenState screenState = ScreenState.WAIT;
 	public static String playerName;
-	public static PlayerClass heroClass;
+	public static Hero.PlayerClass heroClass;
 	private Screen currentScreen; 
 	private Stack<Screen> screenStack = new Stack();
 	private final int FPS = 60;
@@ -53,7 +52,7 @@ public class SquarePG extends JFrame {
 		            			currentScreen = new OptionsScreen();
 		            			break;
 		            		case GAME:
-		            			currentScreen = new GameScreen(playerName, heroClass);
+		            			currentScreen = new GameScreen(heroClass);
 		            			break;
 		            		default:
 		            			currentScreen = screenStack.pop();
