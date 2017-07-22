@@ -1,9 +1,12 @@
 package screens;
 
+
+import characterEntities.Entity;
 import org.w3c.dom.css.Rect;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 import javax.swing.ImageIcon;
@@ -14,6 +17,8 @@ public class GameMap {
 
 	private HashMap<Integer, ImageIcon[][]> levelMapping = new HashMap<Integer, ImageIcon[][]>();
 	private HashMap<Integer, Rectangle[]> hitRectangleMapping = new HashMap<Integer, Rectangle[]>();
+
+	private ArrayList<Entity> currentEntityList;
 
 	public GameMap() {
 		createLevels();
@@ -47,7 +52,7 @@ public class GameMap {
 			return null;
 		}
 
-		Rectangle[] hitRectArray = hitRectangleMapping.get(new Integer(currentLevel));
+		Rectangle[] hitRectArray = addEnemiesToHitArray(hitRectangleMapping.get(new Integer(currentLevel)));
 
 		int objectRight = newX + objectSize.width;
 		int objectLeft = newX;
@@ -94,6 +99,21 @@ public class GameMap {
 			}
 		}
 		return new Point(newX, newY);
+	}
+
+	public void setCurrentEntityList(ArrayList<Entity> entityList) {
+		this.currentEntityList = entityList;
+	}
+
+	private Rectangle[] addEnemiesToHitArray(Rectangle[] currentMap) {
+		if (currentEntityList != null && currentEntityList.size() > 0) {
+			ArrayList<Rectangle> mapList = new ArrayList<Rectangle>(Arrays.asList(currentMap));
+			for (Entity entity : currentEntityList) {
+				mapList.add(new Rectangle(entity.getPosX(), entity.getPosY(), 75, 75));
+			}
+			return mapList.toArray(new Rectangle[mapList.size()]);
+		}
+		return currentMap;
 	}
 
 	//TODO:(cathy) thread this creation method, guard against race conditions
