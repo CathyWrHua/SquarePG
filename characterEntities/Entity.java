@@ -5,36 +5,48 @@ import java.awt.*;
 import java.util.Random;
 
 public abstract class Entity {
-	private String name;
     private int posX, posY;
 	private int maxHealth, currentHealth;
 	private int maxDamage, minDamage;
 	private int stunCounter = STUN_TIME;
-	private int damageTaken = 0;
-	private boolean facingEast = true;
-	private Animation currentAnimation = null;
-    private Animation[] animations = new Animation[5];
+	private int damageTaken;
+	private boolean facingEast;
+	private Animation currentAnimation;
+    private Animation[] animations;
 	private ImageIcon avatar;
     private HealthBar healthBar;
-	private Random random = new Random();
-	
-	private MotionStateLeftRight lrMotionState = MotionStateLeftRight.IDLE;
-	private MotionStateUpDown udMotionState = MotionStateUpDown.IDLE;
+	private Random random;
 
-	public enum EntityState {DEFAULT, ATTACKING, DAMAGED, DEAD}
-	private EntityState entityState = EntityState.DEFAULT;
-	
+    public enum EntityState {DEFAULT, ATTACKING, DAMAGED, DEAD}
+    public enum MotionStateUpDown {IDLE, UP, DOWN}
+    public enum MotionStateLeftRight {IDLE, LEFT, RIGHT}
+
+    private EntityState entityState;
+	private MotionStateLeftRight lrMotionState;
+	private MotionStateUpDown udMotionState;
+
+    private static final int NUM_ANIMATIONS = 5;
 	private static final int VELOCITY = 2;
 	private static final int STUN_TIME = 15;
 	
-	public Entity (String name, int maxHealth, int maxDamage, int minDamage, int posX, int posY) {
-		this.name = name;
-		currentHealth = this.maxHealth = maxHealth;
+	public Entity (int maxHealth, int maxDamage, int minDamage, int posX, int posY) {
+		this.currentHealth = this.maxHealth = maxHealth;
 		this.maxDamage = maxDamage;
 		this.minDamage = minDamage;
+		this.damageTaken = 0;
+
         this.posX = posX;
         this.posY = posY;
-		this.healthBar = new HealthBar(this, maxHealth);
+        this.facingEast = true;
+
+        this.animations = new Animation[NUM_ANIMATIONS];
+        this.currentAnimation = null;
+		this.healthBar = new HealthBar(this);
+		this.random = new Random();
+
+        setEntityState(EntityState.DEFAULT);
+		setLRMotionState(MotionStateLeftRight.IDLE);
+		setUDMotionState(MotionStateUpDown.IDLE);
 	}
 	
 	public void inflict (int damageTaken) {
@@ -46,7 +58,7 @@ public abstract class Entity {
 		currentHealth = (currentHealth > maxHealth) ? maxHealth : currentHealth;
 	}
 
-	public void playAnimation(int index) {
+	void playAnimation(int index) {
 	    if (index >= 0 && index < animations.length)
 	        currentAnimation = animations[index];
     }
@@ -104,31 +116,19 @@ public abstract class Entity {
         }
 	}
 
-	public void setAvatar (String filename) {
+	void setAvatar (String filename) {
         avatar = new ImageIcon(filename);
     }
-
-    public void faceEast () {
-	    facingEast = true;
-    }
-
-    public void faceWest () {
-	    facingEast = false;
-    }
 	
-    public int getDamage () {
+    int getDamage () {
         return (minDamage+random.nextInt(maxDamage-minDamage));
     }
     
-    public String getName () {
-        return name;
-    }
-    
-    public int getCurrentHealth () {
+    int getCurrentHealth () {
         return currentHealth;
     }
     
-    public int getMaxHealth () {
+    int getMaxHealth () {
         return maxHealth;
     }
 
@@ -140,11 +140,11 @@ public abstract class Entity {
         return posY;
     }
 
-    public boolean getFacingEast () {
+    boolean getFacingEast () {
 	    return facingEast;
     }
 
-    public EntityState getEntityState () {
+    EntityState getEntityState () {
 	    return entityState;
     }
     
@@ -164,18 +164,18 @@ public abstract class Entity {
         this.minDamage = damageMin;
     }
 
-    public void setPosX (int posX) {
-        this.posX = posX;
-    }
-
-    public void setPosY (int posY) {
-        this.posY = posY;
-    }
-
     public void setPoint (Point newPoint) {
 	    if (newPoint != null) {
             posX = newPoint.x;
             posY = newPoint.y;
+        }
+    }
+
+    private void setEntityDirection() {
+        if (lrMotionState == MotionStateLeftRight.LEFT) {
+            facingEast = false;
+        } else if (lrMotionState == MotionStateLeftRight.RIGHT) {
+            facingEast = true;
         }
     }
 
@@ -199,7 +199,7 @@ public abstract class Entity {
 	    entityState = state;
     }
 
-    public void setAnimation (int index, Animation animation) {
+    void setAnimation (int index, Animation animation) {
 	    animations[index] = animation;
     }
    
@@ -219,13 +219,5 @@ public abstract class Entity {
         }
 
         g2d.drawImage(image, x, posY, width, image.getHeight(null), null);
-    }
-
-    private void setEntityDirection() {
-        if (lrMotionState == MotionStateLeftRight.LEFT) {
-            facingEast = false;
-        } else if (lrMotionState == MotionStateLeftRight.RIGHT) {
-            facingEast = true;
-        }
     }
 }

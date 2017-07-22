@@ -3,15 +3,21 @@ package characterEntities;
 import java.util.ArrayList;
 
 public abstract class Hero extends Entity {
-	protected String colour = "";
-	protected int numberEvolutions;
-	protected PlayerClass playerClass;
+	public enum PlayerClass {
+		RED, BLUE, YELLOW,
+		VERMILLION, MAGENTA, SCARLET,
+		VIOLET, TURQUOISE, ULTRAMARINE,
+		LIME, AMBER, GOLD
+	}
+	private String colour = "";
+	private PlayerClass playerClass;
+	int numberEvolutions;
 
-	public static final int SQUARE_LENGTH = 75;
-	protected static final int PATH_RED = 0;
-	protected static final int PATH_YELLOW = 1;
-	protected static final int PATH_BLUE = 2;
-	protected static final int DEFAULT_RANGE = SQUARE_LENGTH;
+	static final int PATH_RED = 0;
+	static final int PATH_YELLOW = 1;
+	static final int PATH_BLUE = 2;
+	static final int SQUARE_LENGTH = 75;
+	static final int DEFAULT_RANGE = SQUARE_LENGTH;
 
 	public enum Ability {
 		DEFAULT(0), FIRST(1), SECOND(2), THIRD(3), ULTIMATE(4);
@@ -25,9 +31,17 @@ public abstract class Hero extends Entity {
 			return value;
 		}
 	}
+
+	void setColour (String colour) {
+		this.colour = colour;
+	}
+
+	void setPlayerClass(PlayerClass playerClass) {
+		this.playerClass = playerClass;
+	}
 	
-	public Hero (String name, int maxHealth, int maxDamage, int minDamage, int posX, int posY) {
-		super(name, maxHealth, maxDamage, minDamage, posX, posY);
+	public Hero (int maxHealth, int maxDamage, int minDamage, int posX, int posY) {
+		super(maxHealth, maxDamage, minDamage, posX, posY);
 		setAnimation(0, new Animation(Animation.AnimationType.DEFAULT, this));
 		numberEvolutions = 0;
 	}

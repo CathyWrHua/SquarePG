@@ -3,10 +3,10 @@ package characterEntities;
 import java.util.ArrayList;
 
 public class RedHero extends Hero {
-	public RedHero (String name) {
-		super(name, 300, 55, 45, 100, 100);
-		colour = "red";
-		playerClass = PlayerClass.RED;
+	public RedHero () {
+		super(300, 55, 45, 100, 100);
+		setColour("red");
+		setPlayerClass(PlayerClass.RED);
 		setAvatar("src/assets/hero/redNeutral.png");
 	}
 	
@@ -18,15 +18,15 @@ public class RedHero extends Hero {
 			//Need to also set imageIcon
 			switch (path) {
 			case Hero.PATH_RED:
-				playerClass = PlayerClass.SCARLET;
+				setPlayerClass(PlayerClass.SCARLET);
 				evolutionIncrease(Hero.PATH_RED);
 				break;
 			case Hero.PATH_YELLOW:
-				playerClass = PlayerClass.VERMILLION;
+				setPlayerClass(PlayerClass.VERMILLION);
 				evolutionIncrease(Hero.PATH_YELLOW);
 				break;
 			case Hero.PATH_BLUE:
-				playerClass = PlayerClass.MAGENTA;
+				setPlayerClass(PlayerClass.MAGENTA);
 				evolutionIncrease(Hero.PATH_BLUE);
 				break;
 			default:

@@ -2,8 +2,8 @@ package characterEntities;
 
 public class Enemy extends Entity {
 	
-	public Enemy (String name, int maxHealth, int maxDamage, int minDamage) {
-		super(name, maxHealth, maxDamage, minDamage, 200, 100);
+	public Enemy (int maxHealth, int maxDamage, int minDamage) {
+		super(maxHealth, maxDamage, minDamage, 200, 100);
 		setAvatar("src/assets/hero/yellowNeutral.png");
 	}
 

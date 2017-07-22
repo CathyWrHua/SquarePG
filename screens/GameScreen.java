@@ -9,14 +9,13 @@ import java.util.ArrayList;
 import characterEntities.*;
 
 public class GameScreen extends Screen implements KeyListener{
-	private Set<Integer> motionKeys = new LinkedHashSet<>();
-
 	private GameMap map;
 	private int level = 1;
 	private Hero player;
 	private ArrayList<Entity> enemies = new ArrayList<>();
+	private Set<Integer> motionKeys = new LinkedHashSet<>();
 	
-	public GameScreen(String playerName, PlayerClass playerClass) {
+	public GameScreen(Hero.PlayerClass playerClass) {
 		super();
 		setPreferredSize(new Dimension(1000, 1000));
 		addKeyListener(this);
@@ -24,8 +23,8 @@ public class GameScreen extends Screen implements KeyListener{
 		setFocusTraversalKeysEnabled(false);
 		
 		map = new GameMap(level);
-		createPlayer(playerName, playerClass);
-		createEnemy("dummy", 1000);
+		createPlayer(playerClass);
+		createEnemy(1000);
 	}
 
 	@Override
@@ -46,23 +45,23 @@ public class GameScreen extends Screen implements KeyListener{
 		player.setPoint(map.determineMotion(player.getPosX(), player.getPosY(), originalPlayer));
 	}
 	
-	private void createPlayer(String playerName, PlayerClass playerClass) {
+	private void createPlayer(Hero.PlayerClass playerClass) {
 		switch (playerClass) {
 		case RED:
-			player = new RedHero(playerName);
+			player = new RedHero();
 			break;
 		case BLUE:
-			player = new BlueHero(playerName);
+			player = new BlueHero();
 			break;
 		case YELLOW:
-			player = new YellowHero(playerName);
+			player = new YellowHero();
 			break;
 		default:
 		}
 	}
 
-	private void createEnemy(String name, int health) {
-		Enemy dummy = new Enemy(name, health, 0, 0);
+	private void createEnemy(int health) {
+		Enemy dummy = new Enemy(health, 0, 0);
 		enemies.add(dummy);
 	}
 
@@ -105,13 +104,13 @@ public class GameScreen extends Screen implements KeyListener{
 		Integer code = e.getKeyCode();
 		
 		if (code == KeyEvent.VK_DOWN ) {
-			player.setUDMotionState(motionKeys.contains(KeyEvent.VK_UP)? MotionStateUpDown.UP : MotionStateUpDown.IDLE);
+			player.setUDMotionState(motionKeys.contains(KeyEvent.VK_UP)? Entity.MotionStateUpDown.UP : Entity.MotionStateUpDown.IDLE);
 		} else if (code == KeyEvent.VK_UP){
-			player.setUDMotionState(motionKeys.contains(KeyEvent.VK_DOWN)? MotionStateUpDown.DOWN : MotionStateUpDown.IDLE);
+			player.setUDMotionState(motionKeys.contains(KeyEvent.VK_DOWN)? Entity.MotionStateUpDown.DOWN : Entity.MotionStateUpDown.IDLE);
 		} else if (code == KeyEvent.VK_LEFT) {
-			player.setLRMotionState(motionKeys.contains(KeyEvent.VK_RIGHT)? MotionStateLeftRight.RIGHT : MotionStateLeftRight.IDLE);
+			player.setLRMotionState(motionKeys.contains(KeyEvent.VK_RIGHT)? Entity.MotionStateLeftRight.RIGHT : Entity.MotionStateLeftRight.IDLE);
 		} else if (code == KeyEvent.VK_RIGHT) {
-			player.setLRMotionState(motionKeys.contains(KeyEvent.VK_LEFT)? MotionStateLeftRight.LEFT : MotionStateLeftRight.IDLE);
+			player.setLRMotionState(motionKeys.contains(KeyEvent.VK_LEFT)? Entity.MotionStateLeftRight.LEFT : Entity.MotionStateLeftRight.IDLE);
 		}
 		
 		motionKeys.remove(code);
@@ -130,18 +129,18 @@ public class GameScreen extends Screen implements KeyListener{
 	}
 	
 	private void up() {
-		player.setUDMotionState(MotionStateUpDown.UP);
+		player.setUDMotionState(Entity.MotionStateUpDown.UP);
 	}
 	
 	private void down() {
-		player.setUDMotionState(MotionStateUpDown.DOWN);
+		player.setUDMotionState(Entity.MotionStateUpDown.DOWN);
 	}
 	
 	private void left() {
-		player.setLRMotionState(MotionStateLeftRight.LEFT);
+		player.setLRMotionState(Entity.MotionStateLeftRight.LEFT);
 	}
 	
 	private void right() {
-		player.setLRMotionState(MotionStateLeftRight.RIGHT);
+		player.setLRMotionState(Entity.MotionStateLeftRight.RIGHT);
 	}
 }
