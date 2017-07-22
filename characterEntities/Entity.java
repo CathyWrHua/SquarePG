@@ -2,7 +2,6 @@ package characterEntities;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.Random;
 
 public abstract class Entity {
@@ -75,7 +74,7 @@ public abstract class Entity {
             currentHealth -= damageTaken;
             currentHealth = (currentHealth < 0) ? 0 : currentHealth;
             if (currentAnimation != null) {
-                currentAnimation.reset();
+                currentAnimation.resetCounter();
                 currentAnimation = null;
             }
             if (currentHealth > 0) {

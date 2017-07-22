@@ -71,7 +71,7 @@ public class BlueHero extends Hero {
 			case DEFAULT:
 				if (((getFacingEast() && x2 >= x1 && x2 <= x1+SQUARE_LENGTH+DEFAULT_RANGE) ||
 						(!getFacingEast() && x2 <= x1 && x2 >= x1-SQUARE_LENGTH-DEFAULT_RANGE)) &&
-						y2 >= y1 && y2 <= y1+DEFAULT_RANGE)
+						y2 >= y1-DEFAULT_RANGE && y2 <= y1+DEFAULT_RANGE)
 					hit = true;
 				break;
 			case FIRST:

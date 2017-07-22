@@ -5,7 +5,6 @@ import java.awt.*;
 
 public class Animation {
     private int totalFrames;
-    private int currentFrame = 0;
     private int counter = 0;
     private Entity entity;
     private String animationName;
@@ -36,19 +35,19 @@ public class Animation {
 
     public void update () {
         done = false;
-        if (counter++ % ANIMATION_SPEED == 0 && currentFrame < totalFrames) {
-            String filePath = "src/assets/animations/" + animationName;
-            filePath += (currentFrame++) + ".png";
-            this.imageIcon = new ImageIcon(filePath);
-        } else if (currentFrame >= totalFrames && counter++ % ANIMATION_SPEED == 0) {
-            reset();
+        String filePath = "src/assets/animations/" + animationName;
+        filePath += (counter/ANIMATION_SPEED) + ".png";
+        this.imageIcon = new ImageIcon(filePath);
+        if (counter/ANIMATION_SPEED >= totalFrames) {
+            resetCounter();
             done = true;
+            return;
         }
+        counter++;
     }
 
-    public void reset () {
+    public void resetCounter () {
         this.counter = 0;
-        this.currentFrame = 0;
     }
 
     public void draw (Graphics g) {
@@ -66,7 +65,7 @@ public class Animation {
                 width = -width;
             }
 
-            if (currentFrame < totalFrames) {
+            if (counter/ANIMATION_SPEED < totalFrames) {
                 g2d.drawImage(image, x + offset, entity.getPosY(), width, image.getHeight(null), null);
             }
         }
