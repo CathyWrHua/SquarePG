@@ -2,6 +2,7 @@ package characterEntities;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.Random;
 
 public abstract class Entity {
@@ -10,6 +11,7 @@ public abstract class Entity {
 	private int maxHealth, currentHealth;
 	private int maxDamage, minDamage;
 	private int stunCounter = STUN_TIME;
+	private int damageTaken = 0;
 	private boolean facingEast = true;
 	private Animation currentAnimation = null;
     private Animation[] animations = new Animation[5];
@@ -36,25 +38,13 @@ public abstract class Entity {
 		this.healthBar = new HealthBar(this, maxHealth);
 	}
 	
-	public boolean inflict (int damageTaken) {
-		currentHealth -= damageTaken;
-        currentHealth = (currentHealth < 0) ? 0 : currentHealth;
-        if (currentAnimation != null) {
-            currentAnimation.reset();
-            currentAnimation = null;
-        }
-        if (currentHealth > 0) {
-            setEntityState(EntityState.DAMAGED);
-        } else {
-            setEntityState(EntityState.DEAD);
-        }
-        return !(currentHealth == 0);
+	public void inflict (int damageTaken) {
+	    this.damageTaken = damageTaken;
 	}
 	
-	public boolean heal (int amountHealed) {
+	public void heal (int amountHealed) {
 		currentHealth += amountHealed;
 		currentHealth = (currentHealth > maxHealth) ? maxHealth : currentHealth;
-		return !(currentHealth == maxHealth);
 	}
 
 	public void playAnimation(int index) {
@@ -81,12 +71,31 @@ public abstract class Entity {
             }
         }
 
+        if (damageTaken > 0) {
+            currentHealth -= damageTaken;
+            currentHealth = (currentHealth < 0) ? 0 : currentHealth;
+            if (currentAnimation != null) {
+                currentAnimation.reset();
+                currentAnimation = null;
+            }
+            if (currentHealth > 0) {
+                setEntityState(EntityState.DAMAGED);
+            } else {
+                setEntityState(EntityState.DEAD);
+            }
+            damageTaken = 0;
+        }
+
 		if (entityState == EntityState.DAMAGED && stunCounter > 0) {
+	        //TODO: KNOCKBACK
 		    stunCounter--;
         } else if (stunCounter <= 0) {
 		    setEntityState(EntityState.DEFAULT);
 		    stunCounter = STUN_TIME;
         }
+
+        if (entityState != EntityState.DEAD && currentHealth <= 0)
+            setEntityState(EntityState.DEAD);
 
 		if (currentAnimation != null) {
             currentAnimation.update();

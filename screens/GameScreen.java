@@ -5,6 +5,7 @@ import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.Console;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Logger;
@@ -23,6 +24,7 @@ public class GameScreen extends Screen implements KeyListener{
 	private GameMap map;
 	private int level = 1;
 	private Hero player;
+	private ArrayList<Entity> enemies = new ArrayList<>();
 	
 	public GameScreen(String playerName, PlayerClass playerClass) {
 		super();
@@ -33,12 +35,16 @@ public class GameScreen extends Screen implements KeyListener{
 		
 		map = new GameMap(level);
 		createPlayer(playerName, playerClass);
+		createEnemy("dummy", 5000);
 	}
 
 	@Override
 	public void update() {
 		//HACK: have something that requests focus not so frequently
 		requestFocus(true);
+		for (Entity enemy: enemies) {
+			enemy.update();
+		}
 		player.update();
 	}
 	
@@ -57,7 +63,10 @@ public class GameScreen extends Screen implements KeyListener{
 		}
 	}
 
-	private void createEnemy() {}
+	private void createEnemy(String name, int health) {
+		Enemy dummy = new Enemy(name, health, 0, 0);
+		enemies.add(dummy);
+	}
 
 	private void createProjectile() {}
 
@@ -83,7 +92,7 @@ public class GameScreen extends Screen implements KeyListener{
 		} else if (code == KeyEvent.VK_K) {
 			map.setMap(2);
 		} else if (code == KeyEvent.VK_A) {
-			player.attack(Hero.Ability.DEFAULT);
+			player.attack(Hero.Ability.DEFAULT, enemies);
 		} else if (code == KeyEvent.VK_Z) {
 			player.inflict(25);
 		}
@@ -108,6 +117,9 @@ public class GameScreen extends Screen implements KeyListener{
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		map.draw(g);
+		for (Entity enemy : enemies) {
+			enemy.draw(g);
+		}
 		player.draw(g);
 	}
 	

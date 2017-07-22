@@ -14,7 +14,7 @@ public class Animation {
     private boolean done = false;
 
     private static final int OFFSET = 75;
-    private static final int ANIMATION_SPEED = 7;
+    private static final int ANIMATION_SPEED = 5;
     
     public enum AnimationType {DEFAULT}
 
@@ -53,20 +53,22 @@ public class Animation {
 
     public void draw (Graphics g) {
         Graphics2D g2d = (Graphics2D)g;
-        Image image = imageIcon.getImage();
-        int x = entity.getPosX();
-        int width = image.getWidth(null);
+        if (imageIcon != null) {
+            Image image = imageIcon.getImage();
+            int x = entity.getPosX();
+            int width = image.getWidth(null);
 
-        int offset = !hasDirection ? 0 :
-                (entity.getFacingEast()) ? OFFSET : -OFFSET;
+            int offset = !hasDirection ? 0 :
+                    (entity.getFacingEast()) ? OFFSET : -OFFSET;
 
-        if (hasDirection && !entity.getFacingEast()) {
-            x += width;
-            width = -width;
-        }
+            if (hasDirection && !entity.getFacingEast()) {
+                x += width;
+                width = -width;
+            }
 
-        if (currentFrame < totalFrames && imageIcon != null) {
-            g2d.drawImage(image, x+offset, entity.getPosY(), width, image.getHeight(null), null);
+            if (currentFrame < totalFrames) {
+                g2d.drawImage(image, x + offset, entity.getPosY(), width, image.getHeight(null), null);
+            }
         }
     }
 }

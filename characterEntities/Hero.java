@@ -2,6 +2,8 @@ package characterEntities;
 
 import SquarePG.GameState;
 
+import java.util.ArrayList;
+
 public abstract class Hero extends Entity {
 	private GameState gameState = GameState.WORLDMAP;
 
@@ -12,8 +14,21 @@ public abstract class Hero extends Entity {
 	protected static final int PATH_RED = 0;
 	protected static final int PATH_YELLOW = 1;
 	protected static final int PATH_BLUE = 2;
+	protected static final int SQUARE_LENGTH = 75;
+	protected static final int DEFAULT_RANGE = SQUARE_LENGTH;
 
-	public enum Ability {DEFAULT, FIRST, SECOND, THIRD, ULTIMATE}
+	public enum Ability {
+		DEFAULT(0), FIRST(1), SECOND(2), THIRD(3), ULTIMATE(4);
+		private int value;
+
+		Ability (int value) {
+			this.value = value;
+		}
+
+		public int getValue() {
+			return value;
+		}
+	}
 	
 	public Hero (String name, int maxHealth, int maxDamage, int minDamage, int posX, int posY) {
 		super(name, maxHealth, maxDamage, minDamage, posX, posY);
@@ -23,6 +38,7 @@ public abstract class Hero extends Entity {
 
 	@Override
 	public void setEntityState(EntityState entityState) {
+		//TODO: SHOW GAME OVER MESSAGE IF DEAD
 		super.setEntityState(entityState);
 		String filepath = "src/assets/hero/";
 		filepath += this.colour;
@@ -46,7 +62,9 @@ public abstract class Hero extends Entity {
 	
 	public abstract boolean evolve (int path);
 
-	public abstract void attack (Ability ability);
+	public abstract void attack (Ability ability, ArrayList<Entity> targets);
+
+	protected abstract boolean isHit (Ability ability, Entity target);
 	
 	protected boolean evolutionIncrease (int path) {
 //		switch (path) {
