@@ -142,7 +142,21 @@ public class GameMap {
 		levelMapping.put(1, mapOne);
 		levelMapping.put(2, mapTwo);
 
+		hitRectOne = addBorder(hitRectOne);
+		hitRectTwo = addBorder(hitRectTwo);
+
 		hitRectangleMapping.put(1, hitRectOne.toArray(new Rectangle[hitRectOne.size()]));
 		hitRectangleMapping.put(2, hitRectTwo.toArray(new Rectangle[hitRectTwo.size()]));
+	}
+
+	private ArrayList<Rectangle> addBorder(ArrayList<Rectangle> hitRectMap) {
+		if (hitRectMap != null) {
+			hitRectMap.add(new Rectangle(0, 0, 20, 1000));
+			hitRectMap.add(new Rectangle(0, 0, 1000, 20));
+			hitRectMap.add(new Rectangle(980, 0, 20, 1000));
+			hitRectMap.add(new Rectangle(0, 925, 1000, 20));
+		}
+
+		return hitRectMap;
 	}
 }
