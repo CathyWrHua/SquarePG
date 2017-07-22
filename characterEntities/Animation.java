@@ -51,23 +51,26 @@ public class Animation {
     }
 
     public void draw (Graphics g) {
+        if (imageIcon == null) {
+            return;
+        }
+
         Graphics2D g2d = (Graphics2D)g;
-        if (imageIcon != null) {
-            Image image = imageIcon.getImage();
-            int x = entity.getPosX();
-            int width = image.getWidth(null);
 
-            int offset = !hasDirection ? 0 :
-                    (entity.getFacingEast()) ? OFFSET : -OFFSET;
+        Image image = imageIcon.getImage();
+        int x = entity.getPosX();
+        int width = image.getWidth(null);
 
-            if (hasDirection && !entity.getFacingEast()) {
-                x += width;
-                width = -width;
-            }
+        int offset = !hasDirection ? 0 :
+                (entity.getFacingEast()) ? OFFSET : -OFFSET;
 
-            if (counter/ANIMATION_SPEED < totalFrames) {
-                g2d.drawImage(image, x + offset, entity.getPosY(), width, image.getHeight(null), null);
-            }
+        if (hasDirection && !entity.getFacingEast()) {
+            x += width;
+            width = -width;
+        }
+
+        if (counter/ANIMATION_SPEED < totalFrames) {
+            g2d.drawImage(image, x + offset, entity.getPosY(), width, image.getHeight(null), null);
         }
     }
 }

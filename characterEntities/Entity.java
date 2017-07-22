@@ -25,7 +25,7 @@ public abstract class Entity {
 	private EntityState entityState = EntityState.DEFAULT;
 	
 	private static final int VELOCITY = 2;
-	private static final int STUN_TIME = 10;
+	private static final int STUN_TIME = 15;
 	
 	public Entity (String name, int maxHealth, int maxDamage, int minDamage, int posX, int posY) {
 		this.name = name;

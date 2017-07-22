@@ -4,13 +4,13 @@ public class Enemy extends Entity {
 	
 	public Enemy (String name, int maxHealth, int maxDamage, int minDamage) {
 		super(name, maxHealth, maxDamage, minDamage, 200, 100);
-		setAvatar("src/assets/hero/redNeutral.png");
+		setAvatar("src/assets/hero/yellowNeutral.png");
 	}
 
 	@Override
 	public void setEntityState(EntityState entityState) {
 		super.setEntityState(entityState);
-		String filepath = "src/assets/hero/red";
+		String filepath = "src/assets/hero/yellow";
 		switch (this.getEntityState()) {
 			case DEFAULT:
 				filepath += "Neutral";

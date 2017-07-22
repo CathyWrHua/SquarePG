@@ -6,11 +6,11 @@ public abstract class Hero extends Entity {
 	protected String colour = "";
 	protected int numberEvolutions;
 	protected PlayerClass playerClass;
-	
+
+	public static final int SQUARE_LENGTH = 75;
 	protected static final int PATH_RED = 0;
 	protected static final int PATH_YELLOW = 1;
 	protected static final int PATH_BLUE = 2;
-	protected static final int SQUARE_LENGTH = 75;
 	protected static final int DEFAULT_RANGE = SQUARE_LENGTH;
 
 	public enum Ability {
