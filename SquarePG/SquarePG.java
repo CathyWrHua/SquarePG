@@ -19,7 +19,7 @@ public class SquarePG extends JFrame {
 	public SquarePG() {
 		super("SquarePG");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setSize(1000, 1000);
+		setSize(1000, 1035);
 		setResizable(false);
 		setVisible(true);
 		setLayout(new BorderLayout());

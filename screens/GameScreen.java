@@ -10,8 +10,7 @@ import characterEntities.*;
 
 public class GameScreen extends Screen implements KeyListener{
 	private Set<Integer> motionKeys = new LinkedHashSet<>();
-	
-	//TODO:depending on map design, make background class for collision detection
+
 	private GameMap map;
 	private int level = 1;
 	private Hero player;
@@ -33,6 +32,8 @@ public class GameScreen extends Screen implements KeyListener{
 	public void update() {
 		//HACK: have something that requests focus not so frequently
 		requestFocus(true);
+		//TODO:Remove all magic width and heights with actual ones
+
 		Rectangle originalPlayer = new Rectangle(player.getPosX(), player.getPosY(),75,  75);
 		player.update();
 
@@ -76,9 +77,7 @@ public class GameScreen extends Screen implements KeyListener{
 		}
 		motionKeys.add(e.getKeyCode());
 
-		System.out.println("new input :" + motionKeys.size());
 		for (Integer key : motionKeys) {
-			System.out.print(key);
 			if (key == KeyEvent.VK_UP) {
 				up();
 			} else if (key == KeyEvent.VK_DOWN) {
