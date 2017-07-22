@@ -1,13 +1,15 @@
 package characterEntities;
 
+import screens.GameScreen;
+
 import java.util.ArrayList;
 
 public class BlueHero extends Hero {
-	public BlueHero (String name) {
-		super(name, 100, 80, 70, 100, 100);
-		colour = "blue";
-		playerClass = PlayerClass.BLUE;
-		setAvatar("src/assets/hero/blueNeutral.png");
+	public BlueHero(GameScreen game) {
+		super(game, 100, 80, 70, 100, 100, 5);
+		setColour("blue");
+		setPlayerClass(PlayerClass.BLUE);
+		setImageIcon("src/assets/hero/blueNeutral.png");
 	}
 	
 	public boolean evolve(int path) {
@@ -17,15 +19,15 @@ public class BlueHero extends Hero {
 			//Need to also set imageIcon
 			switch(path) {
 			case Hero.PATH_RED:
-				playerClass = PlayerClass.VIOLET;
+				setPlayerClass(PlayerClass.VIOLET);
 				evolutionIncrease(Hero.PATH_RED);
 				break;
 			case Hero.PATH_YELLOW:
-				playerClass = PlayerClass.TURQUOISE;
+				setPlayerClass(PlayerClass.TURQUOISE);
 				evolutionIncrease(Hero.PATH_YELLOW);
 				break;
 			case Hero.PATH_BLUE:
-				playerClass = PlayerClass.ULTRAMARINE;
+				setPlayerClass(PlayerClass.ULTRAMARINE);
 				evolutionIncrease(Hero.PATH_BLUE);
 				break;
 			default:
@@ -35,7 +37,7 @@ public class BlueHero extends Hero {
 		}
 	}
 
-	public void attack (Ability ability, ArrayList<Entity> targets) {
+	public void attack(Ability ability, ArrayList<Entity> targets) {
 		if (getEntityState() == EntityState.DEFAULT) {
 			setEntityState(EntityState.ATTACKING);
 			playAnimation(ability.getValue());
@@ -43,7 +45,7 @@ public class BlueHero extends Hero {
 				switch (ability) {
 					case DEFAULT:
 						if (isHit(ability, target)) {
-							target.inflict(getDamage());
+							target.inflict(getDamage(), this.getFacingEast());
 						}
 						break;
 					case FIRST:
@@ -61,7 +63,7 @@ public class BlueHero extends Hero {
 		}
 	}
 
-	protected boolean isHit (Ability ability, Entity target) {
+	protected boolean isHit(Ability ability, Entity target) {
 		boolean hit = false;
 		int x1 = getPosX();
 		int y1 = getPosY();
@@ -69,15 +71,16 @@ public class BlueHero extends Hero {
 		int y2 = target.getPosY();
 		switch (ability) {
 			case DEFAULT:
-				if (((getFacingEast() && x2 >= x1 && x2 <= x1+SQUARE_LENGTH+DEFAULT_RANGE) ||
-						(!getFacingEast() && x2 <= x1 && x2 >= x1-SQUARE_LENGTH-DEFAULT_RANGE)) &&
-						y2 >= y1-DEFAULT_RANGE && y2 <= y1+DEFAULT_RANGE)
+				if (((getFacingEast() && x2 > x1 && x2 < x1+SQUARE_LENGTH+DEFAULT_RANGE) ||
+						(!getFacingEast() && x2 < x1 && x2 > x1-SQUARE_LENGTH-DEFAULT_RANGE)) &&
+						y2 >= y1-DEFAULT_RANGE && y2 < y1+DEFAULT_RANGE)
 					hit = true;
 				break;
 			case FIRST:
 			case SECOND:
 			case THIRD:
 			case ULTIMATE:
+			default:
 				break;
 		}
 		return hit;

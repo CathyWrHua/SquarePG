@@ -1,16 +1,18 @@
 package characterEntities;
 
+import screens.GameScreen;
+
 import java.util.ArrayList;
 
 public class YellowHero extends Hero {
-	public YellowHero (String name) {
-		super(name, 200, 70, 60, 100, 100);
-		colour = "yellow";
-		playerClass = PlayerClass.YELLOW;
-		setAvatar("src/assets/hero/yellowNeutral.png");
+	public YellowHero(GameScreen game) {
+		super(game, 200, 70, 60, 100, 100, 5);
+		setColour("yellow");
+		setPlayerClass(PlayerClass.YELLOW);
+		setImageIcon("src/assets/hero/yellowNeutral.png");
 	}
 	
-	public boolean evolve (int path) {
+	public boolean evolve(int path) {
 		if (numberEvolutions != 0) {
 			return false;
 		}
@@ -18,15 +20,15 @@ public class YellowHero extends Hero {
 			//Need to also set imageIcon
 			switch (path) {
 			case Hero.PATH_RED:
-				playerClass = PlayerClass.AMBER;
+				setPlayerClass(PlayerClass.AMBER);
 				evolutionIncrease(Hero.PATH_RED);
 				break;
 			case Hero.PATH_YELLOW:
-				playerClass = PlayerClass.GOLD;
+				setPlayerClass(PlayerClass.GOLD);
 				evolutionIncrease(Hero.PATH_YELLOW);
 				break;
 			case Hero.PATH_BLUE:
-				playerClass = PlayerClass.LIME;
+				setPlayerClass(PlayerClass.LIME);
 				evolutionIncrease(Hero.PATH_BLUE);
 				break;
 			default:
@@ -36,7 +38,7 @@ public class YellowHero extends Hero {
 		}
 	}
 
-	public void attack (Ability ability, ArrayList<Entity> targets) {
+	public void attack(Ability ability, ArrayList<Entity> targets) {
 		if (getEntityState() == EntityState.DEFAULT) {
 			setEntityState(EntityState.ATTACKING);
 			playAnimation(ability.getValue());
@@ -44,7 +46,7 @@ public class YellowHero extends Hero {
 				switch (ability) {
 					case DEFAULT:
 						if (isHit(ability, target)) {
-							target.inflict(getDamage());
+							target.inflict(getDamage(), this.getFacingEast());
 						}
 						break;
 					case FIRST:
@@ -62,7 +64,7 @@ public class YellowHero extends Hero {
 		}
 	}
 
-	protected boolean isHit (Ability ability, Entity target) {
+	protected boolean isHit(Ability ability, Entity target) {
 		boolean hit = false;
 		int x1 = getPosX();
 		int y1 = getPosY();
@@ -70,15 +72,16 @@ public class YellowHero extends Hero {
 		int y2 = target.getPosY();
 		switch (ability) {
 			case DEFAULT:
-				if (((getFacingEast() && x2 >= x1 && x2 <= x1+SQUARE_LENGTH+DEFAULT_RANGE) ||
-						(!getFacingEast() && x2 <= x1 && x2 >= x1-SQUARE_LENGTH-DEFAULT_RANGE)) &&
-						y2 >= y1-DEFAULT_RANGE && y2 <= y1+DEFAULT_RANGE)
+				if (((getFacingEast() && x2 > x1 && x2 < x1+SQUARE_LENGTH+DEFAULT_RANGE) ||
+						(!getFacingEast() && x2 < x1 && x2 > x1-SQUARE_LENGTH-DEFAULT_RANGE)) &&
+						y2 >= y1-DEFAULT_RANGE && y2 < y1+DEFAULT_RANGE)
 					hit = true;
 				break;
 			case FIRST:
 			case SECOND:
 			case THIRD:
 			case ULTIMATE:
+			default:
 				break;
 		}
 		return hit;
