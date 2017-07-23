@@ -68,7 +68,7 @@ public abstract class Hero extends Entity {
 		String filepath = "src/assets/hero/";
 		filepath += colourPath.get(playerClass.getValue());
 		switch (this.getEntityState()) {
-			case DEFAULT:
+			case NEUTRAL:
 				filepath += "Neutral";
 				break;
 			case ATTACKING:

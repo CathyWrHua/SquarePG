@@ -28,7 +28,7 @@ public class Dummy extends Entity {
         super.setEntityState(entityState);
         String filepath = "src/assets/enemies/dummy";
         switch (this.getEntityState()) {
-            case DEFAULT:
+            case NEUTRAL:
                 filepath += "Neutral";
                 break;
             case DAMAGED:
@@ -53,7 +53,7 @@ public class Dummy extends Entity {
         if (getEntityState() == EntityState.DAMAGED && stunCounter > 0) {
         stunCounter--;
         } else if (stunCounter <= 0) {
-            setEntityState(EntityState.DEFAULT);
+            setEntityState(EntityState.NEUTRAL);
             stunCounter = STUN_TIME;
         }
     }

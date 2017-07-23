@@ -41,7 +41,7 @@ public class BlueHero extends Hero {
 		DamageMarker currentDamageMarker;
 		int damage;
 
-		if (getEntityState() == EntityState.DEFAULT) {
+		if (getEntityState() == EntityState.NEUTRAL) {
 			setEntityState(EntityState.ATTACKING);
 			playAnimation(ability.getValue());
 			for (Entity target : targets) {

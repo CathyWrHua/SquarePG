@@ -24,7 +24,7 @@ public abstract class Entity {
 	private Random random;
 
 	public enum EntityType {HERO, ENEMY, DUMMY}
-    public enum EntityState {DEFAULT, ATTACKING, DAMAGED, DEAD}
+    public enum EntityState {NEUTRAL, ATTACKING, DAMAGED, DEAD}
     public enum MotionStateUpDown {IDLE, UP, DOWN}
     public enum MotionStateLeftRight {IDLE, LEFT, RIGHT}
 
@@ -53,7 +53,7 @@ public abstract class Entity {
 		this.healthBar = new HealthBar(this);
 		this.random = new Random();
 
-        entityState = EntityState.DEFAULT;
+        entityState = EntityState.NEUTRAL;
         lrMotionState = MotionStateLeftRight.IDLE;
         udMotionState = MotionStateUpDown.IDLE;
 	}
@@ -63,7 +63,7 @@ public abstract class Entity {
 	    this.damageTaken = damageTaken;
 	    this.attackerFacingEast = attackerFacingEast;
 
-	    damageMarker = (currentHealth-damageTaken <= 0) ? null : (new DamageMarker(damageTaken, posX, posY));
+	    damageMarker = (currentHealth <= 0) ? null : (new DamageMarker(damageTaken, posX, posY));
 	    return damageMarker;
 	}
 	
@@ -73,8 +73,6 @@ public abstract class Entity {
             currentHealth = (currentHealth > maxHealth) ? maxHealth : currentHealth;
         }
 	}
-
-
 
 	void playAnimation(int index) {
 	    if (index >= 0 && index < abilityAnimations.length)
@@ -167,7 +165,7 @@ public abstract class Entity {
     public void setLRMotionState(MotionStateLeftRight state) {
     	lrMotionState = state;
 
-    	if (entityState != EntityState.DEFAULT) return;
+    	if (entityState != EntityState.NEUTRAL) return;
 
     	if (state == MotionStateLeftRight.RIGHT) {
     	    facingEast = true;
@@ -193,7 +191,7 @@ public abstract class Entity {
     }
 
     public void update() {
-        if (entityState == EntityState.DEFAULT || entityState == EntityState.ATTACKING) {
+        if (entityState == EntityState.NEUTRAL || entityState == EntityState.ATTACKING) {
             switch (lrMotionState) {
                 case LEFT:
                     posX -= velocity;
@@ -233,22 +231,22 @@ public abstract class Entity {
             damageTaken = 0;
         }
 
-        if (entityState == EntityState.DAMAGED && stunCounter > 0) {
+        if ((entityState == EntityState.DAMAGED || entityState == EntityState.DEAD) && stunCounter > 0) {
             if (attackerFacingEast) {
                 posX += KNOCK_BACK_DUR;
             } else {
                 posX -= KNOCK_BACK_DUR;
             }
             stunCounter--;
-        } else if (stunCounter <= 0) {
-            setEntityState(EntityState.DEFAULT);
+        } else if (stunCounter <= 0 && entityState == EntityState.DAMAGED) {
+            setEntityState(EntityState.NEUTRAL);
             stunCounter = STUN_TIME;
         }
 
         if (currentAbilityAnimation != null) {
             currentAbilityAnimation.update();
             if (currentAbilityAnimation.isDone()) {
-                setEntityState(EntityState.DEFAULT);
+                setEntityState(EntityState.NEUTRAL);
                 setEntityDirection();
                 currentAbilityAnimation = null;
             }

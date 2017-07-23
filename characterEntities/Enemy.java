@@ -45,7 +45,7 @@ public abstract class Enemy extends Entity {
 		String filepath = "src/assets/enemies/";
 		filepath += shapePath.get(enemyType.getValue());
 		switch (this.getEntityState()) {
-			case DEFAULT:
+			case NEUTRAL:
 				filepath += "Neutral";
 				break;
 			case ATTACKING:
