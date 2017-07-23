@@ -42,7 +42,7 @@ public class SquarePG extends JFrame {
 		            
 		            currentScreen.update();
 		            
-		            //Screen switching function: screenState is in Wait, unless a change screen button is passetssed (eg. back, enter buttons)
+		            //Screen switching function: screenState is in Wait, unless a change screen button is pressed (eg. back, enter buttons)
 		            if (screenState != ScreenState.WAIT) {
 		            	remove(currentScreen);
 		            	if (screenState == ScreenState.HOME) {
