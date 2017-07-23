@@ -3,7 +3,7 @@ package animation;
 import java.awt.*;
 
 public class EffectAnimation extends Animation {
-    int posX, posY;
+    private int posX, posY;
 
     public enum EffectAnimationType {ENEMY_DEATH}
 

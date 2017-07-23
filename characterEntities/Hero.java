@@ -86,14 +86,14 @@ public abstract class Hero extends Entity {
 		filepath += ".png";
 		this.setImageIcon(filepath);
 	}
-	
-	public abstract boolean evolve(int path);
+
+//	public abstract boolean evolve(int path);
 
 	public abstract ArrayList<DamageMarker> attack(Ability ability, ArrayList<Entity> targets);
 
 	protected abstract boolean isHit(Ability ability, Entity target);
 	
-	protected boolean evolutionIncrease(int path) {
+//	protected boolean evolutionIncrease(int path) {
 //		switch (path) {
 //		case PATH_RED:
 //			maxHealth += 210;
@@ -113,6 +113,6 @@ public abstract class Hero extends Entity {
 //		default:
 //			return false;
 //		}
-		return true;
-	}
+//		return true;
+//	}
 }

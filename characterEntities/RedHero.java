@@ -10,31 +10,31 @@ public class RedHero extends Hero {
 		setImageIcon("src/assets/hero/redNeutral.png");
 	}
 	
-	public boolean evolve(int path) {
-		if (numberEvolutions != 0) {
-			return false;
-		}
-		else {
-			//Need to also set imageIcon
-			switch (path) {
-			case Hero.PATH_RED:
-				setPlayerClass(PlayerClass.SCARLET);
-				evolutionIncrease(Hero.PATH_RED);
-				break;
-			case Hero.PATH_YELLOW:
-				setPlayerClass(PlayerClass.VERMILLION);
-				evolutionIncrease(Hero.PATH_YELLOW);
-				break;
-			case Hero.PATH_BLUE:
-				setPlayerClass(PlayerClass.MAGENTA);
-				evolutionIncrease(Hero.PATH_BLUE);
-				break;
-			default:
-				return false;
-			}
-			return true;
-		}
-	}
+//	public boolean evolve(int path) {
+//		if (numberEvolutions != 0) {
+//			return false;
+//		}
+//		else {
+//			//Need to also set imageIcon
+//			switch (path) {
+//			case Hero.PATH_RED:
+//				setPlayerClass(PlayerClass.SCARLET);
+//				evolutionIncrease(Hero.PATH_RED);
+//				break;
+//			case Hero.PATH_YELLOW:
+//				setPlayerClass(PlayerClass.VERMILLION);
+//				evolutionIncrease(Hero.PATH_YELLOW);
+//				break;
+//			case Hero.PATH_BLUE:
+//				setPlayerClass(PlayerClass.MAGENTA);
+//				evolutionIncrease(Hero.PATH_BLUE);
+//				break;
+//			default:
+//				return false;
+//			}
+//			return true;
+//		}
+//	}
 
 	public ArrayList<DamageMarker> attack(Ability ability, ArrayList<Entity> targets) {
         ArrayList<DamageMarker> damageMarkers = new ArrayList<>();
