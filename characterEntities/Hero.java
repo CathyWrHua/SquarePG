@@ -2,6 +2,7 @@ package characterEntities;
 
 import animation.AbilityAnimation;
 import gui.DamageMarker;
+import screens.GameMap;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -43,15 +44,11 @@ public abstract class Hero extends Entity {
 	protected PlayerClass playerClass;
 	int numberEvolutions;
 
-	static final int SQUARE_LENGTH = 75;
+	public static final int SQUARE_LENGTH = 75;
 	static final int DEFAULT_RANGE = SQUARE_LENGTH;
-
-	void setPlayerClass(PlayerClass playerClass) {
-		this.playerClass = playerClass;
-	}
 	
-	Hero(ArrayList<Entity> targets, int maxHealth, int maxDamage, int minDamage, int posX, int posY, int velocity) {
-		super(maxHealth, maxDamage, minDamage, posX, posY, velocity);
+	Hero(ArrayList<Entity> targets, GameMap map, int maxHealth, int maxDamage, int minDamage, int posX, int posY, int velocity) {
+		super(map, maxHealth, maxDamage, minDamage, posX, posY, velocity);
 		this.targets = targets;
 		for (Entity target : targets) {
 			immuneTo.put(target, false);
@@ -143,6 +140,10 @@ public abstract class Hero extends Entity {
 		return enemyMarkers;
 	}
 
+	public void setPlayerClass(PlayerClass playerClass) {
+		this.playerClass = playerClass;
+	}
+
 	public void emptyEnemyMarkers() {
 		enemyMarkers.clear();
 	}
@@ -155,5 +156,6 @@ public abstract class Hero extends Entity {
 				target.immuneTo.put(this, false);
 			}
 		}
+		setPoint(map.determineMotion(posX, posY, originalSelf, targets));
 	}
 }

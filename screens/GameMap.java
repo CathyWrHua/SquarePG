@@ -101,7 +101,7 @@ public class GameMap {
 							} else if (collisionHeight == collisionWidth) {
 								newX = rect.x - objectSize.width;
 							} else {
-								newY =hitRectBottom;
+								newY = hitRectBottom;
 							}
 						}
 

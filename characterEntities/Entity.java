@@ -3,6 +3,7 @@ package characterEntities;
 import animation.AbilityAnimation;
 import gui.DamageMarker;
 import gui.HealthBar;
+import screens.GameMap;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,14 +19,16 @@ public abstract class Entity {
 	protected int velocity;
 	protected boolean attackerFacingEast;
 	protected boolean facingEast;
+	protected GameMap map;
 	protected AbilityAnimation currentAbilityAnimation;
     protected AbilityAnimation[] abilityAnimations;
     protected HashMap<Entity, Boolean> immuneTo;
+    protected Rectangle originalSelf;
 	protected ImageIcon imageIcon;
     protected HealthBar healthBar;
 	protected Random random;
 
-        public enum EntityType {HERO, ENEMY, DUMMY}
+    public enum EntityType {HERO, ENEMY, DUMMY}
     public enum EntityState {NEUTRAL, ATTACKING, DAMAGED, DEAD}
     public enum MotionStateUpDown {IDLE, UP, DOWN}
     public enum MotionStateLeftRight {IDLE, LEFT, RIGHT}
@@ -39,7 +42,8 @@ public abstract class Entity {
 	protected static final int STUN_TIME = 15;
 	protected static final int KNOCK_BACK_DUR = 1;
 	
-	public Entity(int maxHealth, int maxDamage, int minDamage, int posX, int posY, int velocity) {
+	public Entity(GameMap map, int maxHealth, int maxDamage, int minDamage, int posX, int posY, int velocity) {
+	    this.map = map;
 		this.currentHealth = this.maxHealth = maxHealth;
 		this.maxDamage = maxDamage;
 		this.minDamage = minDamage;
@@ -193,6 +197,7 @@ public abstract class Entity {
     }
 
     public void update() {
+        originalSelf = getEntitySize();
         if (entityState == EntityState.NEUTRAL || entityState == EntityState.ATTACKING) {
             switch (lrMotionState) {
                 case LEFT:

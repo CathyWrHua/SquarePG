@@ -46,20 +46,20 @@ public class GameScreen extends Screen implements KeyListener{
 	private void createPlayer(Hero.PlayerClass playerClass) {
 		switch (playerClass) {
 		case RED:
-			player = new RedHero(targets);
+			player = new RedHero(targets, map);
 			break;
 		case BLUE:
-			player = new BlueHero(targets);
+			player = new BlueHero(targets, map);
 			break;
 		case YELLOW:
-			player = new YellowHero(targets);
+			player = new YellowHero(targets, map);
 			break;
 		default:
 		}
 	}
 
 	private void createEnemy(int health, int maxDamage, int minDamage, int posX, int posY, int velocity) {
-		Grunt grunt = new Grunt(player, health, maxDamage, minDamage, posX, posY, velocity);
+		Grunt grunt = new Grunt(player, map, health, maxDamage, minDamage, posX, posY, velocity);
 		targets.add(grunt);
 
 		grunt.setTargetEntity(player);
@@ -110,6 +110,10 @@ public class GameScreen extends Screen implements KeyListener{
 			damageMarkers.add(player.inflict(25, new Dummy(-100, -100, true)));
 		} else if (e.getKeyCode() == KeyEvent.VK_X) {
 			player.heal(25);
+		} else if (e.getKeyCode() == KeyEvent.VK_C) {
+			System.out.println("Player: ("+player.getPosX()+", "+player.getPosY()+")");
+			System.out.println("Enemy: ("+targets.get(0).getPosX()+", "+targets.get(2).getPosY()+")");
+			System.out.println();
 		}
 	}
 
@@ -136,10 +140,7 @@ public class GameScreen extends Screen implements KeyListener{
 	@Override
 	public void update() {
 		//TODO:Remove all magic width and heights with actual ones
-
-		Rectangle originalPlayer = player.getEntitySize();
 		player.update();
-		player.setPoint(map.determineMotion(player.getPosX(), player.getPosY(), originalPlayer, targets));
 		damageMarkers.addAll(player.getEnemyMarkers());
 		player.emptyEnemyMarkers();
 
@@ -147,9 +148,7 @@ public class GameScreen extends Screen implements KeyListener{
 			Entity target = iterator.next();
 			if (target.getEntityType() == Entity.EntityType.ENEMY) {
 				Enemy enemy = (Enemy)target;
-				Rectangle originalEnemy = enemy.getEntitySize();
 				enemy.update();
-				enemy.setPoint(map.determineMotion(enemy.getPosX(), enemy.getPosY(), originalEnemy, new ArrayList<Entity>(Arrays.asList(player))));
 				if (enemy.isDone()) {
 					createEffectAnimation(EffectAnimation.EffectAnimationType.ENEMY_DEATH, enemy.getPosX(), enemy.getPosY());
 					iterator.remove();
@@ -159,14 +158,14 @@ public class GameScreen extends Screen implements KeyListener{
 			}
 		}
 
-		for(Iterator<Animation> iterator = animations.iterator(); iterator.hasNext();) {
+		for (Iterator<Animation> iterator = animations.iterator(); iterator.hasNext();) {
 			Animation animation = iterator.next();
 			animation.update();
 			if (animation.isDone()) {
 				iterator.remove();
 			}
 		}
-		for(Iterator<DamageMarker> iterator = damageMarkers.iterator(); iterator.hasNext();) {
+		for (Iterator<DamageMarker> iterator = damageMarkers.iterator(); iterator.hasNext();) {
 			DamageMarker marker = iterator.next();
 			marker.update();
 			if (marker.isDone()) {
