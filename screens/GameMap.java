@@ -47,7 +47,6 @@ public class GameMap {
 		}
 	}
 
-	//TODO:A few bugs with detection, not sure what causes them
 	public Point determineMotion(int newX, int newY, Rectangle objectSize){
 		if (objectSize == null) {
 			return null;
@@ -74,104 +73,76 @@ public class GameMap {
 					hitRectRight > objectLeft &&
 					hitRectTop < objectBottom &&
 					hitRectBottom > objectTop) {
-				//collision
+				//collision was detected
 
 				if (displacementX > 0) {
 					if (objectLeft < hitRectLeft) {
 						if (displacementY == 0) {
 							newX = rect.x - objectSize.width;
-							objectRight = newX + objectSize.width;
-							objectLeft = newX;
 						} else if (displacementY > 0) {
 							int collisionWidth = objectRight - hitRectLeft;
 							int collisionHeight = objectBottom - hitRectTop;
 							if (collisionHeight > collisionWidth) {
 								newX = rect.x - objectSize.width;
-								objectRight = newX + objectSize.width;
-								objectLeft = newX;
 							} else if (collisionHeight == collisionWidth) {
 								newX = rect.x - objectSize.width;
-								objectRight = newX + objectSize.width;
-								objectLeft = newX;
-
 								newY = rect.y - objectSize.height;
-								objectTop = newY;
-								objectBottom = newY + objectSize.height;
 							} else {
 								newY = rect.y - objectSize.height;
-								objectTop = newY;
-								objectBottom = newY + objectSize.height;
 							}
 						} else {
 							int collisionWidth = objectRight - hitRectLeft;
 							int collisionHeight = hitRectBottom - objectTop;
 							if (collisionHeight > collisionWidth) {
 								newX = rect.x - objectSize.width;
-								objectRight = newX + objectSize.width;
-								objectLeft = newX;
 							} else if (collisionHeight == collisionWidth) {
 								newX = rect.x - objectSize.width;
-								objectRight = newX + objectSize.width;
-								objectLeft = newX;
 
 								newY = hitRectBottom;
-								objectTop = newY;
-								objectBottom = newY + objectSize.height;
 							} else {
 								newY =hitRectBottom;
-								objectTop = newY;
-								objectBottom = newY + objectSize.height;
 							}
 						}
+
+						objectRight = newX + objectSize.width;
+						objectLeft = newX;
+						objectTop = newY;
+						objectBottom = newY + objectSize.height;
+
 						continue;
 					}
 				} else if (displacementX < 0) {
 					if (objectRight > hitRectRight) {
 						if (displacementY == 0) {
 							newX = hitRectRight;
-							objectRight = newX + objectSize.width;
-							objectLeft = newX;
 						} else if (displacementY > 0) {
 							int collisionWidth = hitRectRight - objectLeft;
 							int collisionHeight = objectBottom - hitRectTop;
 							if (collisionHeight > collisionWidth) {
 								newX = hitRectRight;
-								objectRight = newX + objectSize.width;
-								objectLeft = newX;
 							} else if (collisionHeight == collisionWidth) {
 								newX = hitRectRight;
-								objectRight = newX + objectSize.width;
-								objectLeft = newX;
-
 								newY = rect.y - objectSize.height;
-								objectTop = newY;
-								objectBottom = newY + objectSize.height;
 							} else {
 								newY = rect.y - objectSize.height;
-								objectTop = newY;
-								objectBottom = newY + objectSize.height;
 							}
 						} else {
 							int collisionWidth = hitRectRight - objectLeft;
 							int collisionHeight = hitRectBottom - objectTop;
 							if (collisionHeight > collisionWidth) {
 								newX = hitRectRight;
-								objectRight = newX + objectSize.width;
-								objectLeft = newX;
 							} else if (collisionHeight == collisionWidth) {
 								newX = hitRectRight;
-								objectRight = newX + objectSize.width;
-								objectLeft = newX;
-
 								newY = hitRectBottom;
-								objectTop = newY;
-								objectBottom = newY + objectSize.height;
 							} else {
 								newY = hitRectBottom;
-								objectTop = newY;
-								objectBottom = newY + objectSize.height;
 							}
 						}
+
+						objectRight = newX + objectSize.width;
+						objectLeft = newX;
+						objectTop = newY;
+						objectBottom = newY + objectSize.height;
 						continue;
 					}
 				}
