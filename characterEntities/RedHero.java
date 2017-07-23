@@ -1,4 +1,5 @@
 package characterEntities;
+
 import gui.DamageMarker;
 
 import java.util.ArrayList;
@@ -13,8 +14,7 @@ public class RedHero extends Hero {
 //	public boolean evolve(int path) {
 //		if (numberEvolutions != 0) {
 //			return false;
-//		}
-//		else {
+//		} else {
 //			//Need to also set imageIcon
 //			switch (path) {
 //			case Hero.PATH_RED:

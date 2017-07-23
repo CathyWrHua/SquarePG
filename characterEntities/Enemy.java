@@ -75,5 +75,4 @@ public abstract class Enemy extends Entity {
 			hero.immuneTo.put(this, false);
 		}
 	}
-
 }

@@ -14,8 +14,7 @@ public class YellowHero extends Hero {
 //	public boolean evolve(int path) {
 //		if (numberEvolutions != 0) {
 //			return false;
-//		}
-//		else {
+//		} else {
 //			//Need to also set imageIcon
 //			switch (path) {
 //			case Hero.PATH_RED:
