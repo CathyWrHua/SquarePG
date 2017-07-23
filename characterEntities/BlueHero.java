@@ -60,8 +60,7 @@ public class BlueHero extends Hero {
 		super.update();
 		DamageMarker marker;
 
-		if (entityState != EntityState.ATTACKING)
-			return;
+		if (entityState != EntityState.ATTACKING) return;
 		for (Entity target : targets) {
 			switch (currentAbilityAnimation.getAbilityAnimationType()) {
 				case DEFAULT:
