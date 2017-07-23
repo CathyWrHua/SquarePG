@@ -38,6 +38,7 @@ public class RedHero extends Hero {
 
 	public ArrayList<DamageMarker> attack(Ability ability, ArrayList<Entity> targets) {
         ArrayList<DamageMarker> damageMarkers = new ArrayList<>();
+        DamageMarker currentDamageMarker;
         int damage;
 
         if (getEntityState() == EntityState.DEFAULT) {
@@ -48,7 +49,10 @@ public class RedHero extends Hero {
                     case DEFAULT:
                         if (isHit(ability, target)) {
                             damage = getDamage();
-                            damageMarkers.add(target.inflict(damage, this.getFacingEast()));
+                            currentDamageMarker = target.inflict(damage, this.getFacingEast());
+                            if (currentDamageMarker != null) {
+                                damageMarkers.add(currentDamageMarker);
+                            }
                         }
                         break;
                     case FIRST:

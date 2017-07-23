@@ -59,9 +59,12 @@ public abstract class Entity {
 	}
 	
 	public DamageMarker inflict(int damageTaken, boolean attackerFacingEast) {
+	    DamageMarker damageMarker;
 	    this.damageTaken = damageTaken;
 	    this.attackerFacingEast = attackerFacingEast;
-	    return (new DamageMarker(damageTaken, posX, posY));
+
+	    damageMarker = (currentHealth-damageTaken <= 0) ? null : (new DamageMarker(damageTaken, posX, posY));
+	    return damageMarker;
 	}
 	
 	public void heal(int amountHealed) {
@@ -70,6 +73,8 @@ public abstract class Entity {
             currentHealth = (currentHealth > maxHealth) ? maxHealth : currentHealth;
         }
 	}
+
+	
 
 	void playAnimation(int index) {
 	    if (index >= 0 && index < abilityAnimations.length)
