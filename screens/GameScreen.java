@@ -107,6 +107,7 @@ public class GameScreen extends Screen implements KeyListener{
 		} else if (e.getKeyCode() == KeyEvent.VK_A) {
 			player.attack(Hero.Ability.DEFAULT);
 		} else if (e.getKeyCode() == KeyEvent.VK_Z) {
+			//HACK: this is just so that we can damage the player in testing, there will be bugs with this (ignore them)
 			damageMarkers.add(player.inflict(25, new Dummy(-100, -100, true)));
 		} else if (e.getKeyCode() == KeyEvent.VK_X) {
 			player.heal(25);
