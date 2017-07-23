@@ -39,9 +39,8 @@ public class EffectAnimation extends Animation {
     }
 
     public void draw (Graphics g) {
-        if (imageIcon == null) {
+        if (imageIcon == null)
             return;
-        }
         Graphics2D g2d = (Graphics2D)g;
         Image image = imageIcon.getImage();
 
