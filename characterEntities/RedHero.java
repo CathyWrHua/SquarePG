@@ -1,78 +1,50 @@
 package characterEntities;
 
-import screens.GameScreen;
+import gui.DamageMarker;
 
 import java.util.ArrayList;
 
 public class RedHero extends Hero {
-	public RedHero(GameScreen game) {
-		super(game, 300, 55, 45, 100, 100, 5);
-		setColour("red");
+	public RedHero(ArrayList<Entity> targets) {
+		super(targets, 300, 55, 45, 100, 100, 5);
 		setPlayerClass(PlayerClass.RED);
 		setImageIcon("src/assets/hero/redNeutral.png");
 	}
 	
-	public boolean evolve(int path) {
-		if (numberEvolutions != 0) {
-			return false;
-		}
-		else {
-			//Need to also set imageIcon
-			switch (path) {
-			case Hero.PATH_RED:
-				setPlayerClass(PlayerClass.SCARLET);
-				evolutionIncrease(Hero.PATH_RED);
-				break;
-			case Hero.PATH_YELLOW:
-				setPlayerClass(PlayerClass.VERMILLION);
-				evolutionIncrease(Hero.PATH_YELLOW);
-				break;
-			case Hero.PATH_BLUE:
-				setPlayerClass(PlayerClass.MAGENTA);
-				evolutionIncrease(Hero.PATH_BLUE);
-				break;
-			default:
-				return false;
-			}
-			return true;
-		}
-	}
+//	public boolean evolve(int path) {
+//		if (numberEvolutions != 0) {
+//			return false;
+//		} else {
+//			//Need to also set imageIcon
+//			switch (path) {
+//			case Hero.PATH_RED:
+//				setPlayerClass(PlayerClass.SCARLET);
+//				evolutionIncrease(Hero.PATH_RED);
+//				break;
+//			case Hero.PATH_YELLOW:
+//				setPlayerClass(PlayerClass.VERMILLION);
+//				evolutionIncrease(Hero.PATH_YELLOW);
+//				break;
+//			case Hero.PATH_BLUE:
+//				setPlayerClass(PlayerClass.MAGENTA);
+//				evolutionIncrease(Hero.PATH_BLUE);
+//				break;
+//			default:
+//				return false;
+//			}
+//			return true;
+//		}
+//	}
 
-	public void attack(Ability ability, ArrayList<Entity> targets) {
-		if (getEntityState() == EntityState.DEFAULT) {
-			setEntityState(EntityState.ATTACKING);
-            playAnimation(ability.getValue());
-            for (Entity target : targets) {
-                switch (ability) {
-                    case DEFAULT:
-                        if (isHit(ability, target)) {
-                            target.inflict(getDamage(), this.getFacingEast());
-                        }
-                        break;
-                    case FIRST:
-                    case SECOND:
-                    case THIRD:
-                    case ULTIMATE:
-                    default:
-                        break;
-                }
-            }
-		}
-	}
-
+    @Override
 	protected boolean isHit(Ability ability, Entity target) {
+	    if (super.isHit(ability, target)) {
+	        return true;
+        }
 		boolean hit = false;
-        int x1 = getPosX();
-        int y1 = getPosY();
-        int x2 = target.getPosX();
-        int y2 = target.getPosY();
+        int targetPosX = target.getPosX();
+        int targetPosY = target.getPosY();
 		switch (ability) {
-			case DEFAULT:
-                if (((getFacingEast() && x2 > x1 && x2 < x1+SQUARE_LENGTH+DEFAULT_RANGE) ||
-                        (!getFacingEast() && x2 < x1 && x2 > x1-SQUARE_LENGTH-DEFAULT_RANGE)) &&
-                        y2 >= y1-DEFAULT_RANGE && y2 < y1+DEFAULT_RANGE)
-                    hit = true;
-				break;
 			case FIRST:
 			case SECOND:
 			case THIRD:
@@ -81,4 +53,28 @@ public class RedHero extends Hero {
 		}
 		return hit;
 	}
+
+    @Override
+    public void update() {
+        super.update();
+        DamageMarker marker;
+
+        if (entityState != EntityState.ATTACKING) {
+            return;
+        }
+        for (Entity target : targets) {
+            switch (currentAbilityAnimation.getAbilityAnimationType()) {
+                case DEFAULT:
+                    if (!target.immuneTo.get(this) && isHit(Ability.DEFAULT, target)) {
+                        marker = target.inflict(getDamage(), this);
+                        if (marker != null) {
+                            enemyMarkers.add(marker);
+                        }
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
 }

@@ -1,41 +1,47 @@
 package characterEntities;
 
-import screens.GameScreen;
+import java.util.HashMap;
 
 import java.awt.*;
 
-public class Enemy extends Entity {
-	private int deletionCounter = DELETION_TIME;
-	private boolean done;
+public abstract class Enemy extends Entity {
+	public enum EnemyType {
+		CIRCLE(0);
+		private int value;
+
+		EnemyType(int value) {
+			this.value = value;
+		}
+
+		public int getValue() {
+			return value;
+		}
+	}
+
+	protected int deletionCounter = DELETION_TIME;
+	protected boolean done;
+	protected EnemyType enemyType;
+	protected HashMap<Integer, String> shapePath;
+	protected Hero hero;
 	private Entity targetEntity;
-	private String shape;
 
-	private static final int DELETION_TIME = 90;
+	private static final int DELETION_TIME = 60;
 	
-	Enemy(GameScreen game, int maxHealth, int maxDamage, int minDamage, int posX, int posY, int velocity) {
-		super(game, maxHealth, maxDamage, minDamage, posX, posY, velocity);
+	Enemy(Hero hero, int maxHealth, int maxDamage, int minDamage, int posX, int posY, int velocity) {
+		super(maxHealth, maxDamage, minDamage, posX, posY, velocity);
+		this.hero = hero;
+		shapePath = new HashMap<>();
+		shapePath.put(0, "circle");
 		done = false;
-	}
-
-	void setShape(String shape) {
-		this.shape = shape;
-	}
-
-	public String getShape() {
-		return shape;
+		setEntityType(EntityType.ENEMY);
 	}
 
 	public boolean isDone() {
 		return done;
 	}
 
-	public void update() {
-		super.update();
-		if (getEntityState() == EntityState.DEAD && deletionCounter-- <= 0) {
-			done = true;
-		} else if (getEntityState() == EntityState.DEFAULT){
-			calculateNextMove();
-		}
+        void setEnemyType(EnemyType enemyType) {
+		this.enemyType = enemyType;
 	}
 
 	@Override
@@ -52,9 +58,9 @@ public class Enemy extends Entity {
 	public void setEntityState(EntityState entityState) {
 		super.setEntityState(entityState);
 		String filepath = "src/assets/enemies/";
-		filepath += shape;
-		switch (this.getEntityState()) {
-			case DEFAULT:
+		filepath += shapePath.get(enemyType.getValue());
+		switch (entityState) {
+			case NEUTRAL:
 				filepath += "Neutral";
 				break;
 			case ATTACKING:
@@ -95,6 +101,17 @@ public class Enemy extends Entity {
 		if (Math.abs(motionVector.x) < 75 && Math.abs(motionVector.y) < 75) {
 			setEntityState(EntityState.ATTACKING);
 			targetEntity.inflict(2, true);
+                }
+        }
+
+        public void update() {
+		super.update();
+		if (entityState == EntityState.DEAD && deletionCounter-- <= 0) {
+			done = true;
 		}
+		if (currentAbilityAnimation == null) {
+			hero.immuneTo.put(this, false);
+                }
+                //TODO: add calculate movement here
 	}
 }

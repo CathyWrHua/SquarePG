@@ -1,41 +1,45 @@
 package characterEntities;
 
-import screens.GameScreen;
+import animation.AbilityAnimation;
+import gui.DamageMarker;
+import gui.HealthBar;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.HashMap;
 import java.util.Random;
 
 public abstract class Entity {
     protected int posX, posY;
-	private int maxHealth, currentHealth;
-	private int maxDamage, minDamage;
-    private int stunCounter = STUN_TIME;
-	private int damageTaken;
+	protected int maxHealth, currentHealth;
+	protected int maxDamage, minDamage;
+    protected int stunCounter = STUN_TIME;
+	protected int damageTaken;
 	protected int velocity;
-	private boolean attackerFacingEast;
-	private boolean facingEast;
-	private AbilityAnimation currentAbilityAnimation;
-    private AbilityAnimation[] abilityAnimations;
-	private ImageIcon imageIcon;
-    private HealthBar healthBar;
-	private Random random;
-	private GameScreen game;
+	protected boolean attackerFacingEast;
+	protected boolean facingEast;
+	protected AbilityAnimation currentAbilityAnimation;
+    protected AbilityAnimation[] abilityAnimations;
+    protected HashMap<Entity, Boolean> immuneTo;
+	protected ImageIcon imageIcon;
+    protected HealthBar healthBar;
+	protected Random random;
 
-    public enum EntityState {DEFAULT, ATTACKING, DAMAGED, DEAD}
+        public enum EntityType {HERO, ENEMY, DUMMY}
+    public enum EntityState {NEUTRAL, ATTACKING, DAMAGED, DEAD}
     public enum MotionStateUpDown {IDLE, UP, DOWN}
     public enum MotionStateLeftRight {IDLE, LEFT, RIGHT}
 
-    private EntityState entityState;
-	private MotionStateLeftRight lrMotionState;
-	private MotionStateUpDown udMotionState;
+    protected EntityType entityType;
+    protected EntityState entityState;
+	protected MotionStateLeftRight lrMotionState;
+	protected MotionStateUpDown udMotionState;
 
-    private static final int NUM_ANIMATIONS = 5;
-	private static final int STUN_TIME = 15;
-	private static final int KNOCK_BACK_DUR = 1;
+    protected static final int NUM_ANIMATIONS = 5;
+	protected static final int STUN_TIME = 15;
+	protected static final int KNOCK_BACK_DUR = 1;
 	
-	public Entity(GameScreen game, int maxHealth, int maxDamage, int minDamage, int posX, int posY, int velocity) {
-	    this.game = game;
+	public Entity(int maxHealth, int maxDamage, int minDamage, int posX, int posY, int velocity) {
 		this.currentHealth = this.maxHealth = maxHealth;
 		this.maxDamage = maxDamage;
 		this.minDamage = minDamage;
@@ -50,16 +54,21 @@ public abstract class Entity {
         this.currentAbilityAnimation = null;
 		this.healthBar = new HealthBar(this);
 		this.random = new Random();
+		this.immuneTo = new HashMap<>();
 
-        setEntityState(EntityState.DEFAULT);
-		setLRMotionState(MotionStateLeftRight.IDLE);
-		setUDMotionState(MotionStateUpDown.IDLE);
+        entityState = EntityState.NEUTRAL;
+        lrMotionState = MotionStateLeftRight.IDLE;
+        udMotionState = MotionStateUpDown.IDLE;
 	}
 	
-	public void inflict(int damageTaken, boolean attackerFacingEast) {
-	    this.game.createDamageMarker(damageTaken, posX, posY);
+	public DamageMarker inflict(int damageTaken, Entity attacker) {
+	    DamageMarker damageMarker;
 	    this.damageTaken = damageTaken;
-	    this.attackerFacingEast = attackerFacingEast;
+	    this.attackerFacingEast = attacker.getFacingEast();
+	    immuneTo.put(attacker, true);
+
+	    damageMarker = (currentHealth <= 0) ? null : (new DamageMarker(damageTaken, posX, posY));
+	    return damageMarker;
 	}
 	
 	public void heal(int amountHealed) {
@@ -74,8 +83,117 @@ public abstract class Entity {
 	        currentAbilityAnimation = abilityAnimations[index];
     }
 
-	public void update() {
-	    if (entityState == EntityState.DEFAULT || entityState == EntityState.ATTACKING) {
+    private void calculateEntityDirection() {
+        if (lrMotionState == MotionStateLeftRight.LEFT) {
+            facingEast = false;
+        } else if (lrMotionState == MotionStateLeftRight.RIGHT) {
+            facingEast = true;
+        }
+    }
+
+	public ImageIcon getImageIcon() {
+	    return imageIcon;
+    }
+
+    public EntityState getEntityState() {
+        return entityState;
+    }
+
+    public EntityType getEntityType() {
+        return entityType;
+    }
+	
+    public int getDamage() {
+        return (minDamage+random.nextInt(maxDamage-minDamage));
+    }
+    
+    public int getCurrentHealth() {
+        return currentHealth;
+    }
+    
+    public int getMaxHealth() {
+        return maxHealth;
+    }
+
+    public boolean getFacingEast() {
+        return facingEast;
+    }
+
+    public int getPosX() {
+        return posX;
+    }
+
+    public int getPosY() {
+        return posY;
+    }
+
+    public void setImageIcon(String filename) {
+        imageIcon = new ImageIcon(filename);
+    }
+
+    public void setFacingEast(boolean facingEast) {
+        this.facingEast = facingEast;
+    }
+
+    public void setAttackerFacingEast(boolean attackerFacingEast) {
+        this.attackerFacingEast = attackerFacingEast;
+    }
+
+    public void setAnimation(int index, AbilityAnimation abilityAnimation) {
+        abilityAnimations[index] = abilityAnimation;
+    }
+
+    public abstract Rectangle getEntitySize();
+    
+    public void setCurrentHealth(int currentHealth) {
+        this.currentHealth = currentHealth;
+    }
+    
+    public void setMaxHealth(int maxHealth) {
+        this.maxHealth = maxHealth;
+    }
+    
+    public void setDamageMax(int damageMax) {
+        this.maxDamage = damageMax;
+    }
+    
+    public void setDamageMin(int damageMin) {
+        this.minDamage = damageMin;
+    }
+
+    public void setPoint(Point newPoint) {
+	    if (newPoint != null) {
+            posX = newPoint.x;
+            posY = newPoint.y;
+        }
+    }
+
+    public void setEntityType(EntityType entityType) {
+	    this.entityType = entityType;
+    }
+
+    public void setLRMotionState(MotionStateLeftRight state) {
+    	lrMotionState = state;
+
+    	if (entityState != EntityState.NEUTRAL) return;
+
+    	if (state == MotionStateLeftRight.RIGHT) {
+    	    facingEast = true;
+        } else if (state == MotionStateLeftRight.LEFT) {
+    	    facingEast = false;
+        }
+    }
+    
+    public void setUDMotionState(MotionStateUpDown state) {
+    	udMotionState = state;
+    }
+
+    public void setEntityState(EntityState state) {
+	    entityState = state;
+    }
+
+    public void update() {
+        if (entityState == EntityState.NEUTRAL || entityState == EntityState.ATTACKING) {
             switch (lrMotionState) {
                 case LEFT:
                     posX -= velocity;
@@ -115,135 +233,26 @@ public abstract class Entity {
             damageTaken = 0;
         }
 
-		if (entityState == EntityState.DAMAGED && stunCounter > 0) {
-	        if (attackerFacingEast) {
-	            posX += KNOCK_BACK_DUR;
+        if ((entityState == EntityState.DAMAGED || entityState == EntityState.DEAD) && stunCounter > 0) {
+            if (attackerFacingEast) {
+                posX += KNOCK_BACK_DUR;
             } else {
-	            posX -= KNOCK_BACK_DUR;
+                posX -= KNOCK_BACK_DUR;
             }
-		    stunCounter--;
-        } else if (stunCounter <= 0) {
-		    setEntityState(EntityState.DEFAULT);
-		    stunCounter = STUN_TIME;
+            stunCounter--;
+        } else if (stunCounter <= 0 && entityState == EntityState.DAMAGED) {
+            setEntityState(EntityState.NEUTRAL);
+            stunCounter = STUN_TIME;
         }
 
-		if (currentAbilityAnimation != null) {
+        if (currentAbilityAnimation != null) {
             currentAbilityAnimation.update();
             if (currentAbilityAnimation.isDone()) {
-                setEntityState(EntityState.DEFAULT);
-                setEntityDirection();
+                setEntityState(EntityState.NEUTRAL);
+                calculateEntityDirection();
                 currentAbilityAnimation = null;
             }
         }
-	}
-
-	ImageIcon getImageIcon() {
-	    return imageIcon;
-    }
-
-    GameScreen getGame() {
-	    return game;
-    }
-	
-    int getDamage() {
-        return (minDamage+random.nextInt(maxDamage-minDamage));
-    }
-    
-    int getCurrentHealth() {
-        return currentHealth;
-    }
-    
-    int getMaxHealth() {
-        return maxHealth;
-    }
-
-    public int getPosX() {
-        return posX;
-    }
-
-    public int getPosY() {
-        return posY;
-    }
-
-    boolean getFacingEast() {
-	    return facingEast;
-    }
-
-    boolean getAttackerFacingEast() {
-	    return attackerFacingEast;
-    }
-
-    EntityState getEntityState() {
-	    return entityState;
-    }
-
-    void setImageIcon(String filename) {
-        imageIcon = new ImageIcon(filename);
-    }
-
-    public abstract Rectangle getEntitySize();
-    
-    public void setCurrentHealth(int currentHealth) {
-        this.currentHealth = currentHealth;
-    }
-    
-    public void setMaxHealth(int maxHealth) {
-        this.maxHealth = maxHealth; 
-    }
-    
-    public void setDamageMax(int damageMax) {
-        this.maxDamage = damageMax;
-    }
-    
-    public void setDamageMin(int damageMin) {
-        this.minDamage = damageMin;
-    }
-
-    public void setPoint(Point newPoint) {
-	    if (newPoint != null) {
-            posX = newPoint.x;
-            posY = newPoint.y;
-        }
-    }
-
-    public void setLRMotionState(MotionStateLeftRight state) {
-    	lrMotionState = state;
-
-    	if (entityState != EntityState.DEFAULT) return;
-
-    	if (state == MotionStateLeftRight.RIGHT) {
-    	    facingEast = true;
-        } else if (state == MotionStateLeftRight.LEFT) {
-    	    facingEast = false;
-        }
-    }
-    
-    public void setUDMotionState(MotionStateUpDown state) {
-    	udMotionState = state;
-    }
-
-    public void setEntityState(EntityState state) {
-	    entityState = state;
-    }
-
-    private void setEntityDirection() {
-        if (lrMotionState == MotionStateLeftRight.LEFT) {
-            facingEast = false;
-        } else if (lrMotionState == MotionStateLeftRight.RIGHT) {
-            facingEast = true;
-        }
-    }
-
-    void setFacingEast(boolean facingEast) {
-        this.facingEast = facingEast;
-    }
-
-    void setAttackerFacingEast(boolean attackerFacingEast) {
-	    this.attackerFacingEast = attackerFacingEast;
-    }
-
-    void setAnimation(int index, AbilityAnimation abilityAnimation) {
-	    abilityAnimations[index] = abilityAnimation;
     }
    
     public void draw(Graphics g) {
