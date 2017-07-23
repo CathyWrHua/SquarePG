@@ -54,11 +54,8 @@ public abstract class Hero extends Entity {
 			immuneTo.put(target, false);
 		}
 
-		colourPath = new HashMap<>();
 		enemyMarkers = new ArrayList<>();
-		colourPath.put(0, "red");
-		colourPath.put(1, "blue");
-		colourPath.put(2, "yellow");
+		createHeroHashMap();
 		setAnimation(0, new AbilityAnimation(AbilityAnimation.AbilityAnimationType.DEFAULT, this));
 		numberEvolutions = 0;
 		setEntityType(EntityType.HERO);
@@ -148,14 +145,45 @@ public abstract class Hero extends Entity {
 		enemyMarkers.clear();
 	}
 
+	private void createHeroHashMap() {
+		colourPath = new HashMap<>();
+		colourPath.put(0,"red");
+		colourPath.put(1,"blue");
+		colourPath.put(2,"yellow");
+	}
+
 	@Override
 	public void update () {
 		super.update();
+		if (entityState == EntityState.NEUTRAL || entityState == EntityState.ATTACKING) {
+			switch (lrMotionState) {
+				case LEFT:
+					newPosX -= velocity;
+					break;
+				case RIGHT:
+					newPosX += velocity;
+					break;
+				case IDLE:
+				default:
+					break;
+			}
+			switch (udMotionState) {
+				case UP:
+					newPosY -= velocity;
+					break;
+				case DOWN:
+					newPosY += velocity;
+					break;
+				case IDLE:
+				default:
+					break;
+			}
+		}
 		if (currentAbilityAnimation == null) {
 			for (Entity target : targets) {
 				target.immuneTo.put(this, false);
 			}
 		}
-		setPoint(map.determineMotion(posX, posY, originalSelf, targets));
+		setPoint(map.determineMotion(newPosX, newPosY, getEntitySize(), targets));
 	}
 }

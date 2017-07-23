@@ -97,9 +97,9 @@ public abstract class Enemy extends Entity {
 			int deltaX = (int)Math.round(motionVector.x * scaleFactor);
 			int deltaY = (int)Math.round(motionVector.y * scaleFactor);
 
-			posX += (deltaX == 0 && targetCenter.x != selfCenter.x) ?
+			newPosX += (deltaX == 0 && targetCenter.x != selfCenter.x) ?
 					((targetCenter.x > selfCenter.x) ? 1 : -1) : deltaX;
-			posY += (deltaY == 0 && targetCenter.y != selfCenter.y) ?
+			newPosY += (deltaY == 0 && targetCenter.y != selfCenter.y) ?
 					((targetCenter.y > selfCenter.y) ? 1 : -1) : deltaY;
 		}
 
@@ -118,7 +118,7 @@ public abstract class Enemy extends Entity {
 		if (currentAbilityAnimation == null) {
 			targetEntity.immuneTo.put(this, false);
 		}
-		setPoint(map.determineMotion(posX, posY, originalSelf, new ArrayList<>(Collections.singletonList(targetEntity))));
+		setPoint(map.determineMotion(newPosX, newPosY, getEntitySize(), new ArrayList<>(Collections.singletonList(targetEntity))));
 	}
 
 	private void createEnemyHashMap() {

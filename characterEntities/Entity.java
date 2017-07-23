@@ -12,6 +12,7 @@ import java.util.Random;
 
 public abstract class Entity {
     protected int posX, posY;
+    protected int newPosX, newPosY;
 	protected int maxHealth, currentHealth;
 	protected int maxDamage, minDamage;
     protected int stunCounter = STUN_TIME;
@@ -23,7 +24,6 @@ public abstract class Entity {
 	protected AbilityAnimation currentAbilityAnimation;
     protected AbilityAnimation[] abilityAnimations;
     protected HashMap<Entity, Boolean> immuneTo;
-    protected Rectangle originalSelf;
 	protected ImageIcon imageIcon;
     protected HealthBar healthBar;
 	protected Random random;
@@ -197,31 +197,8 @@ public abstract class Entity {
     }
 
     public void update() {
-        originalSelf = getEntitySize();
-        if (entityState == EntityState.NEUTRAL || entityState == EntityState.ATTACKING) {
-            switch (lrMotionState) {
-                case LEFT:
-                    posX -= velocity;
-                    break;
-                case RIGHT:
-                    posX += velocity;
-                    break;
-                case IDLE:
-                default:
-                    break;
-            }
-            switch (udMotionState) {
-                case UP:
-                    posY -= velocity;
-                    break;
-                case DOWN:
-                    posY += velocity;
-                    break;
-                case IDLE:
-                default:
-                    break;
-            }
-        }
+        newPosX = posX;
+        newPosY = posY;
 
         if (damageTaken > 0) {
             currentHealth -= damageTaken;
@@ -240,9 +217,9 @@ public abstract class Entity {
 
         if ((entityState == EntityState.DAMAGED || entityState == EntityState.DEAD) && stunCounter > 0) {
             if (attackerFacingEast) {
-                posX += KNOCK_BACK_DUR;
+                newPosX += KNOCK_BACK_DUR;
             } else {
-                posX -= KNOCK_BACK_DUR;
+                newPosX -= KNOCK_BACK_DUR;
             }
             stunCounter--;
         } else if (stunCounter <= 0 && entityState == EntityState.DAMAGED) {
