@@ -36,22 +36,19 @@ public class BlueHero extends Hero {
 //		}
 //	}
 
+	@Override
 	protected boolean isHit(Ability ability, Entity target) {
+		if (super.isHit(ability, target)) {
+			return true;
+		}
 		boolean hit = false;
 		int targetPosX = target.getPosX();
 		int targetPosY = target.getPosY();
 		switch (ability) {
-			case DEFAULT:
-				if (((getFacingEast() && targetPosX > posX && targetPosX < posX+SQUARE_LENGTH+DEFAULT_RANGE) ||
-						(!getFacingEast() && targetPosX < posX && targetPosX > posX-SQUARE_LENGTH-DEFAULT_RANGE)) &&
-						targetPosY > posY-DEFAULT_RANGE && targetPosY < posY+DEFAULT_RANGE)
-					hit = true;
-				break;
 			case FIRST:
 			case SECOND:
 			case THIRD:
 			case ULTIMATE:
-			default:
 				break;
 		}
 		return hit;
