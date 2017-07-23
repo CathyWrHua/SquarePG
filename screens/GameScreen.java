@@ -33,9 +33,9 @@ public class GameScreen extends Screen implements KeyListener{
 		map = new GameMap(level);
 
 		createPlayer(playerClass);
-		createEnemy(300, 0, 0, 500, 500 ,2);
 		createDummy(400, 100, true);
 		createDummy(600, 100, false);
+		createEnemy(300, 0, 0, 500, 500 ,3);
 	}
 
 	@Override
@@ -100,9 +100,11 @@ public class GameScreen extends Screen implements KeyListener{
 		}
 
 		if (e.getKeyCode() == KeyEvent.VK_J) {
-			map.setMap(1);
+			level = ((level > 1) ? (level-1) : 1);
+			map.setMap(level);
 		} else if (e.getKeyCode() == KeyEvent.VK_K) {
-			map.setMap(2);
+			level = ((level < 3) ? (level+1) : 3);
+			map.setMap(level);
 		} else if (e.getKeyCode() == KeyEvent.VK_A) {
 			player.attack(Hero.Ability.DEFAULT);
 		} else if (e.getKeyCode() == KeyEvent.VK_Z) {
