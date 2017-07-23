@@ -6,13 +6,11 @@ import java.awt.*;
 
 public class Dummy extends Entity {
     private int stunCounter = STUN_TIME;
-    private Hero hero;
 
     private static final int STUN_TIME = 15;
 
-    public Dummy(Hero hero, int posX, int posY, boolean facingEast) {
+    public Dummy(int posX, int posY, boolean facingEast) {
         super(1, 0, 0, posX, posY, 0);
-        this.hero = hero;
         setImageIcon("src/assets/enemies/dummyNeutral.png");
         setFacingEast(facingEast);
         setEntityType(EntityType.DUMMY);

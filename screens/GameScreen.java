@@ -67,7 +67,7 @@ public class GameScreen extends Screen implements KeyListener{
 	}
 
 	private void createDummy(int posX, int posY, boolean facingEast) {
-		Dummy dummy = new Dummy(player, posX, posY, facingEast);
+		Dummy dummy = new Dummy(posX, posY, facingEast);
 		targets.add(dummy);
 
 	}
@@ -107,7 +107,7 @@ public class GameScreen extends Screen implements KeyListener{
 		} else if (e.getKeyCode() == KeyEvent.VK_A) {
 			player.attack(Hero.Ability.DEFAULT);
 		} else if (e.getKeyCode() == KeyEvent.VK_Z) {
-			damageMarkers.add(player.inflict(25, new Dummy(player, -100, -100, true)));
+			damageMarkers.add(player.inflict(25, new Dummy(-100, -100, true)));
 		} else if (e.getKeyCode() == KeyEvent.VK_X) {
 			player.heal(25);
 		}
@@ -139,6 +139,7 @@ public class GameScreen extends Screen implements KeyListener{
 
 		Rectangle originalPlayer = new Rectangle(player.getPosX(), player.getPosY(),75,  75);
 		player.update();
+		player.setPoint(map.determineMotion(player.getPosX(), player.getPosY(), originalPlayer));
 		damageMarkers.addAll(player.getEnemyMarkers());
 		player.emptyEnemyMarkers();
 
@@ -158,7 +159,6 @@ public class GameScreen extends Screen implements KeyListener{
 			}
 		}
 		map.setCurrentEntityList(targets);
-		player.setPoint(map.determineMotion(player.getPosX(), player.getPosY(), originalPlayer));
 
 		for(Iterator<Animation> iterator = animations.iterator(); iterator.hasNext();) {
 			Animation animation = iterator.next();

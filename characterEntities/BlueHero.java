@@ -44,7 +44,7 @@ public class BlueHero extends Hero {
 			case DEFAULT:
 				if (((getFacingEast() && targetPosX > posX && targetPosX < posX+SQUARE_LENGTH+DEFAULT_RANGE) ||
 						(!getFacingEast() && targetPosX < posX && targetPosX > posX-SQUARE_LENGTH-DEFAULT_RANGE)) &&
-						targetPosY >= posY-DEFAULT_RANGE && targetPosY < posY+DEFAULT_RANGE)
+						targetPosY > posY-DEFAULT_RANGE && targetPosY < posY+DEFAULT_RANGE)
 					hit = true;
 				break;
 			case FIRST:

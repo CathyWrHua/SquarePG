@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class YellowHero extends Hero {
 	public YellowHero(ArrayList<Entity> targets) {
-		super(targets,200, 70, 60, 100, 100, 5);
+		super(targets,200, 70, 60, 100, 100, 10);
 		setPlayerClass(PlayerClass.YELLOW);
 		setImageIcon("src/assets/hero/yellowNeutral.png");
 	}
@@ -44,7 +44,7 @@ public class YellowHero extends Hero {
 			case DEFAULT:
 				if (((getFacingEast() && targetPosX > posX && targetPosX < posX+SQUARE_LENGTH+DEFAULT_RANGE) ||
 						(!getFacingEast() && targetPosX < posX && targetPosX > posX-SQUARE_LENGTH-DEFAULT_RANGE)) &&
-						targetPosY >= posY-DEFAULT_RANGE && targetPosY < posY+DEFAULT_RANGE)
+						targetPosY > posY-DEFAULT_RANGE && targetPosY < posY+DEFAULT_RANGE)
 					hit = true;
 				break;
 			case FIRST:
