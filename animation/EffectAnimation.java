@@ -5,19 +5,19 @@ import java.awt.*;
 public class EffectAnimation extends Animation {
     public enum EffectAnimationType {
         ENEMY_DEATH(-25, -25);
-        int offset_x, offset_y;
+        int offsetX, offsetY;
 
-        EffectAnimationType(int offset_x, int offset_y) {
-            this.offset_x = offset_x;
-            this.offset_y = offset_y;
+        EffectAnimationType(int offsetX, int offsetY) {
+            this.offsetX = offsetX;
+            this.offsetY = offsetY;
         }
 
-        public int getOffset_x() {
-            return offset_x;
+        public int getOffsetX() {
+            return offsetX;
         }
 
-        public int getOffset_y() {
-            return offset_y;
+        public int getOffsetY() {
+            return offsetY;
         }
     }
 
@@ -39,14 +39,12 @@ public class EffectAnimation extends Animation {
     }
 
     public void draw (Graphics g) {
-        if (imageIcon == null) {
-            return;
-        }
+        if (imageIcon == null) return;
         Graphics2D g2d = (Graphics2D)g;
         Image image = imageIcon.getImage();
 
         if (counter/ANIMATION_SPEED < totalFrames) {
-            g2d.drawImage(image, posX+animationType.getOffset_x(), posY+animationType.getOffset_y(), null);
+            g2d.drawImage(image, posX+animationType.getOffsetX(), posY+animationType.getOffsetY(), null);
         }
     }
 }

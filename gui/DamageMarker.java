@@ -37,9 +37,7 @@ public class DamageMarker {
     }
 
     public void draw(Graphics g) {
-        if (done) {
-            return;
-        }
+        if (done) return;
         Graphics2D g2d = (Graphics2D)g;
         int x = posX + ((damage >= 10) ? OFFSET_X_2_DIG : OFFSET_X_1_DIG);
         g2d.setPaint(Color.RED);

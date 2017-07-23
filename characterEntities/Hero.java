@@ -2,6 +2,7 @@ package characterEntities;
 
 import animation.AbilityAnimation;
 import gui.DamageMarker;
+import screens.GameMap;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -43,25 +44,18 @@ public abstract class Hero extends Entity {
 	protected PlayerClass playerClass;
 	int numberEvolutions;
 
-	static final int SQUARE_LENGTH = 75;
+	public static final int SQUARE_LENGTH = 75;
 	static final int DEFAULT_RANGE = SQUARE_LENGTH;
-
-	void setPlayerClass(PlayerClass playerClass) {
-		this.playerClass = playerClass;
-	}
 	
-	Hero(ArrayList<Entity> targets, int maxHealth, int maxDamage, int minDamage, int posX, int posY, int velocity) {
-		super(maxHealth, maxDamage, minDamage, posX, posY, velocity);
+	Hero(ArrayList<Entity> targets, GameMap map, int maxHealth, int maxDamage, int minDamage, int posX, int posY, int velocity) {
+		super(map, maxHealth, maxDamage, minDamage, posX, posY, velocity);
 		this.targets = targets;
 		for (Entity target : targets) {
 			immuneTo.put(target, false);
 		}
 
-		colourPath = new HashMap<>();
 		enemyMarkers = new ArrayList<>();
-		colourPath.put(0, "red");
-		colourPath.put(1, "blue");
-		colourPath.put(2, "yellow");
+		createHeroHashMap();
 		setAnimation(0, new AbilityAnimation(AbilityAnimation.AbilityAnimationType.DEFAULT, this));
 		numberEvolutions = 0;
 		setEntityType(EntityType.HERO);
@@ -143,17 +137,53 @@ public abstract class Hero extends Entity {
 		return enemyMarkers;
 	}
 
+	public void setPlayerClass(PlayerClass playerClass) {
+		this.playerClass = playerClass;
+	}
+
 	public void emptyEnemyMarkers() {
 		enemyMarkers.clear();
+	}
+
+	private void createHeroHashMap() {
+		colourPath = new HashMap<>();
+		colourPath.put(0,"red");
+		colourPath.put(1,"blue");
+		colourPath.put(2,"yellow");
 	}
 
 	@Override
 	public void update () {
 		super.update();
+		if (entityState == EntityState.NEUTRAL || entityState == EntityState.ATTACKING) {
+			switch (lrMotionState) {
+				case LEFT:
+					newPosX -= velocity;
+					break;
+				case RIGHT:
+					newPosX += velocity;
+					break;
+				case IDLE:
+				default:
+					break;
+			}
+			switch (udMotionState) {
+				case UP:
+					newPosY -= velocity;
+					break;
+				case DOWN:
+					newPosY += velocity;
+					break;
+				case IDLE:
+				default:
+					break;
+			}
+		}
 		if (currentAbilityAnimation == null) {
 			for (Entity target : targets) {
 				target.immuneTo.put(this, false);
 			}
 		}
+		setPoint(map.determineMotion(newPosX, newPosY, getEntitySize(), targets));
 	}
 }

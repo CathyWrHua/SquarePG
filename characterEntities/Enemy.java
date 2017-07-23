@@ -1,5 +1,9 @@
 package characterEntities;
 
+import screens.GameMap;
+
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 import java.awt.*;
@@ -27,8 +31,8 @@ public abstract class Enemy extends Entity {
 	private static final int DELETION_TIME = 40;
 
 	//TargetEntity can be any type of entity, not necessarily a hero
-	Enemy(Entity targetEntity, int maxHealth, int maxDamage, int minDamage, int posX, int posY, int velocity) {
-		super(maxHealth, maxDamage, minDamage, posX, posY, velocity);
+	Enemy(Entity targetEntity, GameMap map, int maxHealth, int maxDamage, int minDamage, int posX, int posY, int velocity) {
+		super(map, maxHealth, maxDamage, minDamage, posX, posY, velocity);
 		this.targetEntity = targetEntity;
 		createEnemyHashMap();
 		done = false;
@@ -90,12 +94,16 @@ public abstract class Enemy extends Entity {
 
 		if (hypotenuse != 0) {
 			double scaleFactor = velocity / hypotenuse;
+			int deltaX = (int)Math.round(motionVector.x * scaleFactor);
+			int deltaY = (int)Math.round(motionVector.y * scaleFactor);
 
-			posX += motionVector.x * scaleFactor;
-			posY += motionVector.y * scaleFactor;
+			newPosX += (deltaX == 0 && targetCenter.x != selfCenter.x) ?
+					((targetCenter.x > selfCenter.x) ? 1 : -1) : deltaX;
+			newPosY += (deltaY == 0 && targetCenter.y != selfCenter.y) ?
+					((targetCenter.y > selfCenter.y) ? 1 : -1) : deltaY;
 		}
 
-		if (Math.abs(motionVector.x) < 75 && Math.abs(motionVector.y) < 75) {
+		if (Math.abs(motionVector.x) < Hero.SQUARE_LENGTH && Math.abs(motionVector.y) < Hero.SQUARE_LENGTH) {
 			setEntityState(EntityState.ATTACKING);
 		}
 	}
@@ -110,6 +118,7 @@ public abstract class Enemy extends Entity {
 		if (currentAbilityAnimation == null) {
 			targetEntity.immuneTo.put(this, false);
 		}
+		setPoint(map.determineMotion(newPosX, newPosY, getEntitySize(), new ArrayList<>(Collections.singletonList(targetEntity))));
 	}
 
 	private void createEnemyHashMap() {
