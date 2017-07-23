@@ -1,5 +1,6 @@
 package characterEntities;
 
+import animation.AbilityAnimation;
 import gui.DamageMarker;
 
 import java.util.ArrayList;
@@ -25,6 +26,7 @@ public abstract class Enemy extends Entity {
 	protected boolean done;
 	protected EnemyType enemyType;
 	protected HashMap<Integer, String> shapePath;
+	protected int attackRange;
 	//ArrayList because will allow for multiple attacking;
 	protected ArrayList<DamageMarker> targetMarkers;
 	private Entity targetEntity;
@@ -40,6 +42,7 @@ public abstract class Enemy extends Entity {
 		done = false;
 		targetMarkers = new ArrayList<>();
 		entityType = EntityType.ENEMY;
+		attackRange = 75;
 	}
 
 	public boolean isDone() {
@@ -101,6 +104,8 @@ public abstract class Enemy extends Entity {
 
 			posX += motionVector.x * scaleFactor;
 			posY += motionVector.y * scaleFactor;
+
+			setFacingEast((motionVector.x > 0));
 		}
 
 		if (Math.abs(motionVector.x) < 75 && Math.abs(motionVector.y) < 75) {
@@ -115,8 +120,8 @@ public abstract class Enemy extends Entity {
 		} else if (entityState == EntityState.NEUTRAL || entityState == EntityState.ATTACKING) {
 			calculateNextMove();
 
-			DamageMarker marker;
 			if (entityState == EntityState.ATTACKING) {
+				DamageMarker marker;
 				if (!targetEntity.immuneTo.get(this) && isHit()) {
 					marker = targetEntity.inflict(getDamage(), this);
 					if (marker != null) {
@@ -140,7 +145,17 @@ public abstract class Enemy extends Entity {
 
 	public abstract void attack();
 
-	public abstract boolean isHit();
+	public boolean isHit() {
+		boolean hit = false;
+		int targetPosX = targetEntity.getPosX();
+		int targetPosY = targetEntity.getPosY();
+		if (((getFacingEast() && targetPosX > posX && targetPosX < posX+getEntitySize().width+attackRange) ||
+				(!getFacingEast() && targetPosX < posX && targetPosX > posX-getEntitySize().width-attackRange)) &&
+				targetPosY > posY-attackRange && targetPosY < posY+attackRange) {
+			hit = true;
+		}
+		return hit;
+	}
 
 	private void createEnemyHashMap() {
 		shapePath = new HashMap<>();
