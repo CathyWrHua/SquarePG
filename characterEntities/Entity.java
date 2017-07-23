@@ -74,7 +74,7 @@ public abstract class Entity {
         }
 	}
 
-	
+
 
 	void playAnimation(int index) {
 	    if (index >= 0 && index < abilityAnimations.length)
