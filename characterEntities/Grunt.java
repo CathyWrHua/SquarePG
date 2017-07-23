@@ -7,4 +7,15 @@ public class Grunt extends Enemy {
         setImageIcon("src/assets/enemies/circleNeutral.png");
         setEnemyType(EnemyType.CIRCLE);
     }
+
+     public void attack() {
+        if (getEntityState() == EntityState.NEUTRAL) {
+            playAnimation(0);
+            setEntityState(EntityState.ATTACKING);
+        }
+     }
+
+     public boolean isHit() {
+        return true;
+     }
 }

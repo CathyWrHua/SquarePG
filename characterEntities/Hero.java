@@ -49,7 +49,8 @@ public abstract class Hero extends Entity {
 	void setPlayerClass(PlayerClass playerClass) {
 		this.playerClass = playerClass;
 	}
-	
+
+	//TODO:refactor hashmap creation
 	Hero(ArrayList<Entity> targets, int maxHealth, int maxDamage, int minDamage, int posX, int posY, int velocity) {
 		super(maxHealth, maxDamage, minDamage, posX, posY, velocity);
 		this.targets = targets;

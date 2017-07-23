@@ -1,5 +1,8 @@
 package characterEntities;
 
+import gui.DamageMarker;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import java.awt.*;
@@ -22,7 +25,10 @@ public abstract class Enemy extends Entity {
 	protected boolean done;
 	protected EnemyType enemyType;
 	protected HashMap<Integer, String> shapePath;
+	//ArrayList because will allow for multiple attacking;
+	protected ArrayList<DamageMarker> targetMarkers;
 	private Entity targetEntity;
+
 
 	private static final int DELETION_TIME = 60;
 
@@ -32,6 +38,7 @@ public abstract class Enemy extends Entity {
 		this.targetEntity = targetEntity;
 		createEnemyHashMap();
 		done = false;
+		targetMarkers = new ArrayList<>();
 		entityType = EntityType.ENEMY;
 	}
 
@@ -78,6 +85,7 @@ public abstract class Enemy extends Entity {
 	}
 
 	//Simple motion detection (pythagorean locating)
+	//Default attack pattern, override in child classes for custom moves
 	private void calculateNextMove() {
 		if (targetEntity == null) return;
 
@@ -96,7 +104,7 @@ public abstract class Enemy extends Entity {
 		}
 
 		if (Math.abs(motionVector.x) < 75 && Math.abs(motionVector.y) < 75) {
-			setEntityState(EntityState.ATTACKING);
+			attack();
 		}
 	}
 
@@ -106,11 +114,33 @@ public abstract class Enemy extends Entity {
 			done = true;
 		} else if (entityState == EntityState.NEUTRAL || entityState == EntityState.ATTACKING) {
 			calculateNextMove();
+
+			DamageMarker marker;
+			if (entityState == EntityState.ATTACKING) {
+				if (!targetEntity.immuneTo.get(this) && isHit()) {
+					marker = targetEntity.inflict(getDamage(), this);
+					if (marker != null) {
+						targetMarkers.add(marker);
+					}
+				}
+			}
 		}
 		if (currentAbilityAnimation == null) {
 			targetEntity.immuneTo.put(this, false);
 		}
 	}
+
+	public ArrayList<DamageMarker> getTargetMarkers() {
+		return targetMarkers;
+	}
+
+	public void emptyTargetMarkers() {
+		targetMarkers.clear();
+	}
+
+	public abstract void attack();
+
+	public abstract boolean isHit();
 
 	private void createEnemyHashMap() {
 		shapePath = new HashMap<>();
