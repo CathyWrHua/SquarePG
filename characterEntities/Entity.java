@@ -222,7 +222,7 @@ public abstract class Entity {
             currentHealth -= damageTaken;
             currentHealth = (currentHealth < 0) ? 0 : currentHealth;
             if (currentAbilityAnimation != null) {
-                currentAbilityAnimation.assetsetCounter();
+                currentAbilityAnimation.resetCounter();
                 currentAbilityAnimation = null;
             }
             if (currentHealth > 0) {

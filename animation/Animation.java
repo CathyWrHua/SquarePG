@@ -16,7 +16,7 @@ public abstract class Animation {
         return done;
     }
 
-    public void assetsetCounter() {
+    public void resetCounter() {
         this.counter = 0;
     }
 
@@ -26,7 +26,7 @@ public abstract class Animation {
         filePath += (counter/ANIMATION_SPEED) + ".png";
         this.imageIcon = new ImageIcon(filePath);
         if (counter/ANIMATION_SPEED >= totalFrames) {
-            assetsetCounter();
+            resetCounter();
             done = true;
             return;
         }
