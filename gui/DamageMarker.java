@@ -10,7 +10,8 @@ public class DamageMarker {
     private boolean done;
 
     private static final int LIFETIME = 30;
-    private static final int OFFSET_X = 21;
+    private static final int OFFSET_X_1_DIG = 30;
+    private static final int OFFSET_X_2_DIG = 21;
     private static final int OFFSET_Y = 15;
     private static final float SLOWING_MODIFIER = 0.95f;
     private static final float INITIAL_SPEED = 3.0f;
@@ -36,12 +37,11 @@ public class DamageMarker {
     }
 
     public void draw(Graphics g) {
-        if (done) {
-            return;
-        }
+        if (done) return;
         Graphics2D g2d = (Graphics2D)g;
+        int x = posX + ((damage >= 10) ? OFFSET_X_2_DIG : OFFSET_X_1_DIG);
         g2d.setPaint(Color.RED);
         g2d.setFont(new Font("Comic Sans MS", Font.BOLD, 30));
-        g2d.drawString(Integer.toString(damage), posX+OFFSET_X, posY+OFFSET_Y);
+        g2d.drawString(Integer.toString(damage), x, posY+OFFSET_Y);
     }
 }

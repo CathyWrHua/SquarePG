@@ -10,7 +10,7 @@ public class Dummy extends Entity {
     private static final int STUN_TIME = 15;
 
     public Dummy(int posX, int posY, boolean facingEast) {
-        super(1, 0, 0, posX, posY, 0);
+        super(null, 1, 0, 0, posX, posY, 0);
         setImageIcon("src/assets/enemies/dummyNeutral.png");
         setFacingEast(facingEast);
         setEntityType(EntityType.DUMMY);

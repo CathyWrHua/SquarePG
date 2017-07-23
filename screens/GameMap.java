@@ -101,7 +101,7 @@ public class GameMap {
 							} else if (collisionHeight == collisionWidth) {
 								newX = rect.x - objectSize.width;
 							} else {
-								newY =hitRectBottom;
+								newY = hitRectBottom;
 							}
 						}
 
@@ -261,10 +261,10 @@ public class GameMap {
 
 	private ArrayList<Rectangle> addBorder(ArrayList<Rectangle> hitRectMap) {
 		if (hitRectMap != null) {
-			hitRectMap.add(new Rectangle(0, 0, 30, 1000));
-			hitRectMap.add(new Rectangle(0, 0, 1000, 20));
-			hitRectMap.add(new Rectangle(970, 0, 30, 1000));
-			hitRectMap.add(new Rectangle(0, 950, 1000, 20));
+			hitRectMap.add(new Rectangle(0, 0, 25, 1000));
+			hitRectMap.add(new Rectangle(0, 0, 1000, 25));
+			hitRectMap.add(new Rectangle(975, 0, 25, 1000));
+			hitRectMap.add(new Rectangle(0, 975, 1000, 25));
 		}
 		return hitRectMap;
 	}

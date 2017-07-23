@@ -33,5 +33,5 @@ public abstract class Animation {
         counter++;
     }
 
-    public abstract void draw (Graphics g);
+    public abstract void draw(Graphics g);
 }

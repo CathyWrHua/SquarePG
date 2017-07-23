@@ -1,12 +1,13 @@
 package characterEntities;
 
 import gui.DamageMarker;
+import screens.GameMap;
 
 import java.util.ArrayList;
 
 public class YellowHero extends Hero {
-	public YellowHero(ArrayList<Entity> targets) {
-		super(targets,200, 70, 60, 100, 100, 5);
+	public YellowHero(ArrayList<Entity> targets, GameMap map) {
+		super(targets, map, 20, 12, 6, 100, 100, 5);
 		setPlayerClass(PlayerClass.YELLOW);
 		setImageIcon("src/assets/hero/yellowNeutral.png");
 	}
@@ -59,9 +60,7 @@ public class YellowHero extends Hero {
 		super.update();
 		DamageMarker marker;
 
-		if (entityState != EntityState.ATTACKING) {
-			return;
-		}
+		if (entityState != EntityState.ATTACKING) return;
 		for (Entity target : targets) {
 			switch (currentAbilityAnimation.getAbilityAnimationType()) {
 				case DEFAULT:
