@@ -25,7 +25,7 @@ public abstract class Entity {
     protected HealthBar healthBar;
 	protected Random random;
 
-	public enum EntityType {HERO, ENEMY, DUMMY}
+        public enum EntityType {HERO, ENEMY, DUMMY}
     public enum EntityState {NEUTRAL, ATTACKING, DAMAGED, DEAD}
     public enum MotionStateUpDown {IDLE, UP, DOWN}
     public enum MotionStateLeftRight {IDLE, LEFT, RIGHT}
@@ -142,6 +142,8 @@ public abstract class Entity {
     public void setAnimation(int index, AbilityAnimation abilityAnimation) {
         abilityAnimations[index] = abilityAnimation;
     }
+
+    public abstract Rectangle getEntitySize();
     
     public void setCurrentHealth(int currentHealth) {
         this.currentHealth = currentHealth;

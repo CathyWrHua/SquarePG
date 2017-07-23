@@ -3,6 +3,7 @@ package characterEntities;
 import animation.AbilityAnimation;
 import gui.DamageMarker;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -90,6 +91,11 @@ public abstract class Hero extends Entity {
 		}
 		filepath += ".png";
 		this.setImageIcon(filepath);
+	}
+
+	@Override
+	public Rectangle getEntitySize() {
+		return new Rectangle(posX, posY, SQUARE_LENGTH, SQUARE_LENGTH);
 	}
 
 //	public abstract boolean evolve(int path);
