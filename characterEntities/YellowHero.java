@@ -5,8 +5,8 @@ import gui.DamageMarker;
 import java.util.ArrayList;
 
 public class YellowHero extends Hero {
-	public YellowHero() {
-		super(200, 70, 60, 100, 100, 5);
+	public YellowHero(ArrayList<Entity> targets) {
+		super(targets,200, 70, 60, 100, 100, 5);
 		setPlayerClass(PlayerClass.YELLOW);
 		setImageIcon("src/assets/hero/yellowNeutral.png");
 	}
@@ -37,52 +37,15 @@ public class YellowHero extends Hero {
 //		}
 //	}
 
-	public ArrayList<DamageMarker> attack(Ability ability, ArrayList<Entity> targets) {
-		ArrayList<DamageMarker> damageMarkers = new ArrayList<>();
-		DamageMarker currentDamageMarker;
-		int damage;
-
-		if (getEntityState() == EntityState.NEUTRAL) {
-			setEntityState(EntityState.ATTACKING);
-			playAnimation(ability.getValue());
-			for (Entity target : targets) {
-				switch (ability) {
-					case DEFAULT:
-						if (isHit(ability, target)) {
-							damage = getDamage();
-							currentDamageMarker = target.inflict(damage, this.getFacingEast());
-							if (currentDamageMarker != null) {
-								damageMarkers.add(currentDamageMarker);
-							}
-						}
-						break;
-					case FIRST:
-						break;
-					case SECOND:
-						break;
-					case THIRD:
-						break;
-					case ULTIMATE:
-						break;
-					default:
-						break;
-				}
-			}
-		}
-		return damageMarkers;
-	}
-
 	protected boolean isHit(Ability ability, Entity target) {
 		boolean hit = false;
-		int x1 = getPosX();
-		int y1 = getPosY();
-		int x2 = target.getPosX();
-		int y2 = target.getPosY();
+		int targetPosX = target.getPosX();
+		int targetPosY = target.getPosY();
 		switch (ability) {
 			case DEFAULT:
-				if (((getFacingEast() && x2 > x1 && x2 < x1+SQUARE_LENGTH+DEFAULT_RANGE) ||
-						(!getFacingEast() && x2 < x1 && x2 > x1-SQUARE_LENGTH-DEFAULT_RANGE)) &&
-						y2 >= y1-DEFAULT_RANGE && y2 < y1+DEFAULT_RANGE)
+				if (((getFacingEast() && targetPosX > posX && targetPosX < posX+SQUARE_LENGTH+DEFAULT_RANGE) ||
+						(!getFacingEast() && targetPosX < posX && targetPosX > posX-SQUARE_LENGTH-DEFAULT_RANGE)) &&
+						targetPosY >= posY-DEFAULT_RANGE && targetPosY < posY+DEFAULT_RANGE)
 					hit = true;
 				break;
 			case FIRST:
@@ -93,5 +56,29 @@ public class YellowHero extends Hero {
 				break;
 		}
 		return hit;
+	}
+
+	@Override
+	public void update() {
+		super.update();
+		DamageMarker marker;
+
+		if (entityState != EntityState.ATTACKING) {
+			return;
+		}
+		for (Entity target : targets) {
+			switch (currentAbilityAnimation.getAbilityAnimationType()) {
+				case DEFAULT:
+					if (!target.immuneTo.get(this) && isHit(Ability.DEFAULT, target)) {
+						marker = target.inflict(getDamage(), this);
+						if (marker != null) {
+							enemyMarkers.add(marker);
+						}
+					}
+					break;
+				default:
+					break;
+			}
+		}
 	}
 }

@@ -16,15 +16,17 @@ public abstract class Enemy extends Entity {
 		}
 	}
 
-	private int deletionCounter = DELETION_TIME;
-	private boolean done;
-	private EnemyType enemyType;
-	private HashMap<Integer, String> shapePath;
+	protected int deletionCounter = DELETION_TIME;
+	protected boolean done;
+	protected EnemyType enemyType;
+	protected HashMap<Integer, String> shapePath;
+	protected Hero hero;
 
 	private static final int DELETION_TIME = 60;
 	
-	Enemy(int maxHealth, int maxDamage, int minDamage, int posX, int posY, int velocity) {
+	Enemy(Hero hero, int maxHealth, int maxDamage, int minDamage, int posX, int posY, int velocity) {
 		super(maxHealth, maxDamage, minDamage, posX, posY, velocity);
+		this.hero = hero;
 		shapePath = new HashMap<>();
 		shapePath.put(0, "circle");
 		done = false;
@@ -44,7 +46,7 @@ public abstract class Enemy extends Entity {
 		super.setEntityState(entityState);
 		String filepath = "src/assets/enemies/";
 		filepath += shapePath.get(enemyType.getValue());
-		switch (this.getEntityState()) {
+		switch (entityState) {
 			case NEUTRAL:
 				filepath += "Neutral";
 				break;
@@ -66,8 +68,11 @@ public abstract class Enemy extends Entity {
 
 	public void update() {
 		super.update();
-		if (getEntityState() == EntityState.DEAD && deletionCounter-- <= 0) {
+		if (entityState == EntityState.DEAD && deletionCounter-- <= 0) {
 			done = true;
+		}
+		if (currentAbilityAnimation == null) {
+			hero.immuneTo.put(this, false);
 		}
 	}
 

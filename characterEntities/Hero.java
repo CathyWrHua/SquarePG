@@ -36,13 +36,12 @@ public abstract class Hero extends Entity {
 		}
 	}
 
-	private HashMap<Integer, String> colourPath;
-	private PlayerClass playerClass;
+	protected HashMap<Integer, String> colourPath;
+	protected ArrayList<Entity> targets;
+	protected ArrayList<DamageMarker> enemyMarkers;
+	protected PlayerClass playerClass;
 	int numberEvolutions;
 
-	static final int PATH_RED = 0;
-	static final int PATH_YELLOW = 1;
-	static final int PATH_BLUE = 2;
 	static final int SQUARE_LENGTH = 75;
 	static final int DEFAULT_RANGE = SQUARE_LENGTH;
 
@@ -50,9 +49,15 @@ public abstract class Hero extends Entity {
 		this.playerClass = playerClass;
 	}
 	
-	Hero(int maxHealth, int maxDamage, int minDamage, int posX, int posY, int velocity) {
+	Hero(ArrayList<Entity> targets, int maxHealth, int maxDamage, int minDamage, int posX, int posY, int velocity) {
 		super(maxHealth, maxDamage, minDamage, posX, posY, velocity);
+		this.targets = targets;
+		for (Entity target : targets) {
+			immuneTo.put(target, false);
+		}
+
 		colourPath = new HashMap<>();
+		enemyMarkers = new ArrayList<>();
 		colourPath.put(0, "red");
 		colourPath.put(1, "blue");
 		colourPath.put(2, "yellow");
@@ -89,7 +94,12 @@ public abstract class Hero extends Entity {
 
 //	public abstract boolean evolve(int path);
 
-	public abstract ArrayList<DamageMarker> attack(Ability ability, ArrayList<Entity> targets);
+	public void attack(Ability ability) {
+		if (getEntityState() == EntityState.NEUTRAL) {
+			playAnimation(ability.getValue());
+			setEntityState(EntityState.ATTACKING);
+		}
+	}
 
 	protected abstract boolean isHit(Ability ability, Entity target);
 	
@@ -115,4 +125,23 @@ public abstract class Hero extends Entity {
 //		}
 //		return true;
 //	}
+
+
+	public ArrayList<DamageMarker> getEnemyMarkers() {
+		return enemyMarkers;
+	}
+
+	public void emptyEnemyMarkers() {
+		enemyMarkers.clear();
+	}
+
+	@Override
+	public void update () {
+		super.update();
+		if (currentAbilityAnimation == null) {
+			for (Entity target : targets) {
+				target.immuneTo.put(this, false);
+			}
+		}
+	}
 }

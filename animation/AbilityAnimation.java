@@ -7,12 +7,14 @@ import java.awt.*;
 public class AbilityAnimation extends Animation {
     private Entity entity;
     private boolean hasDirection = true;
+    private AbilityAnimationType abilityAnimationType;
 
     private static final int OFFSET = 75;
     
     public enum AbilityAnimationType {DEFAULT}
 
     public AbilityAnimation(AbilityAnimationType animationType, Entity entity) {
+        this.abilityAnimationType = animationType;
         this.entity = entity;
         switch(animationType) {
             case DEFAULT:
@@ -22,6 +24,10 @@ public class AbilityAnimation extends Animation {
             default:
                 break;
         }
+    }
+
+    public AbilityAnimationType getAbilityAnimationType() {
+        return abilityAnimationType;
     }
 
     public void draw(Graphics g) {

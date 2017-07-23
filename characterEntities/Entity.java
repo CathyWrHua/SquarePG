@@ -6,36 +6,38 @@ import gui.HealthBar;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.HashMap;
 import java.util.Random;
 
 public abstract class Entity {
-    private int posX, posY;
-	private int maxHealth, currentHealth;
-	private int maxDamage, minDamage;
-    private int stunCounter = STUN_TIME;
-	private int damageTaken;
-	private int velocity;
-	private boolean attackerFacingEast;
-	private boolean facingEast;
-	private AbilityAnimation currentAbilityAnimation;
-    private AbilityAnimation[] abilityAnimations;
-	private ImageIcon imageIcon;
-    private HealthBar healthBar;
-	private Random random;
+    protected int posX, posY;
+	protected int maxHealth, currentHealth;
+	protected int maxDamage, minDamage;
+    protected int stunCounter = STUN_TIME;
+	protected int damageTaken;
+	protected int velocity;
+	protected boolean attackerFacingEast;
+	protected boolean facingEast;
+	protected AbilityAnimation currentAbilityAnimation;
+    protected AbilityAnimation[] abilityAnimations;
+    protected HashMap<Entity, Boolean> immuneTo;
+	protected ImageIcon imageIcon;
+    protected HealthBar healthBar;
+	protected Random random;
 
 	public enum EntityType {HERO, ENEMY, DUMMY}
     public enum EntityState {NEUTRAL, ATTACKING, DAMAGED, DEAD}
     public enum MotionStateUpDown {IDLE, UP, DOWN}
     public enum MotionStateLeftRight {IDLE, LEFT, RIGHT}
 
-    private EntityType entityType;
-    private EntityState entityState;
-	private MotionStateLeftRight lrMotionState;
-	private MotionStateUpDown udMotionState;
+    protected EntityType entityType;
+    protected EntityState entityState;
+	protected MotionStateLeftRight lrMotionState;
+	protected MotionStateUpDown udMotionState;
 
-    private static final int NUM_ANIMATIONS = 5;
-	private static final int STUN_TIME = 15;
-	private static final int KNOCK_BACK_DUR = 1;
+    protected static final int NUM_ANIMATIONS = 5;
+	protected static final int STUN_TIME = 15;
+	protected static final int KNOCK_BACK_DUR = 1;
 	
 	public Entity(int maxHealth, int maxDamage, int minDamage, int posX, int posY, int velocity) {
 		this.currentHealth = this.maxHealth = maxHealth;
@@ -52,16 +54,18 @@ public abstract class Entity {
         this.currentAbilityAnimation = null;
 		this.healthBar = new HealthBar(this);
 		this.random = new Random();
+		this.immuneTo = new HashMap<>();
 
         entityState = EntityState.NEUTRAL;
         lrMotionState = MotionStateLeftRight.IDLE;
         udMotionState = MotionStateUpDown.IDLE;
 	}
 	
-	public DamageMarker inflict(int damageTaken, boolean attackerFacingEast) {
+	public DamageMarker inflict(int damageTaken, Entity attacker) {
 	    DamageMarker damageMarker;
 	    this.damageTaken = damageTaken;
-	    this.attackerFacingEast = attackerFacingEast;
+	    this.attackerFacingEast = attacker.getFacingEast();
+	    immuneTo.put(attacker, true);
 
 	    damageMarker = (currentHealth <= 0) ? null : (new DamageMarker(damageTaken, posX, posY));
 	    return damageMarker;
@@ -77,6 +81,14 @@ public abstract class Entity {
 	void playAnimation(int index) {
 	    if (index >= 0 && index < abilityAnimations.length)
 	        currentAbilityAnimation = abilityAnimations[index];
+    }
+
+    private void calculateEntityDirection() {
+        if (lrMotionState == MotionStateLeftRight.LEFT) {
+            facingEast = false;
+        } else if (lrMotionState == MotionStateLeftRight.RIGHT) {
+            facingEast = true;
+        }
     }
 
 	public ImageIcon getImageIcon() {
@@ -107,10 +119,6 @@ public abstract class Entity {
         return facingEast;
     }
 
-    public boolean getAttackerFacingEast() {
-        return attackerFacingEast;
-    }
-
     public int getPosX() {
         return posX;
     }
@@ -119,19 +127,19 @@ public abstract class Entity {
         return posY;
     }
 
-    void setImageIcon(String filename) {
+    public void setImageIcon(String filename) {
         imageIcon = new ImageIcon(filename);
     }
 
-    void setFacingEast(boolean facingEast) {
+    public void setFacingEast(boolean facingEast) {
         this.facingEast = facingEast;
     }
 
-    void setAttackerFacingEast(boolean attackerFacingEast) {
+    public void setAttackerFacingEast(boolean attackerFacingEast) {
         this.attackerFacingEast = attackerFacingEast;
     }
 
-    void setAnimation(int index, AbilityAnimation abilityAnimation) {
+    public void setAnimation(int index, AbilityAnimation abilityAnimation) {
         abilityAnimations[index] = abilityAnimation;
     }
     
@@ -180,14 +188,6 @@ public abstract class Entity {
 
     public void setEntityState(EntityState state) {
 	    entityState = state;
-    }
-
-    private void setEntityDirection() {
-        if (lrMotionState == MotionStateLeftRight.LEFT) {
-            facingEast = false;
-        } else if (lrMotionState == MotionStateLeftRight.RIGHT) {
-            facingEast = true;
-        }
     }
 
     public void update() {
@@ -247,7 +247,7 @@ public abstract class Entity {
             currentAbilityAnimation.update();
             if (currentAbilityAnimation.isDone()) {
                 setEntityState(EntityState.NEUTRAL);
-                setEntityDirection();
+                calculateEntityDirection();
                 currentAbilityAnimation = null;
             }
         }

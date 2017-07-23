@@ -49,25 +49,25 @@ public class GameScreen extends Screen implements KeyListener{
 	private void createPlayer(Hero.PlayerClass playerClass) {
 		switch (playerClass) {
 		case RED:
-			player = new RedHero();
+			player = new RedHero(targets);
 			break;
 		case BLUE:
-			player = new BlueHero();
+			player = new BlueHero(targets);
 			break;
 		case YELLOW:
-			player = new YellowHero();
+			player = new YellowHero(targets);
 			break;
 		default:
 		}
 	}
 
 	private void createEnemy(int health, int maxDamage, int minDamage, int posX, int posY, int velocity) {
-		Grunt grunt = new Grunt(health, maxDamage, minDamage, posX, posY, velocity);
+		Grunt grunt = new Grunt(player, health, maxDamage, minDamage, posX, posY, velocity);
 		targets.add(grunt);
 	}
 
 	private void createDummy(int posX, int posY, boolean facingEast) {
-		Dummy dummy = new Dummy(posX, posY, facingEast);
+		Dummy dummy = new Dummy(player, posX, posY, facingEast);
 		targets.add(dummy);
 
 	}
@@ -105,9 +105,9 @@ public class GameScreen extends Screen implements KeyListener{
 		} else if (e.getKeyCode() == KeyEvent.VK_K) {
 			map.setMap(2);
 		} else if (e.getKeyCode() == KeyEvent.VK_A) {
-			damageMarkers.addAll(player.attack(Hero.Ability.DEFAULT, targets));
+			player.attack(Hero.Ability.DEFAULT);
 		} else if (e.getKeyCode() == KeyEvent.VK_Z) {
-			damageMarkers.add(player.inflict(25, true));
+			damageMarkers.add(player.inflict(25, new Dummy(player, -100, -100, true)));
 		} else if (e.getKeyCode() == KeyEvent.VK_X) {
 			player.heal(25);
 		}
@@ -139,6 +139,8 @@ public class GameScreen extends Screen implements KeyListener{
 
 		Rectangle originalPlayer = new Rectangle(player.getPosX(), player.getPosY(),75,  75);
 		player.update();
+		damageMarkers.addAll(player.getEnemyMarkers());
+		player.emptyEnemyMarkers();
 
 		for (Iterator<Entity> iterator = targets.iterator(); iterator.hasNext();) {
 			Entity target = iterator.next();

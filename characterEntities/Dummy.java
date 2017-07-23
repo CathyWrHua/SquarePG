@@ -6,34 +6,37 @@ import java.awt.*;
 
 public class Dummy extends Entity {
     private int stunCounter = STUN_TIME;
+    private Hero hero;
 
     private static final int STUN_TIME = 15;
 
-    public Dummy(int posX, int posY, boolean facingEast) {
+    public Dummy(Hero hero, int posX, int posY, boolean facingEast) {
         super(1, 0, 0, posX, posY, 0);
+        this.hero = hero;
         setImageIcon("src/assets/enemies/dummyNeutral.png");
         setFacingEast(facingEast);
         setEntityType(EntityType.DUMMY);
     }
 
     @Override
-    public DamageMarker inflict(int damageTaken, boolean attackerFacingEast) {
-        setAttackerFacingEast(attackerFacingEast);
+    public DamageMarker inflict(int damageTaken, Entity attacker) {
+        setAttackerFacingEast(attacker.getFacingEast());
         setEntityState(EntityState.DAMAGED);
-        return (new DamageMarker(damageTaken, getPosX(), getPosY()));
+        immuneTo.put(attacker, true);
+        return (new DamageMarker(damageTaken, posX, posY));
     }
 
     @Override
     public void setEntityState(EntityState entityState) {
         super.setEntityState(entityState);
         String filepath = "src/assets/enemies/dummy";
-        switch (this.getEntityState()) {
+        switch (entityState) {
             case NEUTRAL:
                 filepath += "Neutral";
                 break;
             case DAMAGED:
                 filepath += "Damaged";
-                if (!getAttackerFacingEast() && !getFacingEast() || getAttackerFacingEast() && getFacingEast()) {
+                if (!attackerFacingEast && !facingEast || attackerFacingEast && facingEast) {
                     filepath += "Right";
                 } else {
                     filepath += "Left";
@@ -50,7 +53,7 @@ public class Dummy extends Entity {
 
     @Override
     public void update() {
-        if (getEntityState() == EntityState.DAMAGED && stunCounter > 0) {
+        if (entityState == EntityState.DAMAGED && stunCounter > 0) {
         stunCounter--;
         } else if (stunCounter <= 0) {
             setEntityState(EntityState.NEUTRAL);
@@ -62,14 +65,14 @@ public class Dummy extends Entity {
     public void draw(Graphics g) {
         Graphics2D g2d = (Graphics2D)g;
         Image image = getImageIcon().getImage();
-        int x = getPosX();
+        int x = posX;
         int width = image.getWidth(null);
 
-        if (!getFacingEast()) {
+        if (!facingEast) {
             x += width;
             width = -width;
         }
 
-        g2d.drawImage(image, x, getPosY(), width, image.getHeight(null), null);
+        g2d.drawImage(image, x, posY, width, image.getHeight(null), null);
     }
 }
