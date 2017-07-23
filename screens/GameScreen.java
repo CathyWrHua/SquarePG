@@ -7,16 +7,19 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.ArrayList;
+
+import animation.Animation;
+import animation.EffectAnimation;
 import characterEntities.*;
+import gui.DamageMarker;
 
 public class GameScreen extends Screen implements KeyListener{
 	private GameMap map;
 	private int level = 1;
 	private Hero player;
 	private ArrayList<Entity> targets;
-	private ArrayList<Enemy> enemies;
-	private ArrayList<Dummy> dummies;
 	private ArrayList<DamageMarker> damageMarkers;
+	private ArrayList<Animation> animations;
 	private Set<Integer> motionKeys;
 	
 	public GameScreen(Hero.PlayerClass playerClass) {
@@ -27,9 +30,8 @@ public class GameScreen extends Screen implements KeyListener{
 		setFocusTraversalKeysEnabled(false);
 		
 		targets = new ArrayList<>();
-		enemies = new ArrayList<>();
-		dummies = new ArrayList<>();
 		damageMarkers = new ArrayList<>();
+		animations = new ArrayList<>();
 		motionKeys = new LinkedHashSet<>();
 		map = new GameMap(level);
 
@@ -47,34 +49,32 @@ public class GameScreen extends Screen implements KeyListener{
 	private void createPlayer(Hero.PlayerClass playerClass) {
 		switch (playerClass) {
 		case RED:
-			player = new RedHero(this);
+			player = new RedHero(targets);
 			break;
 		case BLUE:
-			player = new BlueHero(this);
+			player = new BlueHero(targets);
 			break;
 		case YELLOW:
-			player = new YellowHero(this);
+			player = new YellowHero(targets);
 			break;
 		default:
 		}
 	}
 
 	private void createEnemy(int health, int maxDamage, int minDamage, int posX, int posY, int velocity) {
-		Grunt grunt = new Grunt(this, health, maxDamage, minDamage, posX, posY, velocity);
-		enemies.add(grunt);
+		Grunt grunt = new Grunt(player, health, maxDamage, minDamage, posX, posY, velocity);
 		targets.add(grunt);
 	}
 
 	private void createDummy(int posX, int posY, boolean facingEast) {
-		Dummy dummy = new Dummy(this, posX, posY, facingEast);
-		dummies.add(dummy);
+		Dummy dummy = new Dummy(posX, posY, facingEast);
 		targets.add(dummy);
 
 	}
 
-	public void createDamageMarker(int damage, int posX, int posY) {
-		DamageMarker marker = new DamageMarker(damage, posX, posY);
-		damageMarkers.add(marker);
+	private void createEffectAnimation(EffectAnimation.EffectAnimationType animationType, int posX, int posY) {
+		EffectAnimation animation = new EffectAnimation(animationType, posX, posY);
+		animations.add(animation);
 	}
 
 	private void createProjectile() {}
@@ -105,9 +105,10 @@ public class GameScreen extends Screen implements KeyListener{
 		} else if (e.getKeyCode() == KeyEvent.VK_K) {
 			map.setMap(2);
 		} else if (e.getKeyCode() == KeyEvent.VK_A) {
-			player.attack(Hero.Ability.DEFAULT, targets);
+			player.attack(Hero.Ability.DEFAULT);
 		} else if (e.getKeyCode() == KeyEvent.VK_Z) {
-			player.inflict(25, true);
+			//HACK: this is just so that we can damage the player in testing, there will be bugs with this (ignore them)
+			damageMarkers.add(player.inflict(25, new Dummy(-100, -100, true)));
 		} else if (e.getKeyCode() == KeyEvent.VK_X) {
 			player.heal(25);
 		}
@@ -139,23 +140,34 @@ public class GameScreen extends Screen implements KeyListener{
 
 		Rectangle originalPlayer = new Rectangle(player.getPosX(), player.getPosY(),75,  75);
 		player.update();
+		player.setPoint(map.determineMotion(player.getPosX(), player.getPosY(), originalPlayer));
+		damageMarkers.addAll(player.getEnemyMarkers());
+		player.emptyEnemyMarkers();
 
-		for (Iterator<Enemy> iterator = enemies.iterator(); iterator.hasNext();) {
-			Enemy enemy = iterator.next();
-			Rectangle originalEnemy = new Rectangle(enemy.getPosX(), enemy.getPosY(), 75, 75);
-			enemy.update();
-			enemy.setPoint(map.determineMotion(enemy.getPosX(), enemy.getPosY(), originalEnemy));
-			if (enemy.isDone()) {
-				System.out.println(targets.remove(enemy));
+		for (Iterator<Entity> iterator = targets.iterator(); iterator.hasNext();) {
+			Entity target = iterator.next();
+			if (target.getEntityType() == Entity.EntityType.ENEMY) {
+				Enemy enemy = (Enemy)target;
+				Rectangle originalEnemy = new Rectangle(enemy.getPosX(), enemy.getPosY(), 75, 75);
+				enemy.update();
+				enemy.setPoint(map.determineMotion(enemy.getPosX(), enemy.getPosY(), originalEnemy));
+				if (enemy.isDone()) {
+					createEffectAnimation(EffectAnimation.EffectAnimationType.ENEMY_DEATH, enemy.getPosX(), enemy.getPosY());
+					iterator.remove();
+				}
+			} else if (target.getEntityType() == Entity.EntityType.DUMMY) {
+				target.update();
+			}
+		}
+		map.setCurrentEntityList(targets);
+
+		for(Iterator<Animation> iterator = animations.iterator(); iterator.hasNext();) {
+			Animation animation = iterator.next();
+			animation.update();
+			if (animation.isDone()) {
 				iterator.remove();
 			}
 		}
-		for (Dummy dummy : dummies) {
-			dummy.update();
-		}
-		map.setCurrentEntityList(targets);
-		player.setPoint(map.determineMotion(player.getPosX(), player.getPosY(), originalPlayer));
-
 		for(Iterator<DamageMarker> iterator = damageMarkers.iterator(); iterator.hasNext();) {
 			DamageMarker marker = iterator.next();
 			marker.update();
@@ -172,7 +184,10 @@ public class GameScreen extends Screen implements KeyListener{
 			target.draw(g);
 		}
 		player.draw(g);
-		for(DamageMarker marker : damageMarkers) {
+		for (Animation animation : animations) {
+			animation.draw(g);
+		}
+		for (DamageMarker marker : damageMarkers) {
 			marker.draw(g);
 		}
 	}

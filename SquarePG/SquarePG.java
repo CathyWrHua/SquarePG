@@ -1,15 +1,17 @@
 package SquarePG;
 
-import java.awt.BorderLayout;
+import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 import java.util.Stack;
-import javax.swing.JFrame;
+import javax.imageio.ImageIO;
+import javax.swing.*;
 
 import screens.*;
 import characterEntities.*;
 
 public class SquarePG extends JFrame {
 	public static ScreenState screenState = ScreenState.WAIT;
-	public static String playerName;
 	public static Hero.PlayerClass heroClass;
 	private Screen currentScreen; 
 	private Stack<Screen> screenStack = new Stack();
@@ -22,6 +24,12 @@ public class SquarePG extends JFrame {
 		setResizable(false);
 		setVisible(true);
 		setLayout(new BorderLayout());
+		try {
+			this.setIconImage(ImageIO.read(new File("src/res/icon.png")));
+		}
+		catch (IOException exc) {
+			exc.printStackTrace();
+		}
 		currentScreen = new HomeScreen();
 		add(currentScreen);
 	}
