@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class RedHero extends Hero {
 	public RedHero(ArrayList<Entity> targets) {
-		super(targets, 300, 55, 45, 100, 100, 5);
+		super(targets, 30, 15, 5, 100, 100, 5);
 		setPlayerClass(PlayerClass.RED);
 		setImageIcon("src/assets/hero/redNeutral.png");
 	}

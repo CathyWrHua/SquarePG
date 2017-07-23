@@ -24,7 +24,7 @@ public abstract class Enemy extends Entity {
 	protected HashMap<Integer, String> shapePath;
 	private Entity targetEntity;
 
-	private static final int DELETION_TIME = 60;
+	private static final int DELETION_TIME = 40;
 
 	//TargetEntity can be any type of entity, not necessarily a hero
 	Enemy(Entity targetEntity, int maxHealth, int maxDamage, int minDamage, int posX, int posY, int velocity) {

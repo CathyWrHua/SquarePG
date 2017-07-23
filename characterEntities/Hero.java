@@ -106,16 +106,13 @@ public abstract class Hero extends Entity {
 			setEntityState(EntityState.ATTACKING);
 		}
 	}
+
 	protected boolean isHit(Ability ability, Entity target) {
-		boolean hit = false;
 		int targetPosX = target.getPosX();
 		int targetPosY = target.getPosY();
-		if (((getFacingEast() && targetPosX > posX && targetPosX < posX+SQUARE_LENGTH+DEFAULT_RANGE) ||
+		return (((getFacingEast() && targetPosX > posX && targetPosX < posX+SQUARE_LENGTH+DEFAULT_RANGE) ||
 				(!getFacingEast() && targetPosX < posX && targetPosX > posX-SQUARE_LENGTH-DEFAULT_RANGE)) &&
-				targetPosY > posY-DEFAULT_RANGE && targetPosY < posY+DEFAULT_RANGE && ability == Ability.DEFAULT) {
-			hit = true;
-		}
-		return hit;
+				targetPosY > posY-DEFAULT_RANGE && targetPosY < posY+DEFAULT_RANGE && ability == Ability.DEFAULT);
 	}
 	
 //	protected boolean evolutionIncrease(int path) {
