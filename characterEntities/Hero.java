@@ -1,5 +1,8 @@
 package characterEntities;
 
+import animation.AbilityAnimation;
+import gui.DamageMarker;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -53,8 +56,9 @@ public abstract class Hero extends Entity {
 		colourPath.put(0, "red");
 		colourPath.put(1, "blue");
 		colourPath.put(2, "yellow");
-		setAnimation(0, new AbilityAnimation(AbilityAnimation.AnimationType.DEFAULT, this));
+		setAnimation(0, new AbilityAnimation(AbilityAnimation.AbilityAnimationType.DEFAULT, this));
 		numberEvolutions = 0;
+		setEntityType(EntityType.HERO);
 	}
 
 	@Override

@@ -1,5 +1,7 @@
 package characterEntities;
 
+import gui.DamageMarker;
+
 import java.awt.*;
 
 public class Dummy extends Entity {
@@ -11,6 +13,7 @@ public class Dummy extends Entity {
         super(1, 0, 0, posX, posY, 0);
         setImageIcon("src/assets/enemies/dummyNeutral.png");
         setFacingEast(facingEast);
+        setEntityType(EntityType.DUMMY);
     }
 
     @Override

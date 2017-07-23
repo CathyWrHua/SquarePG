@@ -1,5 +1,9 @@
 package characterEntities;
 
+import animation.AbilityAnimation;
+import gui.DamageMarker;
+import gui.HealthBar;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.Random;
@@ -19,10 +23,12 @@ public abstract class Entity {
     private HealthBar healthBar;
 	private Random random;
 
+	public enum EntityType {HERO, ENEMY, DUMMY}
     public enum EntityState {DEFAULT, ATTACKING, DAMAGED, DEAD}
     public enum MotionStateUpDown {IDLE, UP, DOWN}
     public enum MotionStateLeftRight {IDLE, LEFT, RIGHT}
 
+    private EntityType entityType;
     private EntityState entityState;
 	private MotionStateLeftRight lrMotionState;
 	private MotionStateUpDown udMotionState;
@@ -70,31 +76,35 @@ public abstract class Entity {
 	        currentAbilityAnimation = abilityAnimations[index];
     }
 
-	ImageIcon getImageIcon() {
+	public ImageIcon getImageIcon() {
 	    return imageIcon;
     }
 
-    EntityState getEntityState() {
+    public EntityState getEntityState() {
         return entityState;
     }
+
+    public EntityType getEntityType() {
+        return entityType;
+    }
 	
-    int getDamage() {
+    public int getDamage() {
         return (minDamage+random.nextInt(maxDamage-minDamage));
     }
     
-    int getCurrentHealth() {
+    public int getCurrentHealth() {
         return currentHealth;
     }
     
-    int getMaxHealth() {
+    public int getMaxHealth() {
         return maxHealth;
     }
 
-    boolean getFacingEast() {
+    public boolean getFacingEast() {
         return facingEast;
     }
 
-    boolean getAttackerFacingEast() {
+    public boolean getAttackerFacingEast() {
         return attackerFacingEast;
     }
 
@@ -143,6 +153,10 @@ public abstract class Entity {
             posX = newPoint.x;
             posY = newPoint.y;
         }
+    }
+
+    public void setEntityType(EntityType entityType) {
+	    this.entityType = entityType;
     }
 
     public void setLRMotionState(MotionStateLeftRight state) {

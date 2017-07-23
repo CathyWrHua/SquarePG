@@ -1,5 +1,7 @@
 package characterEntities;
 
+import gui.DamageMarker;
+
 import java.util.ArrayList;
 
 public class YellowHero extends Hero {

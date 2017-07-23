@@ -2,7 +2,7 @@ package characterEntities;
 
 import java.util.HashMap;
 
-public class Enemy extends Entity {
+public abstract class Enemy extends Entity {
 	public enum EnemyType {
 		CIRCLE(0);
 		private int value;
@@ -21,13 +21,14 @@ public class Enemy extends Entity {
 	private EnemyType enemyType;
 	private HashMap<Integer, String> shapePath;
 
-	private static final int DELETION_TIME = 90;
+	private static final int DELETION_TIME = 60;
 	
 	Enemy(int maxHealth, int maxDamage, int minDamage, int posX, int posY, int velocity) {
 		super(maxHealth, maxDamage, minDamage, posX, posY, velocity);
 		shapePath = new HashMap<>();
 		shapePath.put(0, "circle");
 		done = false;
+		setEntityType(EntityType.ENEMY);
 	}
 
 	public boolean isDone() {

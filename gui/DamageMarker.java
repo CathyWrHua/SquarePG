@@ -1,4 +1,4 @@
-package characterEntities;
+package gui;
 
 import java.awt.*;
 
