@@ -95,7 +95,7 @@ public abstract class Hero extends Entity {
 
 	@Override
 	public Rectangle getEntitySize() {
-		return new Rectangle(getPosX(), getPosY(), SQUARE_LENGTH, SQUARE_LENGTH);
+		return new Rectangle(posX, posY, SQUARE_LENGTH, SQUARE_LENGTH);
 	}
 
 //	public abstract boolean evolve(int path);

@@ -137,7 +137,7 @@ import gui.DamageMarker;
             public void update() {
                     //TODO:Remove all magic width and heights with actual ones
 
-                    Rectangle originalPlayer = new Rectangle(player.getPosX(), player.getPosY(),75,  75);
+                    Rectangle originalPlayer = player.getEntitySize();
                     player.update();
                     player.setPoint(map.determineMotion(player.getPosX(), player.getPosY(), originalPlayer, targets));
                     damageMarkers.addAll(player.getEnemyMarkers());
@@ -147,7 +147,7 @@ import gui.DamageMarker;
                             Entity target = iterator.next();
                             if (target.getEntityType() == Entity.EntityType.ENEMY) {
                                     Enemy enemy = (Enemy)target;
-                                    Rectangle originalEnemy = new Rectangle(enemy.getPosX(), enemy.getPosY(), 75, 75);
+                                    Rectangle originalEnemy = enemy.getEntitySize();
                                     enemy.update();
                                     enemy.setPoint(map.determineMotion(enemy.getPosX(), enemy.getPosY(), originalEnemy, new ArrayList<Entity>(Arrays.asList(player))));
                                     if (enemy.isDone()) {

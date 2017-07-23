@@ -11,14 +11,14 @@ import java.util.HashMap;
 import javax.swing.ImageIcon;
 
 public class GameMap {
-	//arrays
 	private int currentLevel;
 
-	private HashMap<Integer, ImageIcon[][]> levelMapping = new HashMap<Integer, ImageIcon[][]>();
-	private HashMap<Integer, Rectangle[]> hitRectangleMapping = new HashMap<Integer, Rectangle[]>();
+	private HashMap<Integer, ImageIcon[][]> levelMapping = new HashMap<>();
+	private HashMap<Integer, Rectangle[]> hitRectangleMapping = new HashMap<>();
 
 	public GameMap() {
 		createLevels();
+		currentLevel = 1;
 	}
 	
 	public GameMap(int level) {
@@ -162,15 +162,13 @@ public class GameMap {
 		return new Point(newX, newY);
 	}
 
-	//public void setCurrentEntityList(ArrayList<Entity> entityList) {
-	//	this.currentEntityList = entityList;
-	//}
+	// Private helper functions
 
 	private Rectangle[] addEnemiesToHitArray(Rectangle[] currentMap, ArrayList<Entity> entityArrayList) {
 		if (entityArrayList != null && entityArrayList.size() > 0) {
 			ArrayList<Rectangle> mapList = new ArrayList<Rectangle>(Arrays.asList(currentMap));
 			for (Entity entity : entityArrayList) {
-				mapList.add(new Rectangle(entity.getPosX(), entity.getPosY(), 75, 75));
+				mapList.add(entity.getEntitySize());
 			}
 			return mapList.toArray(new Rectangle[mapList.size()]);
 		}
@@ -180,11 +178,13 @@ public class GameMap {
 	//TODO:(cathy) thread this creation method, guard against race conditions
 	private void createLevels() {
 		ImageIcon[][] mapOne = new ImageIcon[10][10];
-		ArrayList<Rectangle> hitRectOne = new ArrayList<>();
 		ImageIcon[][] mapTwo = new ImageIcon[10][10];
-		ArrayList<Rectangle> hitRectTwo = new ArrayList<>();
 		ImageIcon[][] mapThree = new ImageIcon[10][10];
+
+		ArrayList<Rectangle> hitRectOne = new ArrayList<>();
+		ArrayList<Rectangle> hitRectTwo = new ArrayList<>();
 		ArrayList<Rectangle> hitRectThree = new ArrayList<>();
+
 		for (int h = 0; h < 10; h++) {
 			for (int w = 0; w < 10; w++) {
 
@@ -245,6 +245,7 @@ public class GameMap {
 				}
 			}
 		}
+
 		levelMapping.put(1, mapOne);
 		levelMapping.put(2, mapTwo);
 		levelMapping.put(3, mapThree);
@@ -265,7 +266,6 @@ public class GameMap {
 			hitRectMap.add(new Rectangle(970, 0, 30, 1000));
 			hitRectMap.add(new Rectangle(0, 950, 1000, 20));
 		}
-
 		return hitRectMap;
 	}
 }

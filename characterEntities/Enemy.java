@@ -22,34 +22,32 @@ public abstract class Enemy extends Entity {
 	protected boolean done;
 	protected EnemyType enemyType;
 	protected HashMap<Integer, String> shapePath;
-	protected Hero hero;
 	private Entity targetEntity;
 
 	private static final int DELETION_TIME = 60;
-	
-	Enemy(Hero hero, int maxHealth, int maxDamage, int minDamage, int posX, int posY, int velocity) {
+
+	//TargetEntity can be any type of entity, not necessarily a hero
+	Enemy(Entity targetEntity, int maxHealth, int maxDamage, int minDamage, int posX, int posY, int velocity) {
 		super(maxHealth, maxDamage, minDamage, posX, posY, velocity);
-		this.hero = hero;
-		shapePath = new HashMap<>();
-		shapePath.put(0, "circle");
+		this.targetEntity = targetEntity;
+		createEnemyHashMap();
 		done = false;
-		setEntityType(EntityType.ENEMY);
+		entityType = EntityType.ENEMY;
 	}
 
 	public boolean isDone() {
 		return done;
 	}
 
-        void setEnemyType(EnemyType enemyType) {
+	void setEnemyType(EnemyType enemyType) {
 		this.enemyType = enemyType;
 	}
 
 	@Override
 	public Rectangle getEntitySize() {
-		return new Rectangle(getPosX(), getPosY(), getImageIcon().getIconWidth(), getImageIcon().getIconHeight());
+		return new Rectangle(posX, posY, getImageIcon().getIconWidth(), getImageIcon().getIconHeight());
 	}
 
-	//TODO:add target entity to constructor
 	public void setTargetEntity(Entity targetEntity) {
 		this.targetEntity = targetEntity;
 	}
@@ -83,16 +81,15 @@ public abstract class Enemy extends Entity {
 	private void calculateNextMove() {
 		if (targetEntity == null) return;
 
-		Point selfCenter = new Point(posX + getEntitySize().width/2, posY + getEntitySize().height/2);
-		Point targetCenter = new Point(targetEntity.getPosX() + targetEntity.getEntitySize().width/2, targetEntity.getPosY() + targetEntity.getEntitySize().height/2);
+		Point selfCenter = new Point(posX + getEntitySize().width / 2, posY + getEntitySize().height / 2);
+		Point targetCenter = new Point(targetEntity.getPosX() + targetEntity.getEntitySize().width / 2, targetEntity.getPosY() + targetEntity.getEntitySize().height / 2);
 
 		Point motionVector = new Point(targetCenter.x - selfCenter.x, targetCenter.y - selfCenter.y);
 
-		System.out.println(motionVector);
 		double hypotenuse = Math.sqrt(motionVector.x * motionVector.x + motionVector.y * motionVector.y);
 
 		if (hypotenuse != 0) {
-			double scaleFactor = velocity/hypotenuse;
+			double scaleFactor = velocity / hypotenuse;
 
 			posX += motionVector.x * scaleFactor;
 			posY += motionVector.y * scaleFactor;
@@ -100,18 +97,23 @@ public abstract class Enemy extends Entity {
 
 		if (Math.abs(motionVector.x) < 75 && Math.abs(motionVector.y) < 75) {
 			setEntityState(EntityState.ATTACKING);
-			targetEntity.inflict(2, true);
-                }
-        }
+		}
+	}
 
-        public void update() {
+	public void update() {
 		super.update();
 		if (entityState == EntityState.DEAD && deletionCounter-- <= 0) {
 			done = true;
+		} else if (entityState == EntityState.NEUTRAL || entityState == EntityState.ATTACKING) {
+			calculateNextMove();
 		}
 		if (currentAbilityAnimation == null) {
-			hero.immuneTo.put(this, false);
-                }
-                //TODO: add calculate movement here
+			targetEntity.immuneTo.put(this, false);
+		}
+	}
+
+	private void createEnemyHashMap() {
+		shapePath = new HashMap<>();
+		shapePath.put(0, "circle");
 	}
 }
