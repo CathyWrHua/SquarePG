@@ -2,10 +2,13 @@ package screens;
 
 
 import characterEntities.Entity;
+import org.w3c.dom.css.Rect;
 
 import java.awt.*;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import javax.swing.ImageIcon;
 
@@ -49,8 +52,6 @@ public class GameMap {
 			return null;
 		}
 
-		Rectangle[] hitRectArray = addEnemiesToHitArray(hitRectangleMapping.get(new Integer(currentLevel)));
-
 		int objectRight = newX + objectSize.width;
 		int objectLeft = newX;
 		int objectTop = newY;
@@ -58,6 +59,18 @@ public class GameMap {
 
 		int displacementX = newX - objectSize.x;
 		int displacementY = newY - objectSize.y;
+
+		if (displacementX == 0 && displacementY == 0) {
+			return new Point(newX, newY);
+		}
+
+		Rectangle[] hitRectArray = addEnemiesToHitArray(hitRectangleMapping.get(new Integer(currentLevel)));
+
+		if (displacementX < 0 && displacementY < 0) {
+			ArrayList<Rectangle> tempList = new ArrayList<>(Arrays.asList(hitRectArray));
+			Collections.reverse(tempList);
+			hitRectArray = tempList.toArray(new Rectangle[tempList.size()]);
+		}
 
 		for (Rectangle rect:hitRectArray) {
 			int hitRectRight = rect.x + rect.width;
@@ -81,9 +94,6 @@ public class GameMap {
 							int collisionHeight = objectBottom - hitRectTop;
 							if (collisionHeight > collisionWidth) {
 								newX = rect.x - objectSize.width;
-							} else if (collisionHeight == collisionWidth) {
-								newX = rect.x - objectSize.width;
-								newY = rect.y - objectSize.height;
 							} else {
 								newY = rect.y - objectSize.height;
 							}
@@ -94,8 +104,6 @@ public class GameMap {
 								newX = rect.x - objectSize.width;
 							} else if (collisionHeight == collisionWidth) {
 								newX = rect.x - objectSize.width;
-
-								newY = hitRectBottom;
 							} else {
 								newY =hitRectBottom;
 							}
@@ -117,9 +125,6 @@ public class GameMap {
 							int collisionHeight = objectBottom - hitRectTop;
 							if (collisionHeight > collisionWidth) {
 								newX = hitRectRight;
-							} else if (collisionHeight == collisionWidth) {
-								newX = hitRectRight;
-								newY = rect.y - objectSize.height;
 							} else {
 								newY = rect.y - objectSize.height;
 							}
@@ -128,9 +133,6 @@ public class GameMap {
 							int collisionHeight = hitRectBottom - objectTop;
 							if (collisionHeight > collisionWidth) {
 								newX = hitRectRight;
-							} else if (collisionHeight == collisionWidth) {
-								newX = hitRectRight;
-								newY = hitRectBottom;
 							} else {
 								newY = hitRectBottom;
 							}

@@ -28,7 +28,6 @@ public class AboutScreen extends Screen implements ActionListener {
         add(aboutLabel, c);
         c.gridy = 2;
         add(back, c);
-		
 	}
 
 	@Override
