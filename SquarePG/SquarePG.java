@@ -25,7 +25,7 @@ public class SquarePG extends JFrame {
 		setVisible(true);
 		setLayout(new BorderLayout());
 		try {
-			this.setIconImage(ImageIO.read(new File("src/res/gui/icon.png")));
+			this.setIconImage(ImageIO.read(new File("src/assets/gui/icon.png")));
 		}
 		catch (IOException exc) {
 			exc.printStackTrace();
@@ -42,7 +42,7 @@ public class SquarePG extends JFrame {
 		            
 		            currentScreen.update();
 		            
-		            //Screen switching function: screenState is in Wait, unless a change screen button is pressed (eg. back, enter buttons)
+		            //Screen switching function: screenState is in Wait, unless a change screen button is passetssed (eg. back, enter buttons)
 		            if (screenState != ScreenState.WAIT) {
 		            	remove(currentScreen);
 		            	if (screenState == ScreenState.HOME) {

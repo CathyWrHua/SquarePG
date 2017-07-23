@@ -11,7 +11,7 @@ public class Dummy extends Entity {
 
     public Dummy(int posX, int posY, boolean facingEast) {
         super(1, 0, 0, posX, posY, 0);
-        setImageIcon("src/res/enemies/dummyNeutral.png");
+        setImageIcon("src/assets/enemies/dummyNeutral.png");
         setFacingEast(facingEast);
         setEntityType(EntityType.DUMMY);
     }
@@ -27,7 +27,7 @@ public class Dummy extends Entity {
     @Override
     public void setEntityState(EntityState entityState) {
         super.setEntityState(entityState);
-        String filepath = "src/res/enemies/dummy";
+        String filepath = "src/assets/enemies/dummy";
         switch (entityState) {
             case NEUTRAL:
                 filepath += "Neutral";

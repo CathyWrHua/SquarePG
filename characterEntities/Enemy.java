@@ -44,7 +44,7 @@ public abstract class Enemy extends Entity {
 	@Override
 	public void setEntityState(EntityState entityState) {
 		super.setEntityState(entityState);
-		String filepath = "src/res/enemies/";
+		String filepath = "src/assets/enemies/";
 		filepath += shapePath.get(enemyType.getValue());
 		switch (entityState) {
 			case NEUTRAL:

@@ -16,17 +16,17 @@ public abstract class Animation {
         return done;
     }
 
-    public void resetCounter() {
+    public void assetsetCounter() {
         this.counter = 0;
     }
 
     public void update() {
         done = false;
-        String filePath = "src/res/animations/" + animationName;
+        String filePath = "src/assets/animations/" + animationName;
         filePath += (counter/ANIMATION_SPEED) + ".png";
         this.imageIcon = new ImageIcon(filePath);
         if (counter/ANIMATION_SPEED >= totalFrames) {
-            resetCounter();
+            assetsetCounter();
             done = true;
             return;
         }

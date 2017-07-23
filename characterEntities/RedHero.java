@@ -8,7 +8,7 @@ public class RedHero extends Hero {
 	public RedHero(ArrayList<Entity> targets) {
 		super(targets, 30, 15, 5, 100, 100, 5);
 		setPlayerClass(PlayerClass.RED);
-		setImageIcon("src/res/hero/redNeutral.png");
+		setImageIcon("src/assets/hero/redNeutral.png");
 	}
 	
 //	public boolean evolve(int path) {
