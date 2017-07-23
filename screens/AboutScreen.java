@@ -32,6 +32,9 @@ public class AboutScreen extends Screen implements ActionListener {
 	}
 
 	@Override
+	public void init() {}
+
+	@Override
 	public void update() {
 		validate();
 		repaint();

@@ -1,7 +1,5 @@
 package screens;
 
-import java.awt.BorderLayout;
-import java.awt.Container;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -41,7 +39,9 @@ public class HomeScreen extends Screen implements ActionListener{
         add(about, c);
         
     }
-	
+
+    @Override
+    public void init() {}
 
 	@Override
 	public void update() {

@@ -25,7 +25,7 @@ public class GameScreen extends Screen implements KeyListener{
 		addKeyListener(this);
 		setFocusable(true);
 		setFocusTraversalKeysEnabled(false);
-
+		
 		targets = new ArrayList<>();
 		enemies = new ArrayList<>();
 		dummies = new ArrayList<>();
@@ -38,7 +38,12 @@ public class GameScreen extends Screen implements KeyListener{
 		createDummy(400, 100, true);
 		createDummy(600, 100, false);
 	}
-	
+
+	@Override
+	public void init() {
+		requestFocus(true);
+	}
+
 	private void createPlayer(Hero.PlayerClass playerClass) {
 		switch (playerClass) {
 		case RED:
@@ -125,8 +130,6 @@ public class GameScreen extends Screen implements KeyListener{
 
 	@Override
 	public void update() {
-		//HACK: have something that requests focus not so frequently
-		requestFocus(true);
 		//TODO:Remove all magic width and heights with actual ones
 
 		Rectangle originalPlayer = new Rectangle(player.getPosX(), player.getPosY(),75,  75);
