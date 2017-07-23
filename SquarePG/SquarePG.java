@@ -59,6 +59,7 @@ public class SquarePG extends JFrame {
 		            		}
 		            	}
 		            	add(currentScreen);
+		            	currentScreen.init();
 		            	screenState = ScreenState.WAIT;
 		            }
 		            

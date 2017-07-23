@@ -2,13 +2,11 @@ package screens;
 
 
 import characterEntities.Entity;
-import org.w3c.dom.css.Rect;
 
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-
 import javax.swing.ImageIcon;
 
 public class GameMap {
@@ -46,7 +44,6 @@ public class GameMap {
 		}
 	}
 
-	//TODO:A few bugs with detection, not sure what causes them
 	public Point determineMotion(int newX, int newY, Rectangle objectSize){
 		if (objectSize == null) {
 			return null;
@@ -68,33 +65,99 @@ public class GameMap {
 			int hitRectBottom = rect.y + rect.height;
 			int hitRectTop = rect.y;
 
-			if (!(objectSize.y + objectSize.height == hitRectTop || objectSize.y == hitRectBottom)) {
+			if ((displacementX != 0 || displacementY != 0) &&
+					hitRectLeft < objectRight &&
+					hitRectRight > objectLeft &&
+					hitRectTop < objectBottom &&
+					hitRectBottom > objectTop) {
+				//collision was detected
+
 				if (displacementX > 0) {
-					if (objectRight > hitRectLeft && objectRight < hitRectRight && !(objectBottom <= hitRectTop || objectTop >= hitRectBottom)) {
-						newX = rect.x - objectSize.width;
+					if (objectLeft < hitRectLeft) {
+						if (displacementY == 0) {
+							newX = rect.x - objectSize.width;
+						} else if (displacementY > 0) {
+							int collisionWidth = objectRight - hitRectLeft;
+							int collisionHeight = objectBottom - hitRectTop;
+							if (collisionHeight > collisionWidth) {
+								newX = rect.x - objectSize.width;
+							} else if (collisionHeight == collisionWidth) {
+								newX = rect.x - objectSize.width;
+								newY = rect.y - objectSize.height;
+							} else {
+								newY = rect.y - objectSize.height;
+							}
+						} else {
+							int collisionWidth = objectRight - hitRectLeft;
+							int collisionHeight = hitRectBottom - objectTop;
+							if (collisionHeight > collisionWidth) {
+								newX = rect.x - objectSize.width;
+							} else if (collisionHeight == collisionWidth) {
+								newX = rect.x - objectSize.width;
+
+								newY = hitRectBottom;
+							} else {
+								newY =hitRectBottom;
+							}
+						}
+
 						objectRight = newX + objectSize.width;
 						objectLeft = newX;
+						objectTop = newY;
+						objectBottom = newY + objectSize.height;
+
+						continue;
 					}
 				} else if (displacementX < 0) {
-					if (objectLeft > hitRectLeft && objectLeft < hitRectRight && !(objectBottom <= hitRectTop || objectTop >= hitRectBottom)) {
-						newX = hitRectRight;
+					if (objectRight > hitRectRight) {
+						if (displacementY == 0) {
+							newX = hitRectRight;
+						} else if (displacementY > 0) {
+							int collisionWidth = hitRectRight - objectLeft;
+							int collisionHeight = objectBottom - hitRectTop;
+							if (collisionHeight > collisionWidth) {
+								newX = hitRectRight;
+							} else if (collisionHeight == collisionWidth) {
+								newX = hitRectRight;
+								newY = rect.y - objectSize.height;
+							} else {
+								newY = rect.y - objectSize.height;
+							}
+						} else {
+							int collisionWidth = hitRectRight - objectLeft;
+							int collisionHeight = hitRectBottom - objectTop;
+							if (collisionHeight > collisionWidth) {
+								newX = hitRectRight;
+							} else if (collisionHeight == collisionWidth) {
+								newX = hitRectRight;
+								newY = hitRectBottom;
+							} else {
+								newY = hitRectBottom;
+							}
+						}
+
 						objectRight = newX + objectSize.width;
 						objectLeft = newX;
+						objectTop = newY;
+						objectBottom = newY + objectSize.height;
+						continue;
 					}
 				}
-			}
 
-			if (displacementY > 0) {
-				if (objectBottom > hitRectTop && objectBottom < hitRectBottom && !(objectRight <= hitRectLeft || objectLeft >= hitRectRight)) {
-					newY = hitRectTop - objectSize.height;
-					objectTop = newY;
-					objectBottom = newY + objectSize.height;
-				}
-			} else if (displacementY < 0) {
-				if (objectTop < hitRectBottom && objectTop > hitRectTop && !(objectRight <= hitRectLeft || objectLeft >= hitRectRight)) {
-					newY = hitRectBottom;
-					objectTop = newY;
-					objectBottom = newY + objectSize.height;
+				if (displacementY > 0) {
+					if (objectTop < hitRectTop) {
+						newY = rect.y - objectSize.height;
+						objectTop = newY;
+						objectBottom = newY + objectSize.height;
+						continue;
+					}
+				} else if (displacementY < 0) {
+					if (objectBottom > hitRectBottom) {
+						newY = hitRectBottom;
+						objectTop = newY;
+						objectBottom = newY + objectSize.height;
+						continue;
+					}
 				}
 			}
 		}
