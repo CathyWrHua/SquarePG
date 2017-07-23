@@ -145,6 +145,8 @@ public class GameScreen extends Screen implements KeyListener{
                 Rectangle originalEnemy = enemy.getEntitySize();
                 enemy.update();
                 enemy.setPoint(map.determineMotion(enemy.getPosX(), enemy.getPosY(), originalEnemy, new ArrayList<Entity>(Arrays.asList(player))));
+                damageMarkers.addAll(enemy.getTargetMarkers());
+                enemy.emptyTargetMarkers();
                 if (enemy.isDone()) {
                     createEffectAnimation(EffectAnimation.EffectAnimationType.ENEMY_DEATH, enemy.getPosX(), enemy.getPosY());
                     iterator.remove();

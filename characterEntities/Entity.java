@@ -261,8 +261,10 @@ public abstract class Entity {
         int x = posX;
         int width = image.getWidth(null);
 
-        if (currentAbilityAnimation != null)
+        if (currentAbilityAnimation != null) {
             currentAbilityAnimation.draw(g);
+        }
+
         healthBar.draw(g);
 
         if (!facingEast) {

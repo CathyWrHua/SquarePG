@@ -94,7 +94,6 @@ public abstract class Enemy extends Entity {
 
 		Point selfCenter = new Point(posX + getEntitySize().width / 2, posY + getEntitySize().height / 2);
 		Point targetCenter = new Point(targetEntity.getPosX() + targetEntity.getEntitySize().width / 2, targetEntity.getPosY() + targetEntity.getEntitySize().height / 2);
-
 		Point motionVector = new Point(targetCenter.x - selfCenter.x, targetCenter.y - selfCenter.y);
 
 		double hypotenuse = Math.sqrt(motionVector.x * motionVector.x + motionVector.y * motionVector.y);
