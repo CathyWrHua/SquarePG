@@ -2,10 +2,8 @@ package screens;
 
 
 import characterEntities.Entity;
-import org.w3c.dom.css.Rect;
 
 import java.awt.*;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -19,8 +17,6 @@ public class GameMap {
 	private HashMap<Integer, ImageIcon[][]> levelMapping = new HashMap<Integer, ImageIcon[][]>();
 	private HashMap<Integer, Rectangle[]> hitRectangleMapping = new HashMap<Integer, Rectangle[]>();
 
-	private ArrayList<Entity> currentEntityList;
-
 	public GameMap() {
 		createLevels();
 	}
@@ -31,7 +27,7 @@ public class GameMap {
 	}
 	
 	public void setMap(int level) {
-		if (level > 0 && level < 3) {
+		if (level > 0 && level < 4) {
 			currentLevel = level;
 		}
 	}
@@ -47,7 +43,7 @@ public class GameMap {
 		}
 	}
 
-	public Point determineMotion(int newX, int newY, Rectangle objectSize){
+	public Point determineMotion(int newX, int newY, Rectangle objectSize, ArrayList<Entity> currentEntityList){
 		if (objectSize == null) {
 			return null;
 		}
@@ -64,7 +60,7 @@ public class GameMap {
 			return new Point(newX, newY);
 		}
 
-		Rectangle[] hitRectArray = addEnemiesToHitArray(hitRectangleMapping.get(new Integer(currentLevel)));
+		Rectangle[] hitRectArray = addEnemiesToHitArray(hitRectangleMapping.get(new Integer(currentLevel)), currentEntityList);
 
 		if (displacementX < 0 && displacementY < 0) {
 			ArrayList<Rectangle> tempList = new ArrayList<>(Arrays.asList(hitRectArray));
@@ -166,14 +162,14 @@ public class GameMap {
 		return new Point(newX, newY);
 	}
 
-	public void setCurrentEntityList(ArrayList<Entity> entityList) {
-		this.currentEntityList = entityList;
-	}
+	//public void setCurrentEntityList(ArrayList<Entity> entityList) {
+	//	this.currentEntityList = entityList;
+	//}
 
-	private Rectangle[] addEnemiesToHitArray(Rectangle[] currentMap) {
-		if (currentEntityList != null && currentEntityList.size() > 0) {
+	private Rectangle[] addEnemiesToHitArray(Rectangle[] currentMap, ArrayList<Entity> entityArrayList) {
+		if (entityArrayList != null && entityArrayList.size() > 0) {
 			ArrayList<Rectangle> mapList = new ArrayList<Rectangle>(Arrays.asList(currentMap));
-			for (Entity entity : currentEntityList) {
+			for (Entity entity : entityArrayList) {
 				mapList.add(new Rectangle(entity.getPosX(), entity.getPosY(), 75, 75));
 			}
 			return mapList.toArray(new Rectangle[mapList.size()]);
@@ -184,9 +180,11 @@ public class GameMap {
 	//TODO:(cathy) thread this creation method, guard against race conditions
 	private void createLevels() {
 		ImageIcon[][] mapOne = new ImageIcon[10][10];
-		ArrayList<Rectangle> hitRectOne = new ArrayList<Rectangle>();
+		ArrayList<Rectangle> hitRectOne = new ArrayList<>();
 		ImageIcon[][] mapTwo = new ImageIcon[10][10];
-		ArrayList<Rectangle> hitRectTwo = new ArrayList<Rectangle>();
+		ArrayList<Rectangle> hitRectTwo = new ArrayList<>();
+		ImageIcon[][] mapThree = new ImageIcon[10][10];
+		ArrayList<Rectangle> hitRectThree = new ArrayList<>();
 		for (int h = 0; h < 10; h++) {
 			for (int w = 0; w < 10; w++) {
 
@@ -194,30 +192,38 @@ public class GameMap {
 					if (w == 0) {
 						mapOne[h][w] = new ImageIcon("src/assets/maps/background3.png");
 						mapTwo[h][w] = new ImageIcon("src/assets/maps/background3.png");
+						mapThree[h][w] = new ImageIcon("src/assets/maps/background3.png");
 					} else if (w == 9){
 						mapOne[h][w] = new ImageIcon("src/assets/maps/background8.png");
 						mapTwo[h][w] = new ImageIcon("src/assets/maps/background8.png");
+						mapThree[h][w] = new ImageIcon("src/assets/maps/background8.png");
 					} else {
 						mapOne[h][w] = new ImageIcon("src/assets/maps/background5.png");
 						mapTwo[h][w] = new ImageIcon("src/assets/maps/background5.png");
+						mapThree[h][w] = new ImageIcon("src/assets/maps/background5.png");
 					}
 				} else if (h == 9) {
 					if (w == 0) {
 						mapOne[h][w] = new ImageIcon("src/assets/maps/background9.png");
 						mapTwo[h][w] = new ImageIcon("src/assets/maps/background9.png");
+						mapThree[h][w] = new ImageIcon("src/assets/maps/background9.png");
 					} else if (w == 9){
 						mapOne[h][w] = new ImageIcon("src/assets/maps/background10.png");
 						mapTwo[h][w] = new ImageIcon("src/assets/maps/background10.png");
+						mapThree[h][w] = new ImageIcon("src/assets/maps/background10.png");
 					} else {
 						mapOne[h][w] = new ImageIcon("src/assets/maps/background6.png");
 						mapTwo[h][w] = new ImageIcon("src/assets/maps/background6.png");
+						mapThree[h][w] = new ImageIcon("src/assets/maps/background6.png");
 					}
 				} else if (w == 0) {
 					mapOne[h][w] = new ImageIcon("src/assets/maps/background4.png");
 					mapTwo[h][w] = new ImageIcon("src/assets/maps/background4.png");
+					mapThree[h][w] = new ImageIcon("src/assets/maps/background4.png");
 				} else if (w == 9) {
 					mapOne[h][w] = new ImageIcon("src/assets/maps/background7.png");
 					mapTwo[h][w] = new ImageIcon("src/assets/maps/background7.png");
+					mapThree[h][w] = new ImageIcon("src/assets/maps/background7.png");
 				}
 
 				if (((h > 1 && h < 4) || (h > 5 && h < 8)) && ((w > 1 && w < 4) || (w > 5 && w < 8))) {
@@ -233,16 +239,23 @@ public class GameMap {
 				} else if (w != 0 && w != 9 && h != 9 && h != 0) {
 					mapTwo[h][w] = new ImageIcon("src/assets/maps/background1.png");
 				}
+
+				if (w != 0 && w != 9 && h != 9 && h != 0) {
+					mapThree[h][w] = new ImageIcon("src/assets/maps/background1.png");
+				}
 			}
 		}
 		levelMapping.put(1, mapOne);
 		levelMapping.put(2, mapTwo);
+		levelMapping.put(3, mapThree);
 
 		hitRectOne = addBorder(hitRectOne);
 		hitRectTwo = addBorder(hitRectTwo);
+		hitRectThree = addBorder(hitRectThree);
 
 		hitRectangleMapping.put(1, hitRectOne.toArray(new Rectangle[hitRectOne.size()]));
 		hitRectangleMapping.put(2, hitRectTwo.toArray(new Rectangle[hitRectTwo.size()]));
+		hitRectangleMapping.put(3, hitRectThree.toArray(new Rectangle[hitRectThree.size()]));
 	}
 
 	private ArrayList<Rectangle> addBorder(ArrayList<Rectangle> hitRectMap) {

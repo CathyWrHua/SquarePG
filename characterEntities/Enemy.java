@@ -2,9 +2,12 @@ package characterEntities;
 
 import screens.GameScreen;
 
+import java.awt.*;
+
 public class Enemy extends Entity {
 	private int deletionCounter = DELETION_TIME;
 	private boolean done;
+	private Entity targetEntity;
 	private String shape;
 
 	private static final int DELETION_TIME = 90;
@@ -30,7 +33,19 @@ public class Enemy extends Entity {
 		super.update();
 		if (getEntityState() == EntityState.DEAD && deletionCounter-- <= 0) {
 			done = true;
+		} else if (getEntityState() == EntityState.DEFAULT){
+			calculateNextMove();
 		}
+	}
+
+	@Override
+	public Rectangle getEntitySize() {
+		return new Rectangle(getPosX(), getPosY(), getImageIcon().getIconWidth(), getImageIcon().getIconHeight());
+	}
+
+	//TODO:add target entity to constructor
+	public void setTargetEntity(Entity targetEntity) {
+		this.targetEntity = targetEntity;
 	}
 
 	@Override
@@ -58,4 +73,28 @@ public class Enemy extends Entity {
 		this.setImageIcon(filepath);
 	}
 
+	//Simple motion detection (pythagorean locating)
+	private void calculateNextMove() {
+		if (targetEntity == null) return;
+
+		Point selfCenter = new Point(posX + getEntitySize().width/2, posY + getEntitySize().height/2);
+		Point targetCenter = new Point(targetEntity.getPosX() + targetEntity.getEntitySize().width/2, targetEntity.getPosY() + targetEntity.getEntitySize().height/2);
+
+		Point motionVector = new Point(targetCenter.x - selfCenter.x, targetCenter.y - selfCenter.y);
+
+		System.out.println(motionVector);
+		double hypotenuse = Math.sqrt(motionVector.x * motionVector.x + motionVector.y * motionVector.y);
+
+		if (hypotenuse != 0) {
+			double scaleFactor = velocity/hypotenuse;
+
+			posX += motionVector.x * scaleFactor;
+			posY += motionVector.y * scaleFactor;
+		}
+
+		if (Math.abs(motionVector.x) < 75 && Math.abs(motionVector.y) < 75) {
+			setEntityState(EntityState.ATTACKING);
+			targetEntity.inflict(2, true);
+		}
+	}
 }

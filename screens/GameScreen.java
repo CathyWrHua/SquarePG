@@ -3,15 +3,13 @@ package screens;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.Iterator;
-import java.util.LinkedHashSet;
-import java.util.Set;
-import java.util.ArrayList;
+import java.util.*;
+
 import characterEntities.*;
 
 public class GameScreen extends Screen implements KeyListener{
 	private GameMap map;
-	private int level = 1;
+	private int level = 3;
 	private Hero player;
 	private ArrayList<Entity> targets;
 	private ArrayList<Enemy> enemies;
@@ -34,7 +32,7 @@ public class GameScreen extends Screen implements KeyListener{
 		map = new GameMap(level);
 
 		createPlayer(playerClass);
-		createEnemy(300, 0, 0, 200, 100 ,1);
+		createEnemy(300, 0, 0, 500, 500 ,2);
 		createDummy(400, 100, true);
 		createDummy(600, 100, false);
 	}
@@ -63,6 +61,8 @@ public class GameScreen extends Screen implements KeyListener{
 		Grunt grunt = new Grunt(this, health, maxDamage, minDamage, posX, posY, velocity);
 		enemies.add(grunt);
 		targets.add(grunt);
+
+		grunt.setTargetEntity(player);
 	}
 
 	private void createDummy(int posX, int posY, boolean facingEast) {
@@ -138,13 +138,12 @@ public class GameScreen extends Screen implements KeyListener{
 		//TODO:Remove all magic width and heights with actual ones
 
 		Rectangle originalPlayer = new Rectangle(player.getPosX(), player.getPosY(),75,  75);
-		player.update();
 
 		for (Iterator<Enemy> iterator = enemies.iterator(); iterator.hasNext();) {
 			Enemy enemy = iterator.next();
 			Rectangle originalEnemy = new Rectangle(enemy.getPosX(), enemy.getPosY(), 75, 75);
 			enemy.update();
-			enemy.setPoint(map.determineMotion(enemy.getPosX(), enemy.getPosY(), originalEnemy));
+			enemy.setPoint(map.determineMotion(enemy.getPosX(), enemy.getPosY(), originalEnemy, new ArrayList<Entity>(Arrays.asList(player))));
 			if (enemy.isDone()) {
 				System.out.println(targets.remove(enemy));
 				iterator.remove();
@@ -153,8 +152,9 @@ public class GameScreen extends Screen implements KeyListener{
 		for (Dummy dummy : dummies) {
 			dummy.update();
 		}
-		map.setCurrentEntityList(targets);
-		player.setPoint(map.determineMotion(player.getPosX(), player.getPosY(), originalPlayer));
+		//map.setCurrentEntityList(targets);
+        player.update();
+		player.setPoint(map.determineMotion(player.getPosX(), player.getPosY(), originalPlayer, targets));
 
 		for(Iterator<DamageMarker> iterator = damageMarkers.iterator(); iterator.hasNext();) {
 			DamageMarker marker = iterator.next();

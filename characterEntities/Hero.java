@@ -2,6 +2,7 @@ package characterEntities;
 
 import screens.GameScreen;
 
+import java.awt.*;
 import java.util.ArrayList;
 
 public abstract class Hero extends Entity {
@@ -73,7 +74,12 @@ public abstract class Hero extends Entity {
 		filepath += ".png";
 		this.setImageIcon(filepath);
 	}
-	
+
+	@Override
+	public Rectangle getEntitySize() {
+		return new Rectangle(getPosX(), getPosY(), SQUARE_LENGTH, SQUARE_LENGTH);
+	}
+
 	public abstract boolean evolve(int path);
 
 	public abstract void attack(Ability ability, ArrayList<Entity> targets);

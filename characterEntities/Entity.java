@@ -7,12 +7,12 @@ import java.awt.*;
 import java.util.Random;
 
 public abstract class Entity {
-    private int posX, posY;
+    protected int posX, posY;
 	private int maxHealth, currentHealth;
 	private int maxDamage, minDamage;
     private int stunCounter = STUN_TIME;
 	private int damageTaken;
-	private int velocity;
+	protected int velocity;
 	private boolean attackerFacingEast;
 	private boolean facingEast;
 	private AbilityAnimation currentAbilityAnimation;
@@ -180,6 +180,8 @@ public abstract class Entity {
     void setImageIcon(String filename) {
         imageIcon = new ImageIcon(filename);
     }
+
+    public abstract Rectangle getEntitySize();
     
     public void setCurrentHealth(int currentHealth) {
         this.currentHealth = currentHealth;

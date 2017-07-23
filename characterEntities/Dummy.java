@@ -58,6 +58,11 @@ public class Dummy extends Entity {
     }
 
     @Override
+    public Rectangle getEntitySize() {
+        return new Rectangle(posX, posY, getImageIcon().getIconWidth(), getImageIcon().getIconHeight());
+    }
+
+    @Override
     public void draw(Graphics g) {
         Graphics2D g2d = (Graphics2D)g;
         Image image = getImageIcon().getImage();
