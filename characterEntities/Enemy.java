@@ -1,43 +1,48 @@
 package characterEntities;
 
-import screens.GameScreen;
+import java.util.HashMap;
 
 public class Enemy extends Entity {
+	public enum EnemyType {
+		CIRCLE(0);
+		private int value;
+
+		EnemyType(int value) {
+			this.value = value;
+		}
+
+		public int getValue() {
+			return value;
+		}
+	}
+
 	private int deletionCounter = DELETION_TIME;
 	private boolean done;
-	private String shape;
+	private EnemyType enemyType;
+	private HashMap<Integer, String> shapePath;
 
 	private static final int DELETION_TIME = 90;
 	
-	Enemy(GameScreen game, int maxHealth, int maxDamage, int minDamage, int posX, int posY, int velocity) {
-		super(game, maxHealth, maxDamage, minDamage, posX, posY, velocity);
+	Enemy(int maxHealth, int maxDamage, int minDamage, int posX, int posY, int velocity) {
+		super(maxHealth, maxDamage, minDamage, posX, posY, velocity);
+		shapePath = new HashMap<>();
+		shapePath.put(0, "circle");
 		done = false;
-	}
-
-	void setShape(String shape) {
-		this.shape = shape;
-	}
-
-	public String getShape() {
-		return shape;
 	}
 
 	public boolean isDone() {
 		return done;
 	}
 
-	public void update() {
-		super.update();
-		if (getEntityState() == EntityState.DEAD && deletionCounter-- <= 0) {
-			done = true;
-		}
+	void setEnemyType(EnemyType enemyType) {
+		this.enemyType = enemyType;
 	}
 
 	@Override
 	public void setEntityState(EntityState entityState) {
 		super.setEntityState(entityState);
 		String filepath = "src/assets/enemies/";
-		filepath += shape;
+		filepath += shapePath.get(enemyType.getValue());
 		switch (this.getEntityState()) {
 			case DEFAULT:
 				filepath += "Neutral";
@@ -56,6 +61,13 @@ public class Enemy extends Entity {
 		}
 		filepath += ".png";
 		this.setImageIcon(filepath);
+	}
+
+	public void update() {
+		super.update();
+		if (getEntityState() == EntityState.DEAD && deletionCounter-- <= 0) {
+			done = true;
+		}
 	}
 
 }

@@ -1,6 +1,5 @@
 package characterEntities;
 
-import javax.swing.*;
 import java.awt.*;
 
 public class DamageMarker {

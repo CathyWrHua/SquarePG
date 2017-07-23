@@ -1,13 +1,9 @@
 package characterEntities;
-
-import screens.GameScreen;
-
 import java.util.ArrayList;
 
 public class RedHero extends Hero {
-	public RedHero(GameScreen game) {
-		super(game, 300, 55, 45, 100, 100, 5);
-		setColour("red");
+	public RedHero() {
+		super(300, 55, 45, 100, 100, 5);
 		setPlayerClass(PlayerClass.RED);
 		setImageIcon("src/assets/hero/redNeutral.png");
 	}
@@ -38,26 +34,35 @@ public class RedHero extends Hero {
 		}
 	}
 
-	public void attack(Ability ability, ArrayList<Entity> targets) {
-		if (getEntityState() == EntityState.DEFAULT) {
-			setEntityState(EntityState.ATTACKING);
+	public ArrayList<DamageMarker> attack(Ability ability, ArrayList<Entity> targets) {
+        ArrayList<DamageMarker> damageMarkers = new ArrayList<>();
+        int damage;
+
+        if (getEntityState() == EntityState.DEFAULT) {
+            setEntityState(EntityState.ATTACKING);
             playAnimation(ability.getValue());
             for (Entity target : targets) {
                 switch (ability) {
                     case DEFAULT:
                         if (isHit(ability, target)) {
-                            target.inflict(getDamage(), this.getFacingEast());
+                            damage = getDamage();
+                            damageMarkers.add(target.inflict(damage, this.getFacingEast()));
                         }
                         break;
                     case FIRST:
+                        break;
                     case SECOND:
+                        break;
                     case THIRD:
+                        break;
                     case ULTIMATE:
+                        break;
                     default:
                         break;
                 }
             }
-		}
+        }
+        return damageMarkers;
 	}
 
 	protected boolean isHit(Ability ability, Entity target) {

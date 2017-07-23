@@ -1,13 +1,10 @@
 package characterEntities;
 
-import screens.GameScreen;
-
 import java.util.ArrayList;
 
 public class YellowHero extends Hero {
-	public YellowHero(GameScreen game) {
-		super(game, 200, 70, 60, 100, 100, 5);
-		setColour("yellow");
+	public YellowHero() {
+		super(200, 70, 60, 100, 100, 5);
 		setPlayerClass(PlayerClass.YELLOW);
 		setImageIcon("src/assets/hero/yellowNeutral.png");
 	}
@@ -38,7 +35,10 @@ public class YellowHero extends Hero {
 		}
 	}
 
-	public void attack(Ability ability, ArrayList<Entity> targets) {
+	public ArrayList<DamageMarker> attack(Ability ability, ArrayList<Entity> targets) {
+		ArrayList<DamageMarker> damageMarkers = new ArrayList<>();
+		int damage;
+
 		if (getEntityState() == EntityState.DEFAULT) {
 			setEntityState(EntityState.ATTACKING);
 			playAnimation(ability.getValue());
@@ -46,7 +46,8 @@ public class YellowHero extends Hero {
 				switch (ability) {
 					case DEFAULT:
 						if (isHit(ability, target)) {
-							target.inflict(getDamage(), this.getFacingEast());
+							damage = getDamage();
+							damageMarkers.add(target.inflict(damage, this.getFacingEast()));
 						}
 						break;
 					case FIRST:
@@ -62,6 +63,7 @@ public class YellowHero extends Hero {
 				}
 			}
 		}
+		return damageMarkers;
 	}
 
 	protected boolean isHit(Ability ability, Entity target) {

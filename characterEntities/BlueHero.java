@@ -1,13 +1,10 @@
 package characterEntities;
 
-import screens.GameScreen;
-
 import java.util.ArrayList;
 
 public class BlueHero extends Hero {
-	public BlueHero(GameScreen game) {
-		super(game, 100, 80, 70, 100, 100, 5);
-		setColour("blue");
+	public BlueHero() {
+		super(100, 80, 70, 100, 100, 5);
 		setPlayerClass(PlayerClass.BLUE);
 		setImageIcon("src/assets/hero/blueNeutral.png");
 	}
@@ -37,7 +34,10 @@ public class BlueHero extends Hero {
 		}
 	}
 
-	public void attack(Ability ability, ArrayList<Entity> targets) {
+	public ArrayList<DamageMarker> attack(Ability ability, ArrayList<Entity> targets) {
+		ArrayList<DamageMarker> damageMarkers = new ArrayList<>();
+		int damage;
+
 		if (getEntityState() == EntityState.DEFAULT) {
 			setEntityState(EntityState.ATTACKING);
 			playAnimation(ability.getValue());
@@ -45,7 +45,8 @@ public class BlueHero extends Hero {
 				switch (ability) {
 					case DEFAULT:
 						if (isHit(ability, target)) {
-							target.inflict(getDamage(), this.getFacingEast());
+							damage = getDamage();
+							damageMarkers.add(target.inflict(damage, this.getFacingEast()));
 						}
 						break;
 					case FIRST:
@@ -61,6 +62,7 @@ public class BlueHero extends Hero {
 				}
 			}
 		}
+		return damageMarkers;
 	}
 
 	protected boolean isHit(Ability ability, Entity target) {
