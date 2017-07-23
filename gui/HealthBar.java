@@ -19,7 +19,7 @@ public class HealthBar {
 
     public HealthBar(Entity entity) {
         this.entity = entity;
-        this.border = new ImageIcon("src/assets/gui/healthbar.png");
+        this.border = new ImageIcon("src/res/gui/healthbar.png");
     }
 
     public void draw(Graphics g) {

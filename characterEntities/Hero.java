@@ -70,7 +70,7 @@ public abstract class Hero extends Entity {
 	public void setEntityState(EntityState entityState) {
 		//TODO: SHOW GAME OVER MESSAGE IF DEAD
 		super.setEntityState(entityState);
-		String filepath = "src/assets/hero/";
+		String filepath = "src/res/hero/";
 		filepath += colourPath.get(playerClass.getValue());
 		switch (this.getEntityState()) {
 			case NEUTRAL:

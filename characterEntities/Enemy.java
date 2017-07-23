@@ -22,7 +22,7 @@ public abstract class Enemy extends Entity {
 	protected HashMap<Integer, String> shapePath;
 	protected Hero hero;
 
-	private static final int DELETION_TIME = 60;
+	private static final int DELETION_TIME = 40;
 	
 	Enemy(Hero hero, int maxHealth, int maxDamage, int minDamage, int posX, int posY, int velocity) {
 		super(maxHealth, maxDamage, minDamage, posX, posY, velocity);
@@ -44,7 +44,7 @@ public abstract class Enemy extends Entity {
 	@Override
 	public void setEntityState(EntityState entityState) {
 		super.setEntityState(entityState);
-		String filepath = "src/assets/enemies/";
+		String filepath = "src/res/enemies/";
 		filepath += shapePath.get(enemyType.getValue());
 		switch (entityState) {
 			case NEUTRAL:

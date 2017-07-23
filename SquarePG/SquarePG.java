@@ -25,7 +25,7 @@ public class SquarePG extends JFrame {
 		setVisible(true);
 		setLayout(new BorderLayout());
 		try {
-			this.setIconImage(ImageIO.read(new File("src/res/icon.png")));
+			this.setIconImage(ImageIO.read(new File("src/res/gui/icon.png")));
 		}
 		catch (IOException exc) {
 			exc.printStackTrace();

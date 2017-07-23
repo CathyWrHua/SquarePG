@@ -36,7 +36,7 @@ public class GameScreen extends Screen implements KeyListener{
 		map = new GameMap(level);
 
 		createPlayer(playerClass);
-		createEnemy(300, 0, 0, 200, 100 ,1);
+		createEnemy(30, 0, 0, 200, 100 ,1);
 		createDummy(400, 100, true);
 		createDummy(600, 100, false);
 	}
@@ -108,9 +108,9 @@ public class GameScreen extends Screen implements KeyListener{
 			player.attack(Hero.Ability.DEFAULT);
 		} else if (e.getKeyCode() == KeyEvent.VK_Z) {
 			//HACK: this is just so that we can damage the player in testing, there will be bugs with this (ignore them)
-			damageMarkers.add(player.inflict(25, new Dummy(-100, -100, true)));
+			damageMarkers.add(player.inflict(3, new Dummy(-100, -100, true)));
 		} else if (e.getKeyCode() == KeyEvent.VK_X) {
-			player.heal(25);
+			player.heal(3);
 		}
 	}
 

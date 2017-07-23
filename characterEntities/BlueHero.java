@@ -6,9 +6,9 @@ import java.util.ArrayList;
 
 public class BlueHero extends Hero {
 	public BlueHero(ArrayList<Entity> targets) {
-		super(targets, 100, 80, 70, 100, 100, 5);
+		super(targets, 10, 8, 7, 100, 100, 5);
 		setPlayerClass(PlayerClass.BLUE);
-		setImageIcon("src/assets/hero/blueNeutral.png");
+		setImageIcon("src/res/hero/blueNeutral.png");
 	}
 	
 //	public boolean evolve(int path) {
