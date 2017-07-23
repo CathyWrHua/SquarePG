@@ -2,14 +2,11 @@ package screens;
 
 
 import characterEntities.Entity;
-import org.w3c.dom.css.Rect;
 
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-
-import javax.sound.midi.SysexMessage;
 import javax.swing.ImageIcon;
 
 public class GameMap {

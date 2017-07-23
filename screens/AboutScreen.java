@@ -40,7 +40,6 @@ public class AboutScreen extends Screen implements ActionListener {
 		repaint();
 	}
 
-
 	@Override
 	public void actionPerformed(ActionEvent event) {
 		if (event.getSource() == back) {

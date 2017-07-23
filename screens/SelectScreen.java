@@ -45,11 +45,6 @@ public class SelectScreen extends Screen implements ActionListener {
         c.gridx = 2;
         c.ipadx = 40;
         add(blueButton,c);
-        c.gridy = 2;
-        c.gridx = 0;
-        c.ipadx = 5;
-        c.gridx = 1;
-        c.gridwidth = 2;
         c.gridx = 0;
         c.gridy = 3;
         c.gridwidth = 3;
@@ -91,5 +86,4 @@ public class SelectScreen extends Screen implements ActionListener {
             SquarePG.screenState = ScreenState.GAME;
         }
 	}
-	
 }
