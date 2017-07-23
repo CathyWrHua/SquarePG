@@ -191,18 +191,18 @@ public class GameScreen extends Screen implements KeyListener{
 	}
 	
 	private void up() {
-	player.setUDMotionState(Entity.MotionStateUpDown.UP);
+		player.setUDMotionState(Entity.MotionStateUpDown.UP);
 	}
 	
 	private void down() {
-	player.setUDMotionState(Entity.MotionStateUpDown.DOWN);
+		player.setUDMotionState(Entity.MotionStateUpDown.DOWN);
 	}
 	
 	private void left() {
-	player.setLRMotionState(Entity.MotionStateLeftRight.LEFT);
+		player.setLRMotionState(Entity.MotionStateLeftRight.LEFT);
 	}
 	
 	private void right() {
-	player.setLRMotionState(Entity.MotionStateLeftRight.RIGHT);
+		player.setLRMotionState(Entity.MotionStateLeftRight.RIGHT);
 	}
 }
