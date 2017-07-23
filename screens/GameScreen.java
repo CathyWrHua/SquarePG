@@ -3,10 +3,7 @@ package screens;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.Iterator;
-import java.util.LinkedHashSet;
-import java.util.Set;
-import java.util.ArrayList;
+import java.util.*;
 
 import animation.Animation;
 import animation.EffectAnimation;
@@ -15,7 +12,7 @@ import gui.DamageMarker;
 
 public class GameScreen extends Screen implements KeyListener{
 	private GameMap map;
-	private int level = 1;
+	private int level = 3;
 	private Hero player;
 	private ArrayList<Entity> targets;
 	private ArrayList<DamageMarker> damageMarkers;
@@ -36,7 +33,7 @@ public class GameScreen extends Screen implements KeyListener{
 		map = new GameMap(level);
 
 		createPlayer(playerClass);
-		createEnemy(30, 0, 0, 200, 100 ,1);
+		createEnemy(300, 0, 0, 500, 500 ,2);
 		createDummy(400, 100, true);
 		createDummy(600, 100, false);
 	}
@@ -64,6 +61,8 @@ public class GameScreen extends Screen implements KeyListener{
 	private void createEnemy(int health, int maxDamage, int minDamage, int posX, int posY, int velocity) {
 		Grunt grunt = new Grunt(player, health, maxDamage, minDamage, posX, posY, velocity);
 		targets.add(grunt);
+
+		grunt.setTargetEntity(player);
 	}
 
 	private void createDummy(int posX, int posY, boolean facingEast) {
@@ -108,9 +107,9 @@ public class GameScreen extends Screen implements KeyListener{
 			player.attack(Hero.Ability.DEFAULT);
 		} else if (e.getKeyCode() == KeyEvent.VK_Z) {
 			//HACK: this is just so that we can damage the player in testing, there will be bugs with this (ignore them)
-			damageMarkers.add(player.inflict(3, new Dummy(-100, -100, true)));
+			damageMarkers.add(player.inflict(25, new Dummy(-100, -100, true)));
 		} else if (e.getKeyCode() == KeyEvent.VK_X) {
-			player.heal(3);
+			player.heal(25);
 		}
 	}
 
@@ -138,9 +137,9 @@ public class GameScreen extends Screen implements KeyListener{
 	public void update() {
 		//TODO:Remove all magic width and heights with actual ones
 
-		Rectangle originalPlayer = new Rectangle(player.getPosX(), player.getPosY(),75,  75);
+		Rectangle originalPlayer = player.getEntitySize();
 		player.update();
-		player.setPoint(map.determineMotion(player.getPosX(), player.getPosY(), originalPlayer));
+		player.setPoint(map.determineMotion(player.getPosX(), player.getPosY(), originalPlayer, targets));
 		damageMarkers.addAll(player.getEnemyMarkers());
 		player.emptyEnemyMarkers();
 
@@ -148,9 +147,9 @@ public class GameScreen extends Screen implements KeyListener{
 			Entity target = iterator.next();
 			if (target.getEntityType() == Entity.EntityType.ENEMY) {
 				Enemy enemy = (Enemy)target;
-				Rectangle originalEnemy = new Rectangle(enemy.getPosX(), enemy.getPosY(), 75, 75);
+				Rectangle originalEnemy = enemy.getEntitySize();
 				enemy.update();
-				enemy.setPoint(map.determineMotion(enemy.getPosX(), enemy.getPosY(), originalEnemy));
+				enemy.setPoint(map.determineMotion(enemy.getPosX(), enemy.getPosY(), originalEnemy, new ArrayList<Entity>(Arrays.asList(player))));
 				if (enemy.isDone()) {
 					createEffectAnimation(EffectAnimation.EffectAnimationType.ENEMY_DEATH, enemy.getPosX(), enemy.getPosY());
 					iterator.remove();
@@ -159,7 +158,6 @@ public class GameScreen extends Screen implements KeyListener{
 				target.update();
 			}
 		}
-		map.setCurrentEntityList(targets);
 
 		for(Iterator<Animation> iterator = animations.iterator(); iterator.hasNext();) {
 			Animation animation = iterator.next();
@@ -193,18 +191,18 @@ public class GameScreen extends Screen implements KeyListener{
 	}
 	
 	private void up() {
-		player.setUDMotionState(Entity.MotionStateUpDown.UP);
+	player.setUDMotionState(Entity.MotionStateUpDown.UP);
 	}
 	
 	private void down() {
-		player.setUDMotionState(Entity.MotionStateUpDown.DOWN);
+	player.setUDMotionState(Entity.MotionStateUpDown.DOWN);
 	}
 	
 	private void left() {
-		player.setLRMotionState(Entity.MotionStateLeftRight.LEFT);
+	player.setLRMotionState(Entity.MotionStateLeftRight.LEFT);
 	}
 	
 	private void right() {
-		player.setLRMotionState(Entity.MotionStateLeftRight.RIGHT);
+	player.setLRMotionState(Entity.MotionStateLeftRight.RIGHT);
 	}
 }
