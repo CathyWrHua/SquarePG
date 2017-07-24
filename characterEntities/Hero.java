@@ -40,7 +40,6 @@ public abstract class Hero extends Entity {
 
 	protected HashMap<Integer, String> colourPath;
 	protected ArrayList<Entity> targets;
-	protected ArrayList<DamageMarker> enemyMarkers;
 	protected PlayerClass playerClass;
 	int numberEvolutions;
 
@@ -55,7 +54,6 @@ public abstract class Hero extends Entity {
 			immuneTo.put(target, false);
 		}
 
-		enemyMarkers = new ArrayList<>();
 		createHeroHashMap();
 		setAnimation(0, new AbilityAnimation(AbilityAnimation.AbilityAnimationType.DEFAULT, this));
 		numberEvolutions = 0;
@@ -134,16 +132,8 @@ public abstract class Hero extends Entity {
 //	}
 
 
-	public ArrayList<DamageMarker> getEnemyMarkers() {
-		return enemyMarkers;
-	}
-
 	public void setPlayerClass(PlayerClass playerClass) {
 		this.playerClass = playerClass;
-	}
-
-	public void emptyEnemyMarkers() {
-		enemyMarkers.clear();
 	}
 
 	private void createHeroHashMap() {
@@ -156,6 +146,13 @@ public abstract class Hero extends Entity {
 	@Override
 	public void update () {
 		super.update();
+
+		if (currentAbilityAnimation == null) {
+			for (Entity target : targets) {
+				target.immuneTo.put(this, false);
+			}
+		}
+
 		if (entityState == EntityState.NEUTRAL || entityState == EntityState.ATTACKING) {
 			switch (lrMotionState) {
 				case LEFT:
@@ -180,11 +177,7 @@ public abstract class Hero extends Entity {
 					break;
 			}
 		}
-		if (currentAbilityAnimation == null) {
-			for (Entity target : targets) {
-				target.immuneTo.put(this, false);
-			}
-		}
+
 		setPoint(map.determineMotion(newPosX, newPosY, getEntitySize(), targets));
 	}
 }

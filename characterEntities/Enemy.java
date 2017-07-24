@@ -1,5 +1,6 @@
 package characterEntities;
 
+import animation.AbilityAnimation;
 import gui.DamageMarker;
 import java.util.ArrayList;
 import screens.GameMap;
@@ -27,21 +28,23 @@ public abstract class Enemy extends Entity {
 	protected EnemyType enemyType;
 	protected HashMap<Integer, String> shapePath;
 	protected int attackRange;
-	//ArrayList because will allow for multiple attacking;
-	protected ArrayList<DamageMarker> targetMarkers;
 	private Entity targetEntity;
 
 	private static final int DELETION_TIME = 40;
 
-	//TargetEntity can be any type of entity, not necessarily a hero
 	Enemy(Entity targetEntity, GameMap map, int maxHealth, int maxDamage, int minDamage, int posX, int posY, int velocity) {
 		super(map, maxHealth, maxDamage, minDamage, posX, posY, velocity);
 		this.targetEntity = targetEntity;
+
+		immuneTo.put(targetEntity, false);
+
 		createEnemyHashMap();
+
+		setAnimation(0, new AbilityAnimation(AbilityAnimation.AbilityAnimationType.DEFAULT, this));
 		done = false;
 		targetMarkers = new ArrayList<>();
 		entityType = EntityType.ENEMY;
-		attackRange = 75;
+		attackRange = 50;
 	}
 
 	public boolean isDone() {
@@ -108,13 +111,23 @@ public abstract class Enemy extends Entity {
 					((targetCenter.y > selfCenter.y) ? 1 : -1) : deltaY;
 		}
 
-		if (Math.abs(motionVector.x) < Hero.SQUARE_LENGTH && Math.abs(motionVector.y) < Hero.SQUARE_LENGTH) {
-			setEntityState(EntityState.ATTACKING);
+		setFacingEast((motionVector.x > 0)? true: false);
+
+		if (Math.abs(motionVector.x) < 100 && Math.abs(motionVector.y) < 100) {
+			//setEntityState(EntityState.ATTACKING);
+			if (targetEntity.getEntityState() != EntityState.DEAD) {
+				attack();
+			}
 		}
 	}
 
 	public void update() {
 		super.update();
+
+		if (currentAbilityAnimation == null) {
+			targetEntity.immuneTo.put(this, false);
+		}
+
 		if (entityState == EntityState.DEAD && deletionCounter-- <= 0) {
 			done = true;
 		} else if (entityState == EntityState.NEUTRAL || entityState == EntityState.ATTACKING) {
@@ -130,18 +143,8 @@ public abstract class Enemy extends Entity {
 				}
 			}
 		}
-		if (currentAbilityAnimation == null) {
-			targetEntity.immuneTo.put(this, false);
-		}
+
 		setPoint(map.determineMotion(newPosX, newPosY, getEntitySize(), new ArrayList<>(Collections.singletonList(targetEntity))));
-	}
-
-	public ArrayList<DamageMarker> getTargetMarkers() {
-		return targetMarkers;
-	}
-
-	public void emptyTargetMarkers() {
-		targetMarkers.clear();
 	}
 
 	public abstract void attack();

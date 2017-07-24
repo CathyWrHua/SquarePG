@@ -20,8 +20,4 @@ public class Grunt extends Enemy {
             setEntityState(EntityState.ATTACKING);
         }
      }
-
-     public boolean isHit() {
-        return true;
-     }
 }

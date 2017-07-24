@@ -37,6 +37,7 @@ public class GameScreen extends Screen implements KeyListener{
 	private ArrayList<Entity> targets;
 	private ArrayList<Effect> effects;
 	private ArrayList<ArrayList<Drawable>> layerRenderMap;
+	private boolean isDoneRendering;
 
 	private HashSet<Integer> motionKeys;
 	
@@ -53,11 +54,12 @@ public class GameScreen extends Screen implements KeyListener{
 		motionKeys = new LinkedHashSet<>();
 		map = new GameMap(level);
 		createLayerRenderMap();
+		isDoneRendering = true;
 
 		createPlayer(playerClass);
 		createDummy(400, 100, true);
 		createDummy(600, 100, false);
-		createEnemy(300, 0, 0, 500, 500 ,3);
+		createEnemy(100, 10, 5, 500, 500 ,3);
 	}
 
 	@Override
@@ -66,7 +68,7 @@ public class GameScreen extends Screen implements KeyListener{
 	}
 
 	private void createLayerRenderMap() {
-		layerRenderMap = new ArrayList<>(4);
+		layerRenderMap = new ArrayList<>(TOTAL_MAP_LAYERS);
 
 		ArrayList<Drawable> background = new ArrayList<>();
 		background.add(map);
@@ -110,58 +112,70 @@ public class GameScreen extends Screen implements KeyListener{
 		EffectAnimation animation = new EffectAnimation(animationType, posX, posY);
 		layerRenderMap.get(MapLayer.MAP_EFFECTS_LAYER.getValue()).add(animation);
 		effects.add(animation);
-		//animations.add(animation);
 	}
 
 	private void createProjectile() {}
 
     @Override
     public void update() {
+
+		if (!isDoneRendering) return;
 		//Effects controlled by entities are cleared
 		layerRenderMap.get(MapLayer.ENTITY_EFFECTS_LAYER.getValue()).clear();
 
-        player.update();
-		layerRenderMap.get(MapLayer.DAMAGE_LAYER.getValue()).addAll(player.getEnemyMarkers());
-		effects.addAll(player.getEnemyMarkers());
-		player.emptyEnemyMarkers();
+		player.update();
+		layerRenderMap.get(MapLayer.DAMAGE_LAYER.getValue()).addAll(player.getTargetMarkers());
+		effects.addAll(player.getTargetMarkers());
+		player.emptyTargetMarkers();
 
 		Drawable playerAbility = player.getCurrentAbilityAnimation();
 		if (playerAbility != null) {
 			layerRenderMap.get(MapLayer.ENTITY_EFFECTS_LAYER.getValue()).add(playerAbility);
 		}
 
-        for (Iterator<Entity> iterator = targets.iterator(); iterator.hasNext();) {
-            Entity target = iterator.next();
-            if (target.getEntityType() == Entity.EntityType.ENEMY) {
-                Enemy enemy = (Enemy)target;
-                enemy.update();
-                Drawable enemyAbility = enemy.getCurrentAbilityAnimation();
-                if (enemyAbility != null) {
+		for (Iterator<Entity> iterator = targets.iterator(); iterator.hasNext();) {
+			Entity target = iterator.next();
+			if (target.getEntityType() == Entity.EntityType.ENEMY) {
+				Enemy enemy = (Enemy)target;
+				enemy.update();
+
+				Drawable enemyAbility = enemy.getCurrentAbilityAnimation();
+				if (enemyAbility != null) {
 					layerRenderMap.get(MapLayer.ENTITY_EFFECTS_LAYER.getValue()).add(enemyAbility);
 				}
-                if (enemy.isDone()) {
-                	layerRenderMap.get(MapLayer.ENTITY_LAYER.getValue()).remove(enemy);
-                    createEffectAnimation(EffectAnimation.EffectAnimationType.ENEMY_DEATH, enemy.getPosX(), enemy.getPosY());
-                    iterator.remove();
-                }
-            } else if (target.getEntityType() == Entity.EntityType.DUMMY) {
-                target.update();
-            }
-        }
 
-        for (Iterator<Effect> iterator = effects.iterator(); iterator.hasNext();) {
-        	Effect effect = iterator.next();
-        	effect.update();
-        	if (effect.isDone()) {
+				layerRenderMap.get(MapLayer.DAMAGE_LAYER.getValue()).addAll(target.getTargetMarkers());
+				effects.addAll(target.getTargetMarkers());
+				target.emptyTargetMarkers();
+
+				if (enemy.isDone()) {
+					layerRenderMap.get(MapLayer.ENTITY_LAYER.getValue()).remove(enemy);
+					createEffectAnimation(EffectAnimation.EffectAnimationType.ENEMY_DEATH, enemy.getPosX(), enemy.getPosY());
+					iterator.remove();
+				}
+			} else if (target.getEntityType() == Entity.EntityType.DUMMY) {
+				target.update();
+			}
+		}
+
+		for (Iterator<Effect> iterator = effects.iterator(); iterator.hasNext();) {
+			Effect effect = iterator.next();
+			effect.update();
+			if (effect.isDone()) {
 				layerRenderMap.get(MapLayer.MAP_EFFECTS_LAYER.getValue()).remove(effect);
 				iterator.remove();
 			}
 		}
+
+		//TEMPORARY TEST CODE TO REGENERATE ENEMY
+		if (targets.size() == 2) {
+			createEnemy(100, 10, 7, 100, 100, 2);
+		}
+
     }
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-
 		//maintains proper order
 		if (motionKeys.contains(e.getKeyCode())) {
 			motionKeys.remove(e.getKeyCode());
@@ -222,11 +236,10 @@ public class GameScreen extends Screen implements KeyListener{
 	@Override
 	public void keyTyped(KeyEvent arg0) { }
 
-
-	
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 
+		isDoneRendering = false;
 		for (int layer = 0; layer < TOTAL_MAP_LAYERS; layer++) {
 			ArrayList<Drawable> drawables = layerRenderMap.get(layer);
 			if (drawables != null && drawables.size() > 0) {
@@ -235,18 +248,7 @@ public class GameScreen extends Screen implements KeyListener{
 				}
 			}
 		}
-
-		/*map.draw(g);
-		for (Entity target : targets) {
-			target.draw(g);
-		}
-		player.draw(g);
-		for (Animation animation : animations) {
-			animation.draw(g);
-		}
-		for (DamageMarker marker : damageMarkers) {
-			marker.draw(g);
-		}*/
+		isDoneRendering = true;
 	}
 	
 	private void up() {
