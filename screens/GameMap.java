@@ -10,7 +10,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import javax.swing.ImageIcon;
 
-public class GameMap {
+public class GameMap implements Drawable{
 	private int currentLevel;
 
 	private HashMap<Integer, ImageIcon[][]> levelMapping = new HashMap<>();
@@ -43,6 +43,9 @@ public class GameMap {
 		}
 	}
 
+	//Determine motion works for almost all cases, except for two edge cases
+	//Edge cases occur due to the order of the arrayList: (corner with two motion directions)
+	//HACK: reverse the arraylist in these two cases to correctly calculate the new x and y
 	public Point determineMotion(int newX, int newY, Rectangle objectSize, ArrayList<Entity> currentEntityList){
 		if (objectSize == null) {
 			return null;

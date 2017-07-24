@@ -5,19 +5,41 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.*;
 
-import animation.Animation;
+import animation.Effect;
 import animation.EffectAnimation;
 import characterEntities.*;
 import gui.DamageMarker;
 
 public class GameScreen extends Screen implements KeyListener{
+    public enum MapLayer {
+        BACKGROUND(0),
+        ENTITY_LAYER(1),
+        ENTITY_EFFECTS_LAYER(2),
+		MAP_EFFECTS_LAYER(3),
+        DAMAGE_LAYER(4);
+
+        private int value;
+
+        MapLayer(int value) {
+            this.value = value;
+        }
+
+        public int getValue() {
+            return value;
+        }
+    }
+
+    public final int TOTAL_MAP_LAYERS = 5;
+
 	private GameMap map;
 	private int level = 3;
 	private Hero player;
 	private ArrayList<Entity> targets;
-	private ArrayList<DamageMarker> damageMarkers;
-	private ArrayList<Animation> animations;
-	private Set<Integer> motionKeys;
+	private ArrayList<Effect> effects;
+	private ArrayList<ArrayList<Drawable>> layerRenderMap;
+	private boolean isDoneRendering;
+
+	private HashSet<Integer> motionKeys;
 	
 	public GameScreen(Hero.PlayerClass playerClass) {
 		super();
@@ -27,20 +49,35 @@ public class GameScreen extends Screen implements KeyListener{
 		setFocusTraversalKeysEnabled(false);
 		
 		targets = new ArrayList<>();
-		damageMarkers = new ArrayList<>();
-		animations = new ArrayList<>();
+		effects = new ArrayList<>();
+
 		motionKeys = new LinkedHashSet<>();
 		map = new GameMap(level);
+		createLayerRenderMap();
+		isDoneRendering = true;
 
 		createPlayer(playerClass);
 		createDummy(400, 100, true);
 		createDummy(600, 100, false);
-		createEnemy(300, 0, 0, 500, 500 ,3);
+		createEnemy(100, 10, 5, 500, 500 ,3);
 	}
 
 	@Override
 	public void init() {
 		requestFocus(true);
+	}
+
+	private void createLayerRenderMap() {
+		layerRenderMap = new ArrayList<>(TOTAL_MAP_LAYERS);
+
+		ArrayList<Drawable> background = new ArrayList<>();
+		background.add(map);
+
+		layerRenderMap.add(MapLayer.BACKGROUND.getValue(), background);
+		layerRenderMap.add(MapLayer.ENTITY_LAYER.getValue(), new ArrayList<>());
+		layerRenderMap.add(MapLayer.ENTITY_EFFECTS_LAYER.getValue(), new ArrayList<>());
+		layerRenderMap.add(MapLayer.MAP_EFFECTS_LAYER.getValue(), new ArrayList<>());
+		layerRenderMap.add(MapLayer.DAMAGE_LAYER.getValue(), new ArrayList<>());
 	}
 
 	private void createPlayer(Hero.PlayerClass playerClass) {
@@ -56,31 +93,89 @@ public class GameScreen extends Screen implements KeyListener{
 			break;
 		default:
 		}
+		layerRenderMap.get(MapLayer.ENTITY_LAYER.getValue()).add(player);
 	}
 
 	private void createEnemy(int health, int maxDamage, int minDamage, int posX, int posY, int velocity) {
 		Grunt grunt = new Grunt(player, map, health, maxDamage, minDamage, posX, posY, velocity);
 		targets.add(grunt);
-
-		grunt.setTargetEntity(player);
+		layerRenderMap.get(MapLayer.ENTITY_LAYER.getValue()).add(grunt);
 	}
 
 	private void createDummy(int posX, int posY, boolean facingEast) {
 		Dummy dummy = new Dummy(posX, posY, facingEast);
 		targets.add(dummy);
-
+		layerRenderMap.get(MapLayer.ENTITY_LAYER.getValue()).add(dummy);
 	}
 
 	private void createEffectAnimation(EffectAnimation.EffectAnimationType animationType, int posX, int posY) {
 		EffectAnimation animation = new EffectAnimation(animationType, posX, posY);
-		animations.add(animation);
+		layerRenderMap.get(MapLayer.MAP_EFFECTS_LAYER.getValue()).add(animation);
+		effects.add(animation);
 	}
 
 	private void createProjectile() {}
 
+    @Override
+    public void update() {
+
+		if (!isDoneRendering) return;
+		//Effects controlled by entities are cleared
+		layerRenderMap.get(MapLayer.ENTITY_EFFECTS_LAYER.getValue()).clear();
+
+		player.update();
+		layerRenderMap.get(MapLayer.DAMAGE_LAYER.getValue()).addAll(player.getTargetMarkers());
+		effects.addAll(player.getTargetMarkers());
+		player.emptyTargetMarkers();
+
+		Drawable playerAbility = player.getCurrentAbilityAnimation();
+		if (playerAbility != null) {
+			layerRenderMap.get(MapLayer.ENTITY_EFFECTS_LAYER.getValue()).add(playerAbility);
+		}
+
+		for (Iterator<Entity> iterator = targets.iterator(); iterator.hasNext();) {
+			Entity target = iterator.next();
+			if (target.getEntityType() == Entity.EntityType.ENEMY) {
+				Enemy enemy = (Enemy)target;
+				enemy.update();
+
+				Drawable enemyAbility = enemy.getCurrentAbilityAnimation();
+				if (enemyAbility != null) {
+					layerRenderMap.get(MapLayer.ENTITY_EFFECTS_LAYER.getValue()).add(enemyAbility);
+				}
+
+				layerRenderMap.get(MapLayer.DAMAGE_LAYER.getValue()).addAll(target.getTargetMarkers());
+				effects.addAll(target.getTargetMarkers());
+				target.emptyTargetMarkers();
+
+				if (enemy.isDone()) {
+					layerRenderMap.get(MapLayer.ENTITY_LAYER.getValue()).remove(enemy);
+					createEffectAnimation(EffectAnimation.EffectAnimationType.ENEMY_DEATH, enemy.getPosX(), enemy.getPosY());
+					iterator.remove();
+				}
+			} else if (target.getEntityType() == Entity.EntityType.DUMMY) {
+				target.update();
+			}
+		}
+
+		for (Iterator<Effect> iterator = effects.iterator(); iterator.hasNext();) {
+			Effect effect = iterator.next();
+			effect.update();
+			if (effect.isDone()) {
+				layerRenderMap.get(MapLayer.MAP_EFFECTS_LAYER.getValue()).remove(effect);
+				iterator.remove();
+			}
+		}
+
+		//TEMPORARY TEST CODE TO REGENERATE ENEMY
+		if (targets.size() == 2) {
+			createEnemy(100, 10, 7, 100, 100, 2);
+		}
+
+    }
+
 	@Override
 	public void keyPressed(KeyEvent e) {
-
 		//maintains proper order
 		if (motionKeys.contains(e.getKeyCode())) {
 			motionKeys.remove(e.getKeyCode());
@@ -109,7 +204,9 @@ public class GameScreen extends Screen implements KeyListener{
 			player.attack(Hero.Ability.DEFAULT);
 		} else if (e.getKeyCode() == KeyEvent.VK_Z) {
 			//HACK: this is just so that we can damage the player in testing, there will be bugs with this (ignore them)
-			damageMarkers.add(player.inflict(25, new Dummy(-100, -100, true)));
+			DamageMarker marker = player.inflict(25, new Dummy(-100, -100, true));
+			effects.add(marker);
+			layerRenderMap.get(MapLayer.DAMAGE_LAYER.getValue()).add(marker);
 		} else if (e.getKeyCode() == KeyEvent.VK_X) {
 			player.heal(25);
 		} else if (e.getKeyCode() == KeyEvent.VK_C) {
@@ -139,56 +236,19 @@ public class GameScreen extends Screen implements KeyListener{
 	@Override
 	public void keyTyped(KeyEvent arg0) { }
 
-	@Override
-	public void update() {
-		//TODO:Remove all magic width and heights with actual ones
-		player.update();
-		damageMarkers.addAll(player.getEnemyMarkers());
-		player.emptyEnemyMarkers();
-
-		for (Iterator<Entity> iterator = targets.iterator(); iterator.hasNext();) {
-			Entity target = iterator.next();
-			if (target.getEntityType() == Entity.EntityType.ENEMY) {
-				Enemy enemy = (Enemy)target;
-				enemy.update();
-				if (enemy.isDone()) {
-					createEffectAnimation(EffectAnimation.EffectAnimationType.ENEMY_DEATH, enemy.getPosX(), enemy.getPosY());
-					iterator.remove();
-				}
-			} else if (target.getEntityType() == Entity.EntityType.DUMMY) {
-				target.update();
-			}
-		}
-
-		for (Iterator<Animation> iterator = animations.iterator(); iterator.hasNext();) {
-			Animation animation = iterator.next();
-			animation.update();
-			if (animation.isDone()) {
-				iterator.remove();
-			}
-		}
-		for (Iterator<DamageMarker> iterator = damageMarkers.iterator(); iterator.hasNext();) {
-			DamageMarker marker = iterator.next();
-			marker.update();
-			if (marker.isDone()) {
-				iterator.remove();
-			}
-		}
-	}
-	
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		map.draw(g);
-		for (Entity target : targets) {
-			target.draw(g);
+
+		isDoneRendering = false;
+		for (int layer = 0; layer < TOTAL_MAP_LAYERS; layer++) {
+			ArrayList<Drawable> drawables = layerRenderMap.get(layer);
+			if (drawables != null && drawables.size() > 0) {
+				for (Drawable drawable : drawables) {
+					drawable.draw(g);
+				}
+			}
 		}
-		player.draw(g);
-		for (Animation animation : animations) {
-			animation.draw(g);
-		}
-		for (DamageMarker marker : damageMarkers) {
-			marker.draw(g);
-		}
+		isDoneRendering = true;
 	}
 	
 	private void up() {

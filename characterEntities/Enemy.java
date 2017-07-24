@@ -1,8 +1,9 @@
 package characterEntities;
 
-import screens.GameMap;
-
+import animation.AbilityAnimation;
+import gui.DamageMarker;
 import java.util.ArrayList;
+import screens.GameMap;
 import java.util.Collections;
 import java.util.HashMap;
 
@@ -26,16 +27,22 @@ public abstract class Enemy extends Entity {
 	protected boolean done;
 	protected EnemyType enemyType;
 	protected HashMap<Integer, String> shapePath;
+	protected int attackRange;
 	private Entity targetEntity;
 
 	private static final int DELETION_TIME = 40;
 
-	//TargetEntity can be any type of entity, not necessarily a hero
 	Enemy(Entity targetEntity, GameMap map, int maxHealth, int maxDamage, int minDamage, int posX, int posY, int velocity) {
 		super(map, maxHealth, maxDamage, minDamage, posX, posY, velocity);
 		this.targetEntity = targetEntity;
+
+		immuneTo.put(targetEntity, false);
+
 		createEnemyHashMap();
+
+		setAnimation(0, new AbilityAnimation(AbilityAnimation.AbilityAnimationType.DEFAULT, this));
 		done = false;
+		targetMarkers = new ArrayList<>();
 		entityType = EntityType.ENEMY;
 	}
 
@@ -82,12 +89,12 @@ public abstract class Enemy extends Entity {
 	}
 
 	//Simple motion detection (pythagorean locating)
+	//Default attack pattern, override in child classes for custom moves
 	private void calculateNextMove() {
 		if (targetEntity == null) return;
 
 		Point selfCenter = new Point(posX + getEntitySize().width / 2, posY + getEntitySize().height / 2);
 		Point targetCenter = new Point(targetEntity.getPosX() + targetEntity.getEntitySize().width / 2, targetEntity.getPosY() + targetEntity.getEntitySize().height / 2);
-
 		Point motionVector = new Point(targetCenter.x - selfCenter.x, targetCenter.y - selfCenter.y);
 
 		double hypotenuse = Math.sqrt(motionVector.x * motionVector.x + motionVector.y * motionVector.y);
@@ -103,22 +110,54 @@ public abstract class Enemy extends Entity {
 					((targetCenter.y > selfCenter.y) ? 1 : -1) : deltaY;
 		}
 
-		if (Math.abs(motionVector.x) < Hero.SQUARE_LENGTH && Math.abs(motionVector.y) < Hero.SQUARE_LENGTH) {
-			setEntityState(EntityState.ATTACKING);
+		setFacingEast((motionVector.x > 0)? true: false);
+
+		if (Math.abs(motionVector.x) < 100 && Math.abs(motionVector.y) < 100) {
+			//setEntityState(EntityState.ATTACKING);
+			if (targetEntity.getEntityState() != EntityState.DEAD) {
+				attack();
+			}
 		}
 	}
 
 	public void update() {
 		super.update();
+
+		if (currentAbilityAnimation == null) {
+			targetEntity.immuneTo.put(this, false);
+		}
+
 		if (entityState == EntityState.DEAD && deletionCounter-- <= 0) {
 			done = true;
 		} else if (entityState == EntityState.NEUTRAL || entityState == EntityState.ATTACKING) {
 			calculateNextMove();
+
+			if (entityState == EntityState.ATTACKING) {
+				DamageMarker marker;
+				if (!targetEntity.immuneTo.get(this) && isHit() && targetEntity.getEntityState() != EntityState.DEAD) {
+					marker = targetEntity.inflict(getDamage(), this);
+					if (marker != null) {
+						targetMarkers.add(marker);
+					}
+				}
+			}
 		}
-		if (currentAbilityAnimation == null) {
-			targetEntity.immuneTo.put(this, false);
-		}
+
 		setPoint(map.determineMotion(newPosX, newPosY, getEntitySize(), new ArrayList<>(Collections.singletonList(targetEntity))));
+	}
+
+	public abstract void attack();
+
+	public boolean isHit() {
+		boolean hit = false;
+		int targetPosX = targetEntity.getPosX();
+		int targetPosY = targetEntity.getPosY();
+		if (((getFacingEast() && targetPosX > posX && targetPosX < posX+getEntitySize().width+attackRange) ||
+				(!getFacingEast() && targetPosX < posX && targetPosX > posX-getEntitySize().width-attackRange)) &&
+				targetPosY > posY-attackRange && targetPosY < posY+attackRange) {
+			hit = true;
+		}
+		return hit;
 	}
 
 	private void createEnemyHashMap() {

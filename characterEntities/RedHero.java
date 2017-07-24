@@ -67,7 +67,7 @@ public class RedHero extends Hero {
                     if (!target.immuneTo.get(this) && isHit(Ability.DEFAULT, target)) {
                         marker = target.inflict(getDamage(), this);
                         if (marker != null) {
-                            enemyMarkers.add(marker);
+                            targetMarkers.add(marker);
                         }
                     }
                     break;
