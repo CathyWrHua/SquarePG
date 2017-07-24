@@ -44,7 +44,6 @@ public abstract class Enemy extends Entity {
 		done = false;
 		targetMarkers = new ArrayList<>();
 		entityType = EntityType.ENEMY;
-		attackRange = 50;
 	}
 
 	public boolean isDone() {
@@ -135,7 +134,7 @@ public abstract class Enemy extends Entity {
 
 			if (entityState == EntityState.ATTACKING) {
 				DamageMarker marker;
-				if (!targetEntity.immuneTo.get(this) && isHit()) {
+				if (!targetEntity.immuneTo.get(this) && isHit() && targetEntity.getEntityState() != EntityState.DEAD) {
 					marker = targetEntity.inflict(getDamage(), this);
 					if (marker != null) {
 						targetMarkers.add(marker);

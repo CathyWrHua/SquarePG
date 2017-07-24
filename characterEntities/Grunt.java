@@ -10,6 +10,8 @@ public class Grunt extends Enemy {
         setImageIcon("src/assets/enemies/circleNeutral.png");
         setEnemyType(EnemyType.CIRCLE);
 
+        attackRange = 50;
+
         //Temp code until enemy attack is determined
         setAnimation(0, new AbilityAnimation(AbilityAnimation.AbilityAnimationType.DEFAULT, this));
     }

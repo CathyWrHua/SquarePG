@@ -5,7 +5,7 @@ import screens.Drawable;
 import javax.swing.*;
 import java.awt.*;
 
-public abstract class Animation implements Drawable, Effect{
+public abstract class Animation implements Effect{
     int totalFrames;
     int counter = 0;
     String animationName;
