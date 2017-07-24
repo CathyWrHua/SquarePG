@@ -1,13 +1,13 @@
 package characterEntities;
 
+import GameMaps.MapCollisionDetection;
 import gui.DamageMarker;
-import screens.GameMap;
 
 import java.util.ArrayList;
 
 public class YellowHero extends Hero {
-	public YellowHero(ArrayList<Entity> targets, GameMap map) {
-		super(targets, map, 20, 12, 6, 100, 100, 5);
+	public YellowHero(ArrayList<Entity> targets, MapCollisionDetection mapCollisionDetection) {
+		super(targets, mapCollisionDetection, 20, 12, 6, 100, 100, 5);
 		setPlayerClass(PlayerClass.YELLOW);
 		setImageIcon("src/assets/hero/yellowNeutral.png");
 	}

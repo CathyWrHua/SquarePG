@@ -5,6 +5,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.*;
 
+import GameMaps.GameMap;
+import GameMaps.MapCollisionDetection;
 import animation.Effect;
 import animation.EffectAnimation;
 import characterEntities.*;
@@ -32,6 +34,8 @@ public class GameScreen extends Screen implements KeyListener{
     public final int TOTAL_MAP_LAYERS = 5;
 
 	private GameMap map;
+	private MapCollisionDetection collisionMap;
+
 	private int level = 3;
 	private Hero player;
 	private ArrayList<Entity> targets;
@@ -53,6 +57,7 @@ public class GameScreen extends Screen implements KeyListener{
 
 		motionKeys = new LinkedHashSet<>();
 		map = new GameMap(level);
+		collisionMap = new MapCollisionDetection(map.getCurrentCollisionMap());
 		createLayerRenderMap();
 		isDoneRendering = true;
 
@@ -83,13 +88,13 @@ public class GameScreen extends Screen implements KeyListener{
 	private void createPlayer(Hero.PlayerClass playerClass) {
 		switch (playerClass) {
 		case RED:
-			player = new RedHero(targets, map);
+			player = new RedHero(targets, collisionMap);
 			break;
 		case BLUE:
-			player = new BlueHero(targets, map);
+			player = new BlueHero(targets, collisionMap);
 			break;
 		case YELLOW:
-			player = new YellowHero(targets, map);
+			player = new YellowHero(targets, collisionMap);
 			break;
 		default:
 		}
@@ -97,7 +102,7 @@ public class GameScreen extends Screen implements KeyListener{
 	}
 
 	private void createEnemy(int health, int maxDamage, int minDamage, int posX, int posY, int velocity) {
-		Grunt grunt = new Grunt(player, map, health, maxDamage, minDamage, posX, posY, velocity);
+		Grunt grunt = new Grunt(player, collisionMap, health, maxDamage, minDamage, posX, posY, velocity);
 		targets.add(grunt);
 		layerRenderMap.get(MapLayer.ENTITY_LAYER.getValue()).add(grunt);
 	}
@@ -118,8 +123,13 @@ public class GameScreen extends Screen implements KeyListener{
 
     @Override
     public void update() {
-
 		if (!isDoneRendering) return;
+
+		//TEMPORARY REMOVE WHEN WE HAVE LEGIT MAPS
+		//This is to avoid asynchronous heisenbugs of overwriting collision maps while a calculation is going on
+		//Can be removed once tests keys are removed (J and K)
+		collisionMap.setHitRectArray(map.getCurrentCollisionMap());
+
 		//Effects controlled by entities are cleared
 		layerRenderMap.get(MapLayer.ENTITY_EFFECTS_LAYER.getValue()).clear();
 

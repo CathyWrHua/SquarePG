@@ -1,9 +1,9 @@
 package characterEntities;
 
+import GameMaps.MapCollisionDetection;
 import animation.AbilityAnimation;
 import gui.DamageMarker;
 import java.util.ArrayList;
-import screens.GameMap;
 import java.util.Collections;
 import java.util.HashMap;
 
@@ -31,9 +31,11 @@ public abstract class Enemy extends Entity {
 	private Entity targetEntity;
 
 	private static final int DELETION_TIME = 40;
+	private static final int DEFAULT_COOLDOWN = 10;
+	private int coolDown = 0;
 
-	Enemy(Entity targetEntity, GameMap map, int maxHealth, int maxDamage, int minDamage, int posX, int posY, int velocity) {
-		super(map, maxHealth, maxDamage, minDamage, posX, posY, velocity);
+	Enemy(Entity targetEntity, MapCollisionDetection mapCollisionDetection, int maxHealth, int maxDamage, int minDamage, int posX, int posY, int velocity) {
+		super(mapCollisionDetection, maxHealth, maxDamage, minDamage, posX, posY, velocity);
 		this.targetEntity = targetEntity;
 
 		immuneTo.put(targetEntity, false);
@@ -113,7 +115,7 @@ public abstract class Enemy extends Entity {
 		setFacingEast((motionVector.x > 0)? true: false);
 
 		if (Math.abs(motionVector.x) < 100 && Math.abs(motionVector.y) < 100) {
-			//setEntityState(EntityState.ATTACKING);
+
 			if (targetEntity.getEntityState() != EntityState.DEAD) {
 				attack();
 			}
@@ -143,7 +145,7 @@ public abstract class Enemy extends Entity {
 			}
 		}
 
-		setPoint(map.determineMotion(newPosX, newPosY, getEntitySize(), new ArrayList<>(Collections.singletonList(targetEntity))));
+		setPoint(mapCollisionDetection.determineMotion(newPosX, newPosY, getEntitySize(), new ArrayList<>(Collections.singletonList(targetEntity))));
 	}
 
 	public abstract void attack();
