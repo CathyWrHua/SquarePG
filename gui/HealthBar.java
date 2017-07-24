@@ -1,12 +1,13 @@
 package gui;
 
 import characterEntities.Entity;
+import screens.Drawable;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
 
-public class HealthBar {
+public class HealthBar implements Drawable{
     private ImageIcon border;
     private Entity entity;
 

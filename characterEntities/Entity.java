@@ -3,14 +3,16 @@ package characterEntities;
 import animation.AbilityAnimation;
 import gui.DamageMarker;
 import gui.HealthBar;
+import screens.Drawable;
 import screens.GameMap;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
-public abstract class Entity {
+public abstract class Entity implements Drawable{
     protected int posX, posY;
     protected int newPosX, newPosY;
 	protected int maxHealth, currentHealth;
@@ -27,6 +29,7 @@ public abstract class Entity {
 	protected ImageIcon imageIcon;
     protected HealthBar healthBar;
 	protected Random random;
+	protected ArrayList<DamageMarker> targetMarkers;
 
     public enum EntityType {HERO, ENEMY, DUMMY}
     public enum EntityState {NEUTRAL, ATTACKING, DAMAGED, DEAD}
@@ -76,6 +79,8 @@ public abstract class Entity {
         entityState = EntityState.NEUTRAL;
         lrMotionState = MotionStateLeftRight.IDLE;
         udMotionState = MotionStateUpDown.IDLE;
+
+        targetMarkers = new ArrayList<>();
 	}
 	
 	public DamageMarker inflict(int damageTaken, Entity attacker) {
@@ -200,8 +205,12 @@ public abstract class Entity {
     	    facingEast = false;
         }
     }
-    
-    public void setUDMotionState(MotionStateUpDown state) {
+
+	public AbilityAnimation getCurrentAbilityAnimation() {
+		return currentAbilityAnimation;
+	}
+
+	public void setUDMotionState(MotionStateUpDown state) {
     	udMotionState = state;
     }
 
@@ -251,15 +260,25 @@ public abstract class Entity {
             }
         }
     }
-   
+
+    public ArrayList<DamageMarker> getTargetMarkers() {
+    	return targetMarkers;
+	}
+
+	public void emptyTargetMarkers() {
+    	targetMarkers.clear();;
+	}
+
     public void draw(Graphics g) {
         Graphics2D g2d = (Graphics2D)g;
         Image image = imageIcon.getImage();
         int x = posX;
         int width = image.getWidth(null);
 
-        if (currentAbilityAnimation != null)
-            currentAbilityAnimation.draw(g);
+        //if (currentAbilityAnimation != null) {
+        //    currentAbilityAnimation.draw(g);
+        //}
+
         healthBar.draw(g);
 
         if (!facingEast) {

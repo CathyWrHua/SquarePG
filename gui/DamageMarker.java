@@ -1,9 +1,12 @@
 package gui;
 
+import animation.Effect;
+import screens.Drawable;
+
 import java.awt.*;
 
-public class DamageMarker {
-    private int currentLifetime = LIFETIME;
+public class DamageMarker implements Drawable, Effect {
+        private int currentLifetime = LIFETIME;
     private int damage;
     private int posX, posY;
     private float speed = INITIAL_SPEED;
