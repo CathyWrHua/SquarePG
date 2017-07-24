@@ -37,10 +37,8 @@ public abstract class Enemy extends Entity {
 		this.targetEntity = targetEntity;
 
 		immuneTo.put(targetEntity, false);
-
 		createEnemyHashMap();
 
-		setAnimation(0, new AbilityAnimation(AbilityAnimation.AbilityAnimationType.HERO_DEFAULT, this));
 		done = false;
 		targetMarkers = new ArrayList<>();
 		entityType = EntityType.ENEMY;
