@@ -1,14 +1,14 @@
 package characterEntities;
 
 import animation.AbilityAnimation;
+import GameMaps.MapCollisionDetection;
 import gui.DamageMarker;
-import screens.GameMap;
 
 import java.util.ArrayList;
 
 public class BlueHero extends Hero {
-	public BlueHero(ArrayList<Entity> targets, GameMap map) {
-		super(targets, map, 10, 8, 7, 100, 100, 5);
+	public BlueHero(ArrayList<Entity> targets, MapCollisionDetection mapCollisionDetection) {
+		super(targets, mapCollisionDetection, 10, 8, 7, 100, 100, 5);
 		setPlayerClass(PlayerClass.BLUE);
 		setAnimation(1, new AbilityAnimation(AbilityAnimation.AbilityAnimationType.RED_FIRST, this));
 		setImageIcon("src/assets/hero/blueNeutral.png");

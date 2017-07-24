@@ -1,16 +1,16 @@
 package characterEntities;
 
 import animation.AbilityAnimation;
+import GameMaps.MapCollisionDetection;
 import gui.DamageMarker;
-import screens.GameMap;
 
 import java.util.ArrayList;
 
 public class RedHero extends Hero {
     private static final int ABILITY_1_RADIUS = 112;
     
-	public RedHero(ArrayList<Entity> targets, GameMap map) {
-		super(targets, map, 30, 15, 5, 100, 100, 5);
+	public RedHero(ArrayList<Entity> targets, MapCollisionDetection mapCollisionDetection) {
+		super(targets, mapCollisionDetection, 30, 15, 5, 100, 100, 5);
 		setPlayerClass(PlayerClass.RED);
         setAnimation(1, new AbilityAnimation(AbilityAnimation.AbilityAnimationType.RED_FIRST, this));
 		setImageIcon("src/assets/hero/redNeutral.png");

@@ -1,8 +1,7 @@
 package characterEntities;
 
+import GameMaps.MapCollisionDetection;
 import animation.AbilityAnimation;
-import gui.DamageMarker;
-import screens.GameMap;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -33,9 +32,8 @@ public abstract class Hero extends Entity {
 	public static final int SQUARE_LENGTH = 75;
 	static final int DEFAULT_RANGE = SQUARE_LENGTH;
 
-	
-	Hero(ArrayList<Entity> targets, GameMap map, int maxHealth, int maxDamage, int minDamage, int posX, int posY, double velocity) {
-		super(map, maxHealth, maxDamage, minDamage, posX, posY, velocity);
+	Hero(ArrayList<Entity> targets, MapCollisionDetection mapCollisionDetection, int maxHealth, int maxDamage, int minDamage, int posX, int posY, double velocity) {
+		super(mapCollisionDetection, maxHealth, maxDamage, minDamage, posX, posY, velocity);
 		this.targets = targets;
 		for (Entity target : targets) {
 			immuneTo.put(target, false);
@@ -165,6 +163,6 @@ public abstract class Hero extends Entity {
 			}
 		}
 
-		setPoint(map.determineMotion(newPosX, newPosY, getEntitySize(), targets));
+		setPoint(mapCollisionDetection.determineMotion(newPosX, newPosY, getEntitySize(), targets));
 	}
 }
