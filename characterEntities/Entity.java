@@ -104,8 +104,9 @@ public abstract class Entity implements Drawable {
 	}
 
 	void playAnimation(int index) {
-	    if (index >= 0 && index < abilityAnimations.length)
-	        currentAbilityAnimation = abilityAnimations[index];
+	    if (index >= 0 && index < abilityAnimations.length) {
+            currentAbilityAnimation = abilityAnimations[index];
+        }
     }
 
     private void calculateEntityDirection() {
@@ -243,7 +244,7 @@ public abstract class Entity implements Drawable {
             currentHealth -= damageTaken;
             currentHealth = (currentHealth < 0) ? 0 : currentHealth;
             if (currentAbilityAnimation != null) {
-                currentAbilityAnimation.resetCounter();
+                currentAbilityAnimation.reset();
                 currentAbilityAnimation = null;
             }
             if (currentHealth > 0) {
@@ -268,12 +269,11 @@ public abstract class Entity implements Drawable {
             stunCounter = 0;
         }
 
-        if (currentAbilityAnimation != null) {
-            if (currentAbilityAnimation.isDone()) {
-                setEntityState(EntityState.NEUTRAL);
-                calculateEntityDirection();
-                currentAbilityAnimation = null;
-            }
+        if (currentAbilityAnimation != null && currentAbilityAnimation.isDone()) {
+            setEntityState(EntityState.NEUTRAL);
+            calculateEntityDirection();
+            currentAbilityAnimation.resetDone();
+            currentAbilityAnimation = null;
         }
     }
 

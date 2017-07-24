@@ -81,6 +81,7 @@ public class ProjectileAnimation extends Animation {
         int currentFrame = counter++/ANIMATION_SPEED;
         if (currentFrame >= totalFrames) {
             resetCounter();
+            currentFrame = 0;
         }
         String filePath = "src/assets/animations/" + animationName;
         filePath += currentFrame + ".png";

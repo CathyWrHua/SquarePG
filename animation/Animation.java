@@ -17,16 +17,21 @@ public abstract class Animation implements Effect {
         return done;
     }
 
-    public void resetCounter() {
+    protected void resetCounter() {
         this.counter = 0;
+    }
+
+    protected void resetLoops() {
+        this.currentLoop = numLoops;
+    }
+
+    public void reset() {
+        resetLoops();
+        resetCounter();
     }
 
     public void setNumLoops(int numLoops) {
         this.numLoops = numLoops;
-        this.currentLoop = numLoops;
-    }
-
-    private void resetLoops() {
         this.currentLoop = numLoops;
     }
 
@@ -35,6 +40,7 @@ public abstract class Animation implements Effect {
         int currentFrame = counter++/ANIMATION_SPEED;
         if (currentFrame >= totalFrames) {
             resetCounter();
+            currentFrame = 0;
             if (--currentLoop < 1) {
                 done = true;
                 resetLoops();

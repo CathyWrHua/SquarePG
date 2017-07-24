@@ -55,6 +55,10 @@ public class AbilityAnimation extends Animation {
         setNumLoops(numLoops);
     }
 
+    public void resetDone() {
+        done = false;
+    }
+
     @Override
     public EffectType getEffectType() {
         return effectType;

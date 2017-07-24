@@ -83,7 +83,6 @@ public abstract class Hero extends Entity {
 			playAnimation(ability.getValue());
 			setEntityState(EntityState.ATTACKING);
 		}
-		System.out.println("attack");
 	}
 
 	protected boolean isHit(Ability ability, Entity target) {
