@@ -1,5 +1,6 @@
 package characterEntities;
 
+import animation.AbilityAnimation;
 import gui.DamageMarker;
 import screens.GameMap;
 
@@ -9,6 +10,7 @@ public class BlueHero extends Hero {
 	public BlueHero(ArrayList<Entity> targets, GameMap map) {
 		super(targets, map, 10, 8, 7, 100, 100, 5);
 		setPlayerClass(PlayerClass.BLUE);
+		setAnimation(1, new AbilityAnimation(AbilityAnimation.AbilityAnimationType.RED_FIRST, this));
 		setImageIcon("src/assets/hero/blueNeutral.png");
 	}
 	
@@ -71,6 +73,10 @@ public class BlueHero extends Hero {
 						}
 					}
 					break;
+				case FIRST:
+				case SECOND:
+				case THIRD:
+				case ULTIMATE:
 				default:
 					break;
 			}

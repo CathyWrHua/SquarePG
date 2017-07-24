@@ -34,7 +34,7 @@ public abstract class Hero extends Entity {
 	public static final int SQUARE_LENGTH = 75;
 	static final int DEFAULT_RANGE = SQUARE_LENGTH;
 	
-	Hero(ArrayList<Entity> targets, GameMap map, int maxHealth, int maxDamage, int minDamage, int posX, int posY, int velocity) {
+	Hero(ArrayList<Entity> targets, GameMap map, int maxHealth, int maxDamage, int minDamage, int posX, int posY, double velocity) {
 		super(map, maxHealth, maxDamage, minDamage, posX, posY, velocity);
 		this.targets = targets;
 		for (Entity target : targets) {
@@ -145,10 +145,10 @@ public abstract class Hero extends Entity {
 		if (entityState == EntityState.NEUTRAL || entityState == EntityState.ATTACKING) {
 			switch (lrMotionState) {
 				case LEFT:
-					newPosX -= velocity;
+					newPosX -= Math.round(velocity);
 					break;
 				case RIGHT:
-					newPosX += velocity;
+					newPosX += Math.round(velocity);
 					break;
 				case IDLE:
 				default:
@@ -156,10 +156,10 @@ public abstract class Hero extends Entity {
 			}
 			switch (udMotionState) {
 				case UP:
-					newPosY -= velocity;
+					newPosY -= Math.round(velocity);
 					break;
 				case DOWN:
-					newPosY += velocity;
+					newPosY += Math.round(velocity);
 					break;
 				case IDLE:
 				default:

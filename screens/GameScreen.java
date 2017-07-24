@@ -35,7 +35,7 @@ public class GameScreen extends Screen implements KeyListener{
 		createPlayer(playerClass);
 		createDummy(400, 100, true);
 		createDummy(600, 100, false);
-		createEnemy(300, 0, 0, 500, 500 ,3);
+		createEnemy(100, 0, 0, 500, 500 ,2);
 	}
 
 	@Override
@@ -58,7 +58,7 @@ public class GameScreen extends Screen implements KeyListener{
 		}
 	}
 
-	private void createEnemy(int health, int maxDamage, int minDamage, int posX, int posY, int velocity) {
+	private void createEnemy(int health, int maxDamage, int minDamage, int posX, int posY, double velocity) {
 		Grunt grunt = new Grunt(player, map, health, maxDamage, minDamage, posX, posY, velocity);
 		targets.add(grunt);
 
@@ -111,9 +111,9 @@ public class GameScreen extends Screen implements KeyListener{
 			player.attack(Entity.Ability.FIRST);
 		} else if (e.getKeyCode() == KeyEvent.VK_Z) {
 			//HACK: this is just so that we can damage the player in testing, there will be bugs with this (ignore them)
-			damageMarkers.add(player.inflict(25, new Dummy(-100, -100, true)));
+			damageMarkers.add(player.inflict(3, new Dummy(-100, -100, true)));
 		} else if (e.getKeyCode() == KeyEvent.VK_X) {
-			player.heal(25);
+			player.heal(3);
 		} else if (e.getKeyCode() == KeyEvent.VK_C) {
 			System.out.println("Player: ("+player.getPosX()+", "+player.getPosY()+")");
 			System.out.println("Enemy: ("+targets.get(0).getPosX()+", "+targets.get(2).getPosY()+")");

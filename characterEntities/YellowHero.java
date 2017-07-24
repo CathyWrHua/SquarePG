@@ -1,5 +1,6 @@
 package characterEntities;
 
+import animation.AbilityAnimation;
 import gui.DamageMarker;
 import screens.GameMap;
 
@@ -9,6 +10,7 @@ public class YellowHero extends Hero {
 	public YellowHero(ArrayList<Entity> targets, GameMap map) {
 		super(targets, map, 20, 12, 6, 100, 100, 5);
 		setPlayerClass(PlayerClass.YELLOW);
+		setAnimation(1, new AbilityAnimation(AbilityAnimation.AbilityAnimationType.RED_FIRST, this));
 		setImageIcon("src/assets/hero/yellowNeutral.png");
 	}
 	
@@ -71,6 +73,10 @@ public class YellowHero extends Hero {
 						}
 					}
 					break;
+				case FIRST:
+				case SECOND:
+				case THIRD:
+				case ULTIMATE:
 				default:
 					break;
 			}

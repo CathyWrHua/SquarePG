@@ -15,9 +15,9 @@ public abstract class Entity {
     protected int newPosX, newPosY;
 	protected int maxHealth, currentHealth;
 	protected int maxDamage, minDamage;
-    protected int stunCounter = STUN_TIME;
+    protected int stunCounter = 0;
 	protected int damageTaken;
-	protected int velocity;
+	protected double velocity;
 	protected boolean knockBackRight;
 	protected boolean facingEast;
 	protected GameMap map;
@@ -51,10 +51,11 @@ public abstract class Entity {
 	protected MotionStateUpDown udMotionState;
 
     protected static final int NUM_ANIMATIONS = 5;
-	protected static final int STUN_TIME = 25;
-	protected static final int KNOCK_BACK_DUR = 1;
+	protected static final int STUN_TIME = 30;
+	protected static final int KNOCK_BACK_TIME = 20;
+	protected static final int KNOCK_BACK_DUR = 2;
 	
-	public Entity(GameMap map, int maxHealth, int maxDamage, int minDamage, int posX, int posY, int velocity) {
+	public Entity(GameMap map, int maxHealth, int maxDamage, int minDamage, int posX, int posY, double velocity) {
 	    this.map = map;
 		this.currentHealth = this.maxHealth = maxHealth;
 		this.maxDamage = maxDamage;
@@ -227,16 +228,18 @@ public abstract class Entity {
             damageTaken = 0;
         }
 
-        if ((entityState == EntityState.DAMAGED || entityState == EntityState.DEAD) && stunCounter > 0) {
-            if (knockBackRight) {
-                newPosX += KNOCK_BACK_DUR;
-            } else {
-                newPosX -= KNOCK_BACK_DUR;
+        if ((entityState == EntityState.DAMAGED || entityState == EntityState.DEAD) && stunCounter < STUN_TIME) {
+            if (stunCounter < KNOCK_BACK_TIME) {
+                if (knockBackRight) {
+                    newPosX += KNOCK_BACK_DUR;
+                } else {
+                    newPosX -= KNOCK_BACK_DUR;
+                }
             }
-            stunCounter--;
-        } else if (stunCounter <= 0 && entityState == EntityState.DAMAGED) {
+            stunCounter++;
+        } else if (stunCounter >= STUN_TIME && entityState == EntityState.DAMAGED) {
             setEntityState(EntityState.NEUTRAL);
-            stunCounter = STUN_TIME;
+            stunCounter = 0;
         }
 
         if (currentAbilityAnimation != null) {

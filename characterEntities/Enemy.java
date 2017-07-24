@@ -31,7 +31,7 @@ public abstract class Enemy extends Entity {
 	private static final int DELETION_TIME = 40;
 
 	//TargetEntity can be any type of entity, not necessarily a hero
-	Enemy(Entity targetEntity, GameMap map, int maxHealth, int maxDamage, int minDamage, int posX, int posY, int velocity) {
+	Enemy(Entity targetEntity, GameMap map, int maxHealth, int maxDamage, int minDamage, int posX, int posY, double velocity) {
 		super(map, maxHealth, maxDamage, minDamage, posX, posY, velocity);
 		this.targetEntity = targetEntity;
 		createEnemyHashMap();

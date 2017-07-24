@@ -32,21 +32,22 @@ public class AbilityAnimation extends Animation {
         this.animationType = animationType;
         switch(animationType) {
             case HERO_DEFAULT:
-            setValues("default", 4, Entity.Ability.DEFAULT, true);
+            setValues("default", 4, Entity.Ability.DEFAULT, true, 1);
                 break;
             case RED_FIRST:
-                setValues("redFirst", 4, Entity.Ability.FIRST, false);
+                setValues("redFirst", 3, Entity.Ability.FIRST, false, 2);
                 break;
             default:
                 break;
         }
     }
 
-    private void setValues(String animationName, int totalFrames, Entity.Ability ability, boolean hasDirection) {
+    private void setValues(String animationName, int totalFrames, Entity.Ability ability, boolean hasDirection, int numLoops) {
         this.animationName = animationName;
         this.totalFrames = totalFrames;
         this.ability = ability;
         this.hasDirection = hasDirection;
+        setNumLoops(numLoops);
     }
 
     public Entity.Ability getAbility() {
