@@ -1,10 +1,10 @@
 package characterEntities;
 
+import GameMaps.MapCollisionDetection;
 import animation.AbilityAnimation;
 import gui.DamageMarker;
 import gui.HealthBar;
 import screens.Drawable;
-import screens.GameMap;
 
 import javax.swing.*;
 import java.awt.*;
@@ -22,7 +22,7 @@ public abstract class Entity implements Drawable{
 	protected int velocity;
 	protected boolean attackerFacingEast;
 	protected boolean facingEast;
-	protected GameMap map;
+	protected MapCollisionDetection mapCollisionDetection;
 	protected AbilityAnimation currentAbilityAnimation;
     protected AbilityAnimation[] abilityAnimations;
     protected HashMap<Entity, Boolean> immuneTo;
@@ -45,8 +45,8 @@ public abstract class Entity implements Drawable{
 	protected static final int STUN_TIME = 15;
 	protected static final int KNOCK_BACK_DUR = 1;
 	
-	public Entity(GameMap map, int maxHealth, int maxDamage, int minDamage, int posX, int posY, int velocity) {
-	    this.map = map;
+	public Entity(MapCollisionDetection mapCollisionDetection, int maxHealth, int maxDamage, int minDamage, int posX, int posY, int velocity) {
+	    this.mapCollisionDetection = mapCollisionDetection;
 		this.currentHealth = this.maxHealth = maxHealth;
 		this.maxDamage = maxDamage;
 		this.minDamage = minDamage;
@@ -259,10 +259,6 @@ public abstract class Entity implements Drawable{
         Image image = imageIcon.getImage();
         int x = posX;
         int width = image.getWidth(null);
-
-        //if (currentAbilityAnimation != null) {
-        //    currentAbilityAnimation.draw(g);
-        //}
 
         healthBar.draw(g);
 
