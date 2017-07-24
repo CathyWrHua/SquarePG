@@ -110,7 +110,9 @@ public abstract class Enemy extends Entity {
 					((targetCenter.y > selfCenter.y) ? 1 : -1) : deltaY;
 		}
 
-		setFacingEast((motionVector.x > 0)? true: false);
+		if (entityState == EntityState.NEUTRAL) {
+			setFacingEast(motionVector.x > 0);
+		}
 
 		if (Math.abs(motionVector.x) < 100 && Math.abs(motionVector.y) < 100) {
 

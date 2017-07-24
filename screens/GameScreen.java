@@ -64,7 +64,7 @@ public class GameScreen extends Screen implements KeyListener{
 		createPlayer(playerClass);
 		createDummy(400, 100, true);
 		createDummy(600, 100, false);
-		createEnemy(100, 1, 0, 500, 500 ,2);
+		createEnemy(100, 2, 1, 500, 500 ,2);
 	}
 
 	@Override
@@ -179,7 +179,7 @@ public class GameScreen extends Screen implements KeyListener{
 
 		//TEMPORARY TEST CODE TO REGENERATE ENEMY
 		if (targets.size() == 2) {
-			createEnemy(100, 10, 7, 100, 100, 2);
+			createEnemy(100, 2, 1, 100, 100, 2);
 		}
 
     }
