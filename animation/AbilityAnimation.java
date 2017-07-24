@@ -35,7 +35,7 @@ public class AbilityAnimation extends Animation {
             setValues("default", 4, Entity.Ability.DEFAULT, true, 1);
                 break;
             case RED_FIRST:
-                setValues("redFirst", 3, Entity.Ability.FIRST, false, 2);
+                setValues("redFirst", 3, Entity.Ability.FIRST, false, 3);
                 break;
             default:
                 break;

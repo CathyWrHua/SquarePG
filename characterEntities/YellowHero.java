@@ -66,11 +66,9 @@ public class YellowHero extends Hero {
 		for (Entity target : targets) {
 			switch (currentAbilityAnimation.getAbility()) {
 				case DEFAULT:
-					if (!target.immuneTo.get(this) && isHit(Ability.DEFAULT, target)) {
+					if (!target.immuneTo.get(this) && isHit(Ability.DEFAULT, target) && target.getEntityState() != EntityState.DEAD) {
 						marker = target.inflict(getDamage(), this);
-						if (marker != null) {
-							enemyMarkers.add(marker);
-						}
+						if (marker != null) enemyMarkers.add(marker);
 					}
 					break;
 				case FIRST:

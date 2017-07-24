@@ -13,6 +13,7 @@ import gui.DamageMarker;
 public class GameScreen extends Screen implements KeyListener{
 	private GameMap map;
 	private int level = 3;
+	private boolean isDoneRendering = true;
 	private Hero player;
 	private ArrayList<Entity> targets;
 	private ArrayList<DamageMarker> damageMarkers;
@@ -35,7 +36,11 @@ public class GameScreen extends Screen implements KeyListener{
 		createPlayer(playerClass);
 		createDummy(400, 100, true);
 		createDummy(600, 100, false);
-		createEnemy(100, 0, 0, 500, 500 ,2);
+		createEnemy(100, 0, 0, 700, 700 ,2);
+		createEnemy(100, 0, 0, 500, 500 ,2.25);
+		createEnemy(100, 0, 0, 700, 500 ,2.5);
+		createEnemy(100, 0, 0, 500, 700 ,2.75);
+		createEnemy(100, 0, 0, 600, 600 ,3);
 	}
 
 	@Override
@@ -144,6 +149,7 @@ public class GameScreen extends Screen implements KeyListener{
 	@Override
 	public void update() {
 		//TODO:Remove all magic width and heights with actual ones
+		if (!isDoneRendering) return;
 		player.update();
 		damageMarkers.addAll(player.getEnemyMarkers());
 		player.emptyEnemyMarkers();
@@ -161,7 +167,6 @@ public class GameScreen extends Screen implements KeyListener{
 				target.update();
 			}
 		}
-
 		for (Iterator<Animation> iterator = animations.iterator(); iterator.hasNext();) {
 			Animation animation = iterator.next();
 			animation.update();
@@ -179,6 +184,7 @@ public class GameScreen extends Screen implements KeyListener{
 	}
 	
 	public void paintComponent(Graphics g) {
+		isDoneRendering = false;
 		super.paintComponent(g);
 		map.draw(g);
 		for (Entity target : targets) {
@@ -191,6 +197,7 @@ public class GameScreen extends Screen implements KeyListener{
 		for (DamageMarker marker : damageMarkers) {
 			marker.draw(g);
 		}
+		isDoneRendering = true;
 	}
 	
 	private void up() {

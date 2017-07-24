@@ -51,7 +51,7 @@ public abstract class Entity {
 	protected MotionStateUpDown udMotionState;
 
     protected static final int NUM_ANIMATIONS = 5;
-	protected static final int STUN_TIME = 30;
+	protected static final int STUN_TIME = 40;
 	protected static final int KNOCK_BACK_TIME = 20;
 	protected static final int KNOCK_BACK_DUR = 2;
 	

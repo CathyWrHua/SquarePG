@@ -90,11 +90,9 @@ public class RedHero extends Hero {
             switch (currentAbilityAnimation.getAbility()) {
                 case DEFAULT:
                 case FIRST:
-                    if (!target.immuneTo.get(this) && isHit(currentAbilityAnimation.getAbility(), target)) {
+                    if (!target.immuneTo.get(this) && isHit(currentAbilityAnimation.getAbility(), target) && target.getEntityState() != EntityState.DEAD) {
                         marker = target.inflict(getDamage(), this);
-                        if (marker != null) {
-                            enemyMarkers.add(marker);
-                        }
+                        if (marker != null) enemyMarkers.add(marker);
                     }
                     break;
                 case SECOND:
