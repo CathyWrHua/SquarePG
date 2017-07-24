@@ -1,7 +1,6 @@
 package characterEntities;
 
 import GameMaps.MapCollisionDetection;
-import animation.AbilityAnimation;
 import gui.DamageMarker;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -52,6 +51,11 @@ public abstract class Enemy extends Entity {
 
 	void setEnemyType(EnemyType enemyType) {
 		this.enemyType = enemyType;
+	}
+
+	@Override
+	public ArrayList<Entity> getTargets() {
+		return (new ArrayList<>(Collections.singletonList(targetEntity)));
 	}
 
 	@Override

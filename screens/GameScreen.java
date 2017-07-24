@@ -8,11 +8,11 @@ import java.util.*;
 import GameMaps.GameMap;
 import GameMaps.MapCollisionDetection;
 import animation.Effect;
-import animation.EffectAnimation;
+import animation.MapAnimation;
 import characterEntities.*;
 import gui.DamageMarker;
 
-public class GameScreen extends Screen implements KeyListener{
+public class GameScreen extends Screen implements KeyListener {
     public enum MapLayer {
         BACKGROUND(0),
         ENTITY_LAYER(1),
@@ -113,13 +113,11 @@ public class GameScreen extends Screen implements KeyListener{
 		layerRenderMap.get(MapLayer.ENTITY_LAYER.getValue()).add(dummy);
 	}
 
-	private void createEffectAnimation(EffectAnimation.EffectAnimationType animationType, int posX, int posY) {
-		EffectAnimation animation = new EffectAnimation(animationType, posX, posY);
+	private void createMapAnimation(MapAnimation.MapAnimationType animationType, int posX, int posY) {
+		MapAnimation animation = new MapAnimation(animationType, posX, posY);
 		layerRenderMap.get(MapLayer.MAP_EFFECTS_LAYER.getValue()).add(animation);
 		effects.add(animation);
 	}
-
-	private void createProjectile() {}
 
     @Override
     public void update() {
@@ -130,18 +128,19 @@ public class GameScreen extends Screen implements KeyListener{
 		//Can be removed once tests keys are removed (J and K)
 		collisionMap.setHitRectArray(map.getCurrentCollisionMap());
 
-		//Effects controlled by entities are cleared
-		layerRenderMap.get(MapLayer.ENTITY_EFFECTS_LAYER.getValue()).clear();
-
 		player.update();
+
+		Effect playerAbility = player.getCurrentAbilityAnimation();
+		if (playerAbility != null && !layerRenderMap.get(MapLayer.ENTITY_EFFECTS_LAYER.getValue()).contains(playerAbility)) {
+			layerRenderMap.get(MapLayer.ENTITY_EFFECTS_LAYER.getValue()).add(playerAbility);
+			effects.add(playerAbility);
+		}
 		layerRenderMap.get(MapLayer.DAMAGE_LAYER.getValue()).addAll(player.getTargetMarkers());
 		effects.addAll(player.getTargetMarkers());
+		layerRenderMap.get(MapLayer.ENTITY_EFFECTS_LAYER.getValue()).addAll(player.getProjectileAnimations());
+		effects.addAll(player.getProjectileAnimations());
 		player.emptyTargetMarkers();
-
-		Drawable playerAbility = player.getCurrentAbilityAnimation();
-		if (playerAbility != null) {
-			layerRenderMap.get(MapLayer.ENTITY_EFFECTS_LAYER.getValue()).add(playerAbility);
-		}
+		player.emptyProjectileAnimations();
 
 		for (Iterator<Entity> iterator = targets.iterator(); iterator.hasNext();) {
 			Entity target = iterator.next();
@@ -149,18 +148,21 @@ public class GameScreen extends Screen implements KeyListener{
 				Enemy enemy = (Enemy)target;
 				enemy.update();
 
-				Drawable enemyAbility = enemy.getCurrentAbilityAnimation();
-				if (enemyAbility != null) {
+				Effect enemyAbility = enemy.getCurrentAbilityAnimation();
+				if (enemyAbility != null && !layerRenderMap.get(MapLayer.ENTITY_EFFECTS_LAYER.getValue()).contains(enemyAbility)) {
 					layerRenderMap.get(MapLayer.ENTITY_EFFECTS_LAYER.getValue()).add(enemyAbility);
+					effects.add(enemyAbility);
 				}
-
-				layerRenderMap.get(MapLayer.DAMAGE_LAYER.getValue()).addAll(target.getTargetMarkers());
-				effects.addAll(target.getTargetMarkers());
+				layerRenderMap.get(MapLayer.DAMAGE_LAYER.getValue()).addAll(enemy.getTargetMarkers());
+				effects.addAll(enemy.getTargetMarkers());
+				layerRenderMap.get(MapLayer.ENTITY_EFFECTS_LAYER.getValue()).addAll(enemy.getProjectileAnimations());
+				effects.addAll(enemy.getProjectileAnimations());
 				target.emptyTargetMarkers();
+				target.emptyProjectileAnimations();
 
 				if (enemy.isDone()) {
 					layerRenderMap.get(MapLayer.ENTITY_LAYER.getValue()).remove(enemy);
-					createEffectAnimation(EffectAnimation.EffectAnimationType.ENEMY_DEATH, enemy.getPosX(), enemy.getPosY());
+					createMapAnimation(MapAnimation.MapAnimationType.ENEMY_DEATH, enemy.getPosX(), enemy.getPosY());
 					iterator.remove();
 				}
 			} else if (target.getEntityType() == Entity.EntityType.DUMMY) {
@@ -172,7 +174,7 @@ public class GameScreen extends Screen implements KeyListener{
 			Effect effect = iterator.next();
 			effect.update();
 			if (effect.isDone()) {
-				layerRenderMap.get(MapLayer.MAP_EFFECTS_LAYER.getValue()).remove(effect);
+				layerRenderMap.get(effect.getEffectType().getValue()).remove(effect);
 				iterator.remove();
 			}
 		}

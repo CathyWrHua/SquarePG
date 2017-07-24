@@ -2,12 +2,12 @@ package animation;
 
 import java.awt.*;
 
-public class EffectAnimation extends Animation {
-    public enum EffectAnimationType {
+public class MapAnimation extends Animation {
+    public enum MapAnimationType {
         ENEMY_DEATH(-25, -25);
         private int offsetX, offsetY;
 
-        EffectAnimationType(int offsetX, int offsetY) {
+        MapAnimationType(int offsetX, int offsetY) {
             this.offsetX = offsetX;
             this.offsetY = offsetY;
         }
@@ -22,20 +22,32 @@ public class EffectAnimation extends Animation {
     }
 
     private int posX, posY;
-    private EffectAnimationType animationType;
+    private MapAnimationType animationType;
+    private EffectType effectType;
 
-    public EffectAnimation(EffectAnimationType animationType, int posX, int posY) {
+    public MapAnimation(MapAnimationType animationType, int posX, int posY) {
+        this.effectType = EffectType.MAP_EFFECT;
         this.animationType = animationType;
         this.posX = posX;
         this.posY = posY;
         switch(animationType) {
             case ENEMY_DEATH:
-                this.animationName = "enemyDeath";
-                this.totalFrames = 4;
+                setValues("enemyDeath", 4, 1);
                 break;
             default:
                 break;
         }
+    }
+
+    @Override
+    public EffectType getEffectType() {
+        return effectType;
+    }
+
+    private void setValues(String animationName, int totalFrames, int numLoops) {
+        this.animationName = animationName;
+        this.totalFrames = totalFrames;
+        this.setNumLoops(numLoops);
     }
 
     public void draw (Graphics g) {

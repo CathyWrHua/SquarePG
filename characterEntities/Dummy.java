@@ -3,6 +3,7 @@ package characterEntities;
 import gui.DamageMarker;
 
 import java.awt.*;
+import java.util.ArrayList;
 
 public class Dummy extends Entity {
     private int stunCounter = STUN_TIME;
@@ -14,6 +15,11 @@ public class Dummy extends Entity {
         setImageIcon("src/assets/enemies/dummyNeutral.png");
         setFacingEast(facingEast);
         setEntityType(EntityType.DUMMY);
+    }
+
+    @Override
+    public ArrayList<Entity> getTargets() {
+        return null;
     }
 
     @Override

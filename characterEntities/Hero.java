@@ -83,6 +83,7 @@ public abstract class Hero extends Entity {
 			playAnimation(ability.getValue());
 			setEntityState(EntityState.ATTACKING);
 		}
+		System.out.println("attack");
 	}
 
 	protected boolean isHit(Ability ability, Entity target) {
@@ -117,15 +118,20 @@ public abstract class Hero extends Entity {
 //	}
 
 
+	@Override
+	public ArrayList<Entity> getTargets() {
+		return targets;
+	}
+
 	public void setPlayerClass(PlayerClass playerClass) {
 		this.playerClass = playerClass;
 	}
 
 	private void createHeroHashMap() {
 		colourPath = new HashMap<>();
-		colourPath.put(0,"red");
-		colourPath.put(1,"blue");
-		colourPath.put(2,"yellow");
+		colourPath.put(0, "red");
+		colourPath.put(1, "blue");
+		colourPath.put(2, "yellow");
 	}
 
 	@Override

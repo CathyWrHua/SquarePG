@@ -6,7 +6,7 @@ import java.awt.*;
 
 public class AbilityAnimation extends Animation {
     public enum AbilityAnimationType {
-        HERO_DEFAULT(75, 0), RED_FIRST(-75, -75);
+        HERO_DEFAULT(75, 0), RED_FIRST(-75, -75), YELLOW_FIRST(75, 0);
         private int offsetX, offsetY;
 
         AbilityAnimationType(int offsetX, int offsetY) {
@@ -26,8 +26,10 @@ public class AbilityAnimation extends Animation {
     private boolean hasDirection;
     private Entity.Ability ability;
     private AbilityAnimationType animationType;
+    private EffectType effectType;
 
     public AbilityAnimation(AbilityAnimationType animationType, Entity entity) {
+        this.effectType = EffectType.ENTITY_EFFECT;
         this.entity = entity;
         this.animationType = animationType;
         switch(animationType) {
@@ -36,6 +38,9 @@ public class AbilityAnimation extends Animation {
                 break;
             case RED_FIRST:
                 setValues("redFirst", 3, Entity.Ability.FIRST, false, 3);
+                break;
+            case YELLOW_FIRST:
+                setValues("yellowFirst", 3, Entity.Ability.FIRST, true, 1);
                 break;
             default:
                 break;
@@ -48,6 +53,11 @@ public class AbilityAnimation extends Animation {
         this.ability = ability;
         this.hasDirection = hasDirection;
         setNumLoops(numLoops);
+    }
+
+    @Override
+    public EffectType getEffectType() {
+        return effectType;
     }
 
     public Entity.Ability getAbility() {
