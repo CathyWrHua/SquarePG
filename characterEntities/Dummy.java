@@ -18,7 +18,7 @@ public class Dummy extends Entity {
 
     @Override
     public DamageMarker inflict(int damageTaken, Entity attacker) {
-        setAttackerFacingEast(attacker.getFacingEast());
+        setKnockBackRight(attacker.getPosX() < posX);
         setEntityState(EntityState.DAMAGED);
         immuneTo.put(attacker, true);
         return (new DamageMarker(damageTaken, posX, posY));
@@ -34,7 +34,7 @@ public class Dummy extends Entity {
                 break;
             case DAMAGED:
                 filepath += "Damaged";
-                if (!attackerFacingEast && !facingEast || attackerFacingEast && facingEast) {
+                if (!knockBackRight && !facingEast || knockBackRight && facingEast) {
                     filepath += "Right";
                 } else {
                     filepath += "Left";

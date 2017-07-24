@@ -6,6 +6,7 @@ import java.awt.*;
 public abstract class Animation {
     int totalFrames;
     int counter = 0;
+    int numLoops = 1;
     String animationName;
     ImageIcon imageIcon = null;
     private boolean done = false;
@@ -27,7 +28,6 @@ public abstract class Animation {
         this.imageIcon = new ImageIcon(filePath);
         if (counter/ANIMATION_SPEED >= totalFrames) {
             resetCounter();
-            done = true;
             return;
         }
         counter++;

@@ -106,7 +106,9 @@ public class GameScreen extends Screen implements KeyListener{
 			level = ((level < 3) ? (level+1) : 3);
 			map.setMap(level);
 		} else if (e.getKeyCode() == KeyEvent.VK_A) {
-			player.attack(Hero.Ability.DEFAULT);
+			player.attack(Entity.Ability.DEFAULT);
+		} else if (e.getKeyCode() == KeyEvent.VK_S) {
+			player.attack(Entity.Ability.FIRST);
 		} else if (e.getKeyCode() == KeyEvent.VK_Z) {
 			//HACK: this is just so that we can damage the player in testing, there will be bugs with this (ignore them)
 			damageMarkers.add(player.inflict(25, new Dummy(-100, -100, true)));

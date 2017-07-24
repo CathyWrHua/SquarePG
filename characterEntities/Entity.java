@@ -18,7 +18,7 @@ public abstract class Entity {
     protected int stunCounter = STUN_TIME;
 	protected int damageTaken;
 	protected int velocity;
-	protected boolean attackerFacingEast;
+	protected boolean knockBackRight;
 	protected boolean facingEast;
 	protected GameMap map;
 	protected AbilityAnimation currentAbilityAnimation;
@@ -32,6 +32,18 @@ public abstract class Entity {
     public enum EntityState {NEUTRAL, ATTACKING, DAMAGED, DEAD}
     public enum MotionStateUpDown {IDLE, UP, DOWN}
     public enum MotionStateLeftRight {IDLE, LEFT, RIGHT}
+    public enum Ability {
+        DEFAULT(0), FIRST(1), SECOND(2), THIRD(3), ULTIMATE(4);
+        private int value;
+
+        Ability(int value) {
+            this.value = value;
+        }
+
+        public int getValue() {
+            return value;
+        }
+    }
 
     protected EntityType entityType;
     protected EntityState entityState;
@@ -39,7 +51,7 @@ public abstract class Entity {
 	protected MotionStateUpDown udMotionState;
 
     protected static final int NUM_ANIMATIONS = 5;
-	protected static final int STUN_TIME = 15;
+	protected static final int STUN_TIME = 25;
 	protected static final int KNOCK_BACK_DUR = 1;
 	
 	public Entity(GameMap map, int maxHealth, int maxDamage, int minDamage, int posX, int posY, int velocity) {
@@ -68,7 +80,7 @@ public abstract class Entity {
 	public DamageMarker inflict(int damageTaken, Entity attacker) {
 	    DamageMarker damageMarker;
 	    this.damageTaken = damageTaken;
-	    this.attackerFacingEast = attacker.getFacingEast();
+	    this.knockBackRight = attacker.getPosX() < posX;
 	    immuneTo.put(attacker, true);
 
 	    damageMarker = (currentHealth <= 0) ? null : (new DamageMarker(damageTaken, posX, posY));
@@ -139,8 +151,8 @@ public abstract class Entity {
         this.facingEast = facingEast;
     }
 
-    public void setAttackerFacingEast(boolean attackerFacingEast) {
-        this.attackerFacingEast = attackerFacingEast;
+    public void setKnockBackRight(boolean knockBackRight) {
+        this.knockBackRight = knockBackRight;
     }
 
     public void setAnimation(int index, AbilityAnimation abilityAnimation) {
@@ -216,7 +228,7 @@ public abstract class Entity {
         }
 
         if ((entityState == EntityState.DAMAGED || entityState == EntityState.DEAD) && stunCounter > 0) {
-            if (attackerFacingEast) {
+            if (knockBackRight) {
                 newPosX += KNOCK_BACK_DUR;
             } else {
                 newPosX -= KNOCK_BACK_DUR;

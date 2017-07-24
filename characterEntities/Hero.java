@@ -25,19 +25,6 @@ public abstract class Hero extends Entity {
 		}
 	}
 
-	public enum Ability {
-		DEFAULT(0), FIRST(1), SECOND(2), THIRD(3), ULTIMATE(4);
-		private int value;
-
-		Ability(int value) {
-			this.value = value;
-		}
-
-		public int getValue() {
-			return value;
-		}
-	}
-
 	protected HashMap<Integer, String> colourPath;
 	protected ArrayList<Entity> targets;
 	protected ArrayList<DamageMarker> enemyMarkers;
@@ -56,7 +43,7 @@ public abstract class Hero extends Entity {
 
 		enemyMarkers = new ArrayList<>();
 		createHeroHashMap();
-		setAnimation(0, new AbilityAnimation(AbilityAnimation.AbilityAnimationType.DEFAULT, this));
+		setAnimation(0, new AbilityAnimation(AbilityAnimation.AbilityAnimationType.HERO_DEFAULT, this));
 		numberEvolutions = 0;
 		setEntityType(EntityType.HERO);
 	}

@@ -54,7 +54,7 @@ public class BlueHero extends Hero {
 		}
 		return hit;
 	}
-	
+
 	@Override
 	public void update() {
 		super.update();
@@ -62,7 +62,7 @@ public class BlueHero extends Hero {
 
 		if (entityState != EntityState.ATTACKING) return;
 		for (Entity target : targets) {
-			switch (currentAbilityAnimation.getAbilityAnimationType()) {
+			switch (currentAbilityAnimation.getAbility()) {
 				case DEFAULT:
 					if (!target.immuneTo.get(this) && isHit(Ability.DEFAULT, target)) {
 						marker = target.inflict(getDamage(), this);

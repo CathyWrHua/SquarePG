@@ -62,7 +62,7 @@ public class YellowHero extends Hero {
 
 		if (entityState != EntityState.ATTACKING) return;
 		for (Entity target : targets) {
-			switch (currentAbilityAnimation.getAbilityAnimationType()) {
+			switch (currentAbilityAnimation.getAbility()) {
 				case DEFAULT:
 					if (!target.immuneTo.get(this) && isHit(Ability.DEFAULT, target)) {
 						marker = target.inflict(getDamage(), this);
