@@ -6,10 +6,6 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class Dummy extends Entity {
-    private int stunCounter = STUN_TIME;
-
-    private static final int STUN_TIME = 15;
-
     public Dummy(int posX, int posY, boolean facingEast) {
         super(null, 1, 0, 0, posX, posY, 0);
         setImageIcon("src/assets/enemies/dummyNeutral.png");
@@ -57,11 +53,11 @@ public class Dummy extends Entity {
 
     @Override
     public void update() {
-        if (entityState == EntityState.DAMAGED && stunCounter > 0) {
-        stunCounter--;
-        } else if (stunCounter <= 0) {
+        if (entityState == EntityState.DAMAGED && stunCounter < KNOCK_BACK_TIME) {
+            stunCounter++;
+        } else if (stunCounter >= KNOCK_BACK_TIME) {
             setEntityState(EntityState.NEUTRAL);
-            stunCounter = STUN_TIME;
+            stunCounter = 0;
         }
     }
 

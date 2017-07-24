@@ -224,9 +224,9 @@ public class GameScreen extends Screen implements KeyListener {
 		} else if (e.getKeyCode() == KeyEvent.VK_X) {
 			player.heal(3);
 		} else if (e.getKeyCode() == KeyEvent.VK_C) {
-			System.out.println("Player: ("+player.getPosX()+", "+player.getPosY()+")");
-			System.out.println("Enemy: ("+targets.get(0).getPosX()+", "+targets.get(2).getPosY()+")");
-			System.out.println();
+			Rectangle r = new Rectangle(100, 100, 75, 15);
+			Point p = collisionMap.determineMotion(105, 100, r, targets);
+			System.out.println("("+p.x+", "+p.y+")");
 		}
 	}
 

@@ -22,14 +22,12 @@ public class MapAnimation extends Animation {
     }
 
     private int posX, posY;
-    private MapAnimationType animationType;
     private EffectType effectType;
 
     public MapAnimation(MapAnimationType animationType, int posX, int posY) {
         this.effectType = EffectType.MAP_EFFECT;
-        this.animationType = animationType;
-        this.posX = posX;
-        this.posY = posY;
+        this.posX = posX + animationType.getOffsetX();
+        this.posY = posY + animationType.getOffsetY();
         switch(animationType) {
             case ENEMY_DEATH:
                 setValues("enemyDeath", 4, 1);
@@ -56,7 +54,7 @@ public class MapAnimation extends Animation {
         Image image = imageIcon.getImage();
 
         if (counter/ANIMATION_SPEED < totalFrames) {
-            g2d.drawImage(image, posX+animationType.getOffsetX(), posY+animationType.getOffsetY(), null);
+            g2d.drawImage(image, posX, posY, null);
         }
     }
 }

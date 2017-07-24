@@ -95,6 +95,15 @@ public abstract class Entity implements Drawable {
 	    damageMarker = (currentHealth <= 0) ? null : (new DamageMarker(damageTaken, posX, posY));
 	    return damageMarker;
 	}
+
+	public DamageMarker inflict(int damageTaken, boolean knockBackRight) {
+	    DamageMarker damageMarker;
+	    this.damageTaken = damageTaken;
+	    this.knockBackRight = knockBackRight;
+
+        damageMarker = (currentHealth <= 0) ? null : (new DamageMarker(damageTaken, posX, posY));
+        return damageMarker;
+    }
 	
 	public void heal(int amountHealed) {
 	    if (entityState != EntityState.DEAD) {
@@ -115,6 +124,10 @@ public abstract class Entity implements Drawable {
         } else if (lrMotionState == MotionStateLeftRight.RIGHT) {
             facingEast = true;
         }
+    }
+
+    public void addDamageMarker(DamageMarker marker) {
+	    targetMarkers.add(marker);
     }
 
 	public ImageIcon getImageIcon() {

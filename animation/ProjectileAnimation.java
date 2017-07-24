@@ -1,15 +1,14 @@
 package animation;
 
-import GameMaps.MapCollisionDetection;
 import characterEntities.Entity;
+import gui.DamageMarker;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
 
 public class ProjectileAnimation extends Animation {
     public enum ProjectileAnimationType {
-        YELLOW_FIRST(100, 30);
+        YELLOW_FIRST(75, 30);
         private int offsetX, offsetY;
 
         ProjectileAnimationType(int offsetX, int offsetY) {
@@ -29,23 +28,19 @@ public class ProjectileAnimation extends Animation {
     private int posX, posY;
     private int velocityX, velocityY;
     private boolean facingEast;
-    private ProjectileAnimationType animationType;
+    private Entity entity;
     private EffectType effectType;
-    private ArrayList<Entity> targets;
-    private MapCollisionDetection collisionMap;
 
     public ProjectileAnimation(ProjectileAnimationType animationType, Entity entity) {
         this.effectType = EffectType.ENTITY_EFFECT;
-        this.targets = entity.getTargets();
-        this.animationType = animationType;
-        this.posX = entity.getPosX();
-        this.posY = entity.getPosY();
+        this.entity = entity;
         this.facingEast = entity.getFacingEast();
-        this.collisionMap = entity.getMapCollisionDetection();
+        this.posX = entity.getPosX() + animationType.getOffsetX() * (entity.getFacingEast() ? 1 : -1);
+        this.posY = entity.getPosY() + animationType.getOffsetY();
         switch (animationType) {
             case YELLOW_FIRST:
                 setValues("arrow", 2);
-                velocityX = 5;
+                velocityX = 8;
                 velocityY = 0;
                 break;
             default:
@@ -59,16 +54,48 @@ public class ProjectileAnimation extends Animation {
         this.totalFrames = totalFrames;
     }
 
-    private boolean isHit() {
-        boolean hit;
+    private boolean rectOverlap(Rectangle rect1, Rectangle rect2) {
+        int leftRect1 = rect1.x;
+        int rightRect1 = rect1.x + rect1.width;
+        int topRect1 = rect1.y;
+        int botRect1 = rect1.y + rect1.height;
+        int leftRect2 = rect2.x;
+        int rightRect2 = rect2.x + rect2.width;
+        int topRect2 = rect2.y;
+        int botRect2 = rect2.y + rect2.height;
+        return (leftRect1 < rightRect2 && rightRect1 > leftRect2 && topRect1 < botRect2 && botRect1 > topRect2);
+    }
+
+    private void dealDamage() {
+        Entity targetHit = null;
+        Rectangle projectileSize = new Rectangle(posX, posY, imageIcon.getIconWidth(), imageIcon.getIconHeight());
+        DamageMarker marker;
+
+        for (Entity target : entity.getTargets()) {
+            if (rectOverlap(projectileSize, target.getEntitySize()) && (targetHit == null ||
+                    (Math.abs(target.getPosX()-posX) < Math.abs(targetHit.getPosX()-posX)))) {
+                targetHit = target;
+            }
+        }
+        if (targetHit == null) return;
+        marker = targetHit.inflict(entity.getDamage(), posX < targetHit.getPosX());
+        if (marker != null) {
+            entity.addDamageMarker(marker);
+        }
+    }
+
+    private boolean isCollide() {
+        boolean collision;
         int newX = posX + velocityX;
         int newY = posY + velocityY;
         Rectangle projectileSize = new Rectangle(posX, posY, imageIcon.getIconWidth(), imageIcon.getIconHeight());
-        Point newPoint = collisionMap.determineMotion(newX, newY, projectileSize, targets);
-        hit = (newX != newPoint.x || newY != newPoint.y);
+        Point newPoint = entity.getMapCollisionDetection().determineMotion(newX, newY, projectileSize, entity.getTargets());
+
+        collision = (newX != newPoint.x || newY != newPoint.y);
         posX = newX;
         posY = newY;
-        return false;
+        if (collision) dealDamage();
+        return collision;
     }
 
     @Override
@@ -86,7 +113,7 @@ public class ProjectileAnimation extends Animation {
         String filePath = "src/assets/animations/" + animationName;
         filePath += currentFrame + ".png";
         this.imageIcon = new ImageIcon(filePath);
-        done = isHit();
+        done = isCollide();
     }
 
     public void draw(Graphics g) {
@@ -95,8 +122,6 @@ public class ProjectileAnimation extends Animation {
         Image image = imageIcon.getImage();
         int x = posX;
         int width = image.getWidth(null);
-        int offsetX = facingEast ? animationType.getOffsetX() : -animationType.getOffsetX();
-        int offsetY = animationType.getOffsetY();
 
         if (!facingEast) {
             x += width;
@@ -104,7 +129,7 @@ public class ProjectileAnimation extends Animation {
         }
 
         if (counter/ANIMATION_SPEED < totalFrames) {
-            g2d.drawImage(image, x+offsetX, posY+offsetY, width, image.getHeight(null), null);
+            g2d.drawImage(image, x, posY, width, image.getHeight(null), null);
         }
     }
 }
