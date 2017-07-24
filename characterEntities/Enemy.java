@@ -1,8 +1,6 @@
 package characterEntities;
 
-import animation.AbilityAnimation;
 import gui.DamageMarker;
-
 import java.util.ArrayList;
 import screens.GameMap;
 import java.util.Collections;

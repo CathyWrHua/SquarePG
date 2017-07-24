@@ -1,9 +1,11 @@
 package animation;
 
+import screens.Drawable;
+
 import javax.swing.*;
 import java.awt.*;
 
-public abstract class Animation {
+public abstract class Animation implements Drawable, Effect{
     int totalFrames;
     int counter = 0;
     String animationName;

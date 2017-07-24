@@ -10,7 +10,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import javax.swing.ImageIcon;
 
-public class GameMap {
+public class GameMap implements Drawable{
 	private int currentLevel;
 
 	private HashMap<Integer, ImageIcon[][]> levelMapping = new HashMap<>();

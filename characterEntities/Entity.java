@@ -3,6 +3,7 @@ package characterEntities;
 import animation.AbilityAnimation;
 import gui.DamageMarker;
 import gui.HealthBar;
+import screens.Drawable;
 import screens.GameMap;
 
 import javax.swing.*;
@@ -10,7 +11,7 @@ import java.awt.*;
 import java.util.HashMap;
 import java.util.Random;
 
-public abstract class Entity {
+public abstract class Entity implements Drawable{
     protected int posX, posY;
     protected int newPosX, newPosY;
 	protected int maxHealth, currentHealth;
@@ -187,8 +188,12 @@ public abstract class Entity {
     	    facingEast = false;
         }
     }
-    
-    public void setUDMotionState(MotionStateUpDown state) {
+
+	public AbilityAnimation getCurrentAbilityAnimation() {
+		return currentAbilityAnimation;
+	}
+
+	public void setUDMotionState(MotionStateUpDown state) {
     	udMotionState = state;
     }
 
