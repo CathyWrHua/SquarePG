@@ -84,7 +84,7 @@ public class YellowHero extends Hero {
 		DamageMarker marker;
 		Ability ability;
 
-		if (entityState != EntityState.ATTACKING) return;
+		if (entityState != EntityState.ATTACKING || currentAbilityAnimation == null) return;
 		for (Entity target : targets) {
 			ability = currentAbilityAnimation.getAbility();
 			switch (ability) {

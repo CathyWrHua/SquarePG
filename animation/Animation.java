@@ -25,9 +25,14 @@ public abstract class Animation implements Effect {
         this.currentLoop = numLoops;
     }
 
+    public void kill() {
+        done = true;
+    }
+
     public void reset() {
         resetLoops();
         resetCounter();
+        done = false;
     }
 
     public void setNumLoops(int numLoops) {
@@ -36,15 +41,11 @@ public abstract class Animation implements Effect {
     }
 
     public void update() {
-        done = false;
         int currentFrame = counter++/ANIMATION_SPEED;
         if (currentFrame >= totalFrames) {
             resetCounter();
             currentFrame = 0;
-            if (--currentLoop < 1) {
-                done = true;
-                resetLoops();
-            }
+            done = --currentLoop < 1;
         }
         String filePath = "src/assets/animations/" + animationName;
         filePath += currentFrame + ".png";

@@ -87,7 +87,7 @@ public abstract class Entity implements Drawable {
 	}
 
     public void attack(Ability ability) {
-        if (getEntityState() == EntityState.NEUTRAL) {
+        if (entityState == EntityState.NEUTRAL) {
             playAnimation(ability.getValue());
             setEntityState(EntityState.ATTACKING);
         }
@@ -122,6 +122,7 @@ public abstract class Entity implements Drawable {
 	void playAnimation(int index) {
 	    if (index >= 0 && index < abilityAnimations.length) {
             currentAbilityAnimation = abilityAnimations[index];
+            currentAbilityAnimation.reset();
         }
     }
 
@@ -264,7 +265,7 @@ public abstract class Entity implements Drawable {
             currentHealth -= damageTaken;
             currentHealth = (currentHealth < 0) ? 0 : currentHealth;
             if (currentAbilityAnimation != null) {
-                currentAbilityAnimation.reset();
+                currentAbilityAnimation.kill();
                 currentAbilityAnimation = null;
             }
             if (currentHealth > 0) {

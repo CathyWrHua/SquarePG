@@ -7,6 +7,7 @@ import java.util.*;
 
 import GameMaps.GameMap;
 import GameMaps.MapCollisionDetection;
+import animation.Animation;
 import animation.Effect;
 import animation.MapAnimation;
 import characterEntities.*;
@@ -226,7 +227,7 @@ public class GameScreen extends Screen implements KeyListener {
 			player.attack(Entity.Ability.FIRST);
 		} else if (e.getKeyCode() == KeyEvent.VK_Z) {
 			//HACK: this is just so that we can damage the player in testing, there will be bugs with this (ignore them)
-			DamageMarker marker = player.inflict(25, new Dummy(-100, -100, true));
+			DamageMarker marker = player.inflict(3, new Dummy(-100, -100, true));
 			effects.add(marker);
 			layerRenderMap.get(MapLayer.DAMAGE_LAYER.getValue()).add(marker);
 		} else if (e.getKeyCode() == KeyEvent.VK_X) {
