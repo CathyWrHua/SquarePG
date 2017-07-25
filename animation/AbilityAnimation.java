@@ -74,7 +74,7 @@ public class AbilityAnimation extends Animation {
         Image image = imageIcon.getImage();
         int x = entity.getPosX();
         int width = image.getWidth(null);
-        int offsetX = ((entity.getFacingEast() || !hasDirection) ? animationType.getOffsetX() : -animationType.getOffsetX());
+        int offsetX = ((entity.getFacingEast() || !hasDirection) ? animationType.getOffsetX() : -width);
         int offsetY = animationType.getOffsetY();
 
         if (hasDirection && !entity.getFacingEast()) {

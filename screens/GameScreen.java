@@ -135,12 +135,16 @@ public class GameScreen extends Screen implements KeyListener {
 			layerRenderMap.get(MapLayer.ENTITY_EFFECTS_LAYER.getValue()).add(playerAbility);
 			effects.add(playerAbility);
 		}
-		layerRenderMap.get(MapLayer.DAMAGE_LAYER.getValue()).addAll(player.getTargetMarkers());
-		effects.addAll(player.getTargetMarkers());
-		layerRenderMap.get(MapLayer.ENTITY_EFFECTS_LAYER.getValue()).addAll(player.getProjectileAnimations());
-		effects.addAll(player.getProjectileAnimations());
-		player.emptyTargetMarkers();
-		player.emptyProjectileAnimations();
+		if (!player.getTargetMarkers().isEmpty()) {
+			layerRenderMap.get(MapLayer.DAMAGE_LAYER.getValue()).addAll(player.getTargetMarkers());
+			effects.addAll(player.getTargetMarkers());
+			player.emptyTargetMarkers();
+		}
+		if (!player.getProjectileAnimations().isEmpty()) {
+			layerRenderMap.get(MapLayer.ENTITY_EFFECTS_LAYER.getValue()).addAll(player.getProjectileAnimations());
+			effects.addAll(player.getProjectileAnimations());
+			player.emptyProjectileAnimations();
+		}
 
 		for (Iterator<Entity> iterator = targets.iterator(); iterator.hasNext();) {
 			Entity target = iterator.next();
@@ -153,13 +157,16 @@ public class GameScreen extends Screen implements KeyListener {
 					layerRenderMap.get(MapLayer.ENTITY_EFFECTS_LAYER.getValue()).add(enemyAbility);
 					effects.add(enemyAbility);
 				}
-				layerRenderMap.get(MapLayer.DAMAGE_LAYER.getValue()).addAll(enemy.getTargetMarkers());
-				effects.addAll(enemy.getTargetMarkers());
-				layerRenderMap.get(MapLayer.ENTITY_EFFECTS_LAYER.getValue()).addAll(enemy.getProjectileAnimations());
-				effects.addAll(enemy.getProjectileAnimations());
-				target.emptyTargetMarkers();
-				target.emptyProjectileAnimations();
-
+				if (!enemy.getTargetMarkers().isEmpty()) {
+					layerRenderMap.get(MapLayer.DAMAGE_LAYER.getValue()).addAll(enemy.getTargetMarkers());
+					effects.addAll(enemy.getTargetMarkers());
+					target.emptyTargetMarkers();
+				}
+				if (!enemy.getProjectileAnimations().isEmpty()) {
+					layerRenderMap.get(MapLayer.ENTITY_EFFECTS_LAYER.getValue()).addAll(enemy.getProjectileAnimations());
+					effects.addAll(enemy.getProjectileAnimations());
+					target.emptyProjectileAnimations();
+				}
 				if (enemy.isDone()) {
 					layerRenderMap.get(MapLayer.ENTITY_LAYER.getValue()).remove(enemy);
 					createMapAnimation(MapAnimation.MapAnimationType.ENEMY_DEATH, enemy.getPosX(), enemy.getPosY());
@@ -173,6 +180,7 @@ public class GameScreen extends Screen implements KeyListener {
 		for (Iterator<Effect> iterator = effects.iterator(); iterator.hasNext();) {
 			Effect effect = iterator.next();
 			effect.update();
+
 			if (effect.isDone()) {
 				layerRenderMap.get(effect.getEffectType().getValue()).remove(effect);
 				iterator.remove();
@@ -223,10 +231,6 @@ public class GameScreen extends Screen implements KeyListener {
 			layerRenderMap.get(MapLayer.DAMAGE_LAYER.getValue()).add(marker);
 		} else if (e.getKeyCode() == KeyEvent.VK_X) {
 			player.heal(3);
-		} else if (e.getKeyCode() == KeyEvent.VK_C) {
-			Rectangle r = new Rectangle(100, 100, 75, 15);
-			Point p = collisionMap.determineMotion(105, 100, r, targets);
-			System.out.println("("+p.x+", "+p.y+")");
 		}
 	}
 

@@ -40,7 +40,7 @@ public class ProjectileAnimation extends Animation {
         switch (animationType) {
             case YELLOW_FIRST:
                 setValues("arrow", 2);
-                velocityX = 8;
+                velocityX = 10;
                 velocityY = 0;
                 break;
             default:
