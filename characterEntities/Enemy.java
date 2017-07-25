@@ -34,15 +34,13 @@ public abstract class Enemy extends Entity {
 	private static final int DEFAULT_COOLDOWN = 10;
 	private int coolDown = 0;
 
-	Enemy(Entity targetEntity, MapCollisionDetection mapCollisionDetection, int maxHealth, int maxDamage, int minDamage, int posX, int posY, int velocity) {
+	Enemy(Entity targetEntity, MapCollisionDetection mapCollisionDetection, int maxHealth, int maxDamage, int minDamage, int posX, int posY, double velocity) {
 		super(mapCollisionDetection, maxHealth, maxDamage, minDamage, posX, posY, velocity);
 		this.targetEntity = targetEntity;
 
 		immuneTo.put(targetEntity, false);
-
 		createEnemyHashMap();
 
-		setAnimation(0, new AbilityAnimation(AbilityAnimation.AbilityAnimationType.DEFAULT, this));
 		done = false;
 		targetMarkers = new ArrayList<>();
 		entityType = EntityType.ENEMY;
@@ -112,7 +110,9 @@ public abstract class Enemy extends Entity {
 					((targetCenter.y > selfCenter.y) ? 1 : -1) : deltaY;
 		}
 
-		setFacingEast((motionVector.x > 0)? true: false);
+		if (entityState == EntityState.NEUTRAL) {
+			setFacingEast(motionVector.x > 0);
+		}
 
 		if (Math.abs(motionVector.x) < 100 && Math.abs(motionVector.y) < 100) {
 

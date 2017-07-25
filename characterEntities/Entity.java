@@ -17,10 +17,10 @@ public abstract class Entity implements Drawable{
     protected int newPosX, newPosY;
 	protected int maxHealth, currentHealth;
 	protected int maxDamage, minDamage;
-    protected int stunCounter = STUN_TIME;
+    protected int stunCounter = 0;
 	protected int damageTaken;
-	protected int velocity;
-	protected boolean attackerFacingEast;
+	protected double velocity;
+	protected boolean knockBackRight;
 	protected boolean facingEast;
 	protected MapCollisionDetection mapCollisionDetection;
 	protected AbilityAnimation currentAbilityAnimation;
@@ -35,6 +35,18 @@ public abstract class Entity implements Drawable{
     public enum EntityState {NEUTRAL, ATTACKING, DAMAGED, DEAD}
     public enum MotionStateUpDown {IDLE, UP, DOWN}
     public enum MotionStateLeftRight {IDLE, LEFT, RIGHT}
+    public enum Ability {
+        DEFAULT(0), FIRST(1), SECOND(2), THIRD(3), ULTIMATE(4);
+        private int value;
+
+        Ability(int value) {
+            this.value = value;
+        }
+
+        public int getValue() {
+            return value;
+        }
+    }
 
     protected EntityType entityType;
     protected EntityState entityState;
@@ -42,10 +54,11 @@ public abstract class Entity implements Drawable{
 	protected MotionStateUpDown udMotionState;
 
     protected static final int NUM_ANIMATIONS = 5;
-	protected static final int STUN_TIME = 15;
-	protected static final int KNOCK_BACK_DUR = 1;
+	protected static final int STUN_TIME = 40;
+	protected static final int KNOCK_BACK_TIME = 20;
+	protected static final int KNOCK_BACK_DUR = 2;
 	
-	public Entity(MapCollisionDetection mapCollisionDetection, int maxHealth, int maxDamage, int minDamage, int posX, int posY, int velocity) {
+	public Entity(MapCollisionDetection mapCollisionDetection, int maxHealth, int maxDamage, int minDamage, int posX, int posY, double velocity) {
 	    this.mapCollisionDetection = mapCollisionDetection;
 		this.currentHealth = this.maxHealth = maxHealth;
 		this.maxDamage = maxDamage;
@@ -73,7 +86,7 @@ public abstract class Entity implements Drawable{
 	public DamageMarker inflict(int damageTaken, Entity attacker) {
 	    DamageMarker damageMarker;
 	    this.damageTaken = damageTaken;
-	    this.attackerFacingEast = attacker.getFacingEast();
+	    this.knockBackRight = attacker.getPosX() < posX;
 	    immuneTo.put(attacker, true);
 
 	    damageMarker = (currentHealth <= 0) ? null : (new DamageMarker(damageTaken, posX, posY));
@@ -144,8 +157,8 @@ public abstract class Entity implements Drawable{
         this.facingEast = facingEast;
     }
 
-    public void setAttackerFacingEast(boolean attackerFacingEast) {
-        this.attackerFacingEast = attackerFacingEast;
+    public void setKnockBackRight(boolean knockBackRight) {
+        this.knockBackRight = knockBackRight;
     }
 
     public void setAnimation(int index, AbilityAnimation abilityAnimation) {
@@ -224,16 +237,18 @@ public abstract class Entity implements Drawable{
             damageTaken = 0;
         }
 
-        if ((entityState == EntityState.DAMAGED || entityState == EntityState.DEAD) && stunCounter > 0) {
-            if (attackerFacingEast) {
-                newPosX += KNOCK_BACK_DUR;
-            } else {
-                newPosX -= KNOCK_BACK_DUR;
+        if ((entityState == EntityState.DAMAGED || entityState == EntityState.DEAD) && stunCounter < STUN_TIME) {
+            if (stunCounter < KNOCK_BACK_TIME) {
+                if (knockBackRight) {
+                    newPosX += KNOCK_BACK_DUR;
+                } else {
+                    newPosX -= KNOCK_BACK_DUR;
+                }
             }
-            stunCounter--;
-        } else if (stunCounter <= 0 && entityState == EntityState.DAMAGED) {
+            stunCounter++;
+        } else if (stunCounter >= STUN_TIME && entityState == EntityState.DAMAGED) {
             setEntityState(EntityState.NEUTRAL);
-            stunCounter = STUN_TIME;
+            stunCounter = 0;
         }
 
         if (currentAbilityAnimation != null) {

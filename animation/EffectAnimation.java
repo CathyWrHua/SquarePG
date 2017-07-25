@@ -5,7 +5,7 @@ import java.awt.*;
 public class EffectAnimation extends Animation {
     public enum EffectAnimationType {
         ENEMY_DEATH(-25, -25);
-        int offsetX, offsetY;
+        private int offsetX, offsetY;
 
         EffectAnimationType(int offsetX, int offsetY) {
             this.offsetX = offsetX;

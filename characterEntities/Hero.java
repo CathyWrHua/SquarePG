@@ -24,19 +24,6 @@ public abstract class Hero extends Entity {
 		}
 	}
 
-	public enum Ability {
-		DEFAULT(0), FIRST(1), SECOND(2), THIRD(3), ULTIMATE(4);
-		private int value;
-
-		Ability(int value) {
-			this.value = value;
-		}
-
-		public int getValue() {
-			return value;
-		}
-	}
-
 	protected HashMap<Integer, String> colourPath;
 	protected ArrayList<Entity> targets;
 	protected PlayerClass playerClass;
@@ -45,8 +32,7 @@ public abstract class Hero extends Entity {
 	public static final int SQUARE_LENGTH = 75;
 	static final int DEFAULT_RANGE = SQUARE_LENGTH;
 
-	
-	Hero(ArrayList<Entity> targets, MapCollisionDetection mapCollisionDetection, int maxHealth, int maxDamage, int minDamage, int posX, int posY, int velocity) {
+	Hero(ArrayList<Entity> targets, MapCollisionDetection mapCollisionDetection, int maxHealth, int maxDamage, int minDamage, int posX, int posY, double velocity) {
 		super(mapCollisionDetection, maxHealth, maxDamage, minDamage, posX, posY, velocity);
 		this.targets = targets;
 		for (Entity target : targets) {
@@ -54,7 +40,7 @@ public abstract class Hero extends Entity {
 		}
 
 		createHeroHashMap();
-		setAnimation(0, new AbilityAnimation(AbilityAnimation.AbilityAnimationType.DEFAULT, this));
+		setAnimation(0, new AbilityAnimation(AbilityAnimation.AbilityAnimationType.HERO_DEFAULT, this));
 		numberEvolutions = 0;
 		setEntityType(EntityType.HERO);
 	}
@@ -155,10 +141,10 @@ public abstract class Hero extends Entity {
 		if (entityState == EntityState.NEUTRAL || entityState == EntityState.ATTACKING) {
 			switch (lrMotionState) {
 				case LEFT:
-					newPosX -= velocity;
+					newPosX -= Math.round(velocity);
 					break;
 				case RIGHT:
-					newPosX += velocity;
+					newPosX += Math.round(velocity);
 					break;
 				case IDLE:
 				default:
@@ -166,10 +152,10 @@ public abstract class Hero extends Entity {
 			}
 			switch (udMotionState) {
 				case UP:
-					newPosY -= velocity;
+					newPosY -= Math.round(velocity);
 					break;
 				case DOWN:
-					newPosY += velocity;
+					newPosY += Math.round(velocity);
 					break;
 				case IDLE:
 				default:

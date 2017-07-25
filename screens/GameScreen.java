@@ -37,11 +37,11 @@ public class GameScreen extends Screen implements KeyListener{
 	private MapCollisionDetection collisionMap;
 
 	private int level = 3;
+	private boolean isDoneRendering = true;
 	private Hero player;
 	private ArrayList<Entity> targets;
 	private ArrayList<Effect> effects;
 	private ArrayList<ArrayList<Drawable>> layerRenderMap;
-	private boolean isDoneRendering;
 
 	private HashSet<Integer> motionKeys;
 	
@@ -64,7 +64,7 @@ public class GameScreen extends Screen implements KeyListener{
 		createPlayer(playerClass);
 		createDummy(400, 100, true);
 		createDummy(600, 100, false);
-		createEnemy(100, 10, 5, 500, 500 ,3);
+		createEnemy(100, 2, 1, 500, 500 ,2);
 	}
 
 	@Override
@@ -101,7 +101,7 @@ public class GameScreen extends Screen implements KeyListener{
 		layerRenderMap.get(MapLayer.ENTITY_LAYER.getValue()).add(player);
 	}
 
-	private void createEnemy(int health, int maxDamage, int minDamage, int posX, int posY, int velocity) {
+	private void createEnemy(int health, int maxDamage, int minDamage, int posX, int posY, double velocity) {
 		Grunt grunt = new Grunt(player, collisionMap, health, maxDamage, minDamage, posX, posY, velocity);
 		targets.add(grunt);
 		layerRenderMap.get(MapLayer.ENTITY_LAYER.getValue()).add(grunt);
@@ -179,7 +179,7 @@ public class GameScreen extends Screen implements KeyListener{
 
 		//TEMPORARY TEST CODE TO REGENERATE ENEMY
 		if (targets.size() == 2) {
-			createEnemy(100, 10, 7, 100, 100, 2);
+			createEnemy(100, 2, 1, 100, 100, 2);
 		}
 
     }
@@ -211,14 +211,16 @@ public class GameScreen extends Screen implements KeyListener{
 			level = ((level < 3) ? (level+1) : 3);
 			map.setMap(level);
 		} else if (e.getKeyCode() == KeyEvent.VK_A) {
-			player.attack(Hero.Ability.DEFAULT);
+			player.attack(Entity.Ability.DEFAULT);
+		} else if (e.getKeyCode() == KeyEvent.VK_S) {
+			player.attack(Entity.Ability.FIRST);
 		} else if (e.getKeyCode() == KeyEvent.VK_Z) {
 			//HACK: this is just so that we can damage the player in testing, there will be bugs with this (ignore them)
 			DamageMarker marker = player.inflict(25, new Dummy(-100, -100, true));
 			effects.add(marker);
 			layerRenderMap.get(MapLayer.DAMAGE_LAYER.getValue()).add(marker);
 		} else if (e.getKeyCode() == KeyEvent.VK_X) {
-			player.heal(25);
+			player.heal(3);
 		} else if (e.getKeyCode() == KeyEvent.VK_C) {
 			System.out.println("Player: ("+player.getPosX()+", "+player.getPosY()+")");
 			System.out.println("Enemy: ("+targets.get(0).getPosX()+", "+targets.get(2).getPosY()+")");
@@ -248,7 +250,6 @@ public class GameScreen extends Screen implements KeyListener{
 
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-
 		isDoneRendering = false;
 		for (int layer = 0; layer < TOTAL_MAP_LAYERS; layer++) {
 			ArrayList<Drawable> drawables = layerRenderMap.get(layer);

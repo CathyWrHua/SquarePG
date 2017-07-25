@@ -1,5 +1,6 @@
 package characterEntities;
 
+import animation.AbilityAnimation;
 import GameMaps.MapCollisionDetection;
 import gui.DamageMarker;
 
@@ -9,6 +10,7 @@ public class YellowHero extends Hero {
 	public YellowHero(ArrayList<Entity> targets, MapCollisionDetection mapCollisionDetection) {
 		super(targets, mapCollisionDetection, 20, 12, 6, 100, 100, 5);
 		setPlayerClass(PlayerClass.YELLOW);
+		setAnimation(1, new AbilityAnimation(AbilityAnimation.AbilityAnimationType.RED_FIRST, this));
 		setImageIcon("src/assets/hero/yellowNeutral.png");
 	}
 	
@@ -62,15 +64,19 @@ public class YellowHero extends Hero {
 
 		if (entityState != EntityState.ATTACKING) return;
 		for (Entity target : targets) {
-			switch (currentAbilityAnimation.getAbilityAnimationType()) {
+			switch (currentAbilityAnimation.getAbility()) {
 				case DEFAULT:
-					if (!target.immuneTo.get(this) && isHit(Ability.DEFAULT, target)) {
+					if (!target.immuneTo.get(this) && isHit(Ability.DEFAULT, target) && target.getEntityState() != EntityState.DEAD) {
 						marker = target.inflict(getDamage(), this);
 						if (marker != null) {
 							targetMarkers.add(marker);
 						}
 					}
 					break;
+				case FIRST:
+				case SECOND:
+				case THIRD:
+				case ULTIMATE:
 				default:
 					break;
 			}
