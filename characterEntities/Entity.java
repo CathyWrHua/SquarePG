@@ -158,10 +158,6 @@ public abstract class Entity implements Drawable {
         return projectileAnimations;
     }
 
-    public MapCollisionDetection getMapCollisionDetection() {
-        return mapCollisionDetection;
-    }
-
     public abstract ArrayList<Entity> getTargets();
 
     public int getDamage() {
@@ -290,7 +286,9 @@ public abstract class Entity implements Drawable {
             stunCounter = 0;
         }
 
-        if (currentAbilityAnimation != null && currentAbilityAnimation.isDone()) {
+        if (currentAbilityAnimation != null && !currentAbilityAnimation.isDone()) {
+			currentAbilityAnimation.update();
+		} else if (currentAbilityAnimation != null && currentAbilityAnimation.isDone()) {
             setEntityState(EntityState.NEUTRAL);
             calculateEntityDirection();
             currentAbilityAnimation.resetDone();

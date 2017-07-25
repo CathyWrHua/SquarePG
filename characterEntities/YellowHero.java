@@ -85,6 +85,7 @@ public class YellowHero extends Hero {
 		Ability ability;
 
 		if (entityState != EntityState.ATTACKING || currentAbilityAnimation == null) return;
+
 		for (Entity target : targets) {
 			ability = currentAbilityAnimation.getAbility();
 			switch (ability) {
@@ -98,7 +99,7 @@ public class YellowHero extends Hero {
 					break;
 				case FIRST:
 					if (newProjectileFlag.get(ability)) {
-						ProjectileAnimation newProjectile = new ProjectileAnimation(ProjectileAnimation.ProjectileAnimationType.YELLOW_FIRST, this);
+						ProjectileAnimation newProjectile = new ProjectileAnimation(ProjectileAnimation.ProjectileAnimationType.YELLOW_FIRST, mapCollisionDetection, this);
 						projectileAnimations.add(newProjectile);
 						newProjectileFlag.put(ability, false);
 					}

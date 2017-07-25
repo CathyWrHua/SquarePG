@@ -10,6 +10,7 @@ import GameMaps.MapCollisionDetection;
 import animation.Animation;
 import animation.Effect;
 import animation.MapAnimation;
+import animation.ProjectileAnimation;
 import characterEntities.*;
 import gui.DamageMarker;
 
@@ -129,23 +130,22 @@ public class GameScreen extends Screen implements KeyListener {
 		//Can be removed once tests keys are removed (J and K)
 		collisionMap.setHitRectArray(map.getCurrentCollisionMap());
 
+		layerRenderMap.get(MapLayer.ENTITY_EFFECTS_LAYER.getValue()).clear();
+
 		player.update();
 
 		Effect playerAbility = player.getCurrentAbilityAnimation();
-		if (playerAbility != null && !layerRenderMap.get(MapLayer.ENTITY_EFFECTS_LAYER.getValue()).contains(playerAbility)) {
+		if (playerAbility != null) {
 			layerRenderMap.get(MapLayer.ENTITY_EFFECTS_LAYER.getValue()).add(playerAbility);
-			effects.add(playerAbility);
 		}
-		if (!player.getTargetMarkers().isEmpty()) {
-			layerRenderMap.get(MapLayer.DAMAGE_LAYER.getValue()).addAll(player.getTargetMarkers());
-			effects.addAll(player.getTargetMarkers());
-			player.emptyTargetMarkers();
-		}
-		if (!player.getProjectileAnimations().isEmpty()) {
-			layerRenderMap.get(MapLayer.ENTITY_EFFECTS_LAYER.getValue()).addAll(player.getProjectileAnimations());
-			effects.addAll(player.getProjectileAnimations());
-			player.emptyProjectileAnimations();
-		}
+
+		layerRenderMap.get(MapLayer.DAMAGE_LAYER.getValue()).addAll(player.getTargetMarkers());
+		effects.addAll(player.getTargetMarkers());
+		player.emptyTargetMarkers();
+
+		layerRenderMap.get(MapLayer.MAP_EFFECTS_LAYER.getValue()).addAll(player.getProjectileAnimations());
+		effects.addAll(player.getProjectileAnimations());
+		player.emptyProjectileAnimations();
 
 		for (Iterator<Entity> iterator = targets.iterator(); iterator.hasNext();) {
 			Entity target = iterator.next();
@@ -154,20 +154,18 @@ public class GameScreen extends Screen implements KeyListener {
 				enemy.update();
 
 				Effect enemyAbility = enemy.getCurrentAbilityAnimation();
-				if (enemyAbility != null && !layerRenderMap.get(MapLayer.ENTITY_EFFECTS_LAYER.getValue()).contains(enemyAbility)) {
+				if (enemyAbility != null) {
 					layerRenderMap.get(MapLayer.ENTITY_EFFECTS_LAYER.getValue()).add(enemyAbility);
-					effects.add(enemyAbility);
 				}
-				if (!enemy.getTargetMarkers().isEmpty()) {
-					layerRenderMap.get(MapLayer.DAMAGE_LAYER.getValue()).addAll(enemy.getTargetMarkers());
-					effects.addAll(enemy.getTargetMarkers());
-					target.emptyTargetMarkers();
-				}
-				if (!enemy.getProjectileAnimations().isEmpty()) {
-					layerRenderMap.get(MapLayer.ENTITY_EFFECTS_LAYER.getValue()).addAll(enemy.getProjectileAnimations());
-					effects.addAll(enemy.getProjectileAnimations());
-					target.emptyProjectileAnimations();
-				}
+
+				layerRenderMap.get(MapLayer.DAMAGE_LAYER.getValue()).addAll(enemy.getTargetMarkers());
+				effects.addAll(enemy.getTargetMarkers());
+				target.emptyTargetMarkers();
+
+				layerRenderMap.get(MapLayer.MAP_EFFECTS_LAYER.getValue()).addAll(enemy.getProjectileAnimations());
+				effects.addAll(enemy.getProjectileAnimations());
+				target.emptyProjectileAnimations();
+
 				if (enemy.isDone()) {
 					layerRenderMap.get(MapLayer.ENTITY_LAYER.getValue()).remove(enemy);
 					createMapAnimation(MapAnimation.MapAnimationType.ENEMY_DEATH, enemy.getPosX(), enemy.getPosY());
@@ -178,15 +176,25 @@ public class GameScreen extends Screen implements KeyListener {
 			}
 		}
 
+		ArrayList<DamageMarker> damageMarkers = new ArrayList<>();
 		for (Iterator<Effect> iterator = effects.iterator(); iterator.hasNext();) {
 			Effect effect = iterator.next();
 			effect.update();
 
 			if (effect.isDone()) {
+				if (effect.getEffectType() == Effect.EffectType.PROJECTILE_EFFECT) {
+					ProjectileAnimation animation = (ProjectileAnimation) effect;
+					if (animation != null) {
+						damageMarkers.addAll(animation.getTargetMarkers());
+						animation.clearTargetMarkers();
+					}
+				}
 				layerRenderMap.get(effect.getEffectType().getValue()).remove(effect);
 				iterator.remove();
 			}
 		}
+		effects.addAll(damageMarkers);
+		layerRenderMap.get(MapLayer.DAMAGE_LAYER.getValue()).addAll(damageMarkers);
 
 		//TEMPORARY TEST CODE TO REGENERATE ENEMY
 		if (targets.size() == 2) {

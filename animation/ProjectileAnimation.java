@@ -1,11 +1,13 @@
 package animation;
 
+import GameMaps.MapCollisionDetection;
 import characterEntities.Entity;
 import characterEntities.HitDetectionHelper;
 import gui.DamageMarker;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 
 public class ProjectileAnimation extends Animation {
     public enum ProjectileAnimationType {
@@ -29,19 +31,26 @@ public class ProjectileAnimation extends Animation {
     private int posX, posY;
     private int velocityX, velocityY;
     private boolean facingEast;
-    private Entity entity;
     private EffectType effectType;
+    private MapCollisionDetection mapCollision;
+    private ArrayList<Entity> targets;
+    private int damage;
+    private ArrayList<DamageMarker> targetMarkers;
 
-    public ProjectileAnimation(ProjectileAnimationType animationType, Entity entity) {
-        this.effectType = EffectType.ENTITY_EFFECT;
-        this.entity = entity;
+    public ProjectileAnimation(ProjectileAnimationType animationType, MapCollisionDetection collisionMap, Entity entity) {
+        this.effectType = EffectType.PROJECTILE_EFFECT;
+        this.mapCollision = collisionMap;
         this.facingEast = entity.getFacingEast();
+        this.targets = entity.getTargets();
         this.posX = entity.getPosX() + animationType.getOffsetX() * (entity.getFacingEast() ? 1 : -1);
         this.posY = entity.getPosY() + animationType.getOffsetY();
+        this.damage = entity.getDamage();
+        targetMarkers = new ArrayList<>();
         switch (animationType) {
             case YELLOW_FIRST:
                 setValues("arrow", 2);
                 velocityX = 10;
+				setNumLoops(500/velocityX);
                 velocityY = 0;
                 break;
             default:
@@ -60,17 +69,25 @@ public class ProjectileAnimation extends Animation {
         Rectangle projectileSize = new Rectangle(posX, posY, imageIcon.getIconWidth(), imageIcon.getIconHeight());
         DamageMarker marker;
 
-        for (Entity target : entity.getTargets()) {
+        for (Entity target : targets) {
             if (HitDetectionHelper.detectHit(projectileSize, target.getEntitySize()) && (targetHit == null ||
                     (Math.abs(target.getPosX()-posX) < Math.abs(targetHit.getPosX()-posX)))) {
                 targetHit = target;
             }
         }
         if (targetHit == null) return;
-        marker = targetHit.inflict(entity.getDamage(), posX < targetHit.getPosX());
+        marker = targetHit.inflict(damage, posX < targetHit.getPosX());
         if (marker != null) {
-            entity.addDamageMarker(marker);
+            targetMarkers.add(marker);
         }
+    }
+
+    public ArrayList<DamageMarker> getTargetMarkers () {
+        return targetMarkers;
+    }
+
+    public void clearTargetMarkers() {
+        targetMarkers.clear();
     }
 
     private boolean isCollide() {
@@ -78,7 +95,7 @@ public class ProjectileAnimation extends Animation {
         int newX = posX + velocityX;
         int newY = posY + velocityY;
         Rectangle projectileSize = new Rectangle(posX, posY, imageIcon.getIconWidth(), imageIcon.getIconHeight());
-        Point newPoint = entity.getMapCollisionDetection().determineMotion(newX, newY, projectileSize, entity.getTargets());
+        Point newPoint = mapCollision.determineMotion(newX, newY, projectileSize, targets);
 
         collision = (newX != newPoint.x || newY != newPoint.y);
         posX = newX;
