@@ -1,7 +1,7 @@
 package characterEntities;
 
 import animation.AbilityAnimation;
-import GameMaps.MapCollisionDetection;
+import gameLogic.MapCollisionDetection;
 import animation.ProjectileAnimation;
 import gui.DamageMarker;
 

@@ -5,9 +5,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.*;
 
-import GameMaps.GameMap;
-import GameMaps.MapCollisionDetection;
-import animation.Animation;
+import gameLogic.GameMap;
+import gameLogic.MapCollisionDetection;
 import animation.Effect;
 import animation.MapAnimation;
 import animation.ProjectileAnimation;

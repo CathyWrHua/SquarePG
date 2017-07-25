@@ -1,6 +1,6 @@
 package animation;
 
-import GameMaps.MapCollisionDetection;
+import gameLogic.MapCollisionDetection;
 import characterEntities.Entity;
 import characterEntities.HitDetectionHelper;
 import gui.DamageMarker;
