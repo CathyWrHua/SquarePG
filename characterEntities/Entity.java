@@ -2,6 +2,7 @@ package characterEntities;
 
 import GameMaps.MapCollisionDetection;
 import animation.AbilityAnimation;
+import animation.ProjectileAnimation;
 import gui.DamageMarker;
 import gui.HealthBar;
 import screens.Drawable;
@@ -12,7 +13,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
-public abstract class Entity implements Drawable{
+public abstract class Entity implements Drawable {
     protected int posX, posY;
     protected int newPosX, newPosY;
 	protected int maxHealth, currentHealth;
@@ -25,11 +26,12 @@ public abstract class Entity implements Drawable{
 	protected MapCollisionDetection mapCollisionDetection;
 	protected AbilityAnimation currentAbilityAnimation;
     protected AbilityAnimation[] abilityAnimations;
+    protected ArrayList<ProjectileAnimation> projectileAnimations;
+    protected ArrayList<DamageMarker> targetMarkers;
     protected HashMap<Entity, Boolean> immuneTo;
 	protected ImageIcon imageIcon;
     protected HealthBar healthBar;
 	protected Random random;
-	protected ArrayList<DamageMarker> targetMarkers;
 
     public enum EntityType {HERO, ENEMY, DUMMY}
     public enum EntityState {NEUTRAL, ATTACKING, DAMAGED, DEAD}
@@ -81,7 +83,15 @@ public abstract class Entity implements Drawable{
         udMotionState = MotionStateUpDown.IDLE;
 
         targetMarkers = new ArrayList<>();
+        this.projectileAnimations = new ArrayList<>();
 	}
+
+    public void attack(Ability ability) {
+        if (entityState == EntityState.NEUTRAL) {
+            playAnimation(ability.getValue());
+            setEntityState(EntityState.ATTACKING);
+        }
+    }
 	
 	public DamageMarker inflict(int damageTaken, Entity attacker) {
 	    DamageMarker damageMarker;
@@ -92,6 +102,15 @@ public abstract class Entity implements Drawable{
 	    damageMarker = (currentHealth <= 0) ? null : (new DamageMarker(damageTaken, posX, posY));
 	    return damageMarker;
 	}
+
+	public DamageMarker inflict(int damageTaken, boolean knockBackRight) {
+	    DamageMarker damageMarker;
+	    this.damageTaken = damageTaken;
+	    this.knockBackRight = knockBackRight;
+
+        damageMarker = (currentHealth <= 0) ? null : (new DamageMarker(damageTaken, posX, posY));
+        return damageMarker;
+    }
 	
 	public void heal(int amountHealed) {
 	    if (entityState != EntityState.DEAD) {
@@ -101,8 +120,10 @@ public abstract class Entity implements Drawable{
 	}
 
 	void playAnimation(int index) {
-	    if (index >= 0 && index < abilityAnimations.length)
-	        currentAbilityAnimation = abilityAnimations[index];
+	    if (index >= 0 && index < abilityAnimations.length) {
+            currentAbilityAnimation = abilityAnimations[index];
+            currentAbilityAnimation.reset();
+        }
     }
 
     private void calculateEntityDirection() {
@@ -111,6 +132,10 @@ public abstract class Entity implements Drawable{
         } else if (lrMotionState == MotionStateLeftRight.RIGHT) {
             facingEast = true;
         }
+    }
+
+    public void addDamageMarker(DamageMarker marker) {
+	    targetMarkers.add(marker);
     }
 
 	public ImageIcon getImageIcon() {
@@ -124,7 +149,21 @@ public abstract class Entity implements Drawable{
     public EntityType getEntityType() {
         return entityType;
     }
-	
+
+    public ArrayList<DamageMarker> getTargetMarkers() {
+        return targetMarkers;
+    }
+
+    public ArrayList<ProjectileAnimation> getProjectileAnimations() {
+        return projectileAnimations;
+    }
+
+    public MapCollisionDetection getMapCollisionDetection() {
+        return mapCollisionDetection;
+    }
+
+    public abstract ArrayList<Entity> getTargets();
+
     public int getDamage() {
         return (minDamage+random.nextInt(maxDamage-minDamage));
     }
@@ -226,7 +265,7 @@ public abstract class Entity implements Drawable{
             currentHealth -= damageTaken;
             currentHealth = (currentHealth < 0) ? 0 : currentHealth;
             if (currentAbilityAnimation != null) {
-                currentAbilityAnimation.resetCounter();
+                currentAbilityAnimation.kill();
                 currentAbilityAnimation = null;
             }
             if (currentHealth > 0) {
@@ -251,23 +290,21 @@ public abstract class Entity implements Drawable{
             stunCounter = 0;
         }
 
-        if (currentAbilityAnimation != null) {
-            currentAbilityAnimation.update();
-            if (currentAbilityAnimation.isDone()) {
-                setEntityState(EntityState.NEUTRAL);
-                calculateEntityDirection();
-                currentAbilityAnimation = null;
-            }
+        if (currentAbilityAnimation != null && currentAbilityAnimation.isDone()) {
+            setEntityState(EntityState.NEUTRAL);
+            calculateEntityDirection();
+            currentAbilityAnimation.resetDone();
+            currentAbilityAnimation = null;
         }
     }
 
-    public ArrayList<DamageMarker> getTargetMarkers() {
-    	return targetMarkers;
+	public void emptyTargetMarkers() {
+    	targetMarkers.clear();
 	}
 
-	public void emptyTargetMarkers() {
-    	targetMarkers.clear();;
-	}
+	public void emptyProjectileAnimations() {
+        projectileAnimations.clear();
+    }
 
     public void draw(Graphics g) {
         Graphics2D g2d = (Graphics2D)g;

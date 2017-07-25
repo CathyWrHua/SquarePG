@@ -1,17 +1,15 @@
 package animation;
 
-import screens.Drawable;
-
 import javax.swing.*;
 import java.awt.*;
 
-public abstract class Animation implements Effect{
+public abstract class Animation implements Effect {
+    boolean done = false;
     int totalFrames;
     int counter = 0;
+    int numLoops, currentLoop;
     String animationName;
     ImageIcon imageIcon = null;
-    private boolean done = false;
-    private int numLoops, currentLoop;
 
     static final int ANIMATION_SPEED = 5;
 
@@ -19,8 +17,22 @@ public abstract class Animation implements Effect{
         return done;
     }
 
-    public void resetCounter() {
+    protected void resetCounter() {
         this.counter = 0;
+    }
+
+    protected void resetLoops() {
+        this.currentLoop = numLoops;
+    }
+
+    public void kill() {
+        done = true;
+    }
+
+    public void reset() {
+        resetLoops();
+        resetCounter();
+        done = false;
     }
 
     public void setNumLoops(int numLoops) {
@@ -28,23 +40,16 @@ public abstract class Animation implements Effect{
         this.currentLoop = numLoops;
     }
 
-    private void resetLoops() {
-        this.currentLoop = numLoops;
-    }
-
     public void update() {
-        done = false;
         int currentFrame = counter++/ANIMATION_SPEED;
+        if (currentFrame >= totalFrames) {
+            resetCounter();
+            currentFrame = 0;
+            done = --currentLoop < 1;
+        }
         String filePath = "src/assets/animations/" + animationName;
         filePath += currentFrame + ".png";
         this.imageIcon = new ImageIcon(filePath);
-        if (currentFrame >= totalFrames) {
-            resetCounter();
-            if (--currentLoop < 1) {
-                done = true;
-                resetLoops();
-            }
-        }
     }
 
     public abstract void draw(Graphics g);

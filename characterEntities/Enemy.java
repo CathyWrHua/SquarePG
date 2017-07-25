@@ -1,7 +1,6 @@
 package characterEntities;
 
 import GameMaps.MapCollisionDetection;
-import animation.AbilityAnimation;
 import gui.DamageMarker;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -52,6 +51,11 @@ public abstract class Enemy extends Entity {
 
 	void setEnemyType(EnemyType enemyType) {
 		this.enemyType = enemyType;
+	}
+
+	@Override
+	public ArrayList<Entity> getTargets() {
+		return (new ArrayList<>(Collections.singletonList(targetEntity)));
 	}
 
 	@Override
@@ -117,7 +121,7 @@ public abstract class Enemy extends Entity {
 		if (Math.abs(motionVector.x) < 100 && Math.abs(motionVector.y) < 100) {
 
 			if (targetEntity.getEntityState() != EntityState.DEAD) {
-				attack();
+				attack(Ability.DEFAULT);
 			}
 		}
 	}
@@ -147,8 +151,6 @@ public abstract class Enemy extends Entity {
 
 		setPoint(mapCollisionDetection.determineMotion(newPosX, newPosY, getEntitySize(), new ArrayList<>(Collections.singletonList(targetEntity))));
 	}
-
-	public abstract void attack();
 
 	public boolean isHit() {
 		boolean hit = false;
