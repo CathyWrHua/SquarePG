@@ -85,6 +85,13 @@ public abstract class Entity implements Drawable {
         targetMarkers = new ArrayList<>();
         this.projectileAnimations = new ArrayList<>();
 	}
+
+    public void attack(Ability ability) {
+        if (getEntityState() == EntityState.NEUTRAL) {
+            playAnimation(ability.getValue());
+            setEntityState(EntityState.ATTACKING);
+        }
+    }
 	
 	public DamageMarker inflict(int damageTaken, Entity attacker) {
 	    DamageMarker damageMarker;

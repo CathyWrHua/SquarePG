@@ -15,11 +15,4 @@ public class Grunt extends Enemy {
         //Temp code until enemy attack is determined
         setAnimation(0, new AbilityAnimation(AbilityAnimation.AbilityAnimationType.HERO_DEFAULT, this));
     }
-
-     public void attack() {
-        if (getEntityState() == EntityState.NEUTRAL) {
-            playAnimation(0);
-            setEntityState(EntityState.ATTACKING);
-        }
-     }
 }

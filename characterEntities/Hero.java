@@ -78,13 +78,6 @@ public abstract class Hero extends Entity {
 
 //	public abstract boolean evolve(int path);
 
-	public void attack(Ability ability) {
-		if (getEntityState() == EntityState.NEUTRAL) {
-			playAnimation(ability.getValue());
-			setEntityState(EntityState.ATTACKING);
-		}
-	}
-
 	protected boolean isHit(Ability ability, Entity target) {
 		int targetPosX = target.getPosX();
 		int targetPosY = target.getPosY();
