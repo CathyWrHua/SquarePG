@@ -3,7 +3,9 @@ package characterEntities;
 import animation.AbilityAnimation;
 import GameMaps.MapCollisionDetection;
 import gui.DamageMarker;
+import javafx.scene.shape.Circle;
 
+import java.awt.*;
 import java.util.ArrayList;
 
 public class RedHero extends Hero {
@@ -41,36 +43,16 @@ public class RedHero extends Hero {
 //		}
 //	}
 
-    private boolean intersects(int circleX, int circleY, int rectX, int rectY, int rectWidth, int rectHeight, int circleRadius) {
-        int deltaX = Math.abs(circleX - rectX);
-        int deltaY = Math.abs(circleY - rectY);
-
-        if (deltaX > (rectWidth/2 + circleRadius)) { return false; }
-        if (deltaY > (rectHeight/2 + circleRadius)) { return false; }
-
-        if (deltaX <= (rectWidth/2)) { return true; }
-        if (deltaY <= (rectHeight/2)) { return true; }
-
-        int cornerDistance = (deltaX - rectWidth/2)^2 + (deltaY - rectHeight/2)^2;
-
-        return (cornerDistance <= (circleRadius^2));
-    }
-
     @Override
 	protected boolean isHit(Ability ability, Entity target) {
 	    if (super.isHit(ability, target)) {
 	        return true;
         }
 		boolean hit = false;
-        int targetCenterX = target.getPosX() + (target.getImageIcon().getIconWidth()/2);
-        int targetCenterY = target.getPosY() + (target.getImageIcon().getIconHeight()/2);
-        int centerX = posX + (SQUARE_LENGTH/2);
-        int centerY = posY + (SQUARE_LENGTH/2);
 		switch (ability) {
 			case FIRST:
-			    hit = intersects(centerX, centerY, targetCenterX, targetCenterY,
-                        target.getImageIcon().getIconWidth(), target.getImageIcon().getIconHeight(),
-                        ABILITY_1_RADIUS);
+                Circle hitArea = new Circle(posX + (SQUARE_LENGTH/2), posY + (SQUARE_LENGTH/2), ABILITY_1_RADIUS);
+			    hit = HitDetectionHelper.detectHit(hitArea, target.getEntitySize());
 			    break;
 			case SECOND:
 			case THIRD:

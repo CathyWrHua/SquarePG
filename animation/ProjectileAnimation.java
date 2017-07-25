@@ -1,6 +1,7 @@
 package animation;
 
 import characterEntities.Entity;
+import characterEntities.HitDetectionHelper;
 import gui.DamageMarker;
 
 import javax.swing.*;
@@ -54,25 +55,13 @@ public class ProjectileAnimation extends Animation {
         this.totalFrames = totalFrames;
     }
 
-    private boolean rectOverlap(Rectangle rect1, Rectangle rect2) {
-        int leftRect1 = rect1.x;
-        int rightRect1 = rect1.x + rect1.width;
-        int topRect1 = rect1.y;
-        int botRect1 = rect1.y + rect1.height;
-        int leftRect2 = rect2.x;
-        int rightRect2 = rect2.x + rect2.width;
-        int topRect2 = rect2.y;
-        int botRect2 = rect2.y + rect2.height;
-        return (leftRect1 < rightRect2 && rightRect1 > leftRect2 && topRect1 < botRect2 && botRect1 > topRect2);
-    }
-
     private void dealDamage() {
         Entity targetHit = null;
         Rectangle projectileSize = new Rectangle(posX, posY, imageIcon.getIconWidth(), imageIcon.getIconHeight());
         DamageMarker marker;
 
         for (Entity target : entity.getTargets()) {
-            if (rectOverlap(projectileSize, target.getEntitySize()) && (targetHit == null ||
+            if (HitDetectionHelper.detectHit(projectileSize, target.getEntitySize()) && (targetHit == null ||
                     (Math.abs(target.getPosX()-posX) < Math.abs(targetHit.getPosX()-posX)))) {
                 targetHit = target;
             }
