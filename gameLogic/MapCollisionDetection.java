@@ -1,4 +1,4 @@
-package GameMaps;
+package gameLogic;
 
 import characterEntities.Entity;
 

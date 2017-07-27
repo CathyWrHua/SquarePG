@@ -1,6 +1,6 @@
 package characterEntities;
 
-import GameMaps.MapCollisionDetection;
+import gameLogic.MapCollisionDetection;
 import gui.DamageMarker;
 import java.util.ArrayList;
 import java.util.Collections;

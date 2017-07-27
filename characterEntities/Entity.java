@@ -1,6 +1,6 @@
 package characterEntities;
 
-import GameMaps.MapCollisionDetection;
+import gameLogic.MapCollisionDetection;
 import animation.AbilityAnimation;
 import animation.ProjectileAnimation;
 import gui.DamageMarker;
@@ -158,10 +158,6 @@ public abstract class Entity implements Drawable {
         return projectileAnimations;
     }
 
-    public MapCollisionDetection getMapCollisionDetection() {
-        return mapCollisionDetection;
-    }
-
     public abstract ArrayList<Entity> getTargets();
 
     public int getDamage() {
@@ -290,12 +286,15 @@ public abstract class Entity implements Drawable {
             stunCounter = 0;
         }
 
-        if (currentAbilityAnimation != null && currentAbilityAnimation.isDone()) {
-            setEntityState(EntityState.NEUTRAL);
-            calculateEntityDirection();
-            currentAbilityAnimation.resetDone();
-            currentAbilityAnimation = null;
-        }
+        if (currentAbilityAnimation != null) {
+			currentAbilityAnimation.update();
+			if (currentAbilityAnimation.isDone()) {
+				setEntityState(EntityState.NEUTRAL);
+				calculateEntityDirection();
+				currentAbilityAnimation.resetDone();
+				currentAbilityAnimation = null;
+			}
+		}
     }
 
 	public void emptyTargetMarkers() {

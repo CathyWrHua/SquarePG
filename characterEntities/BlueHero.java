@@ -1,7 +1,7 @@
 package characterEntities;
 
 import animation.AbilityAnimation;
-import GameMaps.MapCollisionDetection;
+import gameLogic.MapCollisionDetection;
 import gui.DamageMarker;
 
 import java.util.ArrayList;

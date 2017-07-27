@@ -1,11 +1,10 @@
 package characterEntities;
 
 import animation.AbilityAnimation;
-import GameMaps.MapCollisionDetection;
+import gameLogic.MapCollisionDetection;
 import gui.DamageMarker;
 import javafx.scene.shape.Circle;
 
-import java.awt.*;
 import java.util.ArrayList;
 
 public class RedHero extends Hero {

@@ -1,6 +1,6 @@
 package characterEntities;
 
-import GameMaps.MapCollisionDetection;
+import gameLogic.MapCollisionDetection;
 import animation.AbilityAnimation;
 
 import java.awt.*;
