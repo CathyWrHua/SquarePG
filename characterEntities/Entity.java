@@ -288,13 +288,13 @@ public abstract class Entity implements Drawable {
 
         if (currentAbilityAnimation != null) {
 			currentAbilityAnimation.update();
+			if (currentAbilityAnimation.isDone()) {
+				setEntityState(EntityState.NEUTRAL);
+				calculateEntityDirection();
+				currentAbilityAnimation.resetDone();
+				currentAbilityAnimation = null;
+			}
 		}
-		if (currentAbilityAnimation	!= null && currentAbilityAnimation.isDone()) {
-            setEntityState(EntityState.NEUTRAL);
-            calculateEntityDirection();
-            currentAbilityAnimation.resetDone();
-            currentAbilityAnimation = null;
-        }
     }
 
 	public void emptyTargetMarkers() {
