@@ -50,7 +50,6 @@ public class ProjectileAnimation extends Animation {
             case YELLOW_FIRST:
                 setValues("arrow", 2);
                 velocityX = 10;
-				setNumLoops(500/velocityX);
                 velocityY = 0;
                 break;
             default:
