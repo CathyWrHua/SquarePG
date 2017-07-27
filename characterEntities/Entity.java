@@ -286,9 +286,10 @@ public abstract class Entity implements Drawable {
             stunCounter = 0;
         }
 
-        if (currentAbilityAnimation != null && !currentAbilityAnimation.isDone()) {
+        if (currentAbilityAnimation != null) {
 			currentAbilityAnimation.update();
-		} else if (currentAbilityAnimation != null && currentAbilityAnimation.isDone()) {
+		}
+		if (currentAbilityAnimation	!= null && currentAbilityAnimation.isDone()) {
             setEntityState(EntityState.NEUTRAL);
             calculateEntityDirection();
             currentAbilityAnimation.resetDone();
