@@ -1,10 +1,12 @@
 package animation;
 
+import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 
 public class MapAnimation extends Animation {
     public enum MapAnimationType {
-        ENEMY_DEATH(-25, -25);
+        ENEMY_DEATH(-50, -50);
         private int offsetX, offsetY;
 
         MapAnimationType(int offsetX, int offsetY) {
@@ -34,6 +36,10 @@ public class MapAnimation extends Animation {
                 break;
             default:
                 break;
+        }
+        this.imageIcons = new ArrayList<>(totalFrames);
+        for (int i = 0; i < totalFrames; i++) {
+            imageIcons.add(i, new ImageIcon("src/assets/animations/"+animationName+i+".png"));
         }
     }
 

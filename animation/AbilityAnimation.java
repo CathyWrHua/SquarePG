@@ -2,11 +2,13 @@ package animation;
 
 import characterEntities.Entity;
 
+import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 
 public class AbilityAnimation extends Animation {
     public enum AbilityAnimationType {
-        HERO_DEFAULT(75, 0), RED_FIRST(-75, -75), YELLOW_FIRST(75, 0);
+        HERO_DEFAULT(75, 0), RED_FIRST(-75, -75), YELLOW_FIRST(75, 0), BLUE_FIRST(75, 0);
         private int offsetX, offsetY;
 
         AbilityAnimationType(int offsetX, int offsetY) {
@@ -37,13 +39,20 @@ public class AbilityAnimation extends Animation {
             setValues("default", 4, Entity.Ability.DEFAULT, true, 1);
                 break;
             case RED_FIRST:
-                setValues("redFirst", 3, Entity.Ability.FIRST, false, 3);
+                setValues("redFirst", 3, Entity.Ability.FIRST, false, 2);
                 break;
             case YELLOW_FIRST:
                 setValues("yellowFirst", 3, Entity.Ability.FIRST, true, 1);
                 break;
+            case BLUE_FIRST:
+                setValues("blueFirst", 3, Entity.Ability.FIRST, true, 1);
+                break;
             default:
                 break;
+        }
+        this.imageIcons = new ArrayList<>(totalFrames);
+        for (int i = 0; i < totalFrames; i++) {
+            imageIcons.add(i, new ImageIcon("src/assets/animations/"+animationName+i+".png"));
         }
     }
 

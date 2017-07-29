@@ -1,6 +1,7 @@
 package characterEntities;
 
 import animation.AbilityAnimation;
+import animation.ProjectileAnimation;
 import gameLogic.MapCollisionDetection;
 import gui.DamageMarker;
 
@@ -10,7 +11,7 @@ public class BlueHero extends Hero {
 	public BlueHero(ArrayList<Entity> targets, MapCollisionDetection mapCollisionDetection) {
 		super(targets, mapCollisionDetection, 10, 8, 7, 100, 100, 5);
 		setPlayerClass(PlayerClass.BLUE);
-		setAnimation(1, new AbilityAnimation(AbilityAnimation.AbilityAnimationType.RED_FIRST, this));
+		setAnimation(1, new AbilityAnimation(AbilityAnimation.AbilityAnimationType.BLUE_FIRST, this));
 		setImageIcon("src/assets/hero/blueNeutral.png");
 	}
 	
@@ -38,6 +39,22 @@ public class BlueHero extends Hero {
 //			return true;
 //		}
 //	}
+
+	@Override
+	public void attack(Ability ability) {
+		if (entityState == EntityState.NEUTRAL) {
+			playAnimation(ability.getValue());
+			setEntityState(EntityState.ATTACKING);
+			switch (ability) {
+				case FIRST:
+					ProjectileAnimation newProjectile = new ProjectileAnimation(ProjectileAnimation.ProjectileAnimationType.BLUE_FIRST, mapCollisionDetection, this);
+					projectileAnimations.add(newProjectile);
+					break;
+				default:
+					break;
+			}
+		}
+	}
 
 	@Override
 	protected boolean isHit(Ability ability, Entity target) {
@@ -73,7 +90,6 @@ public class BlueHero extends Hero {
 						}
 					}
 					break;
-				case FIRST:
 				case SECOND:
 				case THIRD:
 				case ULTIMATE:

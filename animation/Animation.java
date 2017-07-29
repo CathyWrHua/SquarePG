@@ -2,14 +2,16 @@ package animation;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 
 public abstract class Animation implements Effect {
-    boolean done = false;
-    int totalFrames;
-    int counter = 0;
-    int numLoops, currentLoop;
-    String animationName;
-    ImageIcon imageIcon = null;
+    protected boolean done = false;
+    protected int totalFrames;
+    protected int counter = 0;
+    protected int numLoops, currentLoop;
+    protected String animationName;
+    protected ImageIcon imageIcon = null;
+    protected ArrayList<ImageIcon> imageIcons;
 
     static final int ANIMATION_SPEED = 5;
 
@@ -42,14 +44,12 @@ public abstract class Animation implements Effect {
 
     public void update() {
         int currentFrame = counter++/ANIMATION_SPEED;
-        if (currentFrame >= totalFrames) {
+        if (counter/ANIMATION_SPEED >= totalFrames) {
             resetCounter();
             currentFrame = 0;
             done = --currentLoop < 1;
         }
-        String filePath = "src/assets/animations/" + animationName;
-        filePath += currentFrame + ".png";
-        this.imageIcon = new ImageIcon(filePath);
+        this.imageIcon = imageIcons.get(currentFrame);
     }
 
     public abstract void draw(Graphics g);
