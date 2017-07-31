@@ -3,19 +3,26 @@ package screens;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.*;
 
 import gameLogic.GameEngine;
 import characterEntities.*;
 
-public class GameScreen extends Screen implements KeyListener {
+import javax.swing.*;
+
+public class GameScreen extends Screen implements KeyListener, MouseListener {
 	public enum GameState {
 		GAME_STATE_MAP,
+		GAME_STATE_PAUSED,
 		GAME_STATE_HELP,
 		GAME_STATE_PROFILE //For now
 	}
 
 	private GameEngine gameEngine;
+	private CharacterProfile profilePage;
+	private ImageIcon helpPage;
 	private HashSet<Integer> motionKeys;
 	private GameState gameState = GameState.GAME_STATE_MAP;
 	
@@ -26,7 +33,11 @@ public class GameScreen extends Screen implements KeyListener {
 		setFocusable(true);
 		setFocusTraversalKeysEnabled(false);
 
+		addMouseListener(this);
+
 		gameEngine = new GameEngine(playerClass);
+		profilePage = new CharacterProfile(gameEngine.getPlayer());
+		helpPage = new ImageIcon("src/assets/maps/helpPage.png");
 		motionKeys = new LinkedHashSet<>();
 	}
 
@@ -45,7 +56,7 @@ public class GameScreen extends Screen implements KeyListener {
 				//something
 				break;
 			case GAME_STATE_PROFILE:
-				//something else
+				profilePage.update();
 				break;
 			default:
 				//error?
@@ -85,6 +96,14 @@ public class GameScreen extends Screen implements KeyListener {
 			gameEngine.playerWasAttacked();
 		} else if (e.getKeyCode() == KeyEvent.VK_X) {
 			gameEngine.playerDidHeal(3);
+		} else if (e.getKeyCode() == KeyEvent.VK_P) {
+			gameState = (gameState == GameState.GAME_STATE_PAUSED)? GameState.GAME_STATE_MAP : GameState.GAME_STATE_PAUSED;
+		} else if (e.getKeyCode() == KeyEvent.VK_M) {
+			gameState = GameState.GAME_STATE_MAP;
+		} else if (e.getKeyCode() == KeyEvent.VK_H) {
+			gameState = GameState.GAME_STATE_HELP;
+		} else if (e.getKeyCode() == KeyEvent.VK_C) {
+			gameState = GameState.GAME_STATE_PROFILE;
 		}
 	}
 
@@ -108,11 +127,54 @@ public class GameScreen extends Screen implements KeyListener {
 	@Override
 	public void keyTyped(KeyEvent arg0) { }
 
+	//mouse events
+	public void mousePressed(MouseEvent e) {
+		if (gameState == GameState.GAME_STATE_PROFILE) {
+
+		}
+	}
+
+	public void mouseReleased(MouseEvent e) {
+		if (gameState == GameState.GAME_STATE_PROFILE) {
+			findPath(e.getX(), e.getY());
+		}
+	}
+
+	public void mouseEntered(MouseEvent e) { }
+
+	public void mouseExited(MouseEvent e) { }
+
+	public void mouseClicked(MouseEvent e) {
+		if (gameState == GameState.GAME_STATE_PROFILE) {
+			findPath(e.getX(), e.getY());
+		}
+	}
+
+	private void findPath(int mouseX, int mouseY) {
+		
+	}
+
+	private void evolvePlayer(int index, CharacterProfile.Path path) {
+		profilePage.attemptEvolution(index, path);
+	}
+
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 
-		if (gameState == GameState.GAME_STATE_MAP) {
-			gameEngine.paint(g);
+		Graphics2D g2d = (Graphics2D)g;
+
+		switch (gameState) {
+			case GAME_STATE_MAP: case GAME_STATE_PAUSED:
+				gameEngine.paint(g);
+				break;
+			case GAME_STATE_HELP:
+				g2d.drawImage(helpPage.getImage(), 0, 0, null);
+				break;
+			case GAME_STATE_PROFILE:
+				profilePage.paint(g);
+				break;
+			default:
+				break;
 		}
 	}
 }

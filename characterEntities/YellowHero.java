@@ -18,6 +18,7 @@ public class YellowHero extends Hero {
 		setPlayerClass(PlayerClass.YELLOW);
 		setAnimation(1, new AbilityAnimation(AbilityAnimation.AbilityAnimationType.YELLOW_FIRST, this));
 		setImageIcon("src/assets/hero/yellowNeutral.png");
+		path[0] = CharacterProfile.Path.YELLOW;
 	}
 	
 //	public boolean evolve(int path) {

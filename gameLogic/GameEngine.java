@@ -224,6 +224,10 @@ public class GameEngine {
 		player.heal(heal);
 	}
 
+	public Hero getPlayer() {
+		return player;
+	}
+
 	// Private helper functions
 	//
 	//Remove temporary test code where required

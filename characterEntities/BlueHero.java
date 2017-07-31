@@ -12,6 +12,7 @@ public class BlueHero extends Hero {
 		setPlayerClass(PlayerClass.BLUE);
 		setAnimation(1, new AbilityAnimation(AbilityAnimation.AbilityAnimationType.RED_FIRST, this));
 		setImageIcon("src/assets/hero/blueNeutral.png");
+		path[0] = CharacterProfile.Path.BLUE;
 	}
 	
 //	public boolean evolve(int path) {
