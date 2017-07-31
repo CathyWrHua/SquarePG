@@ -27,7 +27,7 @@ public abstract class Hero extends Entity {
 	protected HashMap<Integer, String> colourPath;
 	protected ArrayList<Entity> targets;
 	protected PlayerClass playerClass;
-	int numberEvolutions;
+	protected CharacterProfile.Path[] path;
 
 	public static final int SQUARE_LENGTH = 75;
 	static final int DEFAULT_RANGE = SQUARE_LENGTH;
@@ -41,7 +41,7 @@ public abstract class Hero extends Entity {
 
 		createHeroHashMap();
 		setAnimation(0, new AbilityAnimation(AbilityAnimation.AbilityAnimationType.HERO_DEFAULT, this));
-		numberEvolutions = 0;
+		path = new CharacterProfile.Path[3];
 		setEntityType(EntityType.HERO);
 	}
 
@@ -76,7 +76,16 @@ public abstract class Hero extends Entity {
 		return new Rectangle(posX, posY, SQUARE_LENGTH, SQUARE_LENGTH);
 	}
 
-//	public abstract boolean evolve(int path);
+	public boolean evolve(CharacterProfile.Path path) {
+		if (this.path[1] == null) {
+			this.path[1] = path;
+		} else if (this.path[2] == null) {
+			this.path[2] = path;
+		} else {
+			return false;
+		}
+		return true;
+	}
 
 	protected boolean isHit(Ability ability, Entity target) {
 		int targetPosX = target.getPosX();
@@ -113,6 +122,10 @@ public abstract class Hero extends Entity {
 	@Override
 	public ArrayList<Entity> getTargets() {
 		return targets;
+	}
+
+	public CharacterProfile.Path[] getEvolutionPath() {
+		return path;
 	}
 
 	public void setPlayerClass(PlayerClass playerClass) {

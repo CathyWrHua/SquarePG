@@ -15,6 +15,7 @@ public class RedHero extends Hero {
 		setPlayerClass(PlayerClass.RED);
         setAnimation(1, new AbilityAnimation(AbilityAnimation.AbilityAnimationType.RED_FIRST, this));
 		setImageIcon("src/assets/hero/redNeutral.png");
+		path[0] = CharacterProfile.Path.RED;
 	}
 	
 //	public boolean evolve(int path) {
