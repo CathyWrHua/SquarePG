@@ -54,7 +54,7 @@ public class GameEngine {
 		createPlayer(playerClass);
 		createDummy(400, 100, true);
 		createDummy(600, 100, false);
-		createEnemy(100, 2, 1, 500, 500 ,2);
+		createEnemy(20, 2, 1, 500, 500 ,2);
 	}
 
 	private void createLayerRenderMap() {
@@ -72,7 +72,6 @@ public class GameEngine {
 
 	public void update() {
 		if (!isDoneRendering) {
-			System.out.println("Rendering is finished");
 			return;
 		}
 
@@ -119,7 +118,7 @@ public class GameEngine {
 
 				if (enemy.isDone()) {
 					layerRenderMap.get(MapLayer.ENTITY_LAYER.getValue()).remove(enemy);
-					createMapAnimation(MapAnimation.MapAnimationType.ENEMY_DEATH, enemy.getPosX(), enemy.getPosY());
+					createMapAnimation(MapAnimation.MapAnimationType.ENEMY_DEATH, enemy.getCenterX(), enemy.getCenterY());
 					iterator.remove();
 				}
 			} else if (target.getEntityType() == Entity.EntityType.DUMMY) {
@@ -149,7 +148,7 @@ public class GameEngine {
 
 		//TEMPORARY TEST CODE TO REGENERATE ENEMY
 		if (targets.size() == 2) {
-			createEnemy(100, 2, 1, 100, 100, 2);
+			createEnemy(20, 2, 1, 100, 100, 2);
 		}
 	}
 

@@ -134,10 +134,6 @@ public abstract class Entity implements Drawable {
         }
     }
 
-    public void addDamageMarker(DamageMarker marker) {
-	    targetMarkers.add(marker);
-    }
-
 	public ImageIcon getImageIcon() {
 	    return imageIcon;
     }
@@ -184,16 +180,20 @@ public abstract class Entity implements Drawable {
         return posY;
     }
 
+    public int getCenterX() {
+        return posX + imageIcon.getIconWidth()/2;
+    }
+
+    public int getCenterY() {
+        return posY + imageIcon.getIconHeight()/2;
+    }
+
     public void setImageIcon(String filename) {
         imageIcon = new ImageIcon(filename);
     }
 
     public void setFacingEast(boolean facingEast) {
         this.facingEast = facingEast;
-    }
-
-    public void setKnockBackRight(boolean knockBackRight) {
-        this.knockBackRight = knockBackRight;
     }
 
     public void setAnimation(int index, AbilityAnimation abilityAnimation) {
@@ -269,6 +269,7 @@ public abstract class Entity implements Drawable {
             } else {
                 setEntityState(EntityState.DEAD);
             }
+            stunCounter = 0;
             damageTaken = 0;
         }
 

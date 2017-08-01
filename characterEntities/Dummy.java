@@ -20,9 +20,16 @@ public class Dummy extends Entity {
 
     @Override
     public DamageMarker inflict(int damageTaken, Entity attacker) {
-        setKnockBackRight(attacker.getPosX() < posX);
+        knockBackRight = attacker.getPosX() < posX;
         setEntityState(EntityState.DAMAGED);
         immuneTo.put(attacker, true);
+        return (new DamageMarker(damageTaken, posX, posY));
+    }
+
+    @Override
+    public DamageMarker inflict(int damageTaken, boolean knockBackRight) {
+        this.knockBackRight = knockBackRight;
+        setEntityState(EntityState.DAMAGED);
         return (new DamageMarker(damageTaken, posX, posY));
     }
 

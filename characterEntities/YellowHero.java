@@ -9,12 +9,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class YellowHero extends Hero {
-	private HashMap<Ability, Boolean> newProjectileFlag;
-
 	public YellowHero(ArrayList<Entity> targets, MapCollisionDetection mapCollisionDetection) {
 		super(targets, mapCollisionDetection, 20, 12, 6, 100, 100, 5);
-		newProjectileFlag = new HashMap<>();
-		createNewProjectileFlagHashMap();
 		setPlayerClass(PlayerClass.YELLOW);
 		setAnimation(1, new AbilityAnimation(AbilityAnimation.AbilityAnimationType.YELLOW_FIRST, this));
 		setImageIcon("src/assets/hero/yellowNeutral.png");
@@ -46,18 +42,19 @@ public class YellowHero extends Hero {
 //		}
 //	}
 
-	private void createNewProjectileFlagHashMap() {
-		newProjectileFlag.put(Ability.FIRST, false);
-	}
-
 	@Override
 	public void attack(Ability ability) {
-		super.attack(ability);
-		switch (ability) {
-			case FIRST:
-				newProjectileFlag.put(ability, true);
-			default:
-				break;
+		if (entityState == EntityState.NEUTRAL) {
+			playAnimation(ability.getValue());
+			setEntityState(EntityState.ATTACKING);
+			switch (ability) {
+				case FIRST:
+					ProjectileAnimation newProjectile = new ProjectileAnimation(ProjectileAnimation.ProjectileAnimationType.YELLOW_FIRST, mapCollisionDetection, this);
+					projectileAnimations.add(newProjectile);
+					break;
+				default:
+					break;
+			}
 		}
 	}
 
@@ -96,13 +93,6 @@ public class YellowHero extends Hero {
 						if (marker != null) {
 							targetMarkers.add(marker);
 						}
-					}
-					break;
-				case FIRST:
-					if (newProjectileFlag.get(ability)) {
-						ProjectileAnimation newProjectile = new ProjectileAnimation(ProjectileAnimation.ProjectileAnimationType.YELLOW_FIRST, mapCollisionDetection, this);
-						projectileAnimations.add(newProjectile);
-						newProjectileFlag.put(ability, false);
 					}
 					break;
 				case SECOND:

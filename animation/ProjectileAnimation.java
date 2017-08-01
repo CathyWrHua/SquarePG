@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 public class ProjectileAnimation extends Animation {
     public enum ProjectileAnimationType {
-        YELLOW_FIRST(75, 30);
+        YELLOW_FIRST(75, 30), BLUE_FIRST(75, 15);
         private int offsetX, offsetY;
 
         ProjectileAnimationType(int offsetX, int offsetY) {
@@ -30,11 +30,11 @@ public class ProjectileAnimation extends Animation {
 
     private int posX, posY;
     private int velocityX, velocityY;
+    private int damage;
     private boolean facingEast;
     private EffectType effectType;
     private MapCollisionDetection mapCollision;
     private ArrayList<Entity> targets;
-    private int damage;
     private ArrayList<DamageMarker> targetMarkers;
 
     public ProjectileAnimation(ProjectileAnimationType animationType, MapCollisionDetection collisionMap, Entity entity) {
@@ -42,8 +42,6 @@ public class ProjectileAnimation extends Animation {
         this.mapCollision = collisionMap;
         this.facingEast = entity.getFacingEast();
         this.targets = entity.getTargets();
-        this.posX = entity.getPosX() + animationType.getOffsetX() * (entity.getFacingEast() ? 1 : -1);
-        this.posY = entity.getPosY() + animationType.getOffsetY();
         this.damage = entity.getDamage();
         targetMarkers = new ArrayList<>();
         switch (animationType) {
@@ -52,10 +50,20 @@ public class ProjectileAnimation extends Animation {
                 velocityX = 10;
                 velocityY = 0;
                 break;
+            case BLUE_FIRST:
+                setValues("fireball", 3);
+                velocityX = 5;
+                velocityY = 0;
             default:
                 break;
         }
-        velocityX *= facingEast ? 1 : -1;
+        this.imageIcons = new ArrayList<>(totalFrames);
+        for (int i = 0; i < totalFrames; i++) {
+            imageIcons.add(i, new ImageIcon("src/assets/animations/"+animationName+i+".png"));
+        }
+        this.velocityX *= facingEast ? 1 : -1;
+        this.posX = entity.getPosX() + (entity.getFacingEast() ? animationType.getOffsetX() : -imageIcons.get(0).getIconWidth());
+        this.posY = entity.getPosY() + animationType.getOffsetY();
     }
 
     private void setValues(String animationName, int totalFrames) {
@@ -111,13 +119,11 @@ public class ProjectileAnimation extends Animation {
     @Override
     public void update () {
         int currentFrame = counter++/ANIMATION_SPEED;
-        if (currentFrame >= totalFrames) {
+        if (counter/ANIMATION_SPEED >= totalFrames) {
             resetCounter();
             currentFrame = 0;
         }
-        String filePath = "src/assets/animations/" + animationName;
-        filePath += currentFrame + ".png";
-        this.imageIcon = new ImageIcon(filePath);
+        this.imageIcon = imageIcons.get(currentFrame);
         done = isCollide();
     }
 
