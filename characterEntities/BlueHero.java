@@ -43,8 +43,10 @@ public class BlueHero extends Hero {
 
 	@Override
 	public void attack(Ability ability) {
-		if (entityState == EntityState.NEUTRAL) {
+		AbilityAnimation attemptedAnimation = abilityAnimations[ability.getValue()];
+		if (entityState == EntityState.NEUTRAL && attemptedAnimation != null && attemptedAnimation.isOffCoolDown()) {
 			playAnimation(ability.getValue());
+			attemptedAnimation.resetCoolDown();
 			setEntityState(EntityState.ATTACKING);
 			switch (ability) {
 				case FIRST:

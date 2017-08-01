@@ -8,7 +8,8 @@ import java.util.ArrayList;
 
 public class AbilityAnimation extends Animation {
     public enum AbilityAnimationType {
-        HERO_DEFAULT(75, 0), RED_FIRST(-75, -75), YELLOW_FIRST(75, 0), BLUE_FIRST(75, 0);
+        HERO_DEFAULT(75, 0), RED_FIRST(-75, -75), YELLOW_FIRST(75, 0), BLUE_FIRST(75, 0),
+        CIRCLE_DEFAULT(75, 0);
         private int offsetX, offsetY;
 
         AbilityAnimationType(int offsetX, int offsetY) {
@@ -25,6 +26,7 @@ public class AbilityAnimation extends Animation {
         }
     }
     private Entity entity;
+    private int coolDown, coolDownCounter;
     private boolean hasDirection;
     private Entity.Ability ability;
     private AbilityAnimationType animationType;
@@ -34,18 +36,23 @@ public class AbilityAnimation extends Animation {
         this.effectType = EffectType.ENTITY_EFFECT;
         this.entity = entity;
         this.animationType = animationType;
+        this.coolDownCounter = 0;
         switch(animationType) {
             case HERO_DEFAULT:
-            setValues("default", 4, Entity.Ability.DEFAULT, true, 1);
+                setValues("heroDefault", 4, 0.5, Entity.Ability.DEFAULT, true, 1);
                 break;
             case RED_FIRST:
-                setValues("redFirst", 3, Entity.Ability.FIRST, false, 2);
+                setValues("redFirst", 3, 2, Entity.Ability.FIRST, false, 2);
                 break;
             case YELLOW_FIRST:
-                setValues("yellowFirst", 3, Entity.Ability.FIRST, true, 1);
+                setValues("yellowFirst", 3, 1, Entity.Ability.FIRST, true, 1);
                 break;
             case BLUE_FIRST:
-                setValues("blueFirst", 3, Entity.Ability.FIRST, true, 1);
+                setValues("blueFirst", 3, 1, Entity.Ability.FIRST, true, 1);
+                break;
+            case CIRCLE_DEFAULT:
+                //temp asset
+                setValues("heroDefault", 4, 2, Entity.Ability.DEFAULT, true, 1);
                 break;
             default:
                 break;
@@ -56,16 +63,31 @@ public class AbilityAnimation extends Animation {
         }
     }
 
-    private void setValues(String animationName, int totalFrames, Entity.Ability ability, boolean hasDirection, int numLoops) {
+    private void setValues(String animationName, int totalFrames, double coolDownInSeconds, Entity.Ability ability, boolean hasDirection, int numLoops) {
         this.animationName = animationName;
         this.totalFrames = totalFrames;
         this.ability = ability;
         this.hasDirection = hasDirection;
+        this.coolDown = (int)(coolDownInSeconds*FPS);
         setNumLoops(numLoops);
+    }
+
+    public void decrementCoolDownCounter() {
+        if (coolDownCounter > 0) {
+            coolDownCounter--;
+        }
+    }
+
+    public void resetCoolDown () {
+        this.coolDownCounter = coolDown;
     }
 
     public void resetDone() {
         done = false;
+    }
+
+    public boolean isOffCoolDown () {
+        return (coolDownCounter <= 0);
     }
 
     @Override

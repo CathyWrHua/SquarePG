@@ -87,8 +87,10 @@ public abstract class Entity implements Drawable {
 	}
 
     public void attack(Ability ability) {
-        if (entityState == EntityState.NEUTRAL) {
+	    AbilityAnimation attemptedAnimation = abilityAnimations[ability.getValue()];
+        if (entityState == EntityState.NEUTRAL && attemptedAnimation != null && attemptedAnimation.isOffCoolDown()) {
             playAnimation(ability.getValue());
+            attemptedAnimation.resetCoolDown();
             setEntityState(EntityState.ATTACKING);
         }
     }
@@ -296,6 +298,9 @@ public abstract class Entity implements Drawable {
 				currentAbilityAnimation = null;
 			}
 		}
+		for (AbilityAnimation ability : abilityAnimations) {
+            if (ability != null) ability.decrementCoolDownCounter();
+        }
     }
 
 	public void emptyTargetMarkers() {
