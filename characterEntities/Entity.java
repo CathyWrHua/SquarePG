@@ -25,7 +25,7 @@ public abstract class Entity implements Drawable {
 	protected boolean facingEast;
 	protected MapCollisionDetection mapCollisionDetection;
 	protected AbilityAnimation currentAbilityAnimation;
-    protected AbilityAnimation[] abilityAnimations;
+    protected ArrayList<AbilityAnimation> abilityAnimations;
     protected ArrayList<ProjectileAnimation> projectileAnimations;
     protected ArrayList<DamageMarker> targetMarkers;
     protected HashMap<Entity, Boolean> immuneTo;
@@ -57,7 +57,7 @@ public abstract class Entity implements Drawable {
 
     protected static final int NUM_ANIMATIONS = 5;
 	protected static final int STUN_TIME = 40;
-	protected static final int KNOCK_BACK_TIME = 20;
+	protected static final int KNOCK_BACK_TIME = 15;
 	protected static final int KNOCK_BACK_DUR = 2;
 	
 	public Entity(MapCollisionDetection mapCollisionDetection, int maxHealth, int maxDamage, int minDamage, int posX, int posY, double velocity) {
@@ -72,7 +72,7 @@ public abstract class Entity implements Drawable {
         this.facingEast = true;
         this.velocity = velocity;
 
-        this.abilityAnimations = new AbilityAnimation[NUM_ANIMATIONS];
+        this.abilityAnimations = new ArrayList<>(NUM_ANIMATIONS);
         this.currentAbilityAnimation = null;
 		this.healthBar = new HealthBar(this);
 		this.random = new Random();
@@ -87,7 +87,7 @@ public abstract class Entity implements Drawable {
 	}
 
     public void attack(Ability ability) {
-	    AbilityAnimation attemptedAnimation = abilityAnimations[ability.getValue()];
+	    AbilityAnimation attemptedAnimation = abilityAnimations.get(ability.getValue());
         if (entityState == EntityState.NEUTRAL && attemptedAnimation != null && attemptedAnimation.isOffCoolDown()) {
             playAnimation(ability.getValue());
             attemptedAnimation.resetCoolDown();
@@ -122,8 +122,8 @@ public abstract class Entity implements Drawable {
 	}
 
 	void playAnimation(int index) {
-	    if (index >= 0 && index < abilityAnimations.length) {
-            currentAbilityAnimation = abilityAnimations[index];
+	    if (index >= 0 && index < abilityAnimations.size()) {
+            currentAbilityAnimation = abilityAnimations.get(index);
             currentAbilityAnimation.reset();
         }
     }
@@ -154,6 +154,10 @@ public abstract class Entity implements Drawable {
 
     public ArrayList<ProjectileAnimation> getProjectileAnimations() {
         return projectileAnimations;
+    }
+
+    public ArrayList<AbilityAnimation> getAbilityAnimations() {
+        return abilityAnimations;
     }
 
     public abstract ArrayList<Entity> getTargets();
@@ -199,7 +203,7 @@ public abstract class Entity implements Drawable {
     }
 
     public void setAnimation(int index, AbilityAnimation abilityAnimation) {
-        abilityAnimations[index] = abilityAnimation;
+        abilityAnimations.add(index, abilityAnimation);
     }
 
     public abstract Rectangle getEntitySize();
