@@ -11,12 +11,21 @@ import java.util.ArrayList;
 
 public class ProjectileAnimation extends Animation {
 	public enum ProjectileAnimationType {
-		YELLOW_FIRST(75, 30), BLUE_FIRST(75, 15);
+		YELLOW_FIRST(75, 30, "arrow", 2, 10, 0),
+		BLUE_FIRST(75, 15, "fireball", 3, 5, 0);
 		private int offsetX, offsetY;
+		private String animationName;
+		private int totalFrames;
+		private int velocityX, velocityY;
 
-		ProjectileAnimationType(int offsetX, int offsetY) {
+		ProjectileAnimationType(int offsetX, int offsetY, String animationName, int totalFrames,
+								int velocityX, int velocityY) {
 			this.offsetX = offsetX;
 			this.offsetY = offsetY;
+			this.animationName = animationName;
+			this.totalFrames = totalFrames;
+			this.velocityX = velocityX;
+			this.velocityY = velocityY;
 		}
 
 		public int getOffsetX() {
@@ -25,6 +34,22 @@ public class ProjectileAnimation extends Animation {
 
 		public int getOffsetY() {
 			return offsetY;
+		}
+
+		public int getTotalFrames() {
+			return totalFrames;
+		}
+
+		public String getAnimationName() {
+			return animationName;
+		}
+
+		public int getVelocityX() {
+			return velocityX;
+		}
+
+		public int getVelocityY() {
+			return velocityY;
 		}
 	}
 
@@ -43,32 +68,18 @@ public class ProjectileAnimation extends Animation {
 		this.facingEast = entity.getFacingEast();
 		this.targets = entity.getTargets();
 		this.damage = entity.getDamage();
-		targetMarkers = new ArrayList<>();
-		switch (animationType) {
-			case YELLOW_FIRST:
-				setValues("arrow", 2);
-				velocityX = 10;
-				velocityY = 0;
-				break;
-			case BLUE_FIRST:
-				setValues("fireball", 3);
-				velocityX = 5;
-				velocityY = 0;
-			default:
-				break;
-		}
+		this.targetMarkers = new ArrayList<>();
+		this.animationName = animationType.getAnimationName();
+		this.totalFrames = animationType.getTotalFrames();
+		this.velocityX = animationType.getVelocityX();
+		this.velocityY = animationType.getVelocityY();
 		this.imageIcons = new ArrayList<>(totalFrames);
 		for (int i = 0; i < totalFrames; i++) {
-			imageIcons.add(i, new ImageIcon("src/assets/animations/"+animationName+i+".png"));
+			imageIcons.add(i, new ImageIcon(FILEPATH_ROOT+animationName+i+FILEPATH_PNG));
 		}
 		this.velocityX *= facingEast ? 1 : -1;
 		this.posX = entity.getPosX() + (entity.getFacingEast() ? animationType.getOffsetX() : -imageIcons.get(0).getIconWidth());
 		this.posY = entity.getPosY() + animationType.getOffsetY();
-	}
-
-	private void setValues(String animationName, int totalFrames) {
-		this.animationName = animationName;
-		this.totalFrames = totalFrames;
 	}
 
 	private void dealDamage() {
@@ -117,7 +128,7 @@ public class ProjectileAnimation extends Animation {
 	}
 
 	@Override
-	public void update () {
+	public void update() {
 		int currentFrame = counter++/ANIMATION_SPEED;
 		if (counter/ANIMATION_SPEED >= totalFrames) {
 			resetCounter();
