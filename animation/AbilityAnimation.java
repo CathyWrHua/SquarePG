@@ -85,7 +85,7 @@ public class AbilityAnimation extends Animation {
 		setNumLoops(animationType.getNumLoops());
 		this.imageIcons = new ArrayList<>(totalFrames);
 		for (int i = 0; i < totalFrames; i++) {
-			imageIcons.add(i, new ImageIcon(FILEPATH_ROOT+animationName+i+".png"));
+			imageIcons.add(i, new ImageIcon(FILEPATH_ROOT+animationName+i+FILEPATH_PNG));
 		}
 	}
 

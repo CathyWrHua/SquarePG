@@ -15,6 +15,7 @@ public abstract class Animation implements Effect {
 
 	static final int ANIMATION_SPEED = 5;
 	static final String FILEPATH_ROOT = "src/assets/animations/";
+	static final String FILEPATH_PNG = ".png";
 
 	public boolean isDone() {
 		return done;

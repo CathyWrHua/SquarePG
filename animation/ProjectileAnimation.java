@@ -75,7 +75,7 @@ public class ProjectileAnimation extends Animation {
 		this.velocityY = animationType.getVelocityY();
 		this.imageIcons = new ArrayList<>(totalFrames);
 		for (int i = 0; i < totalFrames; i++) {
-			imageIcons.add(i, new ImageIcon(FILEPATH_ROOT+animationName+i+".png"));
+			imageIcons.add(i, new ImageIcon(FILEPATH_ROOT+animationName+i+FILEPATH_PNG));
 		}
 		this.velocityX *= facingEast ? 1 : -1;
 		this.posX = entity.getPosX() + (entity.getFacingEast() ? animationType.getOffsetX() : -imageIcons.get(0).getIconWidth());
