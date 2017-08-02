@@ -46,8 +46,8 @@ public class GameScreen extends Screen implements KeyListener, MouseListener {
 		requestFocus(true);
 	}
 
-    @Override
-    public void update() {
+	@Override
+	public void update() {
 		switch (gameState) {
 			case GAME_STATE_MAP:
 				gameEngine.update();
@@ -62,7 +62,7 @@ public class GameScreen extends Screen implements KeyListener, MouseListener {
 				//error?
 				break;
 		}
-    }
+	}
 
 	@Override
 	public void keyPressed(KeyEvent e) {
