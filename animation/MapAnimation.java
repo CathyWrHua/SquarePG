@@ -6,12 +6,17 @@ import java.util.ArrayList;
 
 public class MapAnimation extends Animation {
 	public enum MapAnimationType {
-		ENEMY_DEATH(-50, -50);
+		ENEMY_DEATH(-50, -50, "enemyDeath", 4, 1);
 		private int offsetX, offsetY;
+		private String animationName;
+		private int totalFrames, numLoops;
 
-		MapAnimationType(int offsetX, int offsetY) {
+		MapAnimationType(int offsetX, int offsetY, String animationName, int totalFrames, int numLoops) {
 			this.offsetX = offsetX;
 			this.offsetY = offsetY;
+			this.animationName = animationName;
+			this.totalFrames = totalFrames;
+			this.numLoops = numLoops;
 		}
 
 		public int getOffsetX() {
@@ -21,6 +26,18 @@ public class MapAnimation extends Animation {
 		public int getOffsetY() {
 			return offsetY;
 		}
+
+		public String getAnimationName() {
+			return animationName;
+		}
+
+		public int getTotalFrames() {
+			return totalFrames;
+		}
+
+		public int getNumLoops() {
+			return numLoops;
+		}
 	}
 
 	private int posX, posY;
@@ -28,32 +45,21 @@ public class MapAnimation extends Animation {
 
 	public MapAnimation(MapAnimationType animationType, int posX, int posY) {
 		this.effectType = EffectType.MAP_EFFECT;
-		this.posX = posX + animationType.getOffsetX();
-		this.posY = posY + animationType.getOffsetY();
-		switch(animationType) {
-			case ENEMY_DEATH:
-				setValues("enemyDeath", 4, 1);
-				break;
-			default:
-				break;
-		}
+		this.animationName = animationType.getAnimationName();
+		this.totalFrames = animationType.getTotalFrames();
+		this.setNumLoops(animationType.getNumLoops());
 		this.imageIcons = new ArrayList<>(totalFrames);
 		for (int i = 0; i < totalFrames; i++) {
-			imageIcons.add(i, new ImageIcon("src/assets/animations/"+animationName+i+".png"));
+			imageIcons.add(i, new ImageIcon(FILEPATH_ROOT+animationName+i+FILEPATH_PNG));
 		}
+		this.posX = posX + animationType.getOffsetX();
+		this.posY = posY + animationType.getOffsetY();
 	}
 
 	@Override
 	public EffectType getEffectType() {
 		return effectType;
 	}
-
-	private void setValues(String animationName, int totalFrames, int numLoops) {
-		this.animationName = animationName;
-		this.totalFrames = totalFrames;
-		this.setNumLoops(numLoops);
-	}
-
 	public void draw (Graphics g) {
 		if (imageIcon == null) return;
 		Graphics2D g2d = (Graphics2D)g;
