@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 public class ProjectileAnimation extends Animation {
 	public enum ProjectileAnimationType {
-		YELLOW_FIRST(75, 30, "arrow", 2, 10, 0),
+		YELLOW_FIRST(30, 30, "arrow", 2, 10, 0),
 		BLUE_FIRST(75, 15, "fireball", 3, 5, 0);
 		private int offsetX, offsetY;
 		private String animationName;
@@ -57,13 +57,12 @@ public class ProjectileAnimation extends Animation {
 	private int velocityX, velocityY;
 	private int damage;
 	private boolean facingEast;
-	private EffectType effectType;
 	private MapCollisionDetection mapCollision;
 	private ArrayList<Entity> targets;
 	private ArrayList<DamageMarker> targetMarkers;
 
 	public ProjectileAnimation(ProjectileAnimationType animationType, MapCollisionDetection collisionMap, Entity entity) {
-		this.effectType = EffectType.PROJECTILE_EFFECT;
+		this.drawableType = DrawableType.PROJECTILE_EFFECT;
 		this.mapCollision = collisionMap;
 		this.facingEast = entity.getFacingEast();
 		this.targets = entity.getTargets();
@@ -78,7 +77,8 @@ public class ProjectileAnimation extends Animation {
 			imageIcons.add(i, new ImageIcon(FILEPATH_ROOT+animationName+i+FILEPATH_PNG));
 		}
 		this.velocityX *= facingEast ? 1 : -1;
-		this.posX = entity.getPosX() + (entity.getFacingEast() ? animationType.getOffsetX() : -imageIcons.get(0).getIconWidth());
+		this.posX = entity.getPosX() + (entity.getFacingEast() ? animationType.getOffsetX() :
+				entity.getImageIcon().getIconWidth()-animationType.getOffsetX()-imageIcons.get(0).getIconWidth());
 		this.posY = entity.getPosY() + animationType.getOffsetY();
 	}
 
@@ -120,11 +120,6 @@ public class ProjectileAnimation extends Animation {
 		posY = newY;
 		if (collision) dealDamage();
 		return collision;
-	}
-
-	@Override
-	public EffectType getEffectType() {
-		return effectType;
 	}
 
 	@Override

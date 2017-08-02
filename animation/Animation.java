@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
-public abstract class Animation implements Effect {
+public abstract class Animation extends Effect {
 	protected boolean done = false;
 	protected int totalFrames;
 	protected int counter = 0;

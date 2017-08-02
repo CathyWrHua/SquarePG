@@ -41,10 +41,9 @@ public class MapAnimation extends Animation {
 	}
 
 	private int posX, posY;
-	private EffectType effectType;
 
 	public MapAnimation(MapAnimationType animationType, int posX, int posY) {
-		this.effectType = EffectType.MAP_EFFECT;
+		this.drawableType = DrawableType.MAP_EFFECT;
 		this.animationName = animationType.getAnimationName();
 		this.totalFrames = animationType.getTotalFrames();
 		this.setNumLoops(animationType.getNumLoops());
@@ -56,10 +55,6 @@ public class MapAnimation extends Animation {
 		this.posY = posY + animationType.getOffsetY();
 	}
 
-	@Override
-	public EffectType getEffectType() {
-		return effectType;
-	}
 	public void draw (Graphics g) {
 		if (imageIcon == null) return;
 		Graphics2D g2d = (Graphics2D)g;

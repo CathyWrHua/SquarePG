@@ -76,10 +76,9 @@ public class AbilityAnimation extends Animation {
 	private boolean hasDirection;
 	private Entity.Ability ability;
 	private AbilityAnimationType animationType;
-	private EffectType effectType;
 
 	public AbilityAnimation(AbilityAnimationType animationType, Entity entity) {
-		this.effectType = EffectType.ENTITY_EFFECT;
+		this.drawableType = DrawableType.ENTITY_EFFECT;
 		this.animationType = animationType;
 		this.entity = entity;
 		this.animationName = animationType.getAnimationName();
@@ -113,11 +112,6 @@ public class AbilityAnimation extends Animation {
 		return (cooldownCounter <= 0);
 	}
 
-	@Override
-	public EffectType getEffectType() {
-		return effectType;
-	}
-
 	public String getAnimationName() {
 		return animationName;
 	}
@@ -140,7 +134,8 @@ public class AbilityAnimation extends Animation {
 		Image image = imageIcon.getImage();
 		int x = entity.getPosX();
 		int width = image.getWidth(null);
-		int offsetX = ((entity.getFacingEast() || !hasDirection) ? animationType.getOffsetX() : -width);
+		int offsetX = ((entity.getFacingEast() || !hasDirection) ? animationType.getOffsetX() :
+				entity.getImageIcon().getIconWidth()-animationType.getOffsetX()-width);
 		int offsetY = animationType.getOffsetY();
 
 		if (hasDirection && !entity.getFacingEast()) {

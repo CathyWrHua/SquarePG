@@ -7,7 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
 
-public class HealthBar implements Drawable {
+public class HealthBar extends Drawable {
 	private ImageIcon border;
 	private Entity entity;
 
