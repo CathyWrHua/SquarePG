@@ -44,8 +44,10 @@ public class YellowHero extends Hero {
 
 	@Override
 	public void attack(Ability ability) {
-		if (entityState == EntityState.NEUTRAL) {
+		AbilityAnimation attemptedAbility = abilityAnimations.get(ability.getValue());
+		if (entityState == EntityState.NEUTRAL && attemptedAbility != null && attemptedAbility.isOffCooldown()) {
 			playAnimation(ability.getValue());
+			attemptedAbility.resetCooldown();
 			setEntityState(EntityState.ATTACKING);
 			switch (ability) {
 				case FIRST:

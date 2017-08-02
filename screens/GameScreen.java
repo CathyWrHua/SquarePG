@@ -90,7 +90,7 @@ public class GameScreen extends Screen implements KeyListener, MouseListener {
 			gameEngine.toggleMapLevel(1);
 		} else if (e.getKeyCode() == KeyEvent.VK_A) {
 			gameEngine.playerDidAttack(Entity.Ability.DEFAULT);
-		} else if (e.getKeyCode() == KeyEvent.VK_S) {
+		} else if (e.getKeyCode() == KeyEvent.VK_Q) {
 			gameEngine.playerDidAttack(Entity.Ability.FIRST);
 		} else if (e.getKeyCode() == KeyEvent.VK_Z) {
 			gameEngine.playerWasAttacked();

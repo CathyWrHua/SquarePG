@@ -4,6 +4,7 @@ import animation.Effect;
 import animation.MapAnimation;
 import animation.ProjectileAnimation;
 import characterEntities.*;
+import gui.AbilityBar;
 import gui.DamageMarker;
 import screens.Drawable;
 
@@ -17,7 +18,8 @@ public class GameEngine {
 		ENTITY_LAYER(1),
 		ENTITY_EFFECTS_LAYER(2),
 		MAP_EFFECTS_LAYER(3),
-		DAMAGE_LAYER(4);
+		DAMAGE_LAYER(4),
+		GUI_LAYER(5);
 
 		private int value;
 
@@ -30,7 +32,7 @@ public class GameEngine {
 		}
 	}
 
-	public final int TOTAL_MAP_LAYERS = 5;
+	public final int TOTAL_MAP_LAYERS = 6;
 
 	private GameMap map;
 	private MapCollisionDetection collisionMap;
@@ -38,6 +40,7 @@ public class GameEngine {
 	private int level = 3;
 	private boolean isDoneRendering = true;
 	private Hero player;
+	private AbilityBar playerAbilityBar;
 	private ArrayList<Entity> targets;
 	private ArrayList<Effect> effects;
 	private ArrayList<ArrayList<Drawable>> layerRenderMap;
@@ -52,6 +55,7 @@ public class GameEngine {
 		isDoneRendering = true;
 
 		createPlayer(playerClass);
+		createAbilityBar(player);
 		createDummy(400, 100, true);
 		createDummy(600, 100, false);
 		createEnemy(20, 2, 1, 500, 500 ,2);
@@ -68,6 +72,7 @@ public class GameEngine {
 		layerRenderMap.add(MapLayer.ENTITY_EFFECTS_LAYER.getValue(), new ArrayList<>());
 		layerRenderMap.add(MapLayer.MAP_EFFECTS_LAYER.getValue(), new ArrayList<>());
 		layerRenderMap.add(MapLayer.DAMAGE_LAYER.getValue(), new ArrayList<>());
+		layerRenderMap.add(MapLayer.GUI_LAYER.getValue(), new ArrayList<>());
 	}
 
 	public void update() {
@@ -230,6 +235,11 @@ public class GameEngine {
 	// Private helper functions
 	//
 	//Remove temporary test code where required
+
+	private void createAbilityBar(Hero player) {
+		this.playerAbilityBar = new AbilityBar(player);
+		layerRenderMap.get(MapLayer.GUI_LAYER.getValue()).add(playerAbilityBar);
+	}
 
 	private void createPlayer(Hero.PlayerClass playerClass) {
 		switch (playerClass) {

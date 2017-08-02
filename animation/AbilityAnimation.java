@@ -1,5 +1,6 @@
 package animation;
 
+import SquarePG.SquarePG;
 import characterEntities.Entity;
 
 import javax.swing.*;
@@ -8,7 +9,8 @@ import java.util.ArrayList;
 
 public class AbilityAnimation extends Animation {
     public enum AbilityAnimationType {
-        HERO_DEFAULT(75, 0), RED_FIRST(-75, -75), YELLOW_FIRST(75, 0), BLUE_FIRST(75, 0);
+        HERO_DEFAULT(75, 0), RED_FIRST(-75, -75), YELLOW_FIRST(75, 0), BLUE_FIRST(75, 0),
+        CIRCLE_DEFAULT(75, 0);
         private int offsetX, offsetY;
 
         AbilityAnimationType(int offsetX, int offsetY) {
@@ -25,6 +27,7 @@ public class AbilityAnimation extends Animation {
         }
     }
     private Entity entity;
+    private int cooldownTotal, cooldownCounter;
     private boolean hasDirection;
     private Entity.Ability ability;
     private AbilityAnimationType animationType;
@@ -34,18 +37,23 @@ public class AbilityAnimation extends Animation {
         this.effectType = EffectType.ENTITY_EFFECT;
         this.entity = entity;
         this.animationType = animationType;
+        this.cooldownCounter = 0;
         switch(animationType) {
             case HERO_DEFAULT:
-            setValues("default", 4, Entity.Ability.DEFAULT, true, 1);
+                setValues("heroDefault", 4, 0.5, Entity.Ability.DEFAULT, true, 1);
                 break;
             case RED_FIRST:
-                setValues("redFirst", 3, Entity.Ability.FIRST, false, 2);
+                setValues("redFirst", 3, 2, Entity.Ability.FIRST, false, 2);
                 break;
             case YELLOW_FIRST:
-                setValues("yellowFirst", 3, Entity.Ability.FIRST, true, 1);
+                setValues("yellowFirst", 3, 1, Entity.Ability.FIRST, true, 1);
                 break;
             case BLUE_FIRST:
-                setValues("blueFirst", 3, Entity.Ability.FIRST, true, 1);
+                setValues("blueFirst", 3, 1, Entity.Ability.FIRST, true, 1);
+                break;
+            case CIRCLE_DEFAULT:
+                //temp asset
+                setValues("heroDefault", 4, 2, Entity.Ability.DEFAULT, true, 1);
                 break;
             default:
                 break;
@@ -56,21 +64,48 @@ public class AbilityAnimation extends Animation {
         }
     }
 
-    private void setValues(String animationName, int totalFrames, Entity.Ability ability, boolean hasDirection, int numLoops) {
+    private void setValues(String animationName, int totalFrames, double cooldownInSeconds, Entity.Ability ability, boolean hasDirection, int numLoops) {
         this.animationName = animationName;
         this.totalFrames = totalFrames;
         this.ability = ability;
         this.hasDirection = hasDirection;
+        this.cooldownTotal = (int)Math.round(cooldownInSeconds*SquarePG.FPS);
         setNumLoops(numLoops);
+    }
+
+    public void decrementCooldownCounter() {
+        if (cooldownCounter > 0) {
+            cooldownCounter--;
+        }
+    }
+
+    public void resetCooldown () {
+        this.cooldownCounter = cooldownTotal;
     }
 
     public void resetDone() {
         done = false;
     }
 
+    public boolean isOffCooldown () {
+        return (cooldownCounter <= 0);
+    }
+
     @Override
     public EffectType getEffectType() {
         return effectType;
+    }
+
+    public String getAnimationName() {
+        return animationName;
+    }
+
+    public int getCooldownCounter() {
+        return cooldownCounter;
+    }
+
+    public int getCooldownTotal() {
+        return cooldownTotal;
     }
 
     public Entity.Ability getAbility() {
