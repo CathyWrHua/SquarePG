@@ -68,7 +68,7 @@ public class AbilityAnimation extends Animation {
         this.totalFrames = totalFrames;
         this.ability = ability;
         this.hasDirection = hasDirection;
-        this.cooldownTotal = (int)(cooldownInSeconds*FPS);
+        this.cooldownTotal = (int)Math.round(cooldownInSeconds*FPS);
         setNumLoops(numLoops);
     }
 
