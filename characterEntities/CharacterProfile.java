@@ -88,7 +88,18 @@ public class CharacterProfile {
 	public void attemptEvolution(int index, Path path) {
 		//hacky temp test code
 		//TODO: add error checking here
+		if (index > 2) return;
+
 		player.evolve(index, path);
+		this.path[index] = path;
+
+		for (int i = 0; i < MAX_EVOLUTION; i++) {
+			if (i == path.getValue()) {
+				isSelected[index][i] = true;
+			} else {
+				isSelected[index][i] = false;
+			}
+		}
 	}
 
 	private void createImageAssets() {

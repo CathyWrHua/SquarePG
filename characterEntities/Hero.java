@@ -79,10 +79,8 @@ public abstract class Hero extends Entity {
 
 	public boolean evolve(int pathIndex, CharacterProfile.Path path) {
 		//Temporary hack code
-		if (pathIndex < 3) return false;
+		if (pathIndex > 2) return false;
 		this.path[pathIndex] = path;
-
-
 
 //		if (this.path[1] == null) {
 //			this.path[1] = path;

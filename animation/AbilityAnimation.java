@@ -9,7 +9,16 @@ import java.util.ArrayList;
 
 public class AbilityAnimation extends Animation {
 	public enum AbilityAnimationType {
-		HERO_DEFAULT(75, 0), RED_FIRST(-75, -75), YELLOW_FIRST(75, 0), BLUE_FIRST(75, 0),
+		HERO_DEFAULT(75, 0),
+		RED_FIRST(-75, -75),
+		RED_SECOND(75, 0),
+		RED_THIRD(75, 0),
+		YELLOW_FIRST(75, 0),
+		YELLOW_SECOND(75, 0),
+		YELLOW_THIRD(75,0),
+		BLUE_FIRST(75, 0),
+		BLUE_SECOND(75, 0),
+		BLUE_THIRD(75, 0),
 		CIRCLE_DEFAULT(75, 0);
 		private int offsetX, offsetY;
 
@@ -45,17 +54,36 @@ public class AbilityAnimation extends Animation {
 			case RED_FIRST:
 				setValues("redFirst", 3, 2, Entity.Ability.FIRST, false, 2);
 				break;
+			case RED_SECOND:
+				setValues("heroDefault", 4, 0.5, Entity.Ability.SECOND, true, 1);
+				break;
+			case RED_THIRD:
+				setValues("heroDefault", 4, 0.5, Entity.Ability.THIRD, true, 1);
+				break;
 			case YELLOW_FIRST:
 				setValues("yellowFirst", 3, 1, Entity.Ability.FIRST, true, 1);
 				break;
+			case YELLOW_SECOND:
+				setValues("heroDefault", 4, 0.5, Entity.Ability.SECOND, true, 1);
+				break;
+			case YELLOW_THIRD:
+				setValues("heroDefault", 4, 0.5, Entity.Ability.THIRD, true, 1);
+				break;
 			case BLUE_FIRST:
 				setValues("blueFirst", 3, 1, Entity.Ability.FIRST, true, 1);
+				break;
+			case BLUE_SECOND:
+				setValues("heroDefault", 4, 0.5, Entity.Ability.SECOND, true, 1);
+				break;
+			case BLUE_THIRD:
+				setValues("heroDefault", 4, 0.5, Entity.Ability.THIRD, true, 1);
 				break;
 			case CIRCLE_DEFAULT:
 				//temp asset
 				setValues("heroDefault", 4, 2, Entity.Ability.DEFAULT, true, 1);
 				break;
 			default:
+
 				break;
 		}
 		this.imageIcons = new ArrayList<>(totalFrames);

@@ -73,6 +73,10 @@ public abstract class Entity implements Drawable {
 		this.velocity = velocity;
 
 		this.abilityAnimations = new ArrayList<>(NUM_ANIMATIONS);
+		for (int i = 0; i < NUM_ANIMATIONS; i++) {
+			this.abilityAnimations.add(i, null);
+		}
+
 		this.currentAbilityAnimation = null;
 		this.healthBar = new HealthBar(this);
 		this.random = new Random();
@@ -203,6 +207,9 @@ public abstract class Entity implements Drawable {
 	}
 
 	public void setAnimation(int index, AbilityAnimation abilityAnimation) {
+		if (abilityAnimations.size() > index) {
+			abilityAnimations.remove(index);
+		}
 		abilityAnimations.add(index, abilityAnimation);
 	}
 

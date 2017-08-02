@@ -92,6 +92,12 @@ public class GameScreen extends Screen implements KeyListener, MouseListener {
 			gameEngine.playerDidAttack(Entity.Ability.DEFAULT);
 		} else if (e.getKeyCode() == KeyEvent.VK_Q) {
 			gameEngine.playerDidAttack(Entity.Ability.FIRST);
+		} else if (e.getKeyCode() == KeyEvent.VK_W){
+			gameEngine.playerDidAttack(Entity.Ability.SECOND);
+		} else if (e.getKeyCode() == KeyEvent.VK_E){
+			gameEngine.playerDidAttack(Entity.Ability.THIRD);
+		} else if (e.getKeyCode() == KeyEvent.VK_R){
+			gameEngine.playerDidAttack(Entity.Ability.ULTIMATE);
 		} else if (e.getKeyCode() == KeyEvent.VK_Z) {
 			gameEngine.playerWasAttacked();
 		} else if (e.getKeyCode() == KeyEvent.VK_X) {
