@@ -17,7 +17,7 @@ public class GameMap extends Drawable {
 	}
 	
 	public GameMap(int level) {
-		drawableType = DrawableType.MAP;
+		drawableType = DrawableType.BACKGROUND;
 		createLevels();
 		currentLevel = level;
 	}

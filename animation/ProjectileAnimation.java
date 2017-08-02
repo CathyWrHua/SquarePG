@@ -57,6 +57,7 @@ public class ProjectileAnimation extends Animation {
 	private int velocityX, velocityY;
 	private int damage;
 	private boolean facingEast;
+	private ProjectileAnimationType animationType;
 	private MapCollisionDetection mapCollision;
 	private ArrayList<Entity> targets;
 	private ArrayList<DamageMarker> targetMarkers;
@@ -68,6 +69,7 @@ public class ProjectileAnimation extends Animation {
 		this.targets = entity.getTargets();
 		this.damage = entity.getDamage();
 		this.targetMarkers = new ArrayList<>();
+		this.animationType = animationType;
 		this.animationName = animationType.getAnimationName();
 		this.totalFrames = animationType.getTotalFrames();
 		this.velocityX = animationType.getVelocityX();
@@ -98,6 +100,18 @@ public class ProjectileAnimation extends Animation {
 		if (marker != null) {
 			targetMarkers.add(marker);
 		}
+	}
+
+	public int getEndX() {
+		return (facingEast ? posX+imageIcon.getIconWidth() : posX);
+	}
+
+	public int getEndY() {
+		return (posY+imageIcon.getIconHeight()/2);
+	}
+
+	public ProjectileAnimationType getAnimationType() {
+		return animationType;
 	}
 
 	public ArrayList<DamageMarker> getTargetMarkers () {
