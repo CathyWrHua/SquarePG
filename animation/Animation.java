@@ -14,6 +14,7 @@ public abstract class Animation implements Effect {
 	protected ArrayList<ImageIcon> imageIcons;
 
 	static final int ANIMATION_SPEED = 5;
+	static final String FILEPATH_ROOT = "\"src/assets/animations/\"";
 
 	public boolean isDone() {
 		return done;
