@@ -6,7 +6,6 @@ import animation.ProjectileAnimation;
 import gui.DamageMarker;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class YellowHero extends Hero {
 	public YellowHero(ArrayList<Entity> targets, MapCollisionDetection mapCollisionDetection) {
