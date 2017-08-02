@@ -11,17 +11,21 @@ import java.util.ArrayList;
 
 public class ProjectileAnimation extends Animation {
 	public enum ProjectileAnimationType {
-		YELLOW_FIRST(75, 30, "arrow", 2),
-		BLUE_FIRST(75, 15, "fireball", 3);
+		YELLOW_FIRST(75, 30, "arrow", 2, 10, 0),
+		BLUE_FIRST(75, 15, "fireball", 3, 5, 0);
 		private int offsetX, offsetY;
 		private String animationName;
 		private int totalFrames;
+		private int velocityX, velocityY;
 
-		ProjectileAnimationType(int offsetX, int offsetY, String animationName, int totalFrames) {
+		ProjectileAnimationType(int offsetX, int offsetY, String animationName, int totalFrames,
+								int velocityX, int velocityY) {
 			this.offsetX = offsetX;
 			this.offsetY = offsetY;
 			this.animationName = animationName;
 			this.totalFrames = totalFrames;
+			this.velocityX = velocityX;
+			this.velocityY = velocityY;
 		}
 
 		public int getOffsetX() {
@@ -38,6 +42,14 @@ public class ProjectileAnimation extends Animation {
 
 		public String getAnimationName() {
 			return animationName;
+		}
+
+		public int getVelocityX() {
+			return velocityX;
+		}
+
+		public int getVelocityY() {
+			return velocityY;
 		}
 	}
 
@@ -59,6 +71,8 @@ public class ProjectileAnimation extends Animation {
 		this.targetMarkers = new ArrayList<>();
 		this.animationName = animationType.getAnimationName();
 		this.totalFrames = animationType.getTotalFrames();
+		this.velocityX = animationType.getVelocityX();
+		this.velocityY = animationType.getVelocityY();
 		this.imageIcons = new ArrayList<>(totalFrames);
 		for (int i = 0; i < totalFrames; i++) {
 			imageIcons.add(i, new ImageIcon(FILEPATH_ROOT+animationName+i+".png"));
