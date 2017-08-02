@@ -1,5 +1,6 @@
 package animation;
 
+import SquarePG.SquarePG;
 import characterEntities.Entity;
 
 import javax.swing.*;
@@ -68,7 +69,7 @@ public class AbilityAnimation extends Animation {
         this.totalFrames = totalFrames;
         this.ability = ability;
         this.hasDirection = hasDirection;
-        this.cooldownTotal = (int)Math.round(cooldownInSeconds*FPS);
+        this.cooldownTotal = (int)Math.round(cooldownInSeconds*SquarePG.FPS);
         setNumLoops(numLoops);
     }
 

@@ -13,8 +13,6 @@ public abstract class Animation implements Effect {
     protected ImageIcon imageIcon = null;
     protected ArrayList<ImageIcon> imageIcons;
 
-    protected static final int FPS = 60;
-
     static final int ANIMATION_SPEED = 5;
 
     public boolean isDone() {
