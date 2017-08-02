@@ -26,7 +26,7 @@ public class AbilityAnimation extends Animation {
         }
     }
     private Entity entity;
-    private int coolDown, coolDownCounter;
+    private int cooldownTotal, cooldownCounter;
     private boolean hasDirection;
     private Entity.Ability ability;
     private AbilityAnimationType animationType;
@@ -36,7 +36,7 @@ public class AbilityAnimation extends Animation {
         this.effectType = EffectType.ENTITY_EFFECT;
         this.entity = entity;
         this.animationType = animationType;
-        this.coolDownCounter = 0;
+        this.cooldownCounter = 0;
         switch(animationType) {
             case HERO_DEFAULT:
                 setValues("heroDefault", 4, 0.5, Entity.Ability.DEFAULT, true, 1);
@@ -63,36 +63,48 @@ public class AbilityAnimation extends Animation {
         }
     }
 
-    private void setValues(String animationName, int totalFrames, double coolDownInSeconds, Entity.Ability ability, boolean hasDirection, int numLoops) {
+    private void setValues(String animationName, int totalFrames, double cooldownInSeconds, Entity.Ability ability, boolean hasDirection, int numLoops) {
         this.animationName = animationName;
         this.totalFrames = totalFrames;
         this.ability = ability;
         this.hasDirection = hasDirection;
-        this.coolDown = (int)(coolDownInSeconds*FPS);
+        this.cooldownTotal = (int)(cooldownInSeconds*FPS);
         setNumLoops(numLoops);
     }
 
-    public void decrementCoolDownCounter() {
-        if (coolDownCounter > 0) {
-            coolDownCounter--;
+    public void decrementCooldownCounter() {
+        if (cooldownCounter > 0) {
+            cooldownCounter--;
         }
     }
 
-    public void resetCoolDown () {
-        this.coolDownCounter = coolDown;
+    public void resetCooldown () {
+        this.cooldownCounter = cooldownTotal;
     }
 
     public void resetDone() {
         done = false;
     }
 
-    public boolean isOffCoolDown () {
-        return (coolDownCounter <= 0);
+    public boolean isOffCooldown () {
+        return (cooldownCounter <= 0);
     }
 
     @Override
     public EffectType getEffectType() {
         return effectType;
+    }
+
+    public String getAnimationName() {
+        return animationName;
+    }
+
+    public int getCooldownCounter() {
+        return cooldownCounter;
+    }
+
+    public int getCooldownTotal() {
+        return cooldownTotal;
     }
 
     public Entity.Ability getAbility() {

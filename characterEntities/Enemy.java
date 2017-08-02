@@ -30,8 +30,6 @@ public abstract class Enemy extends Entity {
 	private Entity targetEntity;
 
 	private static final int DELETION_TIME = 40;
-	private static final int DEFAULT_COOLDOWN = 10;
-	private int coolDown = 0;
 
 	Enemy(Entity targetEntity, MapCollisionDetection mapCollisionDetection, int maxHealth, int maxDamage, int minDamage, int posX, int posY, double velocity) {
 		super(mapCollisionDetection, maxHealth, maxDamage, minDamage, posX, posY, velocity);
@@ -61,10 +59,6 @@ public abstract class Enemy extends Entity {
 	@Override
 	public Rectangle getEntitySize() {
 		return new Rectangle(posX, posY, getImageIcon().getIconWidth(), getImageIcon().getIconHeight());
-	}
-
-	public void setTargetEntity(Entity targetEntity) {
-		this.targetEntity = targetEntity;
 	}
 
 	@Override
