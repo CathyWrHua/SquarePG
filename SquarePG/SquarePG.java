@@ -38,52 +38,52 @@ public class SquarePG extends JFrame {
 		Thread loop = new Thread() {
 			public void run() {
 				while(true) {
-		            long time = System.currentTimeMillis();
-		            
-		            currentScreen.update();
-		            
-		            //Screen switching function: screenState is in Wait, unless a change screen button is pressed (eg. back, enter buttons)
-		            if (screenState != ScreenState.WAIT) {
-		            	remove(currentScreen);
-		            	if (screenState == ScreenState.HOME) {
-		            		currentScreen = screenStack.pop();
-		            	} else {
-		            		screenStack.push(currentScreen);
-		            		switch(screenState) {
-		            		case ABOUT:
-		            			currentScreen = new AboutScreen();
-		            			break;
-		            		case CHARACTER_SELECT:
-		            			currentScreen = new SelectScreen();
-		            			break;
-		            		case OPTIONS:
-		            			currentScreen = new OptionsScreen();
-		            			break;
-		            		case GAME:
-		            			currentScreen = new GameScreen(heroClass);
-		            			break;
-		            		default:
-		            			currentScreen = screenStack.pop();
-		            		}
-		            	}
-		            	add(currentScreen);
-		            	currentScreen.init();
-		            	screenState = ScreenState.WAIT;
-		            }
-		            
-		            validate();
-		            repaint();
-		            
-		            // Delay for each frame
-		            time = (1000/FPS) - (System.currentTimeMillis()-time);
-		            
-		            if (time > 0) {
-		                try{
-		                    Thread.sleep(time);
-		                }
-		                catch (Exception e) {}
-		            }
-		        }
+					long time = System.currentTimeMillis();
+
+					currentScreen.update();
+
+					//Screen switching function: screenState is in Wait, unless a change screen button is pressed (eg. back, enter buttons)
+					if (screenState != ScreenState.WAIT) {
+						remove(currentScreen);
+						if (screenState == ScreenState.HOME) {
+							currentScreen = screenStack.pop();
+						} else {
+							screenStack.push(currentScreen);
+							switch(screenState) {
+							case ABOUT:
+								currentScreen = new AboutScreen();
+								break;
+							case CHARACTER_SELECT:
+								currentScreen = new SelectScreen();
+								break;
+							case OPTIONS:
+								currentScreen = new OptionsScreen();
+								break;
+							case GAME:
+								currentScreen = new GameScreen(heroClass);
+								break;
+							default:
+								currentScreen = screenStack.pop();
+							}
+						}
+						add(currentScreen);
+						currentScreen.init();
+						screenState = ScreenState.WAIT;
+					}
+
+					validate();
+					repaint();
+
+					// Delay for each frame
+					time = (1000/FPS) - (System.currentTimeMillis()-time);
+
+					if (time > 0) {
+						try{
+							Thread.sleep(time);
+						}
+						catch (Exception e) {}
+					}
+				}
 			}
 		};
 		loop.start();
