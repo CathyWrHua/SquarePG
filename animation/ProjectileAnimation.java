@@ -128,7 +128,7 @@ public class ProjectileAnimation extends Animation {
 	}
 
 	@Override
-	public void update () {
+	public void update() {
 		int currentFrame = counter++/ANIMATION_SPEED;
 		if (counter/ANIMATION_SPEED >= totalFrames) {
 			resetCounter();
