@@ -6,7 +6,6 @@ import animation.ProjectileAnimation;
 import gui.DamageMarker;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class YellowHero extends Hero {
 	public YellowHero(ArrayList<Entity> targets, MapCollisionDetection mapCollisionDetection) {
@@ -16,7 +15,20 @@ public class YellowHero extends Hero {
 		setImageIcon("src/assets/hero/yellowNeutral.png");
 		path[0] = CharacterProfile.Path.YELLOW;
 	}
-	
+
+	public boolean evolve (int pathIndex, CharacterProfile.Path path) {
+		if (!super.evolve(pathIndex, path)) return false;
+
+		//temp hack test code, will change in the future
+		if (pathIndex == 1) {
+			setAnimation(pathIndex + 1, new AbilityAnimation(AbilityAnimation.AbilityAnimationType.YELLOW_SECOND, this));
+		} else if (pathIndex == 2) {
+			setAnimation(pathIndex + 1, new AbilityAnimation(AbilityAnimation.AbilityAnimationType.YELLOW_THIRD, this));
+		}
+
+		return true;
+	}
+
 //	public boolean evolve(int path) {
 //		if (numberEvolutions != 0) {
 //			return false;

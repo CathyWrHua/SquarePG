@@ -17,6 +17,19 @@ public class RedHero extends Hero {
 		setImageIcon("src/assets/hero/redNeutral.png");
 		path[0] = CharacterProfile.Path.RED;
 	}
+
+	public boolean evolve (int pathIndex, CharacterProfile.Path path) {
+		if (!super.evolve(pathIndex, path)) return false;
+
+		//temp hack test code, will change in the future
+		if (pathIndex == 1) {
+			setAnimation(pathIndex + 1, new AbilityAnimation(AbilityAnimation.AbilityAnimationType.RED_SECOND, this));
+		} else if (pathIndex == 2) {
+			setAnimation(pathIndex + 1, new AbilityAnimation(AbilityAnimation.AbilityAnimationType.RED_THIRD, this));
+		}
+
+		return true;
+	}
 	
 //	public boolean evolve(int path) {
 //		if (numberEvolutions != 0) {

@@ -76,14 +76,19 @@ public abstract class Hero extends Entity {
 		return new Rectangle(posX, posY, SQUARE_LENGTH, SQUARE_LENGTH);
 	}
 
-	public boolean evolve(CharacterProfile.Path path) {
-		if (this.path[1] == null) {
-			this.path[1] = path;
-		} else if (this.path[2] == null) {
-			this.path[2] = path;
-		} else {
-			return false;
-		}
+
+	public boolean evolve(int pathIndex, CharacterProfile.Path path) {
+		//Temporary hack code
+		if (pathIndex > 2) return false;
+		this.path[pathIndex] = path;
+
+//		if (this.path[1] == null) {
+//			this.path[1] = path;
+//		} else if (this.path[2] == null) {
+//			this.path[2] = path;
+//		} else {
+//			return false;
+//		}
 		return true;
 	}
 
