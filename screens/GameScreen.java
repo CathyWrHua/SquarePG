@@ -150,8 +150,25 @@ public class GameScreen extends Screen implements KeyListener, MouseListener {
 		}
 	}
 
+	//Temporary hack code for evolution tree debug
 	private void findPath(int mouseX, int mouseY) {
-		
+		if (mouseX > 400 && mouseX < 600) {
+			if (mouseY > 100 && mouseY < 300) {
+				profilePage.attemptEvolution(1, CharacterProfile.Path.RED);
+			} else if (mouseY > 400 && mouseY < 600) {
+				profilePage.attemptEvolution(1, CharacterProfile.Path.YELLOW);
+			} else if (mouseY > 700 && mouseY < 900) {
+				profilePage.attemptEvolution(1, CharacterProfile.Path.BLUE);
+			}
+		} else if (mouseX > 700 && mouseX < 900) {
+			if (mouseY > 100 && mouseY < 300) {
+				profilePage.attemptEvolution(2, CharacterProfile.Path.RED);
+			} else if (mouseY > 400 && mouseY < 600) {
+				profilePage.attemptEvolution(2, CharacterProfile.Path.YELLOW);
+			} else if (mouseY > 700 && mouseY < 900) {
+				profilePage.attemptEvolution(2, CharacterProfile.Path.BLUE);
+			}
+		}
 	}
 
 	private void evolvePlayer(int index, CharacterProfile.Path path) {

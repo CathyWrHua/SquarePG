@@ -86,7 +86,9 @@ public class CharacterProfile {
 	}
 
 	public void attemptEvolution(int index, Path path) {
-
+		//hacky temp test code
+		//TODO: add error checking here
+		player.evolve(index, path);
 	}
 
 	private void createImageAssets() {

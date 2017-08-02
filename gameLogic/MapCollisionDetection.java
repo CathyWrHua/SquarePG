@@ -38,15 +38,16 @@ public class MapCollisionDetection {
 			return new Point(newX, newY);
 		}
 
-		hitRectArray = addEnemiesToHitArray(hitRectArray, currentEntityList);
+
+		Rectangle[] detectionList = addEnemiesToHitArray(hitRectArray, currentEntityList);
 
 		if (displacementX < 0 && displacementY < 0) {
-			ArrayList<Rectangle> tempList = new ArrayList<>(Arrays.asList(hitRectArray));
+			ArrayList<Rectangle> tempList = new ArrayList<>(Arrays.asList(detectionList));
 			Collections.reverse(tempList);
-			hitRectArray = tempList.toArray(new Rectangle[tempList.size()]);
+			detectionList = tempList.toArray(new Rectangle[tempList.size()]);
 		}
 
-		for (Rectangle rect:hitRectArray) {
+		for (Rectangle rect:detectionList) {
 			int hitRectRight = rect.x + rect.width;
 			int hitRectLeft = rect.x;
 			int hitRectBottom = rect.y + rect.height;
