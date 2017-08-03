@@ -280,7 +280,7 @@ public class GameEngine {
 		MapAnimation endAnimation;
 		switch (projectile.getAnimationType()) {
 			case BLUE_FIRST:
-				endAnimation = new MapAnimation(MapAnimation.MapAnimationType.ENEMY_DEATH, projectile.getEndX(), projectile.getEndY());
+				endAnimation = new MapAnimation(MapAnimation.MapAnimationType.FIREBALL, projectile.getEndX(), projectile.getEndY());
 				break;
 			default:
 				return null;
