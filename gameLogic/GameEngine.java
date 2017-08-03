@@ -44,13 +44,11 @@ public class GameEngine {
 	private AbilityBar playerAbilityBar;
 	private ArrayList<Entity> targets;
 	private ArrayList<Effect> effects;
-	private ArrayList<Drawable> layerRenderMapTemp;
 	private ArrayList<ArrayList<Drawable>> layerRenderMap;
 
 	public GameEngine(Hero.PlayerClass playerClass) {
 		targets = new ArrayList<>();
 		effects = new ArrayList<>();
-		layerRenderMapTemp = new ArrayList<>();
 
 		map = new GameMap(level);
 		collisionMap = new MapCollisionDetection(map.getCurrentCollisionMap());
@@ -78,16 +76,8 @@ public class GameEngine {
 		layerRenderMap.add(MapLayer.GUI_LAYER.getValue(), new ArrayList<>());
 	}
 
-	private void updateRenderMap() {
-		for (Drawable drawable : layerRenderMapTemp) {
-			layerRenderMap.get(drawable.getDrawableType().getValue()).add(drawable);
-		}
-		layerRenderMapTemp.clear();
-	}
-
 	public void update() {
 		if (!isDoneRendering) return;
-		updateRenderMap();
 
 		//TEMPORARY REMOVE WHEN WE HAVE LEGIT MAPS
 		//This is to avoid asynchronous heisenbugs of overwriting collision maps while a calculation is going on
@@ -231,7 +221,7 @@ public class GameEngine {
 	public void playerWasAttacked() {
 		DamageMarker marker = player.inflict(3, new Dummy(-100, -100, true));
 		effects.add(marker);
-		layerRenderMapTemp.add(marker);
+		layerRenderMap.get(MapLayer.DAMAGE_LAYER.getValue()).add(marker);
 	}
 
 	//Temporary hack to test healing
@@ -249,7 +239,7 @@ public class GameEngine {
 
 	private void createAbilityBar(Hero player) {
 		this.playerAbilityBar = new AbilityBar(player);
-		layerRenderMapTemp.add(playerAbilityBar);
+		layerRenderMap.get(MapLayer.GUI_LAYER.getValue()).add(playerAbilityBar);
 	}
 
 	private void createPlayer(Hero.PlayerClass playerClass) {
@@ -265,24 +255,24 @@ public class GameEngine {
 				break;
 			default:
 		}
-		layerRenderMapTemp.add(player);
+		layerRenderMap.get(MapLayer.ENTITY_LAYER.getValue()).add(player);
 	}
 
 	private void createEnemy(int health, int maxDamage, int minDamage, int posX, int posY, double velocity) {
 		Grunt grunt = new Grunt(player, collisionMap, health, maxDamage, minDamage, posX, posY, velocity);
 		targets.add(grunt);
-		layerRenderMapTemp.add(grunt);
+		layerRenderMap.get(MapLayer.ENTITY_LAYER.getValue()).add(grunt);
 	}
 
 	private void createDummy(int posX, int posY, boolean facingEast) {
 		Dummy dummy = new Dummy(posX, posY, facingEast);
 		targets.add(dummy);
-		layerRenderMapTemp.add(dummy);
+		layerRenderMap.get(MapLayer.ENTITY_LAYER.getValue()).add(dummy);
 	}
 
 	private void createMapAnimation(MapAnimation.MapAnimationType animationType, int posX, int posY) {
 		MapAnimation animation = new MapAnimation(animationType, posX, posY);
-		layerRenderMapTemp.add(animation);
+		layerRenderMap.get(MapLayer.MAP_EFFECTS_LAYER.getValue()).add(animation);
 		effects.add(animation);
 	}
 
