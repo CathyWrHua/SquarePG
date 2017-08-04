@@ -24,7 +24,7 @@ public class CharacterProfile {
 	private Path[] path;
 	public static final int MAX_EVOLUTION = 3;
 
-	private ImageIcon baokground;
+	private ImageIcon background;
 	private ImageIcon redFilled;
 	private ImageIcon redBorder;
 	private ImageIcon blueFilled;
@@ -50,7 +50,7 @@ public class CharacterProfile {
 	public void paint(Graphics g) {
 		Graphics2D g2d = (Graphics2D)g;
 
-		g2d.drawImage(baokground.getImage(), 0, 0, null);
+		g2d.drawImage(background.getImage(), 0, 0, null);
 		for (int h = 0; h < MAX_EVOLUTION; h++) {
 			for (int w = 0; w < MAX_EVOLUTION; w++) {
 				if (h == 0) {
@@ -103,7 +103,7 @@ public class CharacterProfile {
 	}
 
 	private void createImageAssets() {
-		baokground = new ImageIcon("src/assets/profile/layout.png");
+		background = new ImageIcon("src/assets/profile/layout.png");
 		redFilled = new ImageIcon("src/assets/profile/redFilled.png");
 		redBorder = new ImageIcon("src/assets/profile/redBorder.png");
 		blueFilled = new ImageIcon("src/assets/profile/blueFilled.png");
