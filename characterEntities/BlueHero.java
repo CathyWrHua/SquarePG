@@ -55,24 +55,6 @@ public class BlueHero extends Hero {
 //	}
 
 	@Override
-	public void attack(Ability ability) {
-		AbilityAnimation attemptedAbility = abilityAnimations.get(ability.getValue());
-		if (entityState == EntityState.NEUTRAL && attemptedAbility != null && attemptedAbility.isOffCooldown()) {
-			playAnimation(ability.getValue());
-			attemptedAbility.resetCooldown();
-			setEntityState(EntityState.ATTACKING);
-			switch (ability) {
-				case FIRST:
-					ProjectileAnimation newProjectile = new ProjectileAnimation(ProjectileAnimation.ProjectileAnimationType.BLUE_FIRST, mapCollisionDetection, this);
-					projectileAnimations.add(newProjectile);
-					break;
-				default:
-					break;
-			}
-		}
-	}
-
-	@Override
 	protected boolean isHit(Ability ability, Entity target) {
 		if (super.isHit(ability, target)) {
 			return true;
@@ -94,24 +76,33 @@ public class BlueHero extends Hero {
 	public void update() {
 		super.update();
 		DamageMarker marker;
+		Ability ability;
 
-		if (entityState != EntityState.ATTACKING) return;
-		for (Entity target : targets) {
-			switch (currentAbilityAnimation.getAbility()) {
-				case DEFAULT:
+		if (entityState != EntityState.ATTACKING || currentAbilityAnimation == null) return;
+		ability = currentAbilityAnimation.getAbility();
+		switch (ability) {
+			case DEFAULT:
+				for (Entity target : targets) {
 					if (!target.immuneTo.get(this) && isHit(Ability.DEFAULT, target) && target.getEntityState() != EntityState.DEAD) {
 						marker = target.inflict(getDamage(), this);
 						if (marker != null) {
 							targetMarkers.add(marker);
 						}
 					}
-					break;
-				case SECOND:
-				case THIRD:
-				case ULTIMATE:
-				default:
-					break;
-			}
+				}
+				break;
+			case FIRST:
+				if (currentAbilityAnimation.isAttackFrame()) {
+					ProjectileAnimation newProjectile = new ProjectileAnimation(ProjectileAnimation.ProjectileAnimationType.BLUE_FIRST,
+							mapCollisionDetection, this);
+					projectileAnimations.add(newProjectile);
+				}
+				break;
+			case SECOND:
+			case THIRD:
+			case ULTIMATE:
+			default:
+				break;
 		}
 	}
 }

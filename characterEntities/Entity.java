@@ -95,7 +95,7 @@ public abstract class Entity extends Drawable {
 		AbilityAnimation attemptedAbility = abilityAnimations.get(ability.getValue());
 		if (entityState == EntityState.NEUTRAL && attemptedAbility != null && attemptedAbility.isOffCooldown()) {
 			playAnimation(ability.getValue());
-			attemptedAbility.resetCooldown();
+			if (attemptedAbility.isInstantCast()) attemptedAbility.resetCooldown();
 			setEntityState(EntityState.ATTACKING);
 		}
 	}
