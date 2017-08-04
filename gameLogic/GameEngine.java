@@ -225,7 +225,7 @@ public class GameEngine {
 	}
 
 	//Temporary hack to test healing
-	public  void playerDidHeal(int heal) {
+	public void playerDidHeal(int heal) {
 		player.heal(heal);
 	}
 

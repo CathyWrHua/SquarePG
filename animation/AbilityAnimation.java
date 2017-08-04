@@ -14,7 +14,7 @@ public class AbilityAnimation extends Animation {
 		RED_SECOND(75, 0, "heroDefault", Entity.Ability.SECOND, true, 4, 1, 0.5, -1),
 		RED_THIRD(75, 0, "heroDefault", Entity.Ability.THIRD, true, 4, 1, 0.5, -1),
 		YELLOW_FIRST(75, 0, "yellowFirst", Entity.Ability.FIRST, true, 3, 1, 1, 0),
-		YELLOW_SECOND(75, 0,  "heroDefault", Entity.Ability.SECOND, true, 4, 1, 0.5, -1),
+		YELLOW_SECOND(75, 0, "heroDefault", Entity.Ability.SECOND, true, 4, 1, 0.5, -1),
 		YELLOW_THIRD(75, 0, "heroDefault", Entity.Ability.THIRD, true, 4, 1, 0.5, -1),
 		BLUE_FIRST(75, 0, "blueFirst", Entity.Ability.FIRST, true, 3, 1, 1, 2),
 		BLUE_SECOND(75, 0, "heroDefault", Entity.Ability.SECOND, true, 4, 1, 0.5, -1),

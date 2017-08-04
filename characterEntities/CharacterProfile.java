@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class CharacterProfile {
-	public enum  Path {
+	public enum Path {
 		RED(0),
 		YELLOW(1),
 		BLUE(2);
