@@ -92,7 +92,7 @@ public class BlueHero extends Hero {
 				}
 				break;
 			case FIRST:
-				if (currentAbilityAnimation.isAttackFrame()) {
+				if (currentAbilityAnimation.isDamageStartFrame()) {
 					ProjectileAnimation newProjectile = new ProjectileAnimation(ProjectileAnimation.ProjectileAnimationType.BLUE_FIRST,
 							mapCollisionDetection, this);
 					projectileAnimations.add(newProjectile);

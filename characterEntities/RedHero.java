@@ -86,7 +86,7 @@ public class RedHero extends Hero {
 				case DEFAULT:
 				case FIRST:
 					if (isHit(currentAbilityAnimation.getAbility(), target) && target.getEntityState() != EntityState.DEAD &&
-							currentAbilityAnimation.getCurrentFrame() >= currentAbilityAnimation.getAttackFrame() && !target.immuneTo.get(this)) {
+							currentAbilityAnimation.getCurrentFrame() >= currentAbilityAnimation.getDamageStartFrame() && !target.immuneTo.get(this)) {
 						marker = target.inflict(getDamage(), this);
 						if (marker != null) {
 							targetMarkers.add(marker);

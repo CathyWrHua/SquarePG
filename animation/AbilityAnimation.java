@@ -26,10 +26,10 @@ public class AbilityAnimation extends Animation {
 		private boolean hasDirection;
 		int totalFrames, numLoops;
 		double cooldownInSeconds;
-		int attackFrame;
+		int damageStartFrame;
 
 		AbilityAnimationType(int offsetX, int offsetY, String animationName, Entity.Ability ability, boolean hasDirection,
-							 int totalFrames, int numLoops, double cooldownInSeconds, int attackFrame) {
+							 int totalFrames, int numLoops, double cooldownInSeconds, int damageStartFrame) {
 			this.offsetX = offsetX;
 			this.offsetY = offsetY;
 			this.animationName = animationName;
@@ -38,7 +38,7 @@ public class AbilityAnimation extends Animation {
 			this.totalFrames = totalFrames;
 			this.numLoops = numLoops;
 			this.cooldownInSeconds = cooldownInSeconds;
-			this.attackFrame = attackFrame;
+			this.damageStartFrame = damageStartFrame;
 		}
 
 		public int getOffsetX() {
@@ -73,13 +73,13 @@ public class AbilityAnimation extends Animation {
 			return hasDirection;
 		}
 
-		public int getAttackFrame() {
-			return attackFrame;
+		public int getDamageStartFrame() {
+			return damageStartFrame;
 		}
 	}
 	private Entity entity;
 	private int cooldownTotal, cooldownCounter;
-	private int attackFrame;
+	private int damageStartFrame;
 	private boolean hasDirection;
 	private Entity.Ability ability;
 	private AbilityAnimationType animationType;
@@ -89,7 +89,7 @@ public class AbilityAnimation extends Animation {
 		this.animationType = animationType;
 		this.entity = entity;
 		this.animationName = animationType.getAnimationName();
-		this.attackFrame = animationType.getAttackFrame();
+		this.damageStartFrame = animationType.getDamageStartFrame();
 		this.totalFrames = animationType.getTotalFrames();
 		this.ability = animationType.getAbility();
 		this.hasDirection = animationType.getHasDirection();
@@ -117,11 +117,11 @@ public class AbilityAnimation extends Animation {
 	}
 
 	public boolean isInstantCast() {
-		return (attackFrame <= 0);
+		return (damageStartFrame <= 0);
 	}
 
-	public boolean isAttackFrame() {
-		return (counter/ANIMATION_SPEED == attackFrame && (counter+1)/ANIMATION_SPEED != attackFrame);
+	public boolean isDamageStartFrame() {
+		return (counter/ANIMATION_SPEED == damageStartFrame && (counter+1)/ANIMATION_SPEED != damageStartFrame);
 	}
 
 	public boolean isOffCooldown () {
@@ -140,8 +140,8 @@ public class AbilityAnimation extends Animation {
 		return cooldownTotal;
 	}
 
-	public int getAttackFrame() {
-		return attackFrame;
+	public int getDamageStartFrame() {
+		return damageStartFrame;
 	}
 
 	public Entity.Ability getAbility() {
@@ -151,7 +151,7 @@ public class AbilityAnimation extends Animation {
 	@Override
 	public void update() {
 		super.update();
-		if (isAttackFrame() && !isInstantCast()) resetCooldown();
+		if (isDamageStartFrame() && !isInstantCast()) resetCooldown();
 	}
 
 	public void draw(Graphics g) {
