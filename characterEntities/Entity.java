@@ -1,8 +1,7 @@
 package characterEntities;
 
 import gameLogic.MapCollisionDetection;
-import animation.AbilityAnimation;
-import animation.ProjectileAnimation;
+import animation.effects.ProjectileAnimation;
 import gui.DamageMarker;
 import gui.HealthBar;
 import screens.Drawable;
@@ -24,8 +23,8 @@ public abstract class Entity implements Drawable {
 	protected boolean knockBackRight;
 	protected boolean facingEast;
 	protected MapCollisionDetection mapCollisionDetection;
-	protected AbilityAnimation currentAbilityAnimation;
-	protected ArrayList<AbilityAnimation> abilityAnimations;
+	protected animation.abilities.Ability currentAbility;
+	protected ArrayList<animation.abilities.Ability> abilities;
 	protected ArrayList<ProjectileAnimation> projectileAnimations;
 	protected ArrayList<DamageMarker> targetMarkers;
 	protected HashMap<Entity, Boolean> immuneTo;
@@ -72,12 +71,12 @@ public abstract class Entity implements Drawable {
 		this.facingEast = true;
 		this.velocity = velocity;
 
-		this.abilityAnimations = new ArrayList<>(NUM_ANIMATIONS);
+		this.abilities = new ArrayList<>(NUM_ANIMATIONS);
 		for (int i = 0; i < NUM_ANIMATIONS; i++) {
-			this.abilityAnimations.add(i, null);
+			this.abilities.add(i, null);
 		}
 
-		this.currentAbilityAnimation = null;
+		this.currentAbility = null;
 		this.healthBar = new HealthBar(this);
 		this.random = new Random();
 		this.immuneTo = new HashMap<>();
@@ -91,7 +90,7 @@ public abstract class Entity implements Drawable {
 	}
 
 	public void attack(Ability ability) {
-		AbilityAnimation attemptedAbility = abilityAnimations.get(ability.getValue());
+		animation.abilities.Ability attemptedAbility = abilities.get(ability.getValue());
 		if (entityState == EntityState.NEUTRAL && attemptedAbility != null && attemptedAbility.isOffCooldown()) {
 			playAnimation(ability.getValue());
 			if (attemptedAbility.isInstantCast()) attemptedAbility.resetCooldown();
@@ -126,9 +125,9 @@ public abstract class Entity implements Drawable {
 	}
 
 	void playAnimation(int index) {
-		if (index >= 0 && index < abilityAnimations.size()) {
-			currentAbilityAnimation = abilityAnimations.get(index);
-			currentAbilityAnimation.reset();
+		if (index >= 0 && index < abilities.size()) {
+			currentAbility = abilities.get(index);
+			currentAbility.reset();
 		}
 	}
 
@@ -160,8 +159,8 @@ public abstract class Entity implements Drawable {
 		return projectileAnimations;
 	}
 
-	public ArrayList<AbilityAnimation> getAbilityAnimations() {
-		return abilityAnimations;
+	public ArrayList<animation.abilities.Ability> getAbilities() {
+		return abilities;
 	}
 
 	public abstract ArrayList<Entity> getTargets();
@@ -206,11 +205,11 @@ public abstract class Entity implements Drawable {
 		this.facingEast = facingEast;
 	}
 
-	public void setAnimation(int index, AbilityAnimation abilityAnimation) {
-		if (abilityAnimations.size() > index) {
-			abilityAnimations.remove(index);
+	public void setAnimation(int index, animation.abilities.Ability ability) {
+		if (abilities.size() > index) {
+			abilities.remove(index);
 		}
-		abilityAnimations.add(index, abilityAnimation);
+		abilities.add(index, ability);
 	}
 
 	public abstract Rectangle getEntitySize();
@@ -254,8 +253,8 @@ public abstract class Entity implements Drawable {
 		}
 	}
 
-	public AbilityAnimation getCurrentAbilityAnimation() {
-		return currentAbilityAnimation;
+	public animation.abilities.Ability getCurrentAbility() {
+		return currentAbility;
 	}
 
 	public void setUDMotionState(MotionStateUpDown state) {
@@ -273,9 +272,9 @@ public abstract class Entity implements Drawable {
 		if (damageTaken > 0) {
 			currentHealth -= damageTaken;
 			currentHealth = (currentHealth < 0) ? 0 : currentHealth;
-			if (currentAbilityAnimation != null) {
-				currentAbilityAnimation.kill();
-				currentAbilityAnimation = null;
+			if (currentAbility != null) {
+				currentAbility.kill();
+				currentAbility = null;
 			}
 			if (currentHealth > 0) {
 				setEntityState(EntityState.DAMAGED);
@@ -300,16 +299,16 @@ public abstract class Entity implements Drawable {
 			stunCounter = 0;
 		}
 
-		if (currentAbilityAnimation != null) {
-			currentAbilityAnimation.update();
-			if (currentAbilityAnimation.isDone()) {
+		if (currentAbility != null) {
+			currentAbility.update();
+			if (currentAbility.isDone()) {
 				setEntityState(EntityState.NEUTRAL);
 				calculateEntityDirection();
-				currentAbilityAnimation.resetDone();
-				currentAbilityAnimation = null;
+				currentAbility.resetDone();
+				currentAbility = null;
 			}
 		}
-		for (AbilityAnimation ability : abilityAnimations) {
+		for (animation.abilities.Ability ability : abilities) {
 			if (ability != null) ability.decrementCooldownCounter();
 		}
 	}

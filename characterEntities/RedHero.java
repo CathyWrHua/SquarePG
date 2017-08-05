@@ -1,6 +1,5 @@
 package characterEntities;
 
-import animation.AbilityAnimation;
 import gameLogic.MapCollisionDetection;
 import gui.DamageMarker;
 import javafx.scene.shape.Circle;
@@ -13,7 +12,7 @@ public class RedHero extends Hero {
 	public RedHero(ArrayList<Entity> targets, MapCollisionDetection mapCollisionDetection) {
 		super(targets, mapCollisionDetection, 30, 15, 5, 100, 100, 5);
 		setPlayerClass(PlayerClass.RED);
-		setAnimation(1, new AbilityAnimation(AbilityAnimation.AbilityAnimationType.RED_FIRST, this));
+		setAnimation(1, new animation.abilities.Ability(abilities.Ability.AbilityAnimationType.RED_FIRST, this));
 		setImageIcon("src/assets/hero/redNeutral.png");
 		path[0] = CharacterProfile.Path.RED;
 	}
@@ -23,9 +22,9 @@ public class RedHero extends Hero {
 
 		//temp hack test code, will change in the future
 		if (pathIndex == 1) {
-			setAnimation(pathIndex + 1, new AbilityAnimation(AbilityAnimation.AbilityAnimationType.RED_SECOND, this));
+			setAnimation(pathIndex + 1, new animation.abilities.Ability(abilities.Ability.AbilityAnimationType.RED_SECOND, this));
 		} else if (pathIndex == 2) {
-			setAnimation(pathIndex + 1, new AbilityAnimation(AbilityAnimation.AbilityAnimationType.RED_THIRD, this));
+			setAnimation(pathIndex + 1, new animation.abilities.Ability(abilities.Ability.AbilityAnimationType.RED_THIRD, this));
 		}
 
 		return true;
@@ -82,11 +81,11 @@ public class RedHero extends Hero {
 
 		if (entityState != EntityState.ATTACKING) return;
 		for (Entity target : targets) {
-			switch (currentAbilityAnimation.getAbility()) {
+			switch (currentAbility.getAbility()) {
 				case DEFAULT:
 				case FIRST:
-					if (isHit(currentAbilityAnimation.getAbility(), target) && target.getEntityState() != EntityState.DEAD &&
-							currentAbilityAnimation.getCurrentFrame() >= currentAbilityAnimation.getDamageStartFrame() && !target.immuneTo.get(this)) {
+					if (isHit(currentAbility.getAbility(), target) && target.getEntityState() != EntityState.DEAD &&
+							currentAbility.getCurrentFrame() >= currentAbility.getDamageStartFrame() && !target.immuneTo.get(this)) {
 						marker = target.inflict(getDamage(), this);
 						if (marker != null) {
 							targetMarkers.add(marker);

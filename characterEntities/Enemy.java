@@ -123,7 +123,7 @@ public abstract class Enemy extends Entity {
 	public void update() {
 		super.update();
 
-		if (currentAbilityAnimation == null) {
+		if (currentAbility == null) {
 			targetEntity.immuneTo.put(this, false);
 		}
 

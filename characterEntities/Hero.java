@@ -1,7 +1,6 @@
 package characterEntities;
 
 import gameLogic.MapCollisionDetection;
-import animation.AbilityAnimation;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -40,7 +39,7 @@ public abstract class Hero extends Entity {
 		}
 
 		createHeroHashMap();
-		setAnimation(0, new AbilityAnimation(AbilityAnimation.AbilityAnimationType.HERO_DEFAULT, this));
+		setAnimation(0, new animation.abilities.Ability(abilities.Ability.AbilityAnimationType.HERO_DEFAULT, this));
 		path = new CharacterProfile.Path[3];
 		setEntityType(EntityType.HERO);
 	}
@@ -97,7 +96,7 @@ public abstract class Hero extends Entity {
 		int targetPosY = target.getPosY();
 		return (((getFacingEast() && targetPosX > posX && targetPosX < posX+SQUARE_LENGTH+DEFAULT_RANGE) ||
 				(!getFacingEast() && targetPosX < posX && targetPosX > posX-SQUARE_LENGTH-DEFAULT_RANGE)) &&
-				targetPosY > posY-DEFAULT_RANGE && targetPosY < posY+DEFAULT_RANGE && ability == Ability.DEFAULT);
+				targetPosY > posY-DEFAULT_RANGE && targetPosY < posY+DEFAULT_RANGE && ability == Entity.Ability.DEFAULT);
 	}
 	
 //	protected boolean evolutionIncrease(int path) {
@@ -148,7 +147,7 @@ public abstract class Hero extends Entity {
 	public void update () {
 		super.update();
 
-		if (currentAbilityAnimation == null) {
+		if (currentAbility == null) {
 			for (Entity target : targets) {
 				target.immuneTo.put(this, false);
 			}

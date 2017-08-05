@@ -1,36 +1,47 @@
 package animation;
 
+import animation.effects.MapEffect;
+import screens.Drawable;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
-public abstract class Animation extends Effect {
-	protected boolean done = false;
-	protected int totalFrames;
-	protected int counter = 0;
-	protected int numLoops, currentLoop;
-	protected String animationName;
-	protected ImageIcon imageIcon = null;
-	protected ArrayList<ImageIcon> imageIcons;
+public class Animation implements Drawable {
+	private boolean done = false;
+	private boolean shouldMirror = false;
+	private int posX, posY;
+
+	private int totalFrames;
+	private int counter = 0;
+	private int numLoops, currentLoop;
+	private String animationName;
+	private ImageIcon currentImage = null;
+	private ArrayList<ImageIcon> imageIcons;
 
 	static final int ANIMATION_SPEED = 5;
 	static final String FILEPATH_ROOT = "src/assets/animations/";
-	static final String FILEPATH_PNG = ".png";
+	static final String FILEPATH_FILETYPE = ".png";
+
+	public Animation (int posX,
+					  int posY,
+					  String animationName,
+					  int totalFrames,
+					  int numLoops) {
+		this.posX = posX;
+		this.posY = posY;
+		this.animationName = FILEPATH_ROOT + animationName;
+		this.totalFrames = totalFrames;
+		this.numLoops = numLoops;
+
+		this.imageIcons = new ArrayList<>(totalFrames);
+		for (int i = 0; i < totalFrames; i++) {
+			this.imageIcons.add(new ImageIcon(this.animationName + i + FILEPATH_FILETYPE));
+		}
+	}
 
 	public boolean isDone() {
 		return done;
-	}
-
-	protected void resetCounter() {
-		this.counter = 0;
-	}
-
-	protected void resetLoops() {
-		this.currentLoop = numLoops;
-	}
-
-	public void kill() {
-		done = true;
 	}
 
 	public void reset() {
@@ -39,8 +50,30 @@ public abstract class Animation extends Effect {
 		done = false;
 	}
 
-	public int getCurrentFrame() {
-		return counter/ANIMATION_SPEED;
+	public void setPosition (int poxX, int posY) {
+		this.posX = posX;
+		this.posY = posY;
+	}
+
+	public Rectangle getSize() {
+		return (currentImage == null)? null:
+				new Rectangle(posX, posY, currentImage.getIconWidth(), currentImage.getIconHeight());
+	}
+
+	public void killAnimation() {
+		done = true;
+	}
+
+//	public int getCurrentFrame() {
+//		return counter/ANIMATION_SPEED;
+//	}
+
+	protected void resetCounter() {
+		this.counter = 0;
+	}
+
+	protected void resetLoops() {
+		this.currentLoop = numLoops;
 	}
 
 	public void setNumLoops(int numLoops) {
@@ -55,8 +88,27 @@ public abstract class Animation extends Effect {
 			currentFrame = 0;
 			done = --currentLoop < 1;
 		}
-		this.imageIcon = imageIcons.get(currentFrame);
+		currentImage = imageIcons.get(currentFrame);
 	}
 
-	public abstract void draw(Graphics g);
+	public void shouldMirror(boolean mirror) {
+		shouldMirror = mirror;
+	}
+
+	public void draw(Graphics g) {
+		if (currentImage == null) return;
+		Graphics2D g2d = (Graphics2D)g;
+		Image image = currentImage.getImage();
+		int x = posX;
+		int width = image.getWidth(null);
+
+		if (shouldMirror) {
+			x += width;
+			width = -width;
+		}
+
+		if (counter/ANIMATION_SPEED < totalFrames) {
+			g2d.drawImage(image, x, posY, width, image.getHeight(null), null);
+		}
+	}
 }

@@ -1,7 +1,6 @@
 package characterEntities;
 
-import animation.AbilityAnimation;
-import animation.ProjectileAnimation;
+import animation.effects.ProjectileAnimation;
 import gameLogic.MapCollisionDetection;
 import gui.DamageMarker;
 
@@ -11,7 +10,7 @@ public class BlueHero extends Hero {
 	public BlueHero(ArrayList<Entity> targets, MapCollisionDetection mapCollisionDetection) {
 		super(targets, mapCollisionDetection, 10, 8, 7, 100, 100, 5);
 		setPlayerClass(PlayerClass.BLUE);
-		setAnimation(1, new AbilityAnimation(AbilityAnimation.AbilityAnimationType.BLUE_FIRST, this));
+		setAnimation(1, new animation.abilities.Ability(abilities.Ability.AbilityAnimationType.BLUE_FIRST, this));
 		setImageIcon("src/assets/hero/blueNeutral.png");
 		path[0] = CharacterProfile.Path.BLUE;
 	}
@@ -21,9 +20,9 @@ public class BlueHero extends Hero {
 
 		//temp hack test code, will change in the future
 		if (pathIndex == 1) {
-			setAnimation(pathIndex + 1, new AbilityAnimation(AbilityAnimation.AbilityAnimationType.BLUE_SECOND, this));
+			setAnimation(pathIndex + 1, new animation.abilities.Ability(abilities.Ability.AbilityAnimationType.BLUE_SECOND, this));
 		} else if (pathIndex == 2) {
-			setAnimation(pathIndex + 1, new AbilityAnimation(AbilityAnimation.AbilityAnimationType.BLUE_THIRD, this));
+			setAnimation(pathIndex + 1, new animation.abilities.Ability(abilities.Ability.AbilityAnimationType.BLUE_THIRD, this));
 		}
 
 		return true;
@@ -78,12 +77,12 @@ public class BlueHero extends Hero {
 		DamageMarker marker;
 		Ability ability;
 
-		if (entityState != EntityState.ATTACKING || currentAbilityAnimation == null) return;
-		ability = currentAbilityAnimation.getAbility();
+		if (entityState != EntityState.ATTACKING || currentAbility == null) return;
+		ability = currentAbility.getAbility();
 		switch (ability) {
 			case DEFAULT:
 				for (Entity target : targets) {
-					if (!target.immuneTo.get(this) && isHit(Ability.DEFAULT, target) && target.getEntityState() != EntityState.DEAD) {
+					if (!target.immuneTo.get(this) && isHit(Entity.Ability.DEFAULT, target) && target.getEntityState() != EntityState.DEAD) {
 						marker = target.inflict(getDamage(), this);
 						if (marker != null) {
 							targetMarkers.add(marker);
@@ -92,7 +91,7 @@ public class BlueHero extends Hero {
 				}
 				break;
 			case FIRST:
-				if (currentAbilityAnimation.isDamageStartFrame()) {
+				if (currentAbility.isDamageStartFrame()) {
 					ProjectileAnimation newProjectile = new ProjectileAnimation(ProjectileAnimation.ProjectileAnimationType.BLUE_FIRST,
 							mapCollisionDetection, this);
 					projectileAnimations.add(newProjectile);

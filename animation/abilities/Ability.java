@@ -1,13 +1,15 @@
-package animation;
+package animation.abilities;
 
 import SquarePG.SquarePG;
+import animation.Animation;
 import characterEntities.Entity;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class AbilityAnimation extends Animation {
+public class Ability extends Animation {
+	//Remove this
 	public enum AbilityAnimationType {
 		HERO_DEFAULT(75, 0, "heroDefault", Entity.Ability.DEFAULT, true, 4, 1, 0.5, 0),
 		RED_FIRST(-75, -75, "redFirst", Entity.Ability.FIRST, false, 3, 2, 2, 0),
@@ -84,7 +86,7 @@ public class AbilityAnimation extends Animation {
 	private Entity.Ability ability;
 	private AbilityAnimationType animationType;
 
-	public AbilityAnimation(AbilityAnimationType animationType, Entity entity) {
+	public Ability(AbilityAnimationType animationType, Entity entity) {
 		this.effectType = EffectType.ENTITY_EFFECT;
 		this.animationType = animationType;
 		this.entity = entity;

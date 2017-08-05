@@ -1,15 +1,17 @@
-package animation;
+package animation.effects;
 
+import animation.Animation;
 import gameLogic.MapCollisionDetection;
 import characterEntities.Entity;
 import characterEntities.HitDetectionHelper;
 import gui.DamageMarker;
+import screens.Drawable;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class ProjectileAnimation extends Animation {
+public class ProjectileAnimation extends MapEffect {
 	public enum ProjectileAnimationType {
 		YELLOW_FIRST(30, 30, "arrow", 2, 10, 0),
 		BLUE_FIRST(75, 15, "fireball", 3, 5, 0);

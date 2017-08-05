@@ -1,10 +1,13 @@
-package animation;
+package animation.effects;
+
+import animation.Animation;
+import screens.Drawable;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class MapAnimation extends Animation {
+public class MapAnimation extends MapEffect {
 	public enum MapAnimationType {
 		ENEMY_DEATH(-50, -50, "enemyDeath", 4, 1),
 		FIREBALL(-38, -38, "fireballExplosion", 4, 1);

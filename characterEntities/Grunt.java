@@ -1,7 +1,6 @@
 package characterEntities;
 
 import gameLogic.MapCollisionDetection;
-import animation.AbilityAnimation;
 
 public class Grunt extends Enemy {
 
@@ -13,6 +12,6 @@ public class Grunt extends Enemy {
 		attackRange = 50;
 
 		//Temp code until enemy attack is determined
-		setAnimation(0, new AbilityAnimation(AbilityAnimation.AbilityAnimationType.CIRCLE_DEFAULT, this));
+		setAnimation(0, new animation.abilities.Ability(abilities.Ability.AbilityAnimationType.CIRCLE_DEFAULT, this));
 	}
 }

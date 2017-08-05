@@ -1,11 +1,10 @@
 package gui;
 
-import animation.Effect;
-import screens.Drawable;
+import animation.effects.MapEffect;
 
 import java.awt.*;
 
-public class DamageMarker extends Effect {
+public class DamageMarker extends MapEffect {
 	private int currentLifetime = LIFETIME;
 	private int damage;
 	private int posX, posY;
