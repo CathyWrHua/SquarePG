@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import javax.swing.ImageIcon;
 
-public class GameMap extends Drawable {
+public class GameMap implements Drawable {
 	private int currentLevel;
 	private HashMap<Integer, ImageIcon[][]> levelMapping = new HashMap<>();
 	private HashMap<Integer, Rectangle[]> hitRectangleMapping = new HashMap<>();
@@ -17,7 +17,6 @@ public class GameMap extends Drawable {
 	}
 	
 	public GameMap(int level) {
-		drawableType = DrawableType.BACKGROUND;
 		createLevels();
 		currentLevel = level;
 	}

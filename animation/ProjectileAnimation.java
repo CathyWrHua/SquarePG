@@ -63,7 +63,7 @@ public class ProjectileAnimation extends Animation {
 	private ArrayList<DamageMarker> targetMarkers;
 
 	public ProjectileAnimation(ProjectileAnimationType animationType, MapCollisionDetection collisionMap, Entity entity) {
-		this.drawableType = DrawableType.PROJECTILE_EFFECT;
+		this.effectType = EffectType.PROJECTILE_EFFECT;
 		this.mapCollision = collisionMap;
 		this.facingEast = entity.getFacingEast();
 		this.targets = entity.getTargets();

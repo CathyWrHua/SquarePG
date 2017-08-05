@@ -9,7 +9,7 @@ import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
-public class AbilityBar extends Drawable {
+public class AbilityBar implements Drawable {
 	private ImageIcon iconBar;
 	private ArrayList<ImageIcon> abilityIcons;
 	private ArrayList<AbilityAnimation> abilities;
@@ -26,7 +26,6 @@ public class AbilityBar extends Drawable {
 		iconBar = new ImageIcon("src/assets/gui/iconBar.png");
 		abilityIcons = new ArrayList<>(NUM_ABILITIES);
 		abilities = new ArrayList<>(NUM_ABILITIES);
-		drawableType = DrawableType.GUI;
 		updateAbilityIcons(player);
 	}
 

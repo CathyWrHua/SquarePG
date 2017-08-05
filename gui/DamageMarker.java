@@ -20,7 +20,7 @@ public class DamageMarker extends Effect {
 	private static final float INITIAL_SPEED = 3.0f;
 
 	public DamageMarker(int damage, int posX, int posY) {
-		this.drawableType = DrawableType.DAMAGE;
+		this.effectType = EffectType.DAMAGE;
 		this.damage = damage;
 		this.posX = posX;
 		this.posY = posY;

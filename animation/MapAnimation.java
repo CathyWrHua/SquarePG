@@ -44,7 +44,7 @@ public class MapAnimation extends Animation {
 	private int posX, posY;
 
 	public MapAnimation(MapAnimationType animationType, int posX, int posY) {
-		this.drawableType = DrawableType.MAP_EFFECT;
+		this.effectType = EffectType.MAP_EFFECT;
 		this.animationName = animationType.getAnimationName();
 		this.totalFrames = animationType.getTotalFrames();
 		this.setNumLoops(animationType.getNumLoops());

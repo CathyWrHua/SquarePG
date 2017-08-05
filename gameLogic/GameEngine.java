@@ -134,7 +134,7 @@ public class GameEngine {
 			effect.update();
 
 			if (effect.isDone()) {
-				if (effect.getDrawableType() == Drawable.DrawableType.PROJECTILE_EFFECT) {
+				if (effect.getEffectType() == Effect.EffectType.PROJECTILE_EFFECT) {
 					ProjectileAnimation animation = (ProjectileAnimation) effect;
 					damageMarkers.addAll(animation.getTargetMarkers());
 					currentEndAnimation = determineEndAnimation(animation);
@@ -143,7 +143,7 @@ public class GameEngine {
 					}
 					animation.clearTargetMarkers();
 				}
-				layerRenderMap.get(effect.getDrawableType().getValue()).remove(effect);
+				layerRenderMap.get(effect.getEffectType().getValue()).remove(effect);
 				iterator.remove();
 			}
 		}

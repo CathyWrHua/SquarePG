@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
-public abstract class Entity extends Drawable {
+public abstract class Entity implements Drawable {
 	protected int posX, posY;
 	protected int newPosX, newPosY;
 	protected int maxHealth, currentHealth;
@@ -61,7 +61,6 @@ public abstract class Entity extends Drawable {
 	protected static final int KNOCK_BACK_DUR = 2;
 	
 	public Entity(MapCollisionDetection mapCollisionDetection, int maxHealth, int maxDamage, int minDamage, int posX, int posY, double velocity) {
-		this.drawableType = DrawableType.ENTITY;
 		this.mapCollisionDetection = mapCollisionDetection;
 		this.currentHealth = this.maxHealth = maxHealth;
 		this.maxDamage = maxDamage;

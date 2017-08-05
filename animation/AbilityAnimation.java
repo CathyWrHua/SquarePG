@@ -9,17 +9,17 @@ import java.util.ArrayList;
 
 public class AbilityAnimation extends Animation {
 	public enum AbilityAnimationType {
-		HERO_DEFAULT(75, 0, "heroDefault", Entity.Ability.DEFAULT, true, 4, 1, 0.5, -1),
-		RED_FIRST(-75, -75, "redFirst", Entity.Ability.FIRST, false, 3, 2, 2, -1),
-		RED_SECOND(75, 0, "heroDefault", Entity.Ability.SECOND, true, 4, 1, 0.5, -1),
-		RED_THIRD(75, 0, "heroDefault", Entity.Ability.THIRD, true, 4, 1, 0.5, -1),
+		HERO_DEFAULT(75, 0, "heroDefault", Entity.Ability.DEFAULT, true, 4, 1, 0.5, 0),
+		RED_FIRST(-75, -75, "redFirst", Entity.Ability.FIRST, false, 3, 2, 2, 0),
+		RED_SECOND(75, 0, "heroDefault", Entity.Ability.SECOND, true, 4, 1, 0.5, 0),
+		RED_THIRD(75, 0, "heroDefault", Entity.Ability.THIRD, true, 4, 1, 0.5, 0),
 		YELLOW_FIRST(75, 0, "yellowFirst", Entity.Ability.FIRST, true, 3, 1, 1, 0),
-		YELLOW_SECOND(75, 0, "heroDefault", Entity.Ability.SECOND, true, 4, 1, 0.5, -1),
-		YELLOW_THIRD(75, 0, "heroDefault", Entity.Ability.THIRD, true, 4, 1, 0.5, -1),
+		YELLOW_SECOND(75, 0, "heroDefault", Entity.Ability.SECOND, true, 4, 1, 0.5, 0),
+		YELLOW_THIRD(75, 0, "heroDefault", Entity.Ability.THIRD, true, 4, 1, 0.5, 0),
 		BLUE_FIRST(75, 0, "blueFirst", Entity.Ability.FIRST, true, 3, 1, 1, 2),
-		BLUE_SECOND(75, 0, "heroDefault", Entity.Ability.SECOND, true, 4, 1, 0.5, -1),
-		BLUE_THIRD(75, 0, "heroDefault", Entity.Ability.THIRD, true, 4, 1, 0.5, -1),
-		CIRCLE_DEFAULT(75, 0, "heroDefault", Entity.Ability.DEFAULT, true, 4, 1, 2, -1);
+		BLUE_SECOND(75, 0, "heroDefault", Entity.Ability.SECOND, true, 4, 1, 0.5, 0),
+		BLUE_THIRD(75, 0, "heroDefault", Entity.Ability.THIRD, true, 4, 1, 0.5, 0),
+		CIRCLE_DEFAULT(75, 0, "heroDefault", Entity.Ability.DEFAULT, true, 4, 1, 2, 0);
 		private int offsetX, offsetY;
 		private String animationName;
 		private Entity.Ability ability;
@@ -79,15 +79,17 @@ public class AbilityAnimation extends Animation {
 	}
 	private Entity entity;
 	private int cooldownTotal, cooldownCounter;
+	private int attackFrame;
 	private boolean hasDirection;
 	private Entity.Ability ability;
 	private AbilityAnimationType animationType;
 
 	public AbilityAnimation(AbilityAnimationType animationType, Entity entity) {
-		this.drawableType = DrawableType.ENTITY_EFFECT;
+		this.effectType = EffectType.ENTITY_EFFECT;
 		this.animationType = animationType;
 		this.entity = entity;
 		this.animationName = animationType.getAnimationName();
+		this.attackFrame = animationType.getAttackFrame();
 		this.totalFrames = animationType.getTotalFrames();
 		this.ability = animationType.getAbility();
 		this.hasDirection = animationType.getHasDirection();
@@ -115,11 +117,10 @@ public class AbilityAnimation extends Animation {
 	}
 
 	public boolean isInstantCast() {
-		return (animationType.getAttackFrame() < 0);
+		return (attackFrame < 0);
 	}
 
 	public boolean isAttackFrame() {
-		int attackFrame = animationType.getAttackFrame();
 		return (counter/ANIMATION_SPEED == attackFrame && (counter+1)/ANIMATION_SPEED != attackFrame);
 	}
 
@@ -137,6 +138,10 @@ public class AbilityAnimation extends Animation {
 
 	public int getCooldownTotal() {
 		return cooldownTotal;
+	}
+
+	public int getAttackFrame() {
+		return attackFrame;
 	}
 
 	public Entity.Ability getAbility() {

@@ -39,6 +39,10 @@ public abstract class Animation extends Effect {
 		done = false;
 	}
 
+	public int getCurrentFrame() {
+		return counter/ANIMATION_SPEED;
+	}
+
 	public void setNumLoops(int numLoops) {
 		this.numLoops = numLoops;
 		this.currentLoop = numLoops;
