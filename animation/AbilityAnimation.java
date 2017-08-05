@@ -117,7 +117,7 @@ public class AbilityAnimation extends Animation {
 	}
 
 	public boolean isInstantCast() {
-		return (attackFrame < 0);
+		return (attackFrame <= 0);
 	}
 
 	public boolean isAttackFrame() {
