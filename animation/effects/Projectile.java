@@ -30,6 +30,13 @@ public abstract class Projectile extends MapEffect{
 		this.velocityX *= (facingEast)? 1: -1;
 		this.velocityY = velocityY;
 		this.targetMarkers = new ArrayList<>();
+
+		if (regularAnimation != null) {
+			regularAnimation.shouldMirror(!this.facingEast);
+		}
+		if (collisionAnimation != null) {
+			collisionAnimation.shouldMirror(!this.facingEast);
+		}
 	}
 
 	public ArrayList<DamageMarker> getTargetMarkers() {
