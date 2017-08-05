@@ -18,9 +18,9 @@ public class AbilityBar implements Drawable {
 	private static final int ICON_GAP = 90;
 	private static final int ICON_LENGTH = 85;
 	private static final int ICON_BAR_OFFSET_X = 313;
-	private static final int ICON_BAR_OFFSET_Y = 870;
+	private static final int ICON_BAR_OFFSET_Y = 812;
 	private static final int ICONS_OFFSET_X = 323;
-	private static final int ICONS_OFFSET_Y = 880;
+	private static final int ICONS_OFFSET_Y = 820;
 
 	public AbilityBar(Hero player) {
 		iconBar = new ImageIcon("src/assets/gui/iconBar.png");

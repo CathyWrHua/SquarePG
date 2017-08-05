@@ -35,10 +35,11 @@ public class GameEngine {
 
 	private final int TOTAL_MAP_LAYERS = 6;
 
-	private GameMap map;
+	private GameMap gameMap;
 	private MapCollisionDetection collisionMap;
 
-	private int level = 3;
+	private int level = 1;
+	private int map = 3;
 	private boolean isDoneRendering = true;
 	private Hero player;
 	private AbilityBar playerAbilityBar;
@@ -50,8 +51,8 @@ public class GameEngine {
 		targets = new ArrayList<>();
 		effects = new ArrayList<>();
 
-		map = new GameMap(level);
-		collisionMap = new MapCollisionDetection(map.getCurrentCollisionMap());
+		gameMap = new GameMap(level, map);
+		collisionMap = new MapCollisionDetection(gameMap.getCurrentCollisionMap());
 		createLayerRenderMap();
 		isDoneRendering = true;
 
@@ -66,7 +67,7 @@ public class GameEngine {
 		layerRenderMap = new ArrayList<>(TOTAL_MAP_LAYERS);
 
 		ArrayList<Drawable> background = new ArrayList<>();
-		background.add(map);
+		background.add(gameMap);
 
 		layerRenderMap.add(MapLayer.BACKGROUND.getValue(), background);
 		layerRenderMap.add(MapLayer.ENTITY_LAYER.getValue(), new ArrayList<>());
@@ -82,7 +83,7 @@ public class GameEngine {
 		//TEMPORARY REMOVE WHEN WE HAVE LEGIT MAPS
 		//This is to avoid asynchronous heisenbugs of overwriting collision maps while a calculation is going on
 		//Can be removed once tests keys are removed (J and K)
-		collisionMap.setHitRectArray(map.getCurrentCollisionMap());
+		collisionMap.setHitRectArray(gameMap.getCurrentCollisionMap());
 		layerRenderMap.get(MapLayer.ENTITY_EFFECTS_LAYER.getValue()).clear();
 		player.update();
 
@@ -203,14 +204,14 @@ public class GameEngine {
 		player.setLRMotionState(containsLeft? Entity.MotionStateLeftRight.LEFT : Entity.MotionStateLeftRight.IDLE);
 	}
 
-	public void toggleMapLevel(int change) {
-		this.level += change;
-		if (level > 3) {
-			level = 3;
+	public void toggleMap(int change) {
+		this.map += change;
+		if (map > GameMap.MAPS_PER_LEVEL) {
+			map = GameMap.MAPS_PER_LEVEL;
 		} else if (level < 1) {
-			level = 1;
+			map = 1;
 		}
-		map.setMap(level);
+		gameMap.setStage(level, map);
 	}
 
 	public void playerDidAttack(Entity.Ability ability) {
