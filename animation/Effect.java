@@ -4,7 +4,7 @@ import screens.Drawable;
 
 public abstract class Effect implements Drawable {
 	public enum EffectType {
-		BACKGROUND(0), ENTITY(1), ENTITY_EFFECT(2), MAP_EFFECT(3), PROJECTILE_EFFECT(3), DAMAGE(4), GUI(5);
+		ENTITY_EFFECT(2), MAP_EFFECT(3), PROJECTILE_EFFECT(3), DAMAGE(4);
 		private int value;
 
 		EffectType(int value) {
