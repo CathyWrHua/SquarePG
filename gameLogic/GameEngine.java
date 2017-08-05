@@ -277,6 +277,7 @@ public class GameEngine {
 	}
 
 	private MapAnimation determineEndAnimation(ProjectileAnimation projectile) {
+		//TODO: move logic into ProjectileAnimation
 		MapAnimation endAnimation;
 		switch (projectile.getAnimationType()) {
 			case BLUE_FIRST:
