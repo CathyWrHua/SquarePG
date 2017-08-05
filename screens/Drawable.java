@@ -3,5 +3,5 @@ package screens;
 import java.awt.*;
 
 public interface Drawable {
-	public void draw(Graphics g);
+	 void draw(Graphics g);
 }

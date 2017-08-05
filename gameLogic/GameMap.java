@@ -9,19 +9,19 @@ import javax.swing.ImageIcon;
 
 public class GameMap implements Drawable {
 	private int currentLevel;
-
 	private HashMap<Integer, ImageIcon[][]> levelMapping = new HashMap<>();
 	private HashMap<Integer, Rectangle[]> hitRectangleMapping = new HashMap<>();
 
 	public GameMap() {
-		createLevels();
-		currentLevel = 1;
+		this(1);
 	}
 	
 	public GameMap(int level) {
 		createLevels();
 		currentLevel = level;
 	}
+
+
 	
 	public void setMap(int level) {
 		if (level > 0 && level < 4) {

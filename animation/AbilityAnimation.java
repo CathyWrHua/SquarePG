@@ -9,26 +9,27 @@ import java.util.ArrayList;
 
 public class AbilityAnimation extends Animation {
 	public enum AbilityAnimationType {
-		HERO_DEFAULT(75, 0, "heroDefault", Entity.Ability.DEFAULT, true, 4, 1, 0.5),
-		RED_FIRST(-75, -75, "redFirst", Entity.Ability.FIRST, false, 3, 2, 2),
-		RED_SECOND(75, 0, "heroDefault", Entity.Ability.SECOND, true, 4, 1, 0.5),
-		RED_THIRD(75, 0, "heroDefault", Entity.Ability.THIRD, true, 4, 1, 0.5),
-		YELLOW_FIRST(75, 0, "yellowFirst", Entity.Ability.FIRST, true, 3, 1, 1),
-		YELLOW_SECOND(75, 0,  "heroDefault", Entity.Ability.SECOND, true, 4, 1, 0.5),
-		YELLOW_THIRD(75, 0, "heroDefault", Entity.Ability.THIRD, true, 4, 1, 0.5),
-		BLUE_FIRST(75, 0, "blueFirst", Entity.Ability.FIRST, true, 3, 1, 1),
-		BLUE_SECOND(75, 0, "heroDefault", Entity.Ability.SECOND, true, 4, 1, 0.5),
-		BLUE_THIRD(75, 0, "heroDefault", Entity.Ability.THIRD, true, 4, 1, 0.5),
-		CIRCLE_DEFAULT(75, 0, "heroDefault", Entity.Ability.DEFAULT, true, 4, 1, 2);
+		HERO_DEFAULT(75, 0, "heroDefault", Entity.Ability.DEFAULT, true, 4, 1, 0.5, 0),
+		RED_FIRST(-75, -75, "redFirst", Entity.Ability.FIRST, false, 3, 2, 2, 0),
+		RED_SECOND(75, 0, "heroDefault", Entity.Ability.SECOND, true, 4, 1, 0.5, 0),
+		RED_THIRD(75, 0, "heroDefault", Entity.Ability.THIRD, true, 4, 1, 0.5, 0),
+		YELLOW_FIRST(75, 0, "yellowFirst", Entity.Ability.FIRST, true, 3, 1, 1, 0),
+		YELLOW_SECOND(75, 0, "heroDefault", Entity.Ability.SECOND, true, 4, 1, 0.5, 0),
+		YELLOW_THIRD(75, 0, "heroDefault", Entity.Ability.THIRD, true, 4, 1, 0.5, 0),
+		BLUE_FIRST(75, 0, "blueFirst", Entity.Ability.FIRST, true, 3, 1, 1, 2),
+		BLUE_SECOND(75, 0, "heroDefault", Entity.Ability.SECOND, true, 4, 1, 0.5, 0),
+		BLUE_THIRD(75, 0, "heroDefault", Entity.Ability.THIRD, true, 4, 1, 0.5, 0),
+		CIRCLE_DEFAULT(75, 0, "heroDefault", Entity.Ability.DEFAULT, true, 4, 1, 2, 0);
 		private int offsetX, offsetY;
 		private String animationName;
 		private Entity.Ability ability;
 		private boolean hasDirection;
 		int totalFrames, numLoops;
 		double cooldownInSeconds;
+		int damageStartFrame;
 
-		AbilityAnimationType(int offsetX, int offsetY, String animationName, Entity.Ability ability,
-							 boolean hasDirection, int totalFrames, int numLoops, double cooldownInSeconds) {
+		AbilityAnimationType(int offsetX, int offsetY, String animationName, Entity.Ability ability, boolean hasDirection,
+							 int totalFrames, int numLoops, double cooldownInSeconds, int damageStartFrame) {
 			this.offsetX = offsetX;
 			this.offsetY = offsetY;
 			this.animationName = animationName;
@@ -37,6 +38,7 @@ public class AbilityAnimation extends Animation {
 			this.totalFrames = totalFrames;
 			this.numLoops = numLoops;
 			this.cooldownInSeconds = cooldownInSeconds;
+			this.damageStartFrame = damageStartFrame;
 		}
 
 		public int getOffsetX() {
@@ -70,19 +72,24 @@ public class AbilityAnimation extends Animation {
 		public boolean getHasDirection() {
 			return hasDirection;
 		}
+
+		public int getDamageStartFrame() {
+			return damageStartFrame;
+		}
 	}
 	private Entity entity;
 	private int cooldownTotal, cooldownCounter;
+	private int damageStartFrame;
 	private boolean hasDirection;
 	private Entity.Ability ability;
 	private AbilityAnimationType animationType;
-	private EffectType effectType;
 
 	public AbilityAnimation(AbilityAnimationType animationType, Entity entity) {
 		this.effectType = EffectType.ENTITY_EFFECT;
 		this.animationType = animationType;
 		this.entity = entity;
 		this.animationName = animationType.getAnimationName();
+		this.damageStartFrame = animationType.getDamageStartFrame();
 		this.totalFrames = animationType.getTotalFrames();
 		this.ability = animationType.getAbility();
 		this.hasDirection = animationType.getHasDirection();
@@ -101,21 +108,24 @@ public class AbilityAnimation extends Animation {
 		}
 	}
 
-	public void resetCooldown () {
-		this.cooldownCounter = cooldownTotal;
-	}
-
 	public void resetDone() {
 		done = false;
 	}
 
-	public boolean isOffCooldown () {
-		return (cooldownCounter <= 0);
+	public void resetCooldown() {
+		cooldownCounter = cooldownTotal;
 	}
 
-	@Override
-	public EffectType getEffectType() {
-		return effectType;
+	public boolean isInstantCast() {
+		return (damageStartFrame <= 0);
+	}
+
+	public boolean isDamageStartFrame() {
+		return (counter/ANIMATION_SPEED == damageStartFrame && (counter+1)/ANIMATION_SPEED != damageStartFrame);
+	}
+
+	public boolean isOffCooldown () {
+		return (cooldownCounter <= 0);
 	}
 
 	public String getAnimationName() {
@@ -130,8 +140,18 @@ public class AbilityAnimation extends Animation {
 		return cooldownTotal;
 	}
 
+	public int getDamageStartFrame() {
+		return damageStartFrame;
+	}
+
 	public Entity.Ability getAbility() {
 		return ability;
+	}
+
+	@Override
+	public void update() {
+		super.update();
+		if (isDamageStartFrame() && !isInstantCast()) resetCooldown();
 	}
 
 	public void draw(Graphics g) {
@@ -140,7 +160,8 @@ public class AbilityAnimation extends Animation {
 		Image image = imageIcon.getImage();
 		int x = entity.getPosX();
 		int width = image.getWidth(null);
-		int offsetX = ((entity.getFacingEast() || !hasDirection) ? animationType.getOffsetX() : -width);
+		int offsetX = ((entity.getFacingEast() || !hasDirection) ? animationType.getOffsetX() :
+				entity.getImageIcon().getIconWidth()-animationType.getOffsetX()-width);
 		int offsetY = animationType.getOffsetY();
 
 		if (hasDirection && !entity.getFacingEast()) {

@@ -6,7 +6,8 @@ import java.util.ArrayList;
 
 public class MapAnimation extends Animation {
 	public enum MapAnimationType {
-		ENEMY_DEATH(-50, -50, "enemyDeath", 4, 1);
+		ENEMY_DEATH(-50, -50, "enemyDeath", 4, 1),
+		FIREBALL(-38, -38, "fireballExplosion", 4, 1);
 		private int offsetX, offsetY;
 		private String animationName;
 		private int totalFrames, numLoops;
@@ -41,7 +42,6 @@ public class MapAnimation extends Animation {
 	}
 
 	private int posX, posY;
-	private EffectType effectType;
 
 	public MapAnimation(MapAnimationType animationType, int posX, int posY) {
 		this.effectType = EffectType.MAP_EFFECT;
@@ -56,10 +56,6 @@ public class MapAnimation extends Animation {
 		this.posY = posY + animationType.getOffsetY();
 	}
 
-	@Override
-	public EffectType getEffectType() {
-		return effectType;
-	}
 	public void draw (Graphics g) {
 		if (imageIcon == null) return;
 		Graphics2D g2d = (Graphics2D)g;

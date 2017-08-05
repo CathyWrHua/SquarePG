@@ -55,24 +55,6 @@ public class YellowHero extends Hero {
 //	}
 
 	@Override
-	public void attack(Ability ability) {
-		AbilityAnimation attemptedAbility = abilityAnimations.get(ability.getValue());
-		if (entityState == EntityState.NEUTRAL && attemptedAbility != null && attemptedAbility.isOffCooldown()) {
-			playAnimation(ability.getValue());
-			attemptedAbility.resetCooldown();
-			setEntityState(EntityState.ATTACKING);
-			switch (ability) {
-				case FIRST:
-					ProjectileAnimation newProjectile = new ProjectileAnimation(ProjectileAnimation.ProjectileAnimationType.YELLOW_FIRST, mapCollisionDetection, this);
-					projectileAnimations.add(newProjectile);
-					break;
-				default:
-					break;
-			}
-		}
-	}
-
-	@Override
 	protected boolean isHit(Ability ability, Entity target) {
 		if (super.isHit(ability, target)) {
 			return true;
@@ -97,24 +79,30 @@ public class YellowHero extends Hero {
 		Ability ability;
 
 		if (entityState != EntityState.ATTACKING || currentAbilityAnimation == null) return;
-
-		for (Entity target : targets) {
-			ability = currentAbilityAnimation.getAbility();
-			switch (ability) {
-				case DEFAULT:
-					if (!target.immuneTo.get(this) && isHit(ability, target) && target.getEntityState() != EntityState.DEAD) {
+		ability = currentAbilityAnimation.getAbility();
+		switch (ability) {
+			case DEFAULT:
+				for (Entity target : targets) {
+					if (!target.immuneTo.get(this) && isHit(Ability.DEFAULT, target) && target.getEntityState() != EntityState.DEAD) {
 						marker = target.inflict(getDamage(), this);
 						if (marker != null) {
 							targetMarkers.add(marker);
 						}
 					}
-					break;
-				case SECOND:
-				case THIRD:
-				case ULTIMATE:
-				default:
-					break;
-			}
+				}
+				break;
+			case FIRST:
+				if (currentAbilityAnimation.isDamageStartFrame()) {
+					ProjectileAnimation newProjectile = new ProjectileAnimation(ProjectileAnimation.ProjectileAnimationType.YELLOW_FIRST,
+							mapCollisionDetection, this);
+					projectileAnimations.add(newProjectile);
+				}
+				break;
+			case SECOND:
+			case THIRD:
+			case ULTIMATE:
+			default:
+				break;
 		}
 	}
 }

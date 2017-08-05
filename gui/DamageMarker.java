@@ -5,13 +5,12 @@ import screens.Drawable;
 
 import java.awt.*;
 
-public class DamageMarker implements Drawable, Effect {
+public class DamageMarker extends Effect {
 	private int currentLifetime = LIFETIME;
 	private int damage;
 	private int posX, posY;
 	private float speed = INITIAL_SPEED;
 	private boolean done;
-	private EffectType effectType;
 
 	private static final int LIFETIME = 30;
 	private static final int OFFSET_X_1_DIG = 30;
@@ -31,12 +30,6 @@ public class DamageMarker implements Drawable, Effect {
 	public boolean isDone() {
 		return done;
 	}
-
-	@Override
-	public EffectType getEffectType() {
-		return effectType;
-	}
-
 
 	public void update() {
 		posY -= Math.round(speed);

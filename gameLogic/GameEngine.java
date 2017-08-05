@@ -11,6 +11,7 @@ import screens.Drawable;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Map;
 
 public class GameEngine {
 	public enum MapLayer {
@@ -32,7 +33,7 @@ public class GameEngine {
 		}
 	}
 
-	public final int TOTAL_MAP_LAYERS = 6;
+	private final int TOTAL_MAP_LAYERS = 6;
 
 	private GameMap map;
 	private MapCollisionDetection collisionMap;
@@ -76,23 +77,17 @@ public class GameEngine {
 	}
 
 	public void update() {
-		if (!isDoneRendering) {
-			return;
-		}
+		if (!isDoneRendering) return;
 
 		//TEMPORARY REMOVE WHEN WE HAVE LEGIT MAPS
 		//This is to avoid asynchronous heisenbugs of overwriting collision maps while a calculation is going on
 		//Can be removed once tests keys are removed (J and K)
 		collisionMap.setHitRectArray(map.getCurrentCollisionMap());
-
 		layerRenderMap.get(MapLayer.ENTITY_EFFECTS_LAYER.getValue()).clear();
-
 		player.update();
 
 		Effect playerAbility = player.getCurrentAbilityAnimation();
-		if (playerAbility != null) {
-			layerRenderMap.get(MapLayer.ENTITY_EFFECTS_LAYER.getValue()).add(playerAbility);
-		}
+		if (playerAbility != null) layerRenderMap.get(MapLayer.ENTITY_EFFECTS_LAYER.getValue()).add(playerAbility);
 
 		layerRenderMap.get(MapLayer.DAMAGE_LAYER.getValue()).addAll(player.getTargetMarkers());
 		effects.addAll(player.getTargetMarkers());
@@ -131,7 +126,9 @@ public class GameEngine {
 			}
 		}
 
+		ArrayList<MapAnimation> projectileEndAnimations = new ArrayList<>();
 		ArrayList<DamageMarker> damageMarkers = new ArrayList<>();
+		MapAnimation currentEndAnimation;
 		for (Iterator<Effect> iterator = effects.iterator(); iterator.hasNext();) {
 			Effect effect = iterator.next();
 			effect.update();
@@ -139,17 +136,21 @@ public class GameEngine {
 			if (effect.isDone()) {
 				if (effect.getEffectType() == Effect.EffectType.PROJECTILE_EFFECT) {
 					ProjectileAnimation animation = (ProjectileAnimation) effect;
-					if (animation != null) {
-						damageMarkers.addAll(animation.getTargetMarkers());
-						animation.clearTargetMarkers();
+					damageMarkers.addAll(animation.getTargetMarkers());
+					currentEndAnimation = determineEndAnimation(animation);
+					if (currentEndAnimation != null) {
+						projectileEndAnimations.add(currentEndAnimation);
 					}
+					animation.clearTargetMarkers();
 				}
 				layerRenderMap.get(effect.getEffectType().getValue()).remove(effect);
 				iterator.remove();
 			}
 		}
 		effects.addAll(damageMarkers);
+		effects.addAll(projectileEndAnimations);
 		layerRenderMap.get(MapLayer.DAMAGE_LAYER.getValue()).addAll(damageMarkers);
+		layerRenderMap.get(MapLayer.MAP_EFFECTS_LAYER.getValue()).addAll(projectileEndAnimations);
 
 		//TEMPORARY TEST CODE TO REGENERATE ENEMY
 		if (targets.size() == 2) {
@@ -202,7 +203,7 @@ public class GameEngine {
 		player.setLRMotionState(containsLeft? Entity.MotionStateLeftRight.LEFT : Entity.MotionStateLeftRight.IDLE);
 	}
 
-	public void toggleMapLevel (int change) {
+	public void toggleMapLevel(int change) {
 		this.level += change;
 		if (level > 3) {
 			level = 3;
@@ -212,19 +213,19 @@ public class GameEngine {
 		map.setMap(level);
 	}
 
-	public void playerDidAttack (Entity.Ability ability) {
+	public void playerDidAttack(Entity.Ability ability) {
 		player.attack(ability);
 	}
 
 	//Temporary hack to damage the player in testing
-	public void playerWasAttacked () {
+	public void playerWasAttacked() {
 		DamageMarker marker = player.inflict(3, new Dummy(-100, -100, true));
 		effects.add(marker);
 		layerRenderMap.get(MapLayer.DAMAGE_LAYER.getValue()).add(marker);
 	}
 
 	//Temporary hack to test healing
-	public  void playerDidHeal (int heal) {
+	public void playerDidHeal(int heal) {
 		player.heal(heal);
 	}
 
@@ -273,5 +274,18 @@ public class GameEngine {
 		MapAnimation animation = new MapAnimation(animationType, posX, posY);
 		layerRenderMap.get(MapLayer.MAP_EFFECTS_LAYER.getValue()).add(animation);
 		effects.add(animation);
+	}
+
+	private MapAnimation determineEndAnimation(ProjectileAnimation projectile) {
+		//TODO: move logic into ProjectileAnimation
+		MapAnimation endAnimation;
+		switch (projectile.getAnimationType()) {
+			case BLUE_FIRST:
+				endAnimation = new MapAnimation(MapAnimation.MapAnimationType.FIREBALL, projectile.getEndX(), projectile.getEndY());
+				break;
+			default:
+				return null;
+		}
+		return endAnimation;
 	}
 }
