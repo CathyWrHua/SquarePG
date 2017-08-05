@@ -39,7 +39,7 @@ public class GameEngine {
 	private MapCollisionDetection collisionMap;
 
 	private int level = 1;
-	private int map = 3;
+	private int map = 1;
 	private boolean isDoneRendering = true;
 	private Hero player;
 	private AbilityBar playerAbilityBar;

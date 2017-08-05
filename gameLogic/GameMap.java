@@ -14,7 +14,7 @@ public class GameMap implements Drawable {
 	private HashMap<String, Rectangle[]> hitRectangleMapping = new HashMap<>();
 
 	public static final int TOTAL_LEVELS = 1;
-	public static final int MAPS_PER_LEVEL = 3;
+	public static final int MAPS_PER_LEVEL = 4;
 	private static final int MAP_WIDTH = 10;
 	private static final int MAP_HEIGHT = 8;
 	private static final int NUM_TILE_TYPES = 10;
@@ -53,8 +53,6 @@ public class GameMap implements Drawable {
 			}
 		}
 	}
-
-	//Private helper functions
 
 	//TODO:(cathy) thread this creation method, guard against race conditions
 	private void createLevels() {
