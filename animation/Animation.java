@@ -50,7 +50,7 @@ public class Animation implements Drawable {
 		done = false;
 	}
 
-	public void setPosition (int poxX, int posY) {
+	public void setPosition (int posX, int posY) {
 		this.posX = posX;
 		this.posY = posY;
 	}

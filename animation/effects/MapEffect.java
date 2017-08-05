@@ -2,6 +2,9 @@ package animation.effects;
 
 import animation.Animation;
 import screens.Drawable;
+
+import java.awt.*;
+
 public abstract class MapEffect implements Drawable {
 	public enum EffectType {
 		MAP_EFFECT(3), PROJECTILE_EFFECT(3), DAMAGE(4);
@@ -15,6 +18,8 @@ public abstract class MapEffect implements Drawable {
 			return value;
 		}
 	}
+
+	public static final String FILEPATH_EFFECTS = "mapEffects";
 
 	protected EffectType effectType;
 	protected int posX;
@@ -56,4 +61,12 @@ public abstract class MapEffect implements Drawable {
 		}
 	}
 
+	@Override
+	public void draw(Graphics g) {
+		if (!hasCollided && regularAnimation != null && !regularAnimation.isDone()) {
+			regularAnimation.draw(g);
+		} else if (hasCollided && collisionAnimation != null && !collisionAnimation.isDone()) {
+			collisionAnimation.draw(g);
+		}
+	}
 }

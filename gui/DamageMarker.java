@@ -7,7 +7,6 @@ import java.awt.*;
 public class DamageMarker extends MapEffect {
 	private int currentLifetime = LIFETIME;
 	private int damage;
-	private int posX, posY;
 	private float speed = INITIAL_SPEED;
 	private boolean done;
 

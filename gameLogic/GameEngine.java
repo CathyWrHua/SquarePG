@@ -1,8 +1,6 @@
 package gameLogic;
 
 import animation.effects.MapEffect;
-import animation.effects.MapAnimation;
-import animation.effects.ProjectileAnimation;
 import characterEntities.*;
 import gui.AbilityBar;
 import gui.DamageMarker;
