@@ -23,7 +23,7 @@ public abstract class MapEffect implements Drawable {
 	protected Animation collisionAnimation;
 	protected boolean hasCollided = false;
 
-	protected MapEffect(int posX, int posY, Animation regularAnimation, Animation collisionAnimation, EffectType effectType) {
+	public MapEffect(int posX, int posY, Animation regularAnimation, Animation collisionAnimation, EffectType effectType) {
 		this.posX = posX;
 		this.posY = posY;
 		this.regularAnimation = regularAnimation;

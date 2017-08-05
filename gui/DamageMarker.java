@@ -19,10 +19,8 @@ public class DamageMarker extends MapEffect {
 	private static final float INITIAL_SPEED = 3.0f;
 
 	public DamageMarker(int damage, int posX, int posY) {
-		this.effectType = EffectType.DAMAGE;
+		super(posX, posY, null, null, EffectType.DAMAGE);
 		this.damage = damage;
-		this.posX = posX;
-		this.posY = posY;
 		this.done = false;
 	}
 
