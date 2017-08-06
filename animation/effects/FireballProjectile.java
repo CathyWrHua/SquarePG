@@ -14,8 +14,8 @@ public class FireballProjectile extends Projectile {
 		super(entity,
 				mapCollision,
 				new Animation(entity.getPosX() + (entity.getFacingEast()? OFFSET_X : entity.getImageIcon().getIconWidth() - OFFSET_X-FIREBALL_WIDTH),
-						entity.getPosY() + OFFSET_Y, FILEPATH_EFFECTS + "fireball", 3, 100),
-				new Animation(0, 0, FILEPATH_EFFECTS + "fireballExplosion", 4, 1),
+						entity.getPosY() + OFFSET_Y, 0, 0, FILEPATH_EFFECTS + "fireball", 3, 100),
+				new Animation(0, 0, 0, 0,FILEPATH_EFFECTS + "fireballExplosion", 4, 1),
 				5,
 				0);
 	}

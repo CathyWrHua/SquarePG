@@ -17,7 +17,7 @@ public class ArrowProjectile extends Projectile {
 		super(entity,
 				mapCollision,
 				new Animation(entity.getPosX() + (entity.getFacingEast()? OFFSET_X :
-				entity.getImageIcon().getIconWidth()-OFFSET_X-ARROW_WIDTH), entity.getPosY() + OFFSET_Y, FILEPATH_EFFECTS +"arrow",2, 100),
+				entity.getImageIcon().getIconWidth()-OFFSET_X-ARROW_WIDTH), entity.getPosY() + OFFSET_Y, 0,0,FILEPATH_EFFECTS +"arrow",2, 100),
 				null,
 				velocityX,
 				velocityY);
@@ -27,7 +27,7 @@ public class ArrowProjectile extends Projectile {
 		super(entity,
 				mapCollision,
 				new Animation(entity.getPosX() + (entity.getFacingEast()? OFFSET_X :
-						entity.getImageIcon().getIconWidth()-OFFSET_X-ARROW_WIDTH), entity.getPosY() + OFFSET_Y, FILEPATH_EFFECTS +"arrow",2, 100),
+						entity.getImageIcon().getIconWidth()-OFFSET_X-ARROW_WIDTH), entity.getPosY() + OFFSET_Y, 0,0, FILEPATH_EFFECTS +"arrow",2, 100),
 				null,
 				10,
 				0);

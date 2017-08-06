@@ -2,6 +2,8 @@ package animation.abilities;
 
 import SquarePG.SquarePG;
 import animation.Animation;
+import animation.effects.MapEffect;
+import animation.effects.Projectile;
 import characterEntities.Entity;
 import screens.Drawable;
 
@@ -9,187 +11,160 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class Ability implements Drawable {
+public abstract class Ability implements Drawable {
 	public enum AbilityState {
 		INITIALIZING,
 		CAN_DAMAGE,
 		HAS_EXPIRED,
-		IS_DONE;
+		IS_DONE
 	}
 
+	public static final String FILEPATH_ABILITY = "abilities";
 
+	protected Animation initializeAnimation = null;
+	protected Animation canDamageAnimation = null;
+	protected Animation expirationAnimation = null;
+	protected Entity entity = null;
+	protected AbilityState state = AbilityState.INITIALIZING;
+	protected int cooldownTotal, cooldownCounter;
+
+	protected ArrayList<Projectile> projectiles = null;
+
+	public Ability(Entity entity, double cooldownInSeconds) {
+		this.cooldownCounter = 0;
+		this.cooldownTotal = (int)Math.round(cooldownInSeconds * SquarePG.FPS);
+	}
+
+	public void update() {
+		//Updating the state of the ability
+		if (state == AbilityState.INITIALIZING && (initializeAnimation == null || initializeAnimation.isDone())) {
+			resetCooldown();
+			if (canDamageAnimation != null) {
+				state = AbilityState.CAN_DAMAGE;
+			} else if (expirationAnimation != null) {
+				state = AbilityState.HAS_EXPIRED;
+			} else {
+				state = AbilityState.IS_DONE;
+			}
+		} else if (state == AbilityState.CAN_DAMAGE && (canDamageAnimation == null || canDamageAnimation.isDone())) {
+			if (expirationAnimation != null) {
+				state = AbilityState.HAS_EXPIRED;
+			} else {
+				state = AbilityState.IS_DONE;
+			}
+		} else if (state == AbilityState.HAS_EXPIRED && (expirationAnimation == null || expirationAnimation.isDone())) {
+			state = AbilityState.IS_DONE;
+		}
+
+		Animation currentAnimation = null;
+		switch(state) {
+			case INITIALIZING:
+				currentAnimation = initializeAnimation;
+
+				break;
+			case CAN_DAMAGE:
+				currentAnimation = canDamageAnimation;
+				break;
+			case HAS_EXPIRED:
+				currentAnimation = expirationAnimation;
+				break;
+			case IS_DONE:
+				break;
+			default:
+				break;
+		}
+
+		if (currentAnimation != null) {
+			currentAnimation.update();
+			int additionalX = entity.getFacingEast()? 0: entity.getImageIcon().getIconWidth()-2*currentAnimation.getOffsetX()-currentAnimation.getSize().width;
+			currentAnimation.setPosition(entity.getPosX()+additionalX, entity.getPosY());
+			currentAnimation.shouldMirror(entity.getFacingEast());
+		}
+	}
+
+	public AbilityState getState() {
+		return state;
+	}
+
+	public void setHasProjectiles(boolean hasProjectiles) {
+		if (hasProjectiles) {
+			projectiles = new ArrayList<>();
+		}
+	}
+
+	public boolean hasProjectiles() {
+		return projectiles != null;
+	}
+
+	public ArrayList<Projectile> getProjectiles() {
+		return projectiles;
+	}
+
+	public void clearProjectiles() {
+		projectiles.clear();
+	}
+
+	public void setState(AbilityState state) {
+		this.state = state;
+	}
 
 	public void draw(Graphics g) {
+		Animation currentAnimation = null;
+		switch (state) {
+			case INITIALIZING:
+				currentAnimation = initializeAnimation;
+				break;
+			case CAN_DAMAGE:
+				currentAnimation = canDamageAnimation;
+				break;
+			case HAS_EXPIRED:
+				currentAnimation = expirationAnimation;
+				break;
+			case IS_DONE:
+				break;
+			default:
+				break;
+		}
 
-
+		if (currentAnimation != null) {
+			currentAnimation.draw(g);
+		}
 	}
 
+	public void reset() {
+		state = AbilityState.INITIALIZING;
+		if (initializeAnimation != null) {
+			initializeAnimation.reset();
+		}
+		if (canDamageAnimation != null) {
+			canDamageAnimation.reset();
+		}
+		if (expirationAnimation != null) {
+			expirationAnimation.reset();
+		}
+	}
 
-	//Remove this
-//	public enum AbilityAnimationType {
-//		HERO_DEFAULT(75, 0, "heroDefault", Entity.Ability.DEFAULT, true, 4, 1, 0.5, 0),
-//		RED_FIRST(-75, -75, "redFirst", Entity.Ability.FIRST, false, 3, 2, 2, 0),
-//		RED_SECOND(75, 0, "heroDefault", Entity.Ability.SECOND, true, 4, 1, 0.5, 0),
-//		RED_THIRD(75, 0, "heroDefault", Entity.Ability.THIRD, true, 4, 1, 0.5, 0),
-//		YELLOW_FIRST(75, 0, "yellowFirst", Entity.Ability.FIRST, true, 3, 1, 1, 0),
-//		YELLOW_SECOND(75, 0, "heroDefault", Entity.Ability.SECOND, true, 4, 1, 0.5, 0),
-//		YELLOW_THIRD(75, 0, "heroDefault", Entity.Ability.THIRD, true, 4, 1, 0.5, 0),
-//		BLUE_FIRST(75, 0, "blueFirst", Entity.Ability.FIRST, true, 3, 1, 1, 2),
-//		BLUE_SECOND(75, 0, "heroDefault", Entity.Ability.SECOND, true, 4, 1, 0.5, 0),
-//		BLUE_THIRD(75, 0, "heroDefault", Entity.Ability.THIRD, true, 4, 1, 0.5, 0),
-//		CIRCLE_DEFAULT(75, 0, "heroDefault", Entity.Ability.DEFAULT, true, 4, 1, 2, 0);
-//		private int offsetX, offsetY;
-//		private String animationName;
-//		private Entity.Ability ability;
-//		private boolean hasDirection;
-//		int totalFrames, numLoops;
-//		double cooldownInSeconds;
-//		int damageStartFrame;
-//
-//		AbilityAnimationType(int offsetX, int offsetY, String animationName, Entity.Ability ability, boolean hasDirection,
-//							 int totalFrames, int numLoops, double cooldownInSeconds, int damageStartFrame) {
-//			this.offsetX = offsetX;
-//			this.offsetY = offsetY;
-//			this.animationName = animationName;
-//			this.ability = ability;
-//			this.hasDirection = hasDirection;
-//			this.totalFrames = totalFrames;
-//			this.numLoops = numLoops;
-//			this.cooldownInSeconds = cooldownInSeconds;
-//			this.damageStartFrame = damageStartFrame;
-//		}
-//
-//		public int getOffsetX() {
-//			return offsetX;
-//		}
-//
-//		public int getOffsetY() {
-//			return offsetY;
-//		}
-//
-//		public Entity.Ability getAbility() {
-//			return ability;
-//		}
-//
-//		public double getCooldownInSeconds() {
-//			return cooldownInSeconds;
-//		}
-//
-//		public int getNumLoops() {
-//			return numLoops;
-//		}
-//
-//		public int getTotalFrames() {
-//			return totalFrames;
-//		}
-//
-//		public String getAnimationName() {
-//			return animationName;
-//		}
-//
-//		public boolean getHasDirection() {
-//			return hasDirection;
-//		}
-//
-//		public int getDamageStartFrame() {
-//			return damageStartFrame;
-//		}
-//	}
-//
-//	private Entity entity;
-//	private int cooldownTotal, cooldownCounter;
-//	private int damageStartFrame;
-//	private boolean hasDirection;
-//	private Entity.Ability ability;
-//	private AbilityAnimationType animationType;
-//
-//	public Ability(AbilityAnimationType animationType, Entity entity) {
-//		this.effectType = EffectType.ENTITY_EFFECT;
-//		this.animationType = animationType;
-//		this.entity = entity;
-//		this.animationName = animationType.getAnimationName();
-//		this.damageStartFrame = animationType.getDamageStartFrame();
-//		this.totalFrames = animationType.getTotalFrames();
-//		this.ability = animationType.getAbility();
-//		this.hasDirection = animationType.getHasDirection();
-//		this.cooldownTotal = (int)Math.round(animationType.getCooldownInSeconds()*SquarePG.FPS);
-//		this.cooldownCounter = 0;
-//		setNumLoops(animationType.getNumLoops());
-//		this.imageIcons = new ArrayList<>(totalFrames);
-//		for (int i = 0; i < totalFrames; i++) {
-//			imageIcons.add(i, new ImageIcon(FILEPATH_ROOT+animationName+i+FILEPATH_PNG));
-//		}
-//	}
-//
-//	public void decrementCooldownCounter() {
-//		if (cooldownCounter > 0) {
-//			cooldownCounter--;
-//		}
-//	}
-//
-//	public void resetDone() {
-//		done = false;
-//	}
-//
-//	public void resetCooldown() {
-//		cooldownCounter = cooldownTotal;
-//	}
-//
-//	public boolean isInstantCast() {
-//		return (damageStartFrame <= 0);
-//	}
-//
-//	public boolean isDamageStartFrame() {
-//		return (counter/ANIMATION_SPEED == damageStartFrame && (counter+1)/ANIMATION_SPEED != damageStartFrame);
-//	}
-//
-//	public boolean isOffCooldown () {
-//		return (cooldownCounter <= 0);
-//	}
-//
-//	public String getAnimationName() {
-//		return animationName;
-//	}
-//
-//	public int getCooldownCounter() {
-//		return cooldownCounter;
-//	}
-//
-//	public int getCooldownTotal() {
-//		return cooldownTotal;
-//	}
-//
-//	public int getDamageStartFrame() {
-//		return damageStartFrame;
-//	}
-//
-//	public Entity.Ability getAbility() {
-//		return ability;
-//	}
-//
-//	@Override
-//	public void update() {
-//		super.update();
-//		if (isDamageStartFrame() && !isInstantCast()) resetCooldown();
-//	}
-//
-//	public void draw(Graphics g) {
-//		if (imageIcon == null) return;
-//		Graphics2D g2d = (Graphics2D)g;
-//		Image image = imageIcon.getImage();
-//		int x = entity.getPosX();
-//		int width = image.getWidth(null);
-//		int offsetX = ((entity.getFacingEast() || !hasDirection) ? animationType.getOffsetX() :
-//				entity.getImageIcon().getIconWidth()-animationType.getOffsetX()-width);
-//		int offsetY = animationType.getOffsetY();
-//
-//		if (hasDirection && !entity.getFacingEast()) {
-//			x += width;
-//			width = -width;
-//		}
-//
-//		if (counter/ANIMATION_SPEED < totalFrames) {
-//			g2d.drawImage(image, x+offsetX, entity.getPosY()+offsetY, width, image.getHeight(null), null);
-//		}
-//	}
+	public void resetCooldown() {
+		cooldownCounter = cooldownTotal;
+	}
+
+	public void decrementCooldownCounter() {
+		if (cooldownCounter > 0) {
+			cooldownCounter--;
+		}
+	}
+
+	public boolean isOffCooldown() {
+		return cooldownCounter <= 0;
+	}
+
+	public int getCooldownCounter() {
+		return cooldownCounter;
+	}
+
+	public int getCooldownTotal() {
+		return cooldownTotal;
+	}
+
+	public abstract void didTrigger();
 }

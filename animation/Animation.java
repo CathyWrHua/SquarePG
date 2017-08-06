@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public class Animation implements Drawable {
 	private boolean done = false;
 	private boolean shouldMirror = false;
-	private int posX, posY;
+	private int posX, posY, offsetX, offsetY;
 
 	private int totalFrames;
 	private int counter = 0;
@@ -25,11 +25,15 @@ public class Animation implements Drawable {
 
 	public Animation (int posX,
 					  int posY,
+					  int offsetX,
+					  int offsetY,
 					  String animationName,
 					  int totalFrames,
 					  int numLoops) {
 		this.posX = posX;
 		this.posY = posY;
+		this.offsetX = offsetX;
+		this.offsetY = offsetY;
 		this.animationName = FILEPATH_ROOT + animationName;
 		this.totalFrames = totalFrames;
 		this.numLoops = numLoops;
@@ -58,6 +62,14 @@ public class Animation implements Drawable {
 	public Rectangle getSize() {
 		return (currentImage == null)? null:
 				new Rectangle(posX, posY, currentImage.getIconWidth(), currentImage.getIconHeight());
+	}
+
+	public int getOffsetX() {
+		return offsetX;
+	}
+
+	public int getOffsetY() {
+		return offsetY;
 	}
 
 	public void killAnimation() {
@@ -108,7 +120,7 @@ public class Animation implements Drawable {
 		}
 
 		if (counter/ANIMATION_SPEED < totalFrames) {
-			g2d.drawImage(image, x, posY, width, image.getHeight(null), null);
+			g2d.drawImage(image, x+offsetX, posY+offsetY, width, image.getHeight(null), null);
 		}
 	}
 }
