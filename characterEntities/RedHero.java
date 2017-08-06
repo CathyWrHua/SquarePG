@@ -8,7 +8,7 @@ import javafx.scene.shape.Circle;
 import java.util.ArrayList;
 
 public class RedHero extends Hero {
-	private static final int ABILITY_1_RADIUS = 112;
+	//private static final int ABILITY_1_RADIUS = 112;
 
 	public RedHero(ArrayList<Entity> targets, MapCollisionDetection mapCollisionDetection) {
 		super(targets, mapCollisionDetection, 30, 15, 5, 100, 100, 5);

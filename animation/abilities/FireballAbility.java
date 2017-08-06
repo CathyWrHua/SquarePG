@@ -1,6 +1,7 @@
 package animation.abilities;
 
 import animation.Animation;
+import animation.effects.FireballProjectile;
 import characterEntities.Entity;
 
 public class FireballAbility extends Ability {
@@ -12,9 +13,16 @@ public class FireballAbility extends Ability {
 	}
 
 	@Override
-	public void didTrigger() {
+	public void update() {
+		if (state == AbilityState.INITIALIZING && (initializeAnimation == null || initializeAnimation.isDone())) {
+			projectiles.add(new FireballProjectile(entity, entity.getMapCollisionDetection()));
+		}
 
+		super.update();
 	}
+
+	@Override
+	public void didTrigger() {}
 
 	@Override
 	public boolean didHitTarget(Entity target) {
@@ -24,5 +32,10 @@ public class FireballAbility extends Ability {
 	@Override
 	public int dealDamage(int baseDamage) {
 		return baseDamage;
+	}
+
+	@Override
+	public String getAbilityName() {
+		return "blueFirst";
 	}
 }

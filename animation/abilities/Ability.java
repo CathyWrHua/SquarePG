@@ -19,7 +19,7 @@ public abstract class Ability implements Drawable {
 		IS_DONE
 	}
 
-	public static final String FILEPATH_ABILITY = "abilities";
+	public static final String FILEPATH_ABILITY = "abilities/";
 
 	protected Animation initializeAnimation = null;
 	protected Animation canDamageAnimation = null;
@@ -33,6 +33,7 @@ public abstract class Ability implements Drawable {
 
 	public Ability(Entity entity, double cooldownInSeconds, Entity.EntityAbility entityAbility) {
 		this.cooldownCounter = 0;
+		this.entity = entity;
 		this.cooldownTotal = (int)Math.round(cooldownInSeconds * SquarePG.FPS);
 		this.entityAbility = entityAbility;
 	}
@@ -62,7 +63,6 @@ public abstract class Ability implements Drawable {
 		switch(state) {
 			case INITIALIZING:
 				currentAnimation = initializeAnimation;
-
 				break;
 			case CAN_DAMAGE:
 				currentAnimation = canDamageAnimation;
@@ -80,7 +80,7 @@ public abstract class Ability implements Drawable {
 			currentAnimation.update();
 			int additionalX = entity.getFacingEast()? 0: entity.getImageIcon().getIconWidth()-2*currentAnimation.getOffsetX()-currentAnimation.getSize().width;
 			currentAnimation.setPosition(entity.getPosX()+additionalX, entity.getPosY());
-			currentAnimation.shouldMirror(entity.getFacingEast());
+			currentAnimation.shouldMirror(!entity.getFacingEast());
 		}
 	}
 
@@ -175,4 +175,5 @@ public abstract class Ability implements Drawable {
 	public abstract void didTrigger();
 	public abstract boolean didHitTarget(Entity target);
 	public abstract int dealDamage(int baseDamage);
+	public abstract String getAbilityName();
 }

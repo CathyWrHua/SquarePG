@@ -19,7 +19,7 @@ public abstract class MapEffect implements Drawable {
 		}
 	}
 
-	public static final String FILEPATH_EFFECTS = "mapEffects";
+	public static final String FILEPATH_EFFECTS = "mapEffects/";
 
 	protected EffectType effectType;
 	protected int posX;

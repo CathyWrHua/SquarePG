@@ -43,7 +43,7 @@ public class AbilityBar implements Drawable {
 		for (int i = 0; i < NUM_ABILITIES; i++) {
 			filepath = "src/assets/gui/";
 			if (this.abilities.get(i) != null) {
-				filepath += this.abilities.get(i).getAnimationName() + "Icon.png";
+				filepath += this.abilities.get(i).getAbilityName() + "Icon.png";
 			} else {
 				filepath += "unknownIcon.png";
 			}

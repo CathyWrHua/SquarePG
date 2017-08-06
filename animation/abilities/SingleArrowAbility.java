@@ -1,20 +1,27 @@
 package animation.abilities;
 
 import animation.Animation;
+import animation.effects.ArrowProjectile;
 import characterEntities.Entity;
 
 public class SingleArrowAbility extends Ability {
 
 	public SingleArrowAbility(Entity entity) {
 		super(entity, 1, Entity.EntityAbility.FIRST);
-		initializeAnimation = new Animation(entity.getPosX(), entity.getPosY(), -75, -75, FILEPATH_ABILITY+"yellowFirst", 3, 1);
+		initializeAnimation = new Animation(entity.getPosX(), entity.getPosY(), 75, 0, FILEPATH_ABILITY+"yellowFirst", 3, 1);
 		setHasProjectiles(true);
 	}
 
 	@Override
-	public void didTrigger() {
-
+	public void update() {
+		if (state == AbilityState.INITIALIZING && (initializeAnimation == null || initializeAnimation.isDone())) {
+			projectiles.add(new ArrowProjectile(entity, entity.getMapCollisionDetection()));
+		}
+		super.update();
 	}
+
+	@Override
+	public void didTrigger() {}
 
 	@Override
 	public boolean didHitTarget(Entity target) {
@@ -26,4 +33,8 @@ public class SingleArrowAbility extends Ability {
 		return baseDamage;
 	}
 
+	@Override
+	public String getAbilityName() {
+		return "yellowFirst";
+	}
 }

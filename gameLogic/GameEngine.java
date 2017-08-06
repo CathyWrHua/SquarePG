@@ -37,6 +37,9 @@ public class GameEngine {
 	private final int TOTAL_MAP_LAYERS = 6;
 
 	private GameMap gameMap;
+
+	//collisionMap should be a static singleton
+	//TODO: make this static and a singleton
 	private MapCollisionDetection collisionMap;
 
 	private int level = 1;
@@ -96,8 +99,8 @@ public class GameEngine {
 		mapEffects.addAll(player.getTargetMarkers());
 		player.emptyTargetMarkers();
 
-		layerRenderMap.get(MapLayer.MAP_EFFECTS_LAYER.getValue()).addAll(player.getProjectiles());
-		mapEffects.addAll(player.getProjectiles());
+		layerRenderMap.get(MapLayer.MAP_EFFECTS_LAYER.getValue()).addAll(player.getMapEffects());
+		mapEffects.addAll(player.getMapEffects());
 		player.emptyProjectiles();
 
 		for (Iterator<Entity> iterator = targets.iterator(); iterator.hasNext();) {
@@ -115,8 +118,8 @@ public class GameEngine {
 				mapEffects.addAll(enemy.getTargetMarkers());
 				target.emptyTargetMarkers();
 
-				layerRenderMap.get(MapLayer.MAP_EFFECTS_LAYER.getValue()).addAll(enemy.getProjectiles());
-				mapEffects.addAll(enemy.getProjectiles());
+				layerRenderMap.get(MapLayer.MAP_EFFECTS_LAYER.getValue()).addAll(enemy.getMapEffects());
+				mapEffects.addAll(enemy.getMapEffects());
 				target.emptyProjectiles();
 
 				if (enemy.isDone()) {

@@ -2,8 +2,12 @@ package animation.abilities;
 
 import animation.Animation;
 import characterEntities.Entity;
+import characterEntities.HitDetectionHelper;
+import javafx.scene.shape.Circle;
 
 public class WindmillSwordsAbility extends Ability {
+
+	public final int WINDMILL_RADIUS = 112;
 
 	public WindmillSwordsAbility (Entity entity) {
 		super(entity, 2, Entity.EntityAbility.FIRST);
@@ -15,11 +19,18 @@ public class WindmillSwordsAbility extends Ability {
 
 	@Override
 	public boolean didHitTarget(Entity target) {
-		return false;
+		Circle hitArea = new Circle(entity.getCenterX(), entity.getCenterY(), WINDMILL_RADIUS);
+		boolean hit = HitDetectionHelper.detectHit(hitArea, target.getEntitySize());
+		return hit;
 	}
 
 	@Override
 	public int dealDamage(int baseDamage) {
 		return baseDamage;
+	}
+
+	@Override
+	public String getAbilityName() {
+		return "redFirst";
 	}
 }
