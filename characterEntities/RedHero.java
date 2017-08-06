@@ -81,11 +81,10 @@ public class RedHero extends Hero {
 		DamageMarker marker;
 
 		if (entityState != EntityState.ATTACKING) return;
-		for (Entity target : targets) {
-			switch (currentAbilityAnimation.getAbility()) {
-				case DEFAULT:
-//					posX += 5 * (facingEast ? 1 : -1);
-				case FIRST:
+		switch (currentAbilityAnimation.getAbility()) {
+			case DEFAULT:
+			case FIRST:
+				for (Entity target : targets) {
 					if (isHit(currentAbilityAnimation.getAbility(), target) && target.getEntityState() != EntityState.DEAD &&
 							currentAbilityAnimation.getCurrentFrame() >= currentAbilityAnimation.getDamageStartFrame() && !target.immuneTo.get(this)) {
 						marker = target.inflict(getDamage(), this);
@@ -93,13 +92,13 @@ public class RedHero extends Hero {
 							targetMarkers.add(marker);
 						}
 					}
-					break;
-				case SECOND:
-				case THIRD:
-				case ULTIMATE:
-				default:
-					break;
-			}
+				}
+				break;
+			case SECOND:
+			case THIRD:
+			case ULTIMATE:
+			default:
+				break;
 		}
 	}
 }
