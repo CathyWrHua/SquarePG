@@ -115,7 +115,7 @@ public abstract class Enemy extends Entity {
 		if (Math.abs(motionVector.x) < 100 && Math.abs(motionVector.y) < 100) {
 
 			if (targetEntity.getEntityState() != EntityState.DEAD) {
-				attack(Ability.DEFAULT);
+				attack(EntityAbility.DEFAULT);
 			}
 		}
 	}

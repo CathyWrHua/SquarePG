@@ -1,5 +1,6 @@
 package characterEntities;
 
+import animation.abilities.EggplantAbility;
 import gameLogic.MapCollisionDetection;
 
 public class Grunt extends Enemy {
@@ -12,6 +13,6 @@ public class Grunt extends Enemy {
 		attackRange = 50;
 
 		//Temp code until enemy attack is determined
-		setAnimation(0, new animation.abilities.Ability(abilities.Ability.AbilityAnimationType.CIRCLE_DEFAULT, this));
+		setAbility(0, new EggplantAbility(this));
 	}
 }

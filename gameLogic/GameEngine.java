@@ -1,6 +1,9 @@
 package gameLogic;
 
+import animation.abilities.Ability;
+import animation.effects.EnemyDeathEffect;
 import animation.effects.MapEffect;
+import animation.effects.Projectile;
 import characterEntities.*;
 import gui.AbilityBar;
 import gui.DamageMarker;
@@ -9,6 +12,7 @@ import screens.Drawable;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Map;
 
 public class GameEngine {
 	public enum MapLayer {
@@ -81,19 +85,20 @@ public class GameEngine {
 		//This is to avoid asynchronous heisenbugs of overwriting collision maps while a calculation is going on
 		//Can be removed once tests keys are removed (J and K)
 		collisionMap.setHitRectArray(gameMap.getCurrentCollisionMap());
+
 		layerRenderMap.get(MapLayer.ENTITY_EFFECTS_LAYER.getValue()).clear();
 		player.update();
 
-		MapEffect playerAbility = player.getCurrentAbility();
+		Ability playerAbility = player.getCurrentAbility();
 		if (playerAbility != null) layerRenderMap.get(MapLayer.ENTITY_EFFECTS_LAYER.getValue()).add(playerAbility);
 
 		layerRenderMap.get(MapLayer.DAMAGE_LAYER.getValue()).addAll(player.getTargetMarkers());
 		mapEffects.addAll(player.getTargetMarkers());
 		player.emptyTargetMarkers();
 
-		layerRenderMap.get(MapLayer.MAP_EFFECTS_LAYER.getValue()).addAll(player.getProjectileAnimations());
-		mapEffects.addAll(player.getProjectileAnimations());
-		player.emptyProjectileAnimations();
+		layerRenderMap.get(MapLayer.MAP_EFFECTS_LAYER.getValue()).addAll(player.getProjectiles());
+		mapEffects.addAll(player.getProjectiles());
+		player.emptyProjectiles();
 
 		for (Iterator<Entity> iterator = targets.iterator(); iterator.hasNext();) {
 			Entity target = iterator.next();
@@ -101,7 +106,7 @@ public class GameEngine {
 				Enemy enemy = (Enemy)target;
 				enemy.update();
 
-				MapEffect enemyAbility = enemy.getCurrentAbility();
+				Ability enemyAbility = enemy.getCurrentAbility();
 				if (enemyAbility != null) {
 					layerRenderMap.get(MapLayer.ENTITY_EFFECTS_LAYER.getValue()).add(enemyAbility);
 				}
@@ -110,13 +115,15 @@ public class GameEngine {
 				mapEffects.addAll(enemy.getTargetMarkers());
 				target.emptyTargetMarkers();
 
-				layerRenderMap.get(MapLayer.MAP_EFFECTS_LAYER.getValue()).addAll(enemy.getProjectileAnimations());
-				mapEffects.addAll(enemy.getProjectileAnimations());
-				target.emptyProjectileAnimations();
+				layerRenderMap.get(MapLayer.MAP_EFFECTS_LAYER.getValue()).addAll(enemy.getProjectiles());
+				mapEffects.addAll(enemy.getProjectiles());
+				target.emptyProjectiles();
 
 				if (enemy.isDone()) {
 					layerRenderMap.get(MapLayer.ENTITY_LAYER.getValue()).remove(enemy);
-					createMapAnimation(MapAnimation.MapAnimationType.ENEMY_DEATH, enemy.getCenterX(), enemy.getCenterY());
+					MapEffect deathEffect = new EnemyDeathEffect(enemy.getCenterX(), enemy.getCenterY());
+					layerRenderMap.get(MapLayer.MAP_EFFECTS_LAYER.getValue()).add(deathEffect);
+					mapEffects.add(deathEffect);
 					iterator.remove();
 				}
 			} else if (target.getEntityType() == Entity.EntityType.DUMMY) {
@@ -124,31 +131,25 @@ public class GameEngine {
 			}
 		}
 
-		ArrayList<MapAnimation> projectileEndAnimations = new ArrayList<>();
 		ArrayList<DamageMarker> damageMarkers = new ArrayList<>();
-		MapAnimation currentEndAnimation;
+
 		for (Iterator<MapEffect> iterator = mapEffects.iterator(); iterator.hasNext();) {
 			MapEffect mapEffect = iterator.next();
 			mapEffect.update();
 
+			if (mapEffect.getEffectType() == MapEffect.EffectType.PROJECTILE_EFFECT) {
+				Projectile projectile = (Projectile) mapEffect;
+				damageMarkers.addAll(projectile.getTargetMarkers());
+				projectile.clearTargetMarkers();
+			}
+
 			if (mapEffect.isDone()) {
-				if (mapEffect.getEffectType() == MapEffect.EffectType.PROJECTILE_EFFECT) {
-					ProjectileAnimation animation = (ProjectileAnimation) mapEffect;
-					damageMarkers.addAll(animation.getTargetMarkers());
-					currentEndAnimation = determineEndAnimation(animation);
-					if (currentEndAnimation != null) {
-						projectileEndAnimations.add(currentEndAnimation);
-					}
-					animation.clearTargetMarkers();
-				}
 				layerRenderMap.get(mapEffect.getEffectType().getValue()).remove(mapEffect);
 				iterator.remove();
 			}
 		}
 		mapEffects.addAll(damageMarkers);
-		mapEffects.addAll(projectileEndAnimations);
 		layerRenderMap.get(MapLayer.DAMAGE_LAYER.getValue()).addAll(damageMarkers);
-		layerRenderMap.get(MapLayer.MAP_EFFECTS_LAYER.getValue()).addAll(projectileEndAnimations);
 
 		//TEMPORARY TEST CODE TO REGENERATE ENEMY
 		if (targets.size() == 2) {
@@ -211,7 +212,7 @@ public class GameEngine {
 		gameMap.setStage(level, map);
 	}
 
-	public void playerDidAttack(Entity.Ability ability) {
+	public void playerDidAttack(Entity.EntityAbility ability) {
 		player.attack(ability);
 	}
 
@@ -266,24 +267,5 @@ public class GameEngine {
 		Dummy dummy = new Dummy(posX, posY, facingEast);
 		targets.add(dummy);
 		layerRenderMap.get(MapLayer.ENTITY_LAYER.getValue()).add(dummy);
-	}
-
-	private void createMapAnimation(MapAnimation.MapAnimationType animationType, int posX, int posY) {
-		MapAnimation animation = new MapAnimation(animationType, posX, posY);
-		layerRenderMap.get(MapLayer.MAP_EFFECTS_LAYER.getValue()).add(animation);
-		mapEffects.add(animation);
-	}
-
-	private MapAnimation determineEndAnimation(ProjectileAnimation projectile) {
-		//TODO: move logic into ProjectileAnimation
-		MapAnimation endAnimation;
-		switch (projectile.getAnimationType()) {
-			case BLUE_FIRST:
-				endAnimation = new MapAnimation(MapAnimation.MapAnimationType.FIREBALL, projectile.getEndX(), projectile.getEndY());
-				break;
-			default:
-				return null;
-		}
-		return endAnimation;
 	}
 }

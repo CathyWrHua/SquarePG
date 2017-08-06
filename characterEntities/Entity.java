@@ -1,7 +1,8 @@
 package characterEntities;
 
+import animation.abilities.Ability;
+import animation.effects.Projectile;
 import gameLogic.MapCollisionDetection;
-import animation.effects.ProjectileAnimation;
 import gui.DamageMarker;
 import gui.HealthBar;
 import screens.Drawable;
@@ -23,9 +24,8 @@ public abstract class Entity implements Drawable {
 	protected boolean knockBackRight;
 	protected boolean facingEast;
 	protected MapCollisionDetection mapCollisionDetection;
-	protected animation.abilities.Ability currentAbility;
-	protected ArrayList<animation.abilities.Ability> abilities;
-	protected ArrayList<ProjectileAnimation> projectileAnimations;
+	protected Ability currentAbility;
+	protected ArrayList<Ability> abilities;
 	protected ArrayList<DamageMarker> targetMarkers;
 	protected HashMap<Entity, Boolean> immuneTo;
 	protected ImageIcon imageIcon;
@@ -36,11 +36,11 @@ public abstract class Entity implements Drawable {
 	public enum EntityState {NEUTRAL, ATTACKING, DAMAGED, DEAD}
 	public enum MotionStateUpDown {IDLE, UP, DOWN}
 	public enum MotionStateLeftRight {IDLE, LEFT, RIGHT}
-	public enum Ability {
+	public enum EntityAbility {
 		DEFAULT(0), FIRST(1), SECOND(2), THIRD(3), ULTIMATE(4);
 		private int value;
 
-		Ability(int value) {
+		EntityAbility(int value) {
 			this.value = value;
 		}
 
@@ -86,15 +86,15 @@ public abstract class Entity implements Drawable {
 		udMotionState = MotionStateUpDown.IDLE;
 
 		targetMarkers = new ArrayList<>();
-		this.projectileAnimations = new ArrayList<>();
 	}
 
-	public void attack(Ability ability) {
-		animation.abilities.Ability attemptedAbility = abilities.get(ability.getValue());
+	public void attack(EntityAbility ability) {
+		Ability attemptedAbility = abilities.get(ability.getValue());
 		if (entityState == EntityState.NEUTRAL && attemptedAbility != null && attemptedAbility.isOffCooldown()) {
 			playAnimation(ability.getValue());
-			if (attemptedAbility.isInstantCast()) attemptedAbility.resetCooldown();
 			setEntityState(EntityState.ATTACKING);
+		} else if (entityState == EntityState.ATTACKING && currentAbility != null && currentAbility.getEntityAbility() == ability) {
+			currentAbility.didTrigger();
 		}
 	}
 	
@@ -155,8 +155,12 @@ public abstract class Entity implements Drawable {
 		return targetMarkers;
 	}
 
-	public ArrayList<ProjectileAnimation> getProjectileAnimations() {
-		return projectileAnimations;
+	public ArrayList<Projectile> getProjectiles() {
+		if (currentAbility != null && currentAbility.hasProjectiles()) {
+			return currentAbility.getProjectiles();
+		} else {
+			return new ArrayList<>();
+		}
 	}
 
 	public ArrayList<animation.abilities.Ability> getAbilities() {
@@ -205,7 +209,7 @@ public abstract class Entity implements Drawable {
 		this.facingEast = facingEast;
 	}
 
-	public void setAnimation(int index, animation.abilities.Ability ability) {
+	public void setAbility(int index, Ability ability) {
 		if (abilities.size() > index) {
 			abilities.remove(index);
 		}
@@ -269,11 +273,12 @@ public abstract class Entity implements Drawable {
 		newPosX = posX;
 		newPosY = posY;
 
+		//Entity takes damage logic
 		if (damageTaken > 0) {
 			currentHealth -= damageTaken;
 			currentHealth = (currentHealth < 0) ? 0 : currentHealth;
 			if (currentAbility != null) {
-				currentAbility.kill();
+				currentAbility.setState(Ability.AbilityState.IS_DONE);
 				currentAbility = null;
 			}
 			if (currentHealth > 0) {
@@ -285,6 +290,7 @@ public abstract class Entity implements Drawable {
 			damageTaken = 0;
 		}
 
+		//Entity stagger + knockback
 		if ((entityState == EntityState.DAMAGED || entityState == EntityState.DEAD) && stunCounter < STUN_TIME) {
 			if (stunCounter < KNOCK_BACK_TIME) {
 				if (knockBackRight) {
@@ -301,10 +307,10 @@ public abstract class Entity implements Drawable {
 
 		if (currentAbility != null) {
 			currentAbility.update();
-			if (currentAbility.isDone()) {
+			if (currentAbility.getState() == Ability.AbilityState.IS_DONE) {
 				setEntityState(EntityState.NEUTRAL);
 				calculateEntityDirection();
-				currentAbility.resetDone();
+				currentAbility.reset();
 				currentAbility = null;
 			}
 		}
@@ -317,8 +323,10 @@ public abstract class Entity implements Drawable {
 		targetMarkers.clear();
 	}
 
-	public void emptyProjectileAnimations() {
-		projectileAnimations.clear();
+	public void emptyProjectiles() {
+		if (currentAbility != null && currentAbility.hasProjectiles()) {
+			currentAbility.clearProjectiles();
+		}
 	}
 
 	public void draw(Graphics g) {

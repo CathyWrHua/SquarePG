@@ -25,14 +25,16 @@ public abstract class Ability implements Drawable {
 	protected Animation canDamageAnimation = null;
 	protected Animation expirationAnimation = null;
 	protected Entity entity = null;
+	private Entity.EntityAbility entityAbility;
 	protected AbilityState state = AbilityState.INITIALIZING;
 	protected int cooldownTotal, cooldownCounter;
 
 	protected ArrayList<Projectile> projectiles = null;
 
-	public Ability(Entity entity, double cooldownInSeconds) {
+	public Ability(Entity entity, double cooldownInSeconds, Entity.EntityAbility entityAbility) {
 		this.cooldownCounter = 0;
 		this.cooldownTotal = (int)Math.round(cooldownInSeconds * SquarePG.FPS);
+		this.entityAbility = entityAbility;
 	}
 
 	public void update() {
@@ -166,5 +168,11 @@ public abstract class Ability implements Drawable {
 		return cooldownTotal;
 	}
 
+	public Entity.EntityAbility getEntityAbility() {
+		return entityAbility;
+	}
+
 	public abstract void didTrigger();
+	public abstract boolean didHitTarget(Entity target);
+	public abstract int dealDamage(int baseDamage);
 }
