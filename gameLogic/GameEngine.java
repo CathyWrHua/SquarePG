@@ -208,7 +208,7 @@ public class GameEngine {
 		this.map += change;
 		if (map > GameMap.MAPS_PER_LEVEL) {
 			map = GameMap.MAPS_PER_LEVEL;
-		} else if (level < 1) {
+		} else if (map < 1) {
 			map = 1;
 		}
 		gameMap.setStage(level, map);
