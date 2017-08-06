@@ -15,8 +15,8 @@ public class GameMap implements Drawable {
 
 	public static final int TOTAL_LEVELS = 1;
 	public static final int MAPS_PER_LEVEL = 4;
-	private static final int MAP_WIDTH = 10;
-	private static final int MAP_HEIGHT = 8;
+	private static final int MAP_WIDTH_TILES = 10;
+	private static final int MAP_HEIGHT_TILES = 8;
 	private static final int NUM_TILE_TYPES = 10;
 	private static final int TILE_LENGTH = 100;
 
@@ -30,7 +30,7 @@ public class GameMap implements Drawable {
 	}
 	
 	public void setStage(int level, int map) {
-		if (level > 0 && level < TOTAL_LEVELS+1 && map > 0 && map < MAPS_PER_LEVEL+1) {
+		if (level > 0 && level <= TOTAL_LEVELS && map > 0 && map <= MAPS_PER_LEVEL) {
 			currentLevel = level;
 			currentMap = map;
 		} else {
@@ -40,12 +40,12 @@ public class GameMap implements Drawable {
 	}
 
 	public Rectangle[] getCurrentCollisionMap () {
-		return hitRectangleMapping.get(currentLevel+" "+currentMap);
+		return hitRectangleMapping.get(currentLevel+"-"+currentMap);
 	}
 
 	public void draw(Graphics g) {
 		Graphics2D g2d = (Graphics2D)g;
-		ImageIcon[][] currentStage = levelMapping.get(currentLevel+" "+currentMap);
+		ImageIcon[][] currentStage = levelMapping.get(currentLevel+"-"+currentMap);
 
 		for (int h = 0; h < currentStage.length; h++) {
 			for (int w = 0; w < currentStage[h].length; w++) {
@@ -56,7 +56,7 @@ public class GameMap implements Drawable {
 
 	//TODO:(cathy) thread this creation method, guard against race conditions
 	private void createLevels() {
-		ImageIcon[][][][] maps = new ImageIcon[TOTAL_LEVELS][MAPS_PER_LEVEL][MAP_HEIGHT][MAP_WIDTH];
+		ImageIcon[][][][] maps = new ImageIcon[TOTAL_LEVELS][MAPS_PER_LEVEL][MAP_HEIGHT_TILES][MAP_WIDTH_TILES];
 		ArrayList<Rectangle>[][] hitRects = new ArrayList[TOTAL_LEVELS][MAPS_PER_LEVEL];
 		ImageIcon[] mapTiles = new ImageIcon[NUM_TILE_TYPES];
 
@@ -67,29 +67,15 @@ public class GameMap implements Drawable {
 		}
 
 		for (int i = 0; i < TOTAL_LEVELS; i++) {
-			for (int m = 0; m < NUM_TILE_TYPES; m++) mapTiles[m] = new ImageIcon(FILEPATH_ROOT+
-					(i+1)+FILEPATH_BACKGROUND+m+FILEPATH_PNG);
+			for (int m = 0; m < NUM_TILE_TYPES; m++) {
+				mapTiles[m] = new ImageIcon(FILEPATH_ROOT + (i + 1) + FILEPATH_BACKGROUND + m + FILEPATH_PNG);
+			}
 			for (int j = 0; j < MAPS_PER_LEVEL; j++) {
-				maps[i][j][0][0] = mapTiles[1];
-				maps[i][j][0][9] = mapTiles[2];
-				maps[i][j][7][0] = mapTiles[3];
-				maps[i][j][7][9] = mapTiles[4];
-				for (int w = 1; w < MAP_WIDTH - 1; w++) {
-					maps[i][j][0][w] = mapTiles[5];
-					maps[i][j][7][w] = mapTiles[6];
-				}
-				for (int h = 1; h < MAP_HEIGHT - 1; h++) {
-					maps[i][j][h][0] = mapTiles[7];
-					maps[i][j][h][9] = mapTiles[8];
-				}
-				for (int h = 0; h < MAP_HEIGHT - 2; h++) {
-					for (int w = 0; w < MAP_WIDTH - 2; w++) {
-						if (GameMapPresets.LEVEL_MAPS[i][j][h][w] == 1) {
-							maps[i][j][h + 1][w + 1] = mapTiles[9];
-							hitRects[i][j].add(new Rectangle((w+1)*TILE_LENGTH, (h+1)*TILE_LENGTH, TILE_LENGTH, TILE_LENGTH));
-						} else {
-							maps[i][j][h + 1][w + 1] = mapTiles[0];
-						}
+				for (int h = 0; h < MAP_HEIGHT_TILES; h++) {
+					for (int w = 0; w < MAP_WIDTH_TILES; w++) {
+						maps[i][j][h][w] = mapTiles[GameMapPresets.LEVEL_MAPS[i][j][h][w]];
+						if (GameMapPresets.LEVEL_MAPS[i][j][h][w] == 9)
+							hitRects[i][j].add(new Rectangle(w*TILE_LENGTH, h*TILE_LENGTH, TILE_LENGTH, TILE_LENGTH));
 					}
 				}
 			}
@@ -98,9 +84,9 @@ public class GameMap implements Drawable {
 		for (int i = 0; i < TOTAL_LEVELS; i++) {
 			for (int j = 0; j < MAPS_PER_LEVEL; j++) {
 				ArrayList<Rectangle> currentHitRect = hitRects[i][j];
-				levelMapping.put((i+1)+" "+(j+1), maps[i][j]);
+				levelMapping.put((i+1)+"-"+(j+1), maps[i][j]);
 				hitRects[i][j] = addBorder(currentHitRect);
-				hitRectangleMapping.put((i+1)+" "+(j+1), hitRects[i][j].toArray(new Rectangle[currentHitRect.size()]));
+				hitRectangleMapping.put((i+1)+"-"+(j+1), hitRects[i][j].toArray(new Rectangle[currentHitRect.size()]));
 			}
 		}
 	}
