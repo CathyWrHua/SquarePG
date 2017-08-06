@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 public class AbilityAnimation extends Animation {
 	public enum AbilityAnimationType {
-		HERO_DEFAULT(75, 0, "heroDefault", Entity.Ability.DEFAULT, true, 4, 1, 0.5, 0),
+		HERO_DEFAULT(-20, 0, "lightningDraw", Entity.Ability.DEFAULT, true, 4, 1, 0.5, 0),
 		RED_FIRST(-75, -75, "redFirst", Entity.Ability.FIRST, false, 3, 2, 2, 0),
 		RED_SECOND(75, 0, "heroDefault", Entity.Ability.SECOND, true, 4, 1, 0.5, 0),
 		RED_THIRD(75, 0, "heroDefault", Entity.Ability.THIRD, true, 4, 1, 0.5, 0),

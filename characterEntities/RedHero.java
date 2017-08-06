@@ -84,6 +84,7 @@ public class RedHero extends Hero {
 		for (Entity target : targets) {
 			switch (currentAbilityAnimation.getAbility()) {
 				case DEFAULT:
+//					posX += 5 * (facingEast ? 1 : -1);
 				case FIRST:
 					if (isHit(currentAbilityAnimation.getAbility(), target) && target.getEntityState() != EntityState.DEAD &&
 							currentAbilityAnimation.getCurrentFrame() >= currentAbilityAnimation.getDamageStartFrame() && !target.immuneTo.get(this)) {
