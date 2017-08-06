@@ -14,13 +14,13 @@ public class SquarePG extends JFrame {
 	public static ScreenState screenState = ScreenState.WAIT;
 	public static Hero.PlayerClass heroClass;
 	private Screen currentScreen; 
-	private Stack<Screen> screenStack = new Stack();
+	private Stack<Screen> screenStack = new Stack<>();
 	public static final int FPS = 60;
 	
 	public SquarePG() {
 		super("SquarePG");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setSize(1000, 1035);
+		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+		setSize(1000, 960);
 		setResizable(false);
 		setVisible(true);
 		setLayout(new BorderLayout());
@@ -78,7 +78,7 @@ public class SquarePG extends JFrame {
 					time = (1000/FPS) - (System.currentTimeMillis()-time);
 
 					if (time > 0) {
-						try{
+						try {
 							Thread.sleep(time);
 						}
 						catch (Exception e) {}
