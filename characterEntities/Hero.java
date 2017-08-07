@@ -32,7 +32,6 @@ public abstract class Hero extends Entity {
 	protected CharacterProfile.Path[] path;
 
 	public static final int SQUARE_LENGTH = 75;
-	static final int DEFAULT_RANGE = SQUARE_LENGTH;
 
 	Hero(ArrayList<Entity> targets, MapCollisionDetection mapCollisionDetection, int maxHealth, int maxDamage, int minDamage, int posX, int posY, double velocity) {
 		super(mapCollisionDetection, maxHealth, maxDamage, minDamage, posX, posY, velocity);
@@ -169,7 +168,6 @@ public abstract class Hero extends Entity {
 //		}
 //		return true;
 //	}
-
 
 	@Override
 	public ArrayList<Entity> getTargets() {

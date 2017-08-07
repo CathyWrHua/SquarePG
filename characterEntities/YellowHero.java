@@ -2,8 +2,6 @@ package characterEntities;
 
 import animation.abilities.SingleArrowAbility;
 import gameLogic.MapCollisionDetection;
-import animation.effects.ProjectileAnimation;
-import gui.DamageMarker;
 
 import java.util.ArrayList;
 
@@ -51,58 +49,6 @@ public class YellowHero extends Hero {
 //				return false;
 //			}
 //			return true;
-//		}
-//	}
-//
-//	@Override
-//	protected boolean isHit(Ability ability, Entity target) {
-//		if (super.isHit(ability, target)) {
-//			return true;
-//		}
-//		boolean hit = false;
-//		int targetPosX = target.getPosX();
-//		int targetPosY = target.getPosY();
-//		switch (ability) {
-//			case SECOND:
-//			case THIRD:
-//			case ULTIMATE:
-//			default:
-//				break;
-//		}
-//		return hit;
-//	}
-//
-//	@Override
-//	public void update() {
-//		super.update();
-//		DamageMarker marker;
-//		Ability ability;
-//
-//		if (entityState != EntityState.ATTACKING || currentAbility == null) return;
-//		ability = currentAbility.getAbility();
-//		switch (ability) {
-//			case DEFAULT:
-//				for (Entity target : targets) {
-//					if (!target.immuneTo.get(this) && isHit(Entity.Ability.DEFAULT, target) && target.getEntityState() != EntityState.DEAD) {
-//						marker = target.inflict(getDamage(), this);
-//						if (marker != null) {
-//							targetMarkers.add(marker);
-//						}
-//					}
-//				}
-//				break;
-//			case FIRST:
-//				if (currentAbility.isDamageStartFrame()) {
-//					ProjectileAnimation newProjectile = new ProjectileAnimation(ProjectileAnimation.ProjectileAnimationType.YELLOW_FIRST,
-//							mapCollisionDetection, this);
-//					projectileAnimations.add(newProjectile);
-//				}
-//				break;
-//			case SECOND:
-//			case THIRD:
-//			case ULTIMATE:
-//			default:
-//				break;
 //		}
 //	}
 }

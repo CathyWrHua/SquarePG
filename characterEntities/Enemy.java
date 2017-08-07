@@ -144,18 +144,6 @@ public abstract class Enemy extends Entity {
 		setPoint(mapCollisionDetection.determineMotion(newPosX, newPosY, getEntitySize(), new ArrayList<>(Collections.singletonList(targetEntity))));
 	}
 
-//	public boolean isHit() {
-//		boolean hit = false;
-//		int targetPosX = targetEntity.getPosX();
-//		int targetPosY = targetEntity.getPosY();
-//		if (((getFacingEast() && targetPosX > posX && targetPosX < posX+getEntitySize().width+attackRange) ||
-//				(!getFacingEast() && targetPosX < posX && targetPosX > posX-getEntitySize().width-attackRange)) &&
-//				targetPosY > posY-attackRange && targetPosY < posY+attackRange) {
-//			hit = true;
-//		}
-//		return hit;
-//	}
-
 	private void createEnemyHashMap() {
 		shapePath = new HashMap<>();
 		shapePath.put(0, "circle");

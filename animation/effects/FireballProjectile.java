@@ -9,31 +9,32 @@ public class FireballProjectile extends Projectile {
 	private static int OFFSET_X = 75;
 	private static int OFFSET_Y = 15;
 	private static int FIREBALL_WIDTH = 45;
+	private static int FIREBALL_EXPLOSION_WIDTH = 75;
 
 	public FireballProjectile(Entity entity, MapCollisionDetection mapCollision) {
 		super(entity,
 				mapCollision,
-				new Animation(entity.getPosX() + (entity.getFacingEast()? OFFSET_X : entity.getImageIcon().getIconWidth() - OFFSET_X-FIREBALL_WIDTH),
-						entity.getPosY() + OFFSET_Y, 0, 0, FILEPATH_EFFECTS + "fireball", 3, 100),
+				new Animation(entity.getPosX(),
+						entity.getPosY(), OFFSET_X, OFFSET_Y, FILEPATH_EFFECTS + "fireball", 3, 100),
 				new Animation(0, 0, 0, 0,FILEPATH_EFFECTS + "fireballExplosion", 4, 1),
 				5,
 				0);
-		posX += OFFSET_X;
-		posY += OFFSET_Y;
+		posX += (entity.getFacingEast())? 0 : -(FIREBALL_WIDTH+OFFSET_X);
 	}
 
 	@Override
 	public void update() {
 		super.update();
-		if (isCollide()) {
+		if (!hasCollided && isCollide()) {
 			setHasCollided(true);
+
 			//Regular animation kill is a class specific thing:
 			//Should not be moved into super class(s)
 			regularAnimation.killAnimation();
-			int x = facingEast? regularAnimation.getSize().x+FIREBALL_WIDTH : regularAnimation.getSize().x;
-			int y = regularAnimation.getSize().y+regularAnimation.getSize().height/2;
-			collisionAnimation.setPosition(x, y);
-		} else {
+			posX = facingEast? regularAnimation.getSize().x+FIREBALL_WIDTH/2 : regularAnimation.getSize().x-FIREBALL_EXPLOSION_WIDTH/2;
+			posY = regularAnimation.getSize().y+regularAnimation.getSize().height/2 - FIREBALL_EXPLOSION_WIDTH/2;
+			collisionAnimation.setPosition(posX, posY);
+		} else if (!hasCollided){
 			regularAnimation.setPosition(posX, posY);
 		}
 	}

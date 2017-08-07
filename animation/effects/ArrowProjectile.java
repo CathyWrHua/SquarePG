@@ -3,9 +3,6 @@ package animation.effects;
 import animation.Animation;
 import characterEntities.Entity;
 import gameLogic.MapCollisionDetection;
-import gui.DamageMarker;
-
-import java.util.ArrayList;
 
 public class ArrowProjectile extends Projectile {
 
@@ -21,7 +18,7 @@ public class ArrowProjectile extends Projectile {
 				velocityX,
 				velocityY);
 
-		posX += (entity.getFacingEast())? OFFSET_X : -1*(ARROW_WIDTH - OFFSET_X);
+		posX += (entity.getFacingEast())? OFFSET_X : -1*(ARROW_WIDTH-OFFSET_X);
 	}
 
 	public ArrowProjectile(Entity entity, MapCollisionDetection mapCollision) {

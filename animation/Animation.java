@@ -1,6 +1,5 @@
 package animation;
 
-import animation.effects.MapEffect;
 import screens.Drawable;
 
 import javax.swing.*;
@@ -23,13 +22,7 @@ public class Animation implements Drawable {
 	static final String FILEPATH_ROOT = "src/assets/animations/";
 	static final String FILEPATH_FILETYPE = ".png";
 
-	public Animation (int posX,
-					  int posY,
-					  int offsetX,
-					  int offsetY,
-					  String animationName,
-					  int totalFrames,
-					  int numLoops) {
+	public Animation (int posX, int posY, int offsetX, int offsetY, String animationName, int totalFrames, int numLoops) {
 		this.posX = posX;
 		this.posY = posY;
 		this.offsetX = offsetX;
@@ -76,10 +69,6 @@ public class Animation implements Drawable {
 	public void killAnimation() {
 		done = true;
 	}
-
-//	public int getCurrentFrame() {
-//		return counter/ANIMATION_SPEED;
-//	}
 
 	protected void resetCounter() {
 		this.counter = 0;

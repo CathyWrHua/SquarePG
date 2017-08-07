@@ -2,7 +2,6 @@ package characterEntities;
 
 import animation.abilities.Ability;
 import animation.effects.MapEffect;
-import animation.effects.Projectile;
 import gameLogic.MapCollisionDetection;
 import gui.DamageMarker;
 import gui.HealthBar;

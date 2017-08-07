@@ -1,9 +1,7 @@
 package characterEntities;
 
 import animation.abilities.FireballAbility;
-import animation.effects.ProjectileAnimation;
 import gameLogic.MapCollisionDetection;
-import gui.DamageMarker;
 
 import java.util.ArrayList;
 
@@ -51,58 +49,6 @@ public class BlueHero extends Hero {
 //				return false;
 //			}
 //			return true;
-//		}
-//	}
-
-//	@Override
-//	protected boolean isHit(Ability ability, Entity target) {
-//		if (super.isHit(ability, target)) {
-//			return true;
-//		}
-//		boolean hit = false;
-//		int targetPosX = target.getPosX();
-//		int targetPosY = target.getPosY();
-//		switch (ability) {
-//			case FIRST:
-//			case SECOND:
-//			case THIRD:
-//			case ULTIMATE:
-//				break;
-//		}
-//		return hit;
-//	}
-
-//	@Override
-//	public void update() {
-//		super.update();
-//		DamageMarker marker;
-//		Ability ability;
-//
-//		if (entityState != EntityState.ATTACKING || currentAbility == null) return;
-//		ability = currentAbility.getAbility();
-//		switch (ability) {
-//			case DEFAULT:
-//				for (Entity target : targets) {
-//					if (!target.immuneTo.get(this) && isHit(Entity.Ability.DEFAULT, target) && target.getEntityState() != EntityState.DEAD) {
-//						marker = target.inflict(getDamage(), this);
-//						if (marker != null) {
-//							targetMarkers.add(marker);
-//						}
-//					}
-//				}
-//				break;
-//			case FIRST:
-//				if (currentAbility.isDamageStartFrame()) {
-//					ProjectileAnimation newProjectile = new ProjectileAnimation(ProjectileAnimation.ProjectileAnimationType.BLUE_FIRST,
-//							mapCollisionDetection, this);
-//					projectileAnimations.add(newProjectile);
-//				}
-//				break;
-//			case SECOND:
-//			case THIRD:
-//			case ULTIMATE:
-//			default:
-//				break;
 //		}
 //	}
 }
