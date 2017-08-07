@@ -28,7 +28,7 @@ public class GameScreen extends Screen implements KeyListener, MouseListener {
 	
 	public GameScreen(Hero.PlayerClass playerClass) {
 		super();
-		setPreferredSize(new Dimension(1000, 1000));
+		setPreferredSize(new Dimension(1000, 925));
 		addKeyListener(this);
 		setFocusable(true);
 		setFocusTraversalKeysEnabled(false);
@@ -85,9 +85,9 @@ public class GameScreen extends Screen implements KeyListener, MouseListener {
 		}
 
 		if (e.getKeyCode() == KeyEvent.VK_J) {
-			gameEngine.toggleMapLevel(-1);
+			gameEngine.toggleMap(-1);
 		} else if (e.getKeyCode() == KeyEvent.VK_K) {
-			gameEngine.toggleMapLevel(1);
+			gameEngine.toggleMap(1);
 		} else if (e.getKeyCode() == KeyEvent.VK_A) {
 			gameEngine.playerDidAttack(Entity.Ability.DEFAULT);
 		} else if (e.getKeyCode() == KeyEvent.VK_Q) {
