@@ -10,7 +10,7 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public abstract class Projectile extends MapEffect{
-	private int velocityX, velocityY;
+	protected int velocityX, velocityY;
 	private int damage;
 	protected boolean facingEast;
 	protected boolean done;
@@ -39,6 +39,11 @@ public abstract class Projectile extends MapEffect{
 		}
 	}
 
+	@Override
+	public void update() {
+		super.update();
+	}
+
 	public ArrayList<DamageMarker> getTargetMarkers() {
 		return targetMarkers;
 	}
@@ -52,14 +57,10 @@ public abstract class Projectile extends MapEffect{
 	}
 
 	protected boolean isCollide() {
-		boolean collision;
-		int newX = posX + velocityX;
-		int newY = posY + velocityY;
-		Point newPoint = mapCollision.determineMotion(newX, newY, regularAnimation.getSize(), targets);
+		posX += velocityX;
+		posY += velocityY;
 
-		collision = (newX != newPoint.x || newY != newPoint.y);
-		posX = newX;
-		posY = newY;
+		boolean collision = mapCollision.detectCollision(regularAnimation.getSize(), targets);
 		if (collision) dealDamage();
 		return collision;
 	}

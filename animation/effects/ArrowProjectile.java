@@ -16,25 +16,36 @@ public class ArrowProjectile extends Projectile {
 	public ArrowProjectile(Entity entity, MapCollisionDetection mapCollision, int velocityX, int velocityY) {
 		super(entity,
 				mapCollision,
-				new Animation(entity.getPosX() + (entity.getFacingEast()? OFFSET_X :
-				entity.getImageIcon().getIconWidth()-OFFSET_X-ARROW_WIDTH), entity.getPosY() + OFFSET_Y, 0,0,FILEPATH_EFFECTS +"arrow",2, 100),
+				new Animation(entity.getPosX(), entity.getPosY(), OFFSET_X, OFFSET_Y,FILEPATH_EFFECTS +"arrow",2, 1000),
 				null,
 				velocityX,
 				velocityY);
+
+		posX += (entity.getFacingEast())? OFFSET_X : -1*(ARROW_WIDTH - OFFSET_X);
 	}
 
 	public ArrowProjectile(Entity entity, MapCollisionDetection mapCollision) {
 		super(entity,
 				mapCollision,
-				new Animation(entity.getPosX() + (entity.getFacingEast()? OFFSET_X :
-						entity.getImageIcon().getIconWidth()-OFFSET_X-ARROW_WIDTH), entity.getPosY() + OFFSET_Y, 0,0, FILEPATH_EFFECTS +"arrow",2, 100),
+				new Animation(entity.getPosX(), entity.getPosY(),
+						 OFFSET_X, OFFSET_Y, FILEPATH_EFFECTS +"arrow",2, 1000),
 				null,
 				10,
 				0);
+
+		posX += (entity.getFacingEast())? 0 : -1*(ARROW_WIDTH - OFFSET_X);
 	}
 
 	public void update() {
 		super.update();
-		done = isCollide();
+		if (isCollide()) {
+			setHasCollided(true);
+
+			//Regular animation kill is a class specific thing:
+			//Should not be moved into super class(s)
+			regularAnimation.killAnimation();
+		} else {
+			regularAnimation.setPosition(posX, posY);
+		}
 	}
 }

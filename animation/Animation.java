@@ -37,6 +37,7 @@ public class Animation implements Drawable {
 		this.animationName = FILEPATH_ROOT + animationName;
 		this.totalFrames = totalFrames;
 		this.numLoops = numLoops;
+		this.currentLoop = numLoops;
 
 		this.imageIcons = new ArrayList<>(totalFrames);
 		for (int i = 0; i < totalFrames; i++) {
@@ -61,7 +62,7 @@ public class Animation implements Drawable {
 
 	public Rectangle getSize() {
 		return (currentImage == null)? null:
-				new Rectangle(posX, posY, currentImage.getIconWidth(), currentImage.getIconHeight());
+				new Rectangle(offsetX+posX, posY+offsetY, currentImage.getIconWidth(), currentImage.getIconHeight());
 	}
 
 	public int getOffsetX() {

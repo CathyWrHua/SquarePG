@@ -18,6 +18,8 @@ public class FireballProjectile extends Projectile {
 				new Animation(0, 0, 0, 0,FILEPATH_EFFECTS + "fireballExplosion", 4, 1),
 				5,
 				0);
+		posX += OFFSET_X;
+		posY += OFFSET_Y;
 	}
 
 	@Override
@@ -31,6 +33,8 @@ public class FireballProjectile extends Projectile {
 			int x = facingEast? regularAnimation.getSize().x+FIREBALL_WIDTH : regularAnimation.getSize().x;
 			int y = regularAnimation.getSize().y+regularAnimation.getSize().height/2;
 			collisionAnimation.setPosition(x, y);
+		} else {
+			regularAnimation.setPosition(posX, posY);
 		}
 	}
 }
