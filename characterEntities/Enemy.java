@@ -1,5 +1,6 @@
 package characterEntities;
 
+import animation.abilities.Ability;
 import gameLogic.MapCollisionDetection;
 import gui.DamageMarker;
 import java.util.ArrayList;
@@ -26,7 +27,6 @@ public abstract class Enemy extends Entity {
 	protected boolean done;
 	protected EnemyType enemyType;
 	protected HashMap<Integer, String> shapePath;
-	protected int attackRange;
 	private Entity targetEntity;
 
 	private static final int DELETION_TIME = 40;
@@ -39,7 +39,6 @@ public abstract class Enemy extends Entity {
 		createEnemyHashMap();
 
 		done = false;
-		targetMarkers = new ArrayList<>();
 		entityType = EntityType.ENEMY;
 	}
 
@@ -115,7 +114,7 @@ public abstract class Enemy extends Entity {
 		if (Math.abs(motionVector.x) < 100 && Math.abs(motionVector.y) < 100) {
 
 			if (targetEntity.getEntityState() != EntityState.DEAD) {
-				attack(Ability.DEFAULT);
+				attack(EntityAbility.DEFAULT);
 			}
 		}
 	}
@@ -123,7 +122,7 @@ public abstract class Enemy extends Entity {
 	public void update() {
 		super.update();
 
-		if (currentAbilityAnimation == null) {
+		if (currentAbility == null) {
 			targetEntity.immuneTo.put(this, false);
 		}
 
@@ -132,9 +131,9 @@ public abstract class Enemy extends Entity {
 		} else if (entityState == EntityState.NEUTRAL || entityState == EntityState.ATTACKING) {
 			calculateNextMove();
 
-			if (entityState == EntityState.ATTACKING) {
+			if (entityState == EntityState.ATTACKING && currentAbility.getState() != Ability.AbilityState.IS_DONE) {
 				DamageMarker marker;
-				if (!targetEntity.immuneTo.get(this) && isHit() && targetEntity.getEntityState() != EntityState.DEAD) {
+				if (!targetEntity.immuneTo.get(this) && currentAbility.didHitTarget(targetEntity) && targetEntity.getEntityState() != EntityState.DEAD) {
 					marker = targetEntity.inflict(getDamage(), this);
 					if (marker != null) {
 						targetMarkers.add(marker);
@@ -142,20 +141,7 @@ public abstract class Enemy extends Entity {
 				}
 			}
 		}
-
 		setPoint(mapCollisionDetection.determineMotion(newPosX, newPosY, getEntitySize(), new ArrayList<>(Collections.singletonList(targetEntity))));
-	}
-
-	public boolean isHit() {
-		boolean hit = false;
-		int targetPosX = targetEntity.getPosX();
-		int targetPosY = targetEntity.getPosY();
-		if (((getFacingEast() && targetPosX > posX && targetPosX < posX+getEntitySize().width+attackRange) ||
-				(!getFacingEast() && targetPosX < posX && targetPosX > posX-getEntitySize().width-attackRange)) &&
-				targetPosY > posY-attackRange && targetPosY < posY+attackRange) {
-			hit = true;
-		}
-		return hit;
 	}
 
 	private void createEnemyHashMap() {

@@ -1,6 +1,6 @@
 package gui;
 
-import animation.AbilityAnimation;
+import animation.abilities.Ability;
 import characterEntities.Hero;
 import screens.Drawable;
 
@@ -12,7 +12,7 @@ import java.util.ArrayList;
 public class AbilityBar implements Drawable {
 	private ImageIcon iconBar;
 	private ArrayList<ImageIcon> abilityIcons;
-	private ArrayList<AbilityAnimation> abilities;
+	private ArrayList<Ability> abilities;
 
 	private static final int NUM_ABILITIES = 4;
 	private static final int ICON_GAP = 90;
@@ -31,19 +31,19 @@ public class AbilityBar implements Drawable {
 
 	public void updateAbilityIcons(Hero player) {
 		String filepath;
-		ArrayList<AbilityAnimation> abilityAnimations = player.getAbilityAnimations();
+		ArrayList<Ability> abilities = player.getAbilities();
 
 		for (int i = 0; i < NUM_ABILITIES; i++) {
-			if (i+1 < abilityAnimations.size()) {
-				abilities.add(i, abilityAnimations.get(i+1));
+			if (i+1 < abilities.size()) {
+				this.abilities.add(i, abilities.get(i+1));
 			} else {
-				abilities.add(i, null);
+				this.abilities.add(i, null);
 			}
 		}
 		for (int i = 0; i < NUM_ABILITIES; i++) {
 			filepath = "src/assets/gui/";
-			if (abilities.get(i) != null) {
-				filepath += abilities.get(i).getAnimationName() + "Icon.png";
+			if (this.abilities.get(i) != null) {
+				filepath += this.abilities.get(i).getAbilityName() + "Icon.png";
 			} else {
 				filepath += "unknownIcon.png";
 			}
