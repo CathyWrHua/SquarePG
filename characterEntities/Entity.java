@@ -1,7 +1,7 @@
 package characterEntities;
 
 import animation.abilities.Ability;
-import animation.effects.MapEffect;
+import animation.effects.Effect;
 import gameLogic.MapCollisionDetection;
 import gui.DamageMarker;
 import gui.HealthBar;
@@ -27,7 +27,7 @@ public abstract class Entity implements Drawable {
 	protected Ability currentAbility;
 	protected ArrayList<Ability> abilities;
 	protected ArrayList<DamageMarker> targetMarkers;
-	protected ArrayList<MapEffect> mapEffects;
+	protected ArrayList<Effect> Effects;
 	protected HashMap<Entity, Boolean> immuneTo;
 	protected ImageIcon imageIcon;
 	protected HealthBar healthBar;
@@ -87,7 +87,7 @@ public abstract class Entity implements Drawable {
 		udMotionState = MotionStateUpDown.IDLE;
 
 		targetMarkers = new ArrayList<>();
-		mapEffects = new ArrayList<>();
+		Effects = new ArrayList<>();
 	}
 
 	public void update() {
@@ -129,7 +129,7 @@ public abstract class Entity implements Drawable {
 		if (currentAbility != null) {
 			currentAbility.update();
 			if (currentAbility.hasProjectiles()) {
-				mapEffects.addAll(currentAbility.getProjectiles());
+				Effects.addAll(currentAbility.getProjectiles());
 				currentAbility.clearProjectiles();
 			}
 			if (currentAbility.getState() == Ability.AbilityState.IS_DONE) {
@@ -337,8 +337,8 @@ public abstract class Entity implements Drawable {
 		return targetMarkers;
 	}
 
-	public ArrayList<MapEffect> getMapEffects() {
-		return mapEffects;
+	public ArrayList<Effect> getEffects() {
+		return Effects;
 	}
 
 	public void emptyTargetMarkers() {
@@ -346,7 +346,7 @@ public abstract class Entity implements Drawable {
 	}
 
 	public void emptyProjectiles() {
-		mapEffects.clear();
+		Effects.clear();
 	}
 
 

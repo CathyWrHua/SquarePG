@@ -19,7 +19,7 @@ public class FireballProjectile extends Projectile {
 				new Animation(0, 0, 0, 0,FILEPATH_EFFECTS + "fireballExplosion", 4, 1),
 				5,
 				0);
-		posX += (entity.getFacingEast())? 0 : -(FIREBALL_WIDTH+OFFSET_X);
+		posX += (entity.getFacingEast())? 0 : entity.getImageIcon().getIconWidth()-2*OFFSET_X-FIREBALL_WIDTH;
 	}
 
 	@Override

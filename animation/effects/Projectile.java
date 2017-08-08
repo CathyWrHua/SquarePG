@@ -9,7 +9,7 @@ import gui.DamageMarker;
 import java.awt.*;
 import java.util.ArrayList;
 
-public abstract class Projectile extends MapEffect{
+public abstract class Projectile extends Effect {
 	protected int velocityX, velocityY;
 	private int damage;
 	protected boolean facingEast;

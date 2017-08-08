@@ -2,12 +2,10 @@ package animation.abilities;
 
 import SquarePG.SquarePG;
 import animation.Animation;
-import animation.effects.MapEffect;
 import animation.effects.Projectile;
 import characterEntities.Entity;
 import screens.Drawable;
 
-import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 

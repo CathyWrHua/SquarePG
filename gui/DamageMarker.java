@@ -1,10 +1,10 @@
 package gui;
 
-import animation.effects.MapEffect;
+import animation.effects.Effect;
 
 import java.awt.*;
 
-public class DamageMarker extends MapEffect {
+public class DamageMarker extends Effect {
 	private int currentLifetime = LIFETIME;
 	private int damage;
 	private float speed = INITIAL_SPEED;

@@ -5,11 +5,11 @@ import characterEntities.Entity;
 import characterEntities.HitDetectionHelper;
 import javafx.scene.shape.Circle;
 
-public class WindmillSwordsAbility extends Ability {
+public class WhirlBladesAbility extends Ability {
 
 	public final int WINDMILL_RADIUS = 112;
 
-	public WindmillSwordsAbility (Entity entity) {
+	public WhirlBladesAbility(Entity entity) {
 		super(entity, 2, Entity.EntityAbility.FIRST);
 		canDamageAnimation = new Animation(entity.getPosX(), entity.getPosY(), -75, -75, FILEPATH_ABILITY+"redFirst", 3, 2);
 	}

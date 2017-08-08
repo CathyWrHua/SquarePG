@@ -5,7 +5,7 @@ import screens.Drawable;
 
 import java.awt.*;
 
-public abstract class MapEffect implements Drawable {
+public abstract class Effect implements Drawable {
 	public enum EffectType {
 		MAP_EFFECT(3), PROJECTILE_EFFECT(3), DAMAGE(4);
 		private int value;
@@ -19,7 +19,7 @@ public abstract class MapEffect implements Drawable {
 		}
 	}
 
-	public static final String FILEPATH_EFFECTS = "mapEffects/";
+	public static final String FILEPATH_EFFECTS = "Effects/";
 
 	protected EffectType effectType;
 	protected int posX;
@@ -28,7 +28,7 @@ public abstract class MapEffect implements Drawable {
 	protected Animation collisionAnimation;
 	protected boolean hasCollided = false;
 
-	public MapEffect(int posX, int posY, Animation regularAnimation, Animation collisionAnimation, EffectType effectType) {
+	public Effect(int posX, int posY, Animation regularAnimation, Animation collisionAnimation, EffectType effectType) {
 		this.posX = posX;
 		this.posY = posY;
 		this.regularAnimation = regularAnimation;

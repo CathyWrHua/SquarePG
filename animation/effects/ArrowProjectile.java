@@ -17,8 +17,7 @@ public class ArrowProjectile extends Projectile {
 				null,
 				velocityX,
 				velocityY);
-
-		posX += (entity.getFacingEast())? OFFSET_X : -1*(ARROW_WIDTH-OFFSET_X);
+		posX += (entity.getFacingEast())? 0 : entity.getImageIcon().getIconWidth()-2*OFFSET_X-ARROW_WIDTH;
 	}
 
 	public ArrowProjectile(Entity entity, MapCollisionDetection mapCollision) {
@@ -29,8 +28,7 @@ public class ArrowProjectile extends Projectile {
 				null,
 				10,
 				0);
-
-		posX += (entity.getFacingEast())? 0 : -1*(ARROW_WIDTH - OFFSET_X);
+		posX += (entity.getFacingEast())? 0 : entity.getImageIcon().getIconWidth()-2*OFFSET_X-ARROW_WIDTH;
 	}
 
 	public void update() {

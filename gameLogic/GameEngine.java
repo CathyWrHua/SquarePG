@@ -1,8 +1,8 @@
 package gameLogic;
 
 import animation.abilities.Ability;
+import animation.effects.Effect;
 import animation.effects.EnemyDeathEffect;
-import animation.effects.MapEffect;
 import animation.effects.Projectile;
 import characterEntities.*;
 import gui.AbilityBar;
@@ -12,7 +12,6 @@ import screens.Drawable;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Map;
 
 public class GameEngine {
 	public enum MapLayer {
@@ -48,12 +47,12 @@ public class GameEngine {
 	private Hero player;
 	private AbilityBar playerAbilityBar;
 	private ArrayList<Entity> targets;
-	private ArrayList<MapEffect> mapEffects;
+	private ArrayList<Effect> Effects;
 	private ArrayList<ArrayList<Drawable>> layerRenderMap;
 
 	public GameEngine(Hero.PlayerClass playerClass) {
 		targets = new ArrayList<>();
-		mapEffects = new ArrayList<>();
+		Effects = new ArrayList<>();
 
 		gameMap = new GameMap(level, map);
 		collisionMap = new MapCollisionDetection(gameMap.getCurrentCollisionMap());
@@ -96,11 +95,11 @@ public class GameEngine {
 		if (playerAbility != null) layerRenderMap.get(MapLayer.ENTITY_EFFECTS_LAYER.getValue()).add(playerAbility);
 
 		layerRenderMap.get(MapLayer.DAMAGE_LAYER.getValue()).addAll(player.getTargetMarkers());
-		mapEffects.addAll(player.getTargetMarkers());
+		Effects.addAll(player.getTargetMarkers());
 		player.emptyTargetMarkers();
 
-		layerRenderMap.get(MapLayer.MAP_EFFECTS_LAYER.getValue()).addAll(player.getMapEffects());
-		mapEffects.addAll(player.getMapEffects());
+		layerRenderMap.get(MapLayer.MAP_EFFECTS_LAYER.getValue()).addAll(player.getEffects());
+		Effects.addAll(player.getEffects());
 		player.emptyProjectiles();
 
 		for (Iterator<Entity> iterator = targets.iterator(); iterator.hasNext();) {
@@ -115,18 +114,18 @@ public class GameEngine {
 				}
 
 				layerRenderMap.get(MapLayer.DAMAGE_LAYER.getValue()).addAll(enemy.getTargetMarkers());
-				mapEffects.addAll(enemy.getTargetMarkers());
+				Effects.addAll(enemy.getTargetMarkers());
 				target.emptyTargetMarkers();
 
-				layerRenderMap.get(MapLayer.MAP_EFFECTS_LAYER.getValue()).addAll(enemy.getMapEffects());
-				mapEffects.addAll(enemy.getMapEffects());
+				layerRenderMap.get(MapLayer.MAP_EFFECTS_LAYER.getValue()).addAll(enemy.getEffects());
+				Effects.addAll(enemy.getEffects());
 				target.emptyProjectiles();
 
 				if (enemy.isDone()) {
 					layerRenderMap.get(MapLayer.ENTITY_LAYER.getValue()).remove(enemy);
-					MapEffect deathEffect = new EnemyDeathEffect(enemy.getCenterX(), enemy.getCenterY());
+					Effect deathEffect = new EnemyDeathEffect(enemy.getCenterX(), enemy.getCenterY());
 					layerRenderMap.get(MapLayer.MAP_EFFECTS_LAYER.getValue()).add(deathEffect);
-					mapEffects.add(deathEffect);
+					Effects.add(deathEffect);
 					iterator.remove();
 				}
 			} else if (target.getEntityType() == Entity.EntityType.DUMMY) {
@@ -136,22 +135,22 @@ public class GameEngine {
 
 		ArrayList<DamageMarker> damageMarkers = new ArrayList<>();
 
-		for (Iterator<MapEffect> iterator = mapEffects.iterator(); iterator.hasNext();) {
-			MapEffect mapEffect = iterator.next();
-			mapEffect.update();
+		for (Iterator<Effect> iterator = Effects.iterator(); iterator.hasNext();) {
+			Effect effect = iterator.next();
+			effect.update();
 
-			if (mapEffect.getEffectType() == MapEffect.EffectType.PROJECTILE_EFFECT) {
-				Projectile projectile = (Projectile) mapEffect;
+			if (effect.getEffectType() == Effect.EffectType.PROJECTILE_EFFECT) {
+				Projectile projectile = (Projectile) effect;
 				damageMarkers.addAll(projectile.getTargetMarkers());
 				projectile.clearTargetMarkers();
 			}
 
-			if (mapEffect.isDone()) {
-				layerRenderMap.get(mapEffect.getEffectType().getValue()).remove(mapEffect);
+			if (effect.isDone()) {
+				layerRenderMap.get(effect.getEffectType().getValue()).remove(effect);
 				iterator.remove();
 			}
 		}
-		mapEffects.addAll(damageMarkers);
+		Effects.addAll(damageMarkers);
 		layerRenderMap.get(MapLayer.DAMAGE_LAYER.getValue()).addAll(damageMarkers);
 
 		//TEMPORARY TEST CODE TO REGENERATE ENEMY
@@ -222,7 +221,7 @@ public class GameEngine {
 	//Temporary hack to damage the player in testing
 	public void playerWasAttacked() {
 		DamageMarker marker = player.inflict(3, new Dummy(-100, -100, true));
-		mapEffects.add(marker);
+		Effects.add(marker);
 		layerRenderMap.get(MapLayer.DAMAGE_LAYER.getValue()).add(marker);
 	}
 
