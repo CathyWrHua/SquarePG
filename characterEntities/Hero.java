@@ -1,7 +1,9 @@
 package characterEntities;
 
+import animation.abilities.Ability;
+import animation.abilities.EggplantAbility;
 import gameLogic.MapCollisionDetection;
-import animation.AbilityAnimation;
+import gui.DamageMarker;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -30,7 +32,6 @@ public abstract class Hero extends Entity {
 	protected CharacterProfile.Path[] path;
 
 	public static final int SQUARE_LENGTH = 75;
-	static final int DEFAULT_RANGE = SQUARE_LENGTH;
 
 	Hero(ArrayList<Entity> targets, MapCollisionDetection mapCollisionDetection, int maxHealth, int maxDamage, int minDamage, int posX, int posY, double velocity) {
 		super(mapCollisionDetection, maxHealth, maxDamage, minDamage, posX, posY, velocity);
@@ -40,9 +41,62 @@ public abstract class Hero extends Entity {
 		}
 
 		createHeroHashMap();
-		setAnimation(0, new AbilityAnimation(AbilityAnimation.AbilityAnimationType.HERO_DEFAULT, this));
+		setAbility(0, new EggplantAbility(this));
 		path = new CharacterProfile.Path[3];
 		setEntityType(EntityType.HERO);
+	}
+
+	@Override
+	public void update () {
+		super.update();
+
+		if (currentAbility == null) {
+			for (Entity target : targets) {
+				target.immuneTo.put(this, false);
+			}
+		}
+
+		if (entityState == EntityState.NEUTRAL || entityState == EntityState.ATTACKING) {
+			switch (lrMotionState) {
+				case LEFT:
+					newPosX -= Math.round(velocity);
+					break;
+				case RIGHT:
+					newPosX += Math.round(velocity);
+					break;
+				case IDLE:
+				default:
+					break;
+			}
+			switch (udMotionState) {
+				case UP:
+					newPosY -= Math.round(velocity);
+					break;
+				case DOWN:
+					newPosY += Math.round(velocity);
+					break;
+				case IDLE:
+				default:
+					break;
+			}
+		}
+
+		setPoint(mapCollisionDetection.determineMotion(newPosX, newPosY, getEntitySize(), targets));
+
+		if (entityState != EntityState.ATTACKING || currentAbility == null) return;
+		DamageMarker marker;
+		if (currentAbility.getState() == Ability.AbilityState.CAN_DAMAGE) {
+			for (Entity target : targets) {
+				if (!target.immuneTo.get(this) &&
+						currentAbility.didHitTarget(target) &&
+						target.getEntityState() != EntityState.DEAD) {
+					marker = target.inflict(currentAbility.dealDamage(getDamage()), this);
+					if (marker != null) {
+						targetMarkers.add(marker);
+					}
+				}
+			}
+		}
 	}
 
 	@Override
@@ -76,29 +130,21 @@ public abstract class Hero extends Entity {
 		return new Rectangle(posX, posY, SQUARE_LENGTH, SQUARE_LENGTH);
 	}
 
-
 	public boolean evolve(int pathIndex, CharacterProfile.Path path) {
 		//Temporary hack code
 		if (pathIndex > 2) return false;
 		this.path[pathIndex] = path;
 
-//		if (this.path[1] == null) {
-//			this.path[1] = path;
-//		} else if (this.path[2] == null) {
-//			this.path[2] = path;
-//		} else {
-//			return false;
-//		}
 		return true;
 	}
 
-	protected boolean isHit(Ability ability, Entity target) {
-		int targetPosX = target.getPosX();
-		int targetPosY = target.getPosY();
-		return (((getFacingEast() && targetPosX > posX && targetPosX < posX+SQUARE_LENGTH+DEFAULT_RANGE) ||
-				(!getFacingEast() && targetPosX < posX && targetPosX > posX-SQUARE_LENGTH-DEFAULT_RANGE)) &&
-				targetPosY > posY-DEFAULT_RANGE && targetPosY < posY+DEFAULT_RANGE && ability == Ability.DEFAULT);
-	}
+//	protected boolean isHit(EntityAbility ability, Entity target) {
+//		int targetPosX = target.getPosX();
+//		int targetPosY = target.getPosY();
+//		return (((getFacingEast() && targetPosX > posX && targetPosX < posX+SQUARE_LENGTH+DEFAULT_RANGE) ||
+//				(!getFacingEast() && targetPosX < posX && targetPosX > posX-SQUARE_LENGTH-DEFAULT_RANGE)) &&
+//				targetPosY > posY-DEFAULT_RANGE && targetPosY < posY+DEFAULT_RANGE && ability == Entity.Ability.DEFAULT);
+//	}
 	
 //	protected boolean evolutionIncrease(int path) {
 //		switch (path) {
@@ -123,7 +169,6 @@ public abstract class Hero extends Entity {
 //		return true;
 //	}
 
-
 	@Override
 	public ArrayList<Entity> getTargets() {
 		return targets;
@@ -142,43 +187,5 @@ public abstract class Hero extends Entity {
 		colourPath.put(0, "red");
 		colourPath.put(1, "blue");
 		colourPath.put(2, "yellow");
-	}
-
-	@Override
-	public void update () {
-		super.update();
-
-		if (currentAbilityAnimation == null) {
-			for (Entity target : targets) {
-				target.immuneTo.put(this, false);
-			}
-		}
-
-		if (entityState == EntityState.NEUTRAL || entityState == EntityState.ATTACKING) {
-			switch (lrMotionState) {
-				case LEFT:
-					newPosX -= Math.round(velocity);
-					break;
-				case RIGHT:
-					newPosX += Math.round(velocity);
-					break;
-				case IDLE:
-				default:
-					break;
-			}
-			switch (udMotionState) {
-				case UP:
-					newPosY -= Math.round(velocity);
-					break;
-				case DOWN:
-					newPosY += Math.round(velocity);
-					break;
-				case IDLE:
-				default:
-					break;
-			}
-		}
-
-		setPoint(mapCollisionDetection.determineMotion(newPosX, newPosY, getEntitySize(), targets));
 	}
 }

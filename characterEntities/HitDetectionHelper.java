@@ -33,6 +33,10 @@ public class HitDetectionHelper {
 		int rightRect2 = rect2.x + rect2.width;
 		int topRect2 = rect2.y;
 		int botRect2 = rect2.y + rect2.height;
-		return (leftRect1 < rightRect2 && rightRect1 > leftRect2 && topRect1 < botRect2 && botRect1 > topRect2);
+
+		return (leftRect1 < rightRect2 &&
+				rightRect1 > leftRect2 &&
+				topRect1 < botRect2 &&
+				botRect1 > topRect2);
 	}
 }

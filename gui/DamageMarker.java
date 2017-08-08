@@ -1,14 +1,12 @@
 package gui;
 
-import animation.Effect;
-import screens.Drawable;
+import animation.effects.Effect;
 
 import java.awt.*;
 
 public class DamageMarker extends Effect {
 	private int currentLifetime = LIFETIME;
 	private int damage;
-	private int posX, posY;
 	private float speed = INITIAL_SPEED;
 	private boolean done;
 
@@ -20,10 +18,8 @@ public class DamageMarker extends Effect {
 	private static final float INITIAL_SPEED = 3.0f;
 
 	public DamageMarker(int damage, int posX, int posY) {
-		this.effectType = EffectType.DAMAGE;
+		super(posX, posY, null, null, EffectType.DAMAGE);
 		this.damage = damage;
-		this.posX = posX;
-		this.posY = posY;
 		this.done = false;
 	}
 

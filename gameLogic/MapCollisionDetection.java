@@ -1,6 +1,7 @@
 package gameLogic;
 
 import characterEntities.Entity;
+import characterEntities.HitDetectionHelper;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -139,6 +140,19 @@ public class MapCollisionDetection {
 			}
 		}
 		return new Point(newX, newY);
+	}
+
+	public boolean detectCollision(Rectangle object, ArrayList<Entity> entityArray) {
+		if (object == null) return false;
+
+		Rectangle[] detectionList = addEnemiesToHitArray(hitRectArray, entityArray);
+		boolean collision = false;
+
+		for (Rectangle rect:detectionList) {
+			collision = collision || HitDetectionHelper.detectHit(rect, object);
+			if (collision) break;
+		}
+		return collision;
 	}
 
 	// Private helper functions
