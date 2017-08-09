@@ -76,9 +76,19 @@ public abstract class Ability implements Drawable {
 
 		if (currentAnimation != null) {
 			currentAnimation.update();
-			int additionalX = entity.getFacingEast()? 0: entity.getImageIcon().getIconWidth()-2*currentAnimation.getOffsetX()-currentAnimation.getSize().width;
-			currentAnimation.setPosition(entity.getPosX()+additionalX, entity.getPosY());
-			currentAnimation.shouldMirror(!entity.getFacingEast());
+			if (currentAnimation.isDone()) {
+				if (state == AbilityState.INITIALIZING) {
+					state = AbilityState.CAN_DAMAGE;
+				} else if (state == AbilityState.CAN_DAMAGE) {
+					state = AbilityState.HAS_EXPIRED;
+				} else {
+					state = AbilityState.IS_DONE;
+				}
+			} else {
+				int additionalX = entity.getFacingEast()? 0: entity.getImageIcon().getIconWidth()-2*currentAnimation.getOffsetX()-currentAnimation.getSize().width;
+				currentAnimation.setPosition(entity.getPosX()+additionalX, entity.getPosY());
+				currentAnimation.shouldMirror(!entity.getFacingEast());
+			}
 		}
 	}
 
