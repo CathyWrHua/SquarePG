@@ -2,6 +2,7 @@ package characterEntities;
 
 import animation.abilities.Ability;
 import animation.abilities.EggplantAbility;
+import animation.abilities.LightningDrawAbility;
 import gameLogic.MapCollisionDetection;
 import gui.DamageMarker;
 
@@ -56,7 +57,9 @@ public abstract class Hero extends Entity {
 			}
 		}
 
-		if (entityState == EntityState.NEUTRAL || entityState == EntityState.ATTACKING) {
+		if ((entityState == EntityState.NEUTRAL || entityState == EntityState.ATTACKING) &&
+				// temp way of preventing movement during lightning draw
+				(currentAbility != null && !currentAbility.getAbilityName().equals("lightningDraw") || currentAbility == null)) {
 			newPosX = posX;
 			newPosY = posY;
 			switch (lrMotionState) {
@@ -81,10 +84,10 @@ public abstract class Hero extends Entity {
 				default:
 					break;
 			}
-		}
 
-		if (newPosX != posX || newPosY != posY) {
-			setPoint(mapCollisionDetection.determineMotion(newPosX, newPosY, getEntitySize(), targets));
+			if (newPosX != posX || newPosY != posY) {
+				setPoint(mapCollisionDetection.determineMotion(newPosX, newPosY, getEntitySize(), targets));
+			}
 		}
 
 		if (entityState != EntityState.ATTACKING || currentAbility == null) return;

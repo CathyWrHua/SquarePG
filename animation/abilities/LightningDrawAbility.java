@@ -21,7 +21,7 @@ public class LightningDrawAbility extends Ability {
 	public void update() {
 		super.update();
 		int newPosX = entity.getPosX() + (15 * (entity.getFacingEast() ? 1 : -1));
-		entity.setPoint(entity.getMapCollisionDetection().determineMotion(newPosX, entity.getPosY(), entity.getEntitySize(), entity.getTargets()));
+		entity.setPoint(entity.getMapCollisionDetection().determineMotion(newPosX, entity.getPosY(), entity.getEntitySize(), null));
 	}
 
 	@Override
