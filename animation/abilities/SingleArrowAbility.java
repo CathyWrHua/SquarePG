@@ -6,9 +6,11 @@ import characterEntities.Entity;
 
 public class SingleArrowAbility extends Ability {
 
+	private final String ABILITY_NAME = "singleArrow";
+
 	public SingleArrowAbility(Entity entity) {
 		super(entity, 1, Entity.EntityAbility.FIRST);
-		canDamageAnimation = new Animation(entity.getPosX(), entity.getPosY(), 75, 0, FILEPATH_ABILITY+"singleArrow", 3, 1);
+		canDamageAnimation = new Animation(entity.getPosX(), entity.getPosY(), 75, 0, FILEPATH_ABILITY+ABILITY_NAME, 3, 1);
 		setHasProjectiles(true);
 	}
 
@@ -36,6 +38,6 @@ public class SingleArrowAbility extends Ability {
 
 	@Override
 	public String getAbilityName() {
-		return "singleArrow";
+		return ABILITY_NAME;
 	}
 }
