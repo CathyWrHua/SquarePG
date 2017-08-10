@@ -63,7 +63,7 @@ public class GameEngine {
 		createAbilityBar(player);
 		createDummy(400, 100, true);
 		createDummy(600, 100, false);
-		createEnemy(20, 2, 1, 500, 500 ,2);
+//		createEnemy(20, 2, 1, 500, 500 ,2);
 	}
 
 	private void createLayerRenderMap() {
@@ -154,9 +154,9 @@ public class GameEngine {
 		layerRenderMap.get(MapLayer.DAMAGE_LAYER.getValue()).addAll(damageMarkers);
 
 		//TEMPORARY TEST CODE TO REGENERATE ENEMY
-		if (targets.size() == 2) {
-			createEnemy(20, 2, 1, 100, 100, 2);
-		}
+//		if (targets.size() == 2) {
+//			createEnemy(20, 2, 1, 100, 100, 2);
+//		}
 	}
 
 	public void paint(Graphics g) {
@@ -232,6 +232,10 @@ public class GameEngine {
 
 	public Hero getPlayer() {
 		return player;
+	}
+
+	public AbilityBar getPlayerAbilityBar() {
+		return playerAbilityBar;
 	}
 
 	// Private helper functions

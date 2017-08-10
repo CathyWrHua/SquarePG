@@ -57,6 +57,8 @@ public abstract class Hero extends Entity {
 		}
 
 		if (entityState == EntityState.NEUTRAL || entityState == EntityState.ATTACKING) {
+			newPosX = posX;
+			newPosY = posY;
 			switch (lrMotionState) {
 				case LEFT:
 					newPosX -= Math.round(velocity);
@@ -81,7 +83,9 @@ public abstract class Hero extends Entity {
 			}
 		}
 
-		setPoint(mapCollisionDetection.determineMotion(newPosX, newPosY, getEntitySize(), targets));
+		if (newPosX != posX || newPosY != posY) {
+			setPoint(mapCollisionDetection.determineMotion(newPosX, newPosY, getEntitySize(), targets));
+		}
 
 		if (entityState != EntityState.ATTACKING || currentAbility == null) return;
 		DamageMarker marker;

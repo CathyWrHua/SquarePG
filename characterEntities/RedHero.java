@@ -1,6 +1,7 @@
 package characterEntities;
 
 import animation.abilities.BladeWhirlAbility;
+import animation.abilities.LightningDrawAbility;
 import gameLogic.MapCollisionDetection;
 
 import java.util.ArrayList;
@@ -15,12 +16,12 @@ public class RedHero extends Hero {
 		path[0] = CharacterProfile.Path.RED;
 	}
 
-	public boolean evolve (int pathIndex, CharacterProfile.Path path) {
+	public boolean evolve(int pathIndex, CharacterProfile.Path path) {
 		if (!super.evolve(pathIndex, path)) return false;
 
 		//temp hack test code, will change in the future
 		if (pathIndex == 1) {
-			setAbility(2, new BladeWhirlAbility(this)); //temp
+			setAbility(2, new LightningDrawAbility(this)); //temp
 		} else if (pathIndex == 2) {
 			setAbility(3, new BladeWhirlAbility(this)); //temp
 		}
