@@ -8,7 +8,7 @@ public class SingleArrowAbility extends Ability {
 
 	public SingleArrowAbility(Entity entity) {
 		super(entity, 1, Entity.EntityAbility.FIRST);
-		canDamageAnimation = new Animation(entity.getPosX(), entity.getPosY(), 75, 0, FILEPATH_ABILITY+"yellowFirst", 3, 1);
+		canDamageAnimation = new Animation(entity.getPosX(), entity.getPosY(), 75, 0, FILEPATH_ABILITY+"singleArrow", 3, 1);
 		setHasProjectiles(true);
 	}
 
@@ -36,6 +36,6 @@ public class SingleArrowAbility extends Ability {
 
 	@Override
 	public String getAbilityName() {
-		return "yellowFirst";
+		return "singleArrow";
 	}
 }

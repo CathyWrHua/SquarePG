@@ -1,6 +1,6 @@
 package characterEntities;
 
-import animation.abilities.WhirlBladesAbility;
+import animation.abilities.BladeWhirlAbility;
 import gameLogic.MapCollisionDetection;
 
 import java.util.ArrayList;
@@ -10,7 +10,7 @@ public class RedHero extends Hero {
 	public RedHero(ArrayList<Entity> targets, MapCollisionDetection mapCollisionDetection) {
 		super(targets, mapCollisionDetection, 30, 15, 5, 100, 100, 5);
 		setPlayerClass(PlayerClass.RED);
-		setAbility(1, new WhirlBladesAbility(this));
+		setAbility(1, new BladeWhirlAbility(this));
 		setImageIcon("src/assets/hero/redNeutral.png");
 		path[0] = CharacterProfile.Path.RED;
 	}
@@ -20,9 +20,9 @@ public class RedHero extends Hero {
 
 		//temp hack test code, will change in the future
 		if (pathIndex == 1) {
-			setAbility(2, new WhirlBladesAbility(this)); //temp
+			setAbility(2, new BladeWhirlAbility(this)); //temp
 		} else if (pathIndex == 2) {
-			setAbility(3, new WhirlBladesAbility(this)); //temp
+			setAbility(3, new BladeWhirlAbility(this)); //temp
 		}
 		return true;
 	}

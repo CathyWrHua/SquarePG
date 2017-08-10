@@ -12,7 +12,7 @@ public class EggplantAbility extends Ability {
 
 	public EggplantAbility(Entity entity) {
 		super(entity, 2, Entity.EntityAbility.DEFAULT);
-		canDamageAnimation = new Animation(entity.getPosX(), entity.getPosY(), 75, 0, FILEPATH_ABILITY+"heroDefault", 4, 1);
+		canDamageAnimation = new Animation(entity.getPosX(), entity.getPosY(), 75, 0, FILEPATH_ABILITY+"eggplant", 4, 1);
 	}
 
 	@Override
@@ -48,6 +48,6 @@ public class EggplantAbility extends Ability {
 
 	@Override
 	public String getAbilityName() {
-		return "heroDefault";
+		return "eggplant";
 	}
 }
