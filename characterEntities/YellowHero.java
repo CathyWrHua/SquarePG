@@ -3,10 +3,10 @@ package characterEntities;
 import animation.abilities.SingleArrowAbility;
 import gameLogic.MapCollisionDetection;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 
 public class YellowHero extends Hero {
-	public YellowHero(ArrayList<Entity> targets, MapCollisionDetection mapCollisionDetection) {
+	public YellowHero(LinkedList<Entity> targets, MapCollisionDetection mapCollisionDetection) {
 		super(targets, mapCollisionDetection, 20, 12, 6, 100, 100, 5);
 		setPlayerClass(PlayerClass.YELLOW);
 		setAbility(1, new SingleArrowAbility(this));

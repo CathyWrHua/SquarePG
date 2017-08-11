@@ -3,10 +3,10 @@ package characterEntities;
 import animation.abilities.FireballAbility;
 import gameLogic.MapCollisionDetection;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 
 public class BlueHero extends Hero {
-	public BlueHero(ArrayList<Entity> targets, MapCollisionDetection mapCollisionDetection) {
+	public BlueHero(LinkedList<Entity> targets, MapCollisionDetection mapCollisionDetection) {
 		super(targets, mapCollisionDetection, 10, 8, 7, 100, 100, 5);
 		setPlayerClass(PlayerClass.BLUE);
 		setAbility(1, new FireballAbility(this));

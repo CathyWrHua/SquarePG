@@ -7,6 +7,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.LinkedList;
 
 public class MapCollisionDetection {
 	private Rectangle[] hitRectArray;
@@ -22,7 +23,7 @@ public class MapCollisionDetection {
 	//Determine motion works for almost all cases, except for two edge cases
 	//Edge cases occur due to the order of the arrayList: (corner with two motion directions)
 	//HACK: reverse the arraylist in these two cases to correctly calculate the new x and y
-	public Point determineMotion(int newX, int newY, Rectangle objectSize, ArrayList<Entity> currentEntityList){
+	public Point determineMotion(int newX, int newY, Rectangle objectSize, LinkedList<Entity> currentEntityList){
 		if (objectSize == null) {
 			return null;
 		}
@@ -141,10 +142,10 @@ public class MapCollisionDetection {
 		return new Point(newX, newY);
 	}
 
-	public boolean detectCollision(Rectangle object, ArrayList<Entity> entityArray) {
+	public boolean detectCollision(Rectangle object, LinkedList<Entity> entityList) {
 		if (object == null) return false;
 
-		Rectangle[] detectionList = addEnemiesToHitArray(hitRectArray, entityArray);
+		Rectangle[] detectionList = addEnemiesToHitArray(hitRectArray, entityList);
 		boolean collision = false;
 
 		for (Rectangle rect:detectionList) {
@@ -155,10 +156,10 @@ public class MapCollisionDetection {
 	}
 
 	// Private helper functions
-	private Rectangle[] addEnemiesToHitArray(Rectangle[] currentMap, ArrayList<Entity> entityArrayList) {
-		if (entityArrayList != null && entityArrayList.size() > 0) {
-			ArrayList<Rectangle> mapList = new ArrayList<Rectangle>(Arrays.asList(currentMap));
-			for (Entity entity : entityArrayList) {
+	private Rectangle[] addEnemiesToHitArray(Rectangle[] currentMap, LinkedList<Entity> entityList) {
+		if (entityList != null && entityList.size() > 0) {
+			ArrayList<Rectangle> mapList = new ArrayList<>(Arrays.asList(currentMap));
+			for (Entity entity : entityList) {
 				mapList.add(entity.getEntitySize());
 			}
 			return mapList.toArray(new Rectangle[mapList.size()]);

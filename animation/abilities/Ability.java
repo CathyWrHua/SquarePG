@@ -8,6 +8,7 @@ import screens.Drawable;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 public abstract class Ability implements Drawable {
 	public enum AbilityState {
@@ -27,7 +28,7 @@ public abstract class Ability implements Drawable {
 	protected AbilityState state = AbilityState.INITIALIZING;
 	protected int cooldownTotal, cooldownCounter;
 
-	protected ArrayList<Projectile> projectiles = null;
+	protected LinkedList<Projectile> projectiles = null;
 
 	public Ability(Entity entity, double cooldownInSeconds, Entity.EntityAbility entityAbility) {
 		this.cooldownCounter = 0;
@@ -98,7 +99,7 @@ public abstract class Ability implements Drawable {
 
 	public void setHasProjectiles(boolean hasProjectiles) {
 		if (hasProjectiles) {
-			projectiles = new ArrayList<>();
+			projectiles = new LinkedList<>();
 		}
 	}
 
@@ -106,7 +107,7 @@ public abstract class Ability implements Drawable {
 		return projectiles != null;
 	}
 
-	public ArrayList<Projectile> getProjectiles() {
+	public LinkedList<Projectile> getProjectiles() {
 		return projectiles;
 	}
 

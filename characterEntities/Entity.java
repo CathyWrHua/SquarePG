@@ -11,6 +11,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Random;
 
 public abstract class Entity implements Drawable {
@@ -26,8 +27,8 @@ public abstract class Entity implements Drawable {
 	protected MapCollisionDetection mapCollisionDetection;
 	protected Ability currentAbility;
 	protected ArrayList<Ability> abilities;
-	protected ArrayList<DamageMarker> targetMarkers;
-	protected ArrayList<Effect> Effects;
+	protected LinkedList<DamageMarker> targetMarkers;
+	protected LinkedList<Effect> Effects;
 	protected HashMap<Entity, Boolean> immuneTo;
 	protected ImageIcon imageIcon;
 	protected HealthBar healthBar;
@@ -86,8 +87,8 @@ public abstract class Entity implements Drawable {
 		lrMotionState = MotionStateLeftRight.IDLE;
 		udMotionState = MotionStateUpDown.IDLE;
 
-		targetMarkers = new ArrayList<>();
-		Effects = new ArrayList<>();
+		targetMarkers = new LinkedList<>();
+		Effects = new LinkedList<>();
 	}
 
 	public void update() {
@@ -227,7 +228,7 @@ public abstract class Entity implements Drawable {
 		return abilities;
 	}
 
-	public abstract ArrayList<Entity> getTargets();
+	public abstract LinkedList<Entity> getTargets();
 
 	public int getDamage() {
 		return (minDamage+random.nextInt(maxDamage-minDamage));
@@ -333,11 +334,11 @@ public abstract class Entity implements Drawable {
 		entityState = state;
 	}
 
-	public ArrayList<DamageMarker> getTargetMarkers() {
+	public LinkedList<DamageMarker> getTargetMarkers() {
 		return targetMarkers;
 	}
 
-	public ArrayList<Effect> getEffects() {
+	public LinkedList<Effect> getEffects() {
 		return Effects;
 	}
 
