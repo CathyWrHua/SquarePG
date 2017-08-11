@@ -10,8 +10,9 @@ import gui.DamageMarker;
 import screens.Drawable;
 
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.ArrayList;
+import java.util.LinkedList;
 
 public class GameEngine {
 	public enum MapLayer {
@@ -46,13 +47,13 @@ public class GameEngine {
 	private boolean isDoneRendering = true;
 	private Hero player;
 	private AbilityBar playerAbilityBar;
-	private ArrayList<Entity> targets;
-	private ArrayList<Effect> Effects;
-	private ArrayList<ArrayList<Drawable>> layerRenderMap;
+	private LinkedList<Entity> targets;
+	private LinkedList<Effect> Effects;
+	private ArrayList<LinkedList<Drawable>> layerRenderMap;
 
 	public GameEngine(Hero.PlayerClass playerClass) {
-		targets = new ArrayList<>();
-		Effects = new ArrayList<>();
+		targets = new LinkedList<>();
+		Effects = new LinkedList<>();
 
 		gameMap = new GameMap(level, map);
 		collisionMap = new MapCollisionDetection(gameMap.getCurrentCollisionMap());
@@ -69,15 +70,15 @@ public class GameEngine {
 	private void createLayerRenderMap() {
 		layerRenderMap = new ArrayList<>(TOTAL_MAP_LAYERS);
 
-		ArrayList<Drawable> background = new ArrayList<>();
+		LinkedList<Drawable> background = new LinkedList<>();
 		background.add(gameMap);
 
 		layerRenderMap.add(MapLayer.BACKGROUND.getValue(), background);
-		layerRenderMap.add(MapLayer.ENTITY_LAYER.getValue(), new ArrayList<>());
-		layerRenderMap.add(MapLayer.ENTITY_EFFECTS_LAYER.getValue(), new ArrayList<>());
-		layerRenderMap.add(MapLayer.MAP_EFFECTS_LAYER.getValue(), new ArrayList<>());
-		layerRenderMap.add(MapLayer.DAMAGE_LAYER.getValue(), new ArrayList<>());
-		layerRenderMap.add(MapLayer.GUI_LAYER.getValue(), new ArrayList<>());
+		layerRenderMap.add(MapLayer.ENTITY_LAYER.getValue(), new LinkedList<>());
+		layerRenderMap.add(MapLayer.ENTITY_EFFECTS_LAYER.getValue(), new LinkedList<>());
+		layerRenderMap.add(MapLayer.MAP_EFFECTS_LAYER.getValue(), new LinkedList<>());
+		layerRenderMap.add(MapLayer.DAMAGE_LAYER.getValue(), new LinkedList<>());
+		layerRenderMap.add(MapLayer.GUI_LAYER.getValue(), new LinkedList<>());
 	}
 
 	public void update() {
@@ -133,7 +134,7 @@ public class GameEngine {
 			}
 		}
 
-		ArrayList<DamageMarker> damageMarkers = new ArrayList<>();
+		LinkedList<DamageMarker> damageMarkers = new LinkedList<>();
 
 		for (Iterator<Effect> iterator = Effects.iterator(); iterator.hasNext();) {
 			Effect effect = iterator.next();
@@ -162,7 +163,7 @@ public class GameEngine {
 	public void paint(Graphics g) {
 		isDoneRendering = false;
 		for (int layer = 0; layer < TOTAL_MAP_LAYERS; layer++) {
-			ArrayList<Drawable> drawables = layerRenderMap.get(layer);
+			LinkedList<Drawable> drawables = layerRenderMap.get(layer);
 			if (drawables != null && drawables.size() > 0) {
 				for (Drawable drawable : drawables) {
 					drawable.draw(g);

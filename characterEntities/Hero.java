@@ -6,8 +6,8 @@ import gameLogic.MapCollisionDetection;
 import gui.DamageMarker;
 
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 
 public abstract class Hero extends Entity {
 	public enum PlayerClass {
@@ -27,13 +27,13 @@ public abstract class Hero extends Entity {
 	}
 
 	protected HashMap<Integer, String> colourPath;
-	protected ArrayList<Entity> targets;
+	protected LinkedList<Entity> targets;
 	protected PlayerClass playerClass;
 	protected CharacterProfile.Path[] path;
 
 	public static final int SQUARE_LENGTH = 75;
 
-	Hero(ArrayList<Entity> targets, MapCollisionDetection mapCollisionDetection, int maxHealth, int maxDamage, int minDamage, int posX, int posY, double velocity) {
+	Hero(LinkedList<Entity> targets, MapCollisionDetection mapCollisionDetection, int maxHealth, int maxDamage, int minDamage, int posX, int posY, double velocity) {
 		super(mapCollisionDetection, maxHealth, maxDamage, minDamage, posX, posY, velocity);
 		this.targets = targets;
 		for (Entity target : targets) {
@@ -170,7 +170,7 @@ public abstract class Hero extends Entity {
 //	}
 
 	@Override
-	public ArrayList<Entity> getTargets() {
+	public LinkedList<Entity> getTargets() {
 		return targets;
 	}
 

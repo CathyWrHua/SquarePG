@@ -3,11 +3,11 @@ package characterEntities;
 import animation.abilities.Ability;
 import gameLogic.MapCollisionDetection;
 import gui.DamageMarker;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 
 import java.awt.*;
+import java.util.LinkedList;
 
 public abstract class Enemy extends Entity {
 	public enum EnemyType {
@@ -51,8 +51,8 @@ public abstract class Enemy extends Entity {
 	}
 
 	@Override
-	public ArrayList<Entity> getTargets() {
-		return (new ArrayList<>(Collections.singletonList(targetEntity)));
+	public LinkedList<Entity> getTargets() {
+		return (new LinkedList<>(Collections.singletonList(targetEntity)));
 	}
 
 	@Override
@@ -141,7 +141,7 @@ public abstract class Enemy extends Entity {
 				}
 			}
 		}
-		setPoint(mapCollisionDetection.determineMotion(newPosX, newPosY, getEntitySize(), new ArrayList<>(Collections.singletonList(targetEntity))));
+		setPoint(mapCollisionDetection.determineMotion(newPosX, newPosY, getEntitySize(), new LinkedList<>(Collections.singletonList(targetEntity))));
 	}
 
 	private void createEnemyHashMap() {
