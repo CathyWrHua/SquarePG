@@ -7,7 +7,7 @@ import gameLogic.MapCollisionDetection;
 import gui.DamageMarker;
 
 import java.awt.*;
-import java.util.ArrayList;
+import java.util.LinkedList;
 
 public abstract class Projectile extends Effect {
 	protected int velocityX, velocityY;
@@ -15,8 +15,8 @@ public abstract class Projectile extends Effect {
 	protected boolean facingEast;
 	protected boolean done;
 	private MapCollisionDetection mapCollision;
-	private ArrayList<Entity> targets;
-	private ArrayList<DamageMarker> targetMarkers;
+	private LinkedList<Entity> targets;
+	private LinkedList<DamageMarker> targetMarkers;
 
 	public Projectile(Entity entity, MapCollisionDetection mapCollision, Animation regular, Animation collision, int velocityX, int velocityY) {
 		super(entity.getPosX(), entity.getPosY(), regular, collision, EffectType.PROJECTILE_EFFECT);
@@ -29,7 +29,7 @@ public abstract class Projectile extends Effect {
 		this.velocityX = velocityX;
 		this.velocityX *= (facingEast)? 1: -1;
 		this.velocityY = velocityY;
-		this.targetMarkers = new ArrayList<>();
+		this.targetMarkers = new LinkedList<>();
 
 		if (regularAnimation != null) {
 			regularAnimation.shouldMirror(!this.facingEast);
@@ -44,7 +44,7 @@ public abstract class Projectile extends Effect {
 		super.update();
 	}
 
-	public ArrayList<DamageMarker> getTargetMarkers() {
+	public LinkedList<DamageMarker> getTargetMarkers() {
 		return targetMarkers;
 	}
 

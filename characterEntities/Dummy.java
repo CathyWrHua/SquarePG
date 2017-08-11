@@ -3,7 +3,7 @@ package characterEntities;
 import gui.DamageMarker;
 
 import java.awt.*;
-import java.util.ArrayList;
+import java.util.LinkedList;
 
 public class Dummy extends Entity {
 	public Dummy(int posX, int posY, boolean facingEast) {
@@ -14,7 +14,7 @@ public class Dummy extends Entity {
 	}
 
 	@Override
-	public ArrayList<Entity> getTargets() {
+	public LinkedList<Entity> getTargets() {
 		return null;
 	}
 

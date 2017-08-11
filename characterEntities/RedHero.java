@@ -3,11 +3,11 @@ package characterEntities;
 import animation.abilities.BladeWhirlAbility;
 import gameLogic.MapCollisionDetection;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 
 public class RedHero extends Hero {
 
-	public RedHero(ArrayList<Entity> targets, MapCollisionDetection mapCollisionDetection) {
+	public RedHero(LinkedList<Entity> targets, MapCollisionDetection mapCollisionDetection) {
 		super(targets, mapCollisionDetection, 30, 15, 5, 100, 100, 5);
 		setPlayerClass(PlayerClass.RED);
 		setAbility(1, new BladeWhirlAbility(this));
