@@ -27,6 +27,7 @@ public abstract class Ability implements Drawable {
 	private Entity.EntityAbility entityAbility;
 	protected AbilityState state = AbilityState.INITIALIZING;
 	protected int cooldownTotal, cooldownCounter;
+	protected boolean restrictingMovement = false;
 
 	protected LinkedList<Projectile> projectiles = null;
 
@@ -91,6 +92,10 @@ public abstract class Ability implements Drawable {
 				currentAnimation.shouldMirror(!entity.getFacingEast());
 			}
 		}
+	}
+
+	public boolean isRestrictingMovement() {
+		return restrictingMovement;
 	}
 
 	public AbilityState getState() {

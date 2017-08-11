@@ -58,8 +58,7 @@ public abstract class Hero extends Entity {
 		}
 
 		if ((entityState == EntityState.NEUTRAL || entityState == EntityState.ATTACKING) &&
-				// temp way of preventing movement during lightning draw
-				(currentAbility != null && !currentAbility.getAbilityName().equals("lightningDraw") || currentAbility == null)) {
+				(currentAbility == null || (currentAbility != null && !currentAbility.isRestrictingMovement()))) {
 			newPosX = posX;
 			newPosY = posY;
 			switch (lrMotionState) {
