@@ -5,13 +5,13 @@ import characterEntities.Entity;
 import characterEntities.HitDetectionHelper;
 import javafx.scene.shape.Circle;
 
-public class WhirlBladesAbility extends Ability {
+public class BladeWhirlAbility extends Ability {
 
 	public final int WINDMILL_RADIUS = 112;
 
-	public WhirlBladesAbility(Entity entity) {
+	public BladeWhirlAbility(Entity entity) {
 		super(entity, 2, Entity.EntityAbility.FIRST);
-		canDamageAnimation = new Animation(entity.getPosX(), entity.getPosY(), -75, -75, FILEPATH_ABILITY+"redFirst", 3, 2);
+		canDamageAnimation = new Animation(entity.getPosX(), entity.getPosY(), -75, -75, FILEPATH_ABILITY+"bladeWhirl", 3, 2);
 	}
 
 	@Override
@@ -31,6 +31,6 @@ public class WhirlBladesAbility extends Ability {
 
 	@Override
 	public String getAbilityName() {
-		return "redFirst";
+		return "bladeWhirl";
 	}
 }
