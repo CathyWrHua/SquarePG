@@ -61,7 +61,7 @@ public class AbilityBar implements Drawable {
 			if (abilities.get(i) != null && abilities.get(i).getCooldownCounter() > 0) {
 				double percentageCooldown = abilities.get(i).getCooldownCounter()/(1.0*abilities.get(i).getCooldownTotal());
 				int blurHeight = (int)Math.ceil(ICON_LENGTH*percentageCooldown);
-				g2d.fill(new Rectangle2D.Double(ICONS_OFFSET_X, ICONS_OFFSET_Y+ICON_LENGTH-blurHeight, ICON_LENGTH, blurHeight));
+				g2d.fill(new Rectangle2D.Double(ICONS_OFFSET_X+ICON_GAP*i, ICONS_OFFSET_Y+ICON_LENGTH-blurHeight, ICON_LENGTH, blurHeight));
 			}
 		}
 	}

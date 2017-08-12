@@ -36,7 +36,7 @@ public class GameScreen extends Screen implements KeyListener, MouseListener {
 		addMouseListener(this);
 
 		gameEngine = new GameEngine(playerClass);
-		profilePage = new CharacterProfile(gameEngine.getPlayer());
+		profilePage = new CharacterProfile(gameEngine.getPlayer(), gameEngine.getPlayerAbilityBar());
 		helpPage = new ImageIcon("src/assets/maps/helpPage.png");
 		motionKeys = new LinkedHashSet<>();
 	}

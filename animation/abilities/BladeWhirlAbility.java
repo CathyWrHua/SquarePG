@@ -7,11 +7,12 @@ import javafx.scene.shape.Circle;
 
 public class BladeWhirlAbility extends Ability {
 
+	private final String ABILITY_NAME = "bladeWhirl";
 	public final int WINDMILL_RADIUS = 112;
 
 	public BladeWhirlAbility(Entity entity) {
 		super(entity, 2, Entity.EntityAbility.FIRST);
-		canDamageAnimation = new Animation(entity.getPosX(), entity.getPosY(), -75, -75, FILEPATH_ABILITY+"bladeWhirl", 3, 2);
+		canDamageAnimation = new Animation(entity.getPosX(), entity.getPosY(), -75, -75, FILEPATH_ABILITY+ABILITY_NAME, 3, 2);
 	}
 
 	@Override
@@ -20,8 +21,7 @@ public class BladeWhirlAbility extends Ability {
 	@Override
 	public boolean didHitTarget(Entity target) {
 		Circle hitArea = new Circle(entity.getCenterX(), entity.getCenterY(), WINDMILL_RADIUS);
-		boolean hit = HitDetectionHelper.detectHit(hitArea, target.getEntitySize());
-		return hit;
+		return HitDetectionHelper.detectHit(hitArea, target.getEntitySize());
 	}
 
 	@Override
@@ -31,6 +31,6 @@ public class BladeWhirlAbility extends Ability {
 
 	@Override
 	public String getAbilityName() {
-		return "bladeWhirl";
+		return ABILITY_NAME;
 	}
 }

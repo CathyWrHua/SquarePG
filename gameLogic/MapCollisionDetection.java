@@ -40,7 +40,6 @@ public class MapCollisionDetection {
 			return new Point(newX, newY);
 		}
 
-
 		Rectangle[] detectionList = addEnemiesToHitArray(hitRectArray, currentEntityList);
 
 		if (displacementX < 0 && displacementY < 0) {

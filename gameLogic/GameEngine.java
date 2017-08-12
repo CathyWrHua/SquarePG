@@ -235,6 +235,10 @@ public class GameEngine {
 		return player;
 	}
 
+	public AbilityBar getPlayerAbilityBar() {
+		return playerAbilityBar;
+	}
+
 	// Private helper functions
 	//
 	//Remove temporary test code where required

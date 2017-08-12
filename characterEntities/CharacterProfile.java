@@ -1,5 +1,7 @@
 package characterEntities;
 
+import gui.AbilityBar;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -22,6 +24,7 @@ public class CharacterProfile {
 
 	private Hero player;
 	private Path[] path;
+	private AbilityBar abilityBar;
 	public static final int MAX_EVOLUTION = 3;
 
 	private ImageIcon background;
@@ -34,9 +37,10 @@ public class CharacterProfile {
 
 	private boolean[][] isSelected;
 
-	public CharacterProfile(Hero player) {
+	public CharacterProfile(Hero player, AbilityBar abilityBar) {
 		this.player = player;
 		this.path = player.path;
+		this.abilityBar = abilityBar;
 		isSelected = new boolean[3][3];
 
 		calculateIsSelected();
@@ -91,6 +95,7 @@ public class CharacterProfile {
 		if (index > 2) return;
 
 		player.evolve(index, path);
+		abilityBar.updateAbilityIcons(player);
 		this.path[index] = path;
 
 		for (int i = 0; i < MAX_EVOLUTION; i++) {

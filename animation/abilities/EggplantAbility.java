@@ -8,11 +8,12 @@ import java.awt.*;
 
 public class EggplantAbility extends Ability {
 
+	private final String ABILITY_NAME = "eggplant";
 	private final int ATTACK_RANGE = 75;
 
 	public EggplantAbility(Entity entity) {
 		super(entity, 2, Entity.EntityAbility.DEFAULT);
-		canDamageAnimation = new Animation(entity.getPosX(), entity.getPosY(), 75, 0, FILEPATH_ABILITY+"eggplant", 4, 1);
+		canDamageAnimation = new Animation(entity.getPosX(), entity.getPosY(), 75, 0, FILEPATH_ABILITY+ABILITY_NAME, 4, 1);
 	}
 
 	@Override
@@ -20,7 +21,6 @@ public class EggplantAbility extends Ability {
 
 	@Override
 	public boolean didHitTarget(Entity target) {
-		boolean hit = false;
 //		int targetPosX = target.getPosX();
 //		int targetPosY = target.getPosY();
 //		if (((entity.getFacingEast() && targetPosX > entity.getPosX() && targetPosX < entity.getPosX()+entity.getEntitySize().width+ATTACK_RANGE) ||
@@ -36,9 +36,7 @@ public class EggplantAbility extends Ability {
 				ATTACK_RANGE,
 				ATTACK_RANGE);
 
-
-		hit = HitDetectionHelper.detectHit(eggplantRect, target.getEntitySize());
-		return hit;
+		return HitDetectionHelper.detectHit(eggplantRect, target.getEntitySize());
 	}
 
 	@Override
@@ -48,6 +46,6 @@ public class EggplantAbility extends Ability {
 
 	@Override
 	public String getAbilityName() {
-		return "eggplant";
+		return ABILITY_NAME;
 	}
 }
