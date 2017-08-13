@@ -36,7 +36,6 @@ public class GameEngine {
 
 	public enum GameEnemyUpdateState {
 		REGULAR,
-		SLOWED,
 		STOPPED
 	}
 
@@ -101,64 +100,20 @@ public class GameEngine {
 		Ability playerAbility = player.getCurrentAbility();
 		if (playerAbility != null) layerRenderMap.get(MapLayer.ENTITY_EFFECTS_LAYER.getValue()).add(playerAbility);
 
-		layerRenderMap.get(MapLayer.DAMAGE_LAYER.getValue()).addAll(player.getTargetMarkers());
-		Effects.addAll(player.getTargetMarkers());
-		player.emptyTargetMarkers();
+		if (playerAbility != null && playerAbility.gameUpdateStateEffect() == GameEnemyUpdateState.STOPPED) {
+			//do nothing for now (?)
+		} else {
+			layerRenderMap.get(MapLayer.DAMAGE_LAYER.getValue()).addAll(player.getTargetMarkers());
+			Effects.addAll(player.getTargetMarkers());
+			player.emptyTargetMarkers();
 
-		layerRenderMap.get(MapLayer.MAP_EFFECTS_LAYER.getValue()).addAll(player.getEffects());
-		Effects.addAll(player.getEffects());
-		player.emptyProjectiles();
+			layerRenderMap.get(MapLayer.MAP_EFFECTS_LAYER.getValue()).addAll(player.getEffects());
+			Effects.addAll(player.getEffects());
+			player.emptyProjectiles();
 
-		for (Iterator<Entity> iterator = targets.iterator(); iterator.hasNext();) {
-			Entity target = iterator.next();
-			if (target.getEntityType() == Entity.EntityType.ENEMY) {
-				Enemy enemy = (Enemy)target;
-				enemy.update();
-
-				Ability enemyAbility = enemy.getCurrentAbility();
-				if (enemyAbility != null) {
-					layerRenderMap.get(MapLayer.ENTITY_EFFECTS_LAYER.getValue()).add(enemyAbility);
-				}
-
-				layerRenderMap.get(MapLayer.DAMAGE_LAYER.getValue()).addAll(enemy.getTargetMarkers());
-				Effects.addAll(enemy.getTargetMarkers());
-				target.emptyTargetMarkers();
-
-				layerRenderMap.get(MapLayer.MAP_EFFECTS_LAYER.getValue()).addAll(enemy.getEffects());
-				Effects.addAll(enemy.getEffects());
-				target.emptyProjectiles();
-
-				if (enemy.isDone()) {
-					layerRenderMap.get(MapLayer.ENTITY_LAYER.getValue()).remove(enemy);
-					Effect deathEffect = new EnemyDeathEffect(enemy.getCenterX(), enemy.getCenterY());
-					layerRenderMap.get(MapLayer.MAP_EFFECTS_LAYER.getValue()).add(deathEffect);
-					Effects.add(deathEffect);
-					iterator.remove();
-				}
-			} else if (target.getEntityType() == Entity.EntityType.DUMMY) {
-				target.update();
-			}
+			updateEnemies();
+			updateEffects();
 		}
-
-		LinkedList<DamageMarker> damageMarkers = new LinkedList<>();
-
-		for (Iterator<Effect> iterator = Effects.iterator(); iterator.hasNext();) {
-			Effect effect = iterator.next();
-			effect.update();
-
-			if (effect.getEffectType() == Effect.EffectType.PROJECTILE_EFFECT) {
-				Projectile projectile = (Projectile) effect;
-				damageMarkers.addAll(projectile.getTargetMarkers());
-				projectile.clearTargetMarkers();
-			}
-
-			if (effect.isDone()) {
-				layerRenderMap.get(effect.getEffectType().getValue()).remove(effect);
-				iterator.remove();
-			}
-		}
-		Effects.addAll(damageMarkers);
-		layerRenderMap.get(MapLayer.DAMAGE_LAYER.getValue()).addAll(damageMarkers);
 
 		//TEMPORARY TEST CODE TO REGENERATE ENEMY
 		if (targets.size() == 2) {
@@ -246,8 +201,62 @@ public class GameEngine {
 	}
 
 	// Private helper functions
-	//
-	//Remove temporary test code where required
+
+	private void updateEnemies() {
+		for (Iterator<Entity> iterator = targets.iterator(); iterator.hasNext();) {
+			Entity target = iterator.next();
+			if (target.getEntityType() == Entity.EntityType.ENEMY) {
+				Enemy enemy = (Enemy)target;
+				enemy.update();
+
+				Ability enemyAbility = enemy.getCurrentAbility();
+				if (enemyAbility != null) {
+					layerRenderMap.get(MapLayer.ENTITY_EFFECTS_LAYER.getValue()).add(enemyAbility);
+				}
+
+				layerRenderMap.get(MapLayer.DAMAGE_LAYER.getValue()).addAll(enemy.getTargetMarkers());
+				Effects.addAll(enemy.getTargetMarkers());
+				target.emptyTargetMarkers();
+
+				layerRenderMap.get(MapLayer.MAP_EFFECTS_LAYER.getValue()).addAll(enemy.getEffects());
+				Effects.addAll(enemy.getEffects());
+				target.emptyProjectiles();
+
+				if (enemy.isDone()) {
+					player.notifyEnemyDeath(enemy);
+					layerRenderMap.get(MapLayer.ENTITY_LAYER.getValue()).remove(enemy);
+					Effect deathEffect = new EnemyDeathEffect(enemy.getCenterX(), enemy.getCenterY());
+					layerRenderMap.get(MapLayer.MAP_EFFECTS_LAYER.getValue()).add(deathEffect);
+					Effects.add(deathEffect);
+					iterator.remove();
+				}
+			} else if (target.getEntityType() == Entity.EntityType.DUMMY) {
+				target.update();
+			}
+		}
+	}
+
+	private void updateEffects() {
+		LinkedList<DamageMarker> damageMarkers = new LinkedList<>();
+
+		for (Iterator<Effect> iterator = Effects.iterator(); iterator.hasNext();) {
+			Effect effect = iterator.next();
+			effect.update();
+
+			if (effect.getEffectType() == Effect.EffectType.PROJECTILE_EFFECT) {
+				Projectile projectile = (Projectile) effect;
+				damageMarkers.addAll(projectile.getTargetMarkers());
+				projectile.clearTargetMarkers();
+			}
+
+			if (effect.isDone()) {
+				layerRenderMap.get(effect.getEffectType().getValue()).remove(effect);
+				iterator.remove();
+			}
+		}
+		Effects.addAll(damageMarkers);
+		layerRenderMap.get(MapLayer.DAMAGE_LAYER.getValue()).addAll(damageMarkers);
+	}
 
 	private void createAbilityBar(Hero player) {
 		this.playerAbilityBar = new AbilityBar(player);
@@ -273,12 +282,14 @@ public class GameEngine {
 	private void createEnemy(int health, int maxDamage, int minDamage, int posX, int posY, double velocity) {
 		Grunt grunt = new Grunt(player, collisionMap, health, maxDamage, minDamage, posX, posY, velocity);
 		targets.add(grunt);
+		player.notifyEnemyCreation(grunt);
 		layerRenderMap.get(MapLayer.ENTITY_LAYER.getValue()).add(grunt);
 	}
 
 	private void createDummy(int posX, int posY, boolean facingEast) {
 		Dummy dummy = new Dummy(posX, posY, facingEast);
 		targets.add(dummy);
+		player.notifyEnemyCreation(dummy);
 		layerRenderMap.get(MapLayer.ENTITY_LAYER.getValue()).add(dummy);
 	}
 }

@@ -6,6 +6,8 @@ import java.awt.*;
 
 public class HitDetectionHelper {
 	public static boolean detectHit(Circle hitArea, Rectangle targetRect) {
+		if (hitArea == null || targetRect == null) return false;
+
 		int hitRadius = (int)hitArea.getRadius();
 		int targetWidth = targetRect.width;
 		int targetHeight = targetRect.height;
@@ -25,6 +27,8 @@ public class HitDetectionHelper {
 	}
 
 	public static boolean detectHit(Rectangle rect1, Rectangle rect2) {
+		if (rect1 == null || rect2 == null) return false;
+
 		int leftRect1 = rect1.x;
 		int rightRect1 = rect1.x + rect1.width;
 		int topRect1 = rect1.y;
@@ -38,5 +42,14 @@ public class HitDetectionHelper {
 				rightRect1 > leftRect2 &&
 				topRect1 < botRect2 &&
 				botRect1 > topRect2);
+	}
+
+	public static double calculateDistance(Rectangle rect1, Rectangle rect2) {
+		if (rect1 == null || rect2 == null) return 0.0;
+
+		Point rect1Center = new Point(rect1.x+rect1.width/2, rect1.y+rect1.height/2);
+		Point rect2Center = new Point(rect2.x+rect2.width/2, rect2.y+rect2.height/2);
+
+		return Math.hypot(rect1Center.x-rect2Center.x, rect1Center.y-rect2Center.y);
 	}
 }

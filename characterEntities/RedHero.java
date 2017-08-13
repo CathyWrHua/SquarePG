@@ -2,6 +2,7 @@ package characterEntities;
 
 import animation.abilities.BladeWhirlAbility;
 import animation.abilities.LightningDrawAbility;
+import animation.abilities.UltimateAssasinAbility;
 import gameLogic.MapCollisionDetection;
 
 import java.util.LinkedList;
@@ -24,7 +25,7 @@ public class RedHero extends Hero {
 		} else if (pathIndex == 1 && path == CharacterProfile.Path.RED) {
 			setAbility(3, new BladeWhirlAbility(this)); //temp
 		} else if (pathIndex == 2 && path == CharacterProfile.Path.RED) {
-			setAbility(4, new BladeWhirlAbility(this)); //temp
+			setAbility(4, new UltimateAssasinAbility(this)); //temp
 		}
 
 		return true;

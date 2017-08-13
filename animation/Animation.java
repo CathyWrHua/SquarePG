@@ -90,7 +90,12 @@ public class Animation implements Drawable {
 			currentFrame = 0;
 			done = --currentLoop < 1;
 		}
-		currentImage = imageIcons.get(currentFrame);
+
+		if (done) {
+			currentImage  = null;
+		} else {
+			currentImage = imageIcons.get(currentFrame);
+		}
 	}
 
 	public void shouldMirror(boolean mirror) {

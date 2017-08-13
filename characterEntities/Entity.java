@@ -200,7 +200,7 @@ public abstract class Entity implements Drawable {
 	void playAnimation(int index) {
 		if (index >= 0 && index < abilities.size()) {
 			currentAbility = abilities.get(index);
-			currentAbility.reset();
+			currentAbility.setupAbility();
 		}
 	}
 
@@ -322,6 +322,8 @@ public abstract class Entity implements Drawable {
 		}
 	}
 
+	public abstract void resetImmuneTo();
+
 	public animation.abilities.Ability getCurrentAbility() {
 		return currentAbility;
 	}
@@ -350,5 +352,15 @@ public abstract class Entity implements Drawable {
 		Effects.clear();
 	}
 
+	public void notifyEnemyCreation(Entity enemy) {
+		if (enemy != null) {
+			this.immuneTo.put(enemy, false);
+		}
+	}
 
+	public  void notifyEnemyDeath(Entity enemy) {
+		if (enemy != null && this.immuneTo.containsKey(enemy)) {
+			this.immuneTo.remove(enemy);
+		}
+	}
 }

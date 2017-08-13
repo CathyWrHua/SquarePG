@@ -51,9 +51,7 @@ public abstract class Hero extends Entity {
 		super.update();
 
 		if (currentAbility == null) {
-			for (Entity target : targets) {
-				target.immuneTo.put(this, false);
-			}
+			resetImmuneTo();
 		}
 
 		if ((entityState == EntityState.NEUTRAL || entityState == EntityState.ATTACKING) &&
@@ -141,6 +139,13 @@ public abstract class Hero extends Entity {
 		this.path[pathIndex] = path;
 
 		return true;
+	}
+
+	@Override
+	public void resetImmuneTo() {
+		for (Entity target : targets) {
+			target.immuneTo.put(this, false);
+		}
 	}
 
 //	protected boolean isHit(EntityAbility ability, Entity target) {

@@ -123,7 +123,7 @@ public abstract class Enemy extends Entity {
 		super.update();
 
 		if (currentAbility == null) {
-			targetEntity.immuneTo.put(this, false);
+			resetImmuneTo();
 		}
 
 		if (entityState == EntityState.DEAD && deletionCounter-- <= 0) {
@@ -142,6 +142,11 @@ public abstract class Enemy extends Entity {
 			}
 		}
 		setPoint(mapCollisionDetection.determineMotion(newPosX, newPosY, getEntitySize(), new LinkedList<>(Collections.singletonList(targetEntity))));
+	}
+
+	@Override
+	public void resetImmuneTo() {
+		targetEntity.immuneTo.put(this, false);
 	}
 
 	private void createEnemyHashMap() {
