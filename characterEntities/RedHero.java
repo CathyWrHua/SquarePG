@@ -13,18 +13,17 @@ public class RedHero extends Hero {
 		setPlayerClass(PlayerClass.RED);
 		setAbility(1, new BladeWhirlAbility(this));
 		setImageIcon("src/assets/hero/redNeutral.png");
-		path[0] = CharacterProfile.Path.RED;
 	}
 
 	public boolean evolve(int pathIndex, CharacterProfile.Path path) {
 		if (!super.evolve(pathIndex, path)) return false;
 
 		//temp hack test code, will change in the future
-		if (pathIndex == 1 && path == CharacterProfile.Path.RED) {
+		if (pathIndex == 0 && path == CharacterProfile.Path.RED) {
 			setAbility(2, new LightningDrawAbility(this)); //temp
-		} else if (pathIndex == 2 && path == CharacterProfile.Path.RED) {
+		} else if (pathIndex == 1 && path == CharacterProfile.Path.RED) {
 			setAbility(3, new BladeWhirlAbility(this)); //temp
-		} else if (pathIndex == 3 && path == CharacterProfile.Path.RED) {
+		} else if (pathIndex == 2 && path == CharacterProfile.Path.RED) {
 			setAbility(4, new BladeWhirlAbility(this)); //temp
 		}
 

@@ -2,7 +2,6 @@ package characterEntities;
 
 import animation.abilities.Ability;
 import animation.abilities.EggplantAbility;
-import animation.abilities.LightningDrawAbility;
 import gameLogic.MapCollisionDetection;
 import gui.DamageMarker;
 

@@ -27,7 +27,6 @@ public abstract class Ability implements Drawable {
 	private Entity.EntityAbility entityAbility;
 	protected AbilityState state = AbilityState.INITIALIZING;
 	protected int cooldownTotal, cooldownCounter;
-	protected boolean restrictingMovement = false;
 
 	protected LinkedList<Projectile> projectiles = null;
 
@@ -95,7 +94,7 @@ public abstract class Ability implements Drawable {
 	}
 
 	public boolean isRestrictingMovement() {
-		return restrictingMovement;
+		return false;
 	}
 
 	public GameEngine.GameEnemyUpdateState gameUpdateStateEffect() {

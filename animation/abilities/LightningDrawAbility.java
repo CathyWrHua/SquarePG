@@ -15,7 +15,6 @@ public class LightningDrawAbility extends Ability {
 	public LightningDrawAbility(Entity entity) {
 		super(entity, 1, Entity.EntityAbility.SECOND);
 		canDamageAnimation = new Animation(entity.getPosX(), entity.getPosY(), -20, 0, FILEPATH_ABILITY+ABILITY_NAME, 4, 1);;
-		restrictingMovement = true;
 	}
 
 	@Override
@@ -27,6 +26,11 @@ public class LightningDrawAbility extends Ability {
 
 	@Override
 	public void didTrigger() {}
+
+	@Override
+	public boolean isRestrictingMovement() {
+		return true;
+	}
 
 	@Override
 	public boolean didHitTarget(Entity target) {
