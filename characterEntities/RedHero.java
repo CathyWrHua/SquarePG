@@ -20,11 +20,14 @@ public class RedHero extends Hero {
 		if (!super.evolve(pathIndex, path)) return false;
 
 		//temp hack test code, will change in the future
-		if (pathIndex == 1) {
+		if (pathIndex == 1 && path == CharacterProfile.Path.RED) {
 			setAbility(2, new LightningDrawAbility(this)); //temp
-		} else if (pathIndex == 2) {
+		} else if (pathIndex == 2 && path == CharacterProfile.Path.RED) {
 			setAbility(3, new BladeWhirlAbility(this)); //temp
+		} else if (pathIndex == 3 && path == CharacterProfile.Path.RED) {
+			setAbility(4, new BladeWhirlAbility(this)); //temp
 		}
+
 		return true;
 	}
 	

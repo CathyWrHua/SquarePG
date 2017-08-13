@@ -18,10 +18,12 @@ public class BlueHero extends Hero {
 		if (!super.evolve(pathIndex, path)) return false;
 
 		//temp hack test code, will change in the future
-		if (pathIndex == 1) {
+		if (pathIndex == 1 && path == CharacterProfile.Path.BLUE) {
 			setAbility(2, new FireballAbility(this));
-		} else if (pathIndex == 2) {
+		} else if (pathIndex == 2 && path == CharacterProfile.Path.BLUE) {
 			setAbility(3, new FireballAbility(this));
+		} else if (pathIndex == 3 && path == CharacterProfile.Path.BLUE) {
+			setAbility(4, new FireballAbility(this));
 		}
 
 		return true;

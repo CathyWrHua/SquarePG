@@ -18,10 +18,12 @@ public class YellowHero extends Hero {
 		if (!super.evolve(pathIndex, path)) return false;
 
 		//temp hack test code, will change in the future
-		if (pathIndex == 1) {
+		if (pathIndex == 1 && path == CharacterProfile.Path.YELLOW) {
 			setAbility(2, new SingleArrowAbility(this));
-		} else if (pathIndex == 2) {
+		} else if (pathIndex == 2 && path == CharacterProfile.Path.YELLOW) {
 			setAbility(3, new SingleArrowAbility(this));
+		} else if (pathIndex == 3 && path == CharacterProfile.Path.YELLOW) {
+			setAbility(4, new SingleArrowAbility(this));
 		}
 
 		return true;

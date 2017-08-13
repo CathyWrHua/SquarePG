@@ -34,6 +34,12 @@ public class GameEngine {
 		}
 	}
 
+	public enum GameEnemyUpdateState {
+		REGULAR,
+		SLOWED,
+		STOPPED
+	}
+
 	private final int TOTAL_MAP_LAYERS = 6;
 
 	private GameMap gameMap;

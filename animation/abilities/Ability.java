@@ -4,10 +4,10 @@ import SquarePG.SquarePG;
 import animation.Animation;
 import animation.effects.Projectile;
 import characterEntities.Entity;
+import gameLogic.GameEngine;
 import screens.Drawable;
 
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.LinkedList;
 
 public abstract class Ability implements Drawable {
@@ -96,6 +96,10 @@ public abstract class Ability implements Drawable {
 
 	public boolean isRestrictingMovement() {
 		return restrictingMovement;
+	}
+
+	public GameEngine.GameEnemyUpdateState gameUpdateStateEffect() {
+		return GameEngine.GameEnemyUpdateState.REGULAR;
 	}
 
 	public AbilityState getState() {
