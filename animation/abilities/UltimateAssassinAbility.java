@@ -11,7 +11,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedList;
 
-public class UltimateAssasinAbility extends Ability{
+public class UltimateAssassinAbility extends Ability{
 
 	static final float DAMAGE_MULTIPLIER = 1.5f;
 	static final String ABILITY_NAME = "assassinate";
@@ -23,7 +23,7 @@ public class UltimateAssasinAbility extends Ability{
 
 	private Point entityOriginalPoint;
 
-	public UltimateAssasinAbility(Hero player) {
+	public UltimateAssassinAbility(Hero player) {
 		super(player, 3, Entity.EntityAbility.ULTIMATE);
 		this.targets = player.getTargets();
 		markedTargets = new LinkedList<>();
@@ -136,13 +136,13 @@ public class UltimateAssasinAbility extends Ability{
 		if (markedTargets.size() < TOTAL_TARGETS && markedTargets.size() != 0) {
 			//loop around
 			for (int i = 0; i < markedTargets.size(); i++) {
-				if (markedTargets.size() >= 10) {
+				if (markedTargets.size() >= TOTAL_TARGETS) {
 					break;
 				}
 				markedTargets.add(markedTargets.get(i));
 			}
 		} else if (markedTargets.size() > TOTAL_TARGETS) {
-			markedTargets.subList(10, markedTargets.size()).clear();
+			markedTargets.subList(TOTAL_TARGETS, markedTargets.size()).clear();
 		}
 	}
 
