@@ -39,11 +39,6 @@ public abstract class Projectile extends Effect {
 		}
 	}
 
-	@Override
-	public void update() {
-		super.update();
-	}
-
 	public LinkedList<DamageMarker> getTargetMarkers() {
 		return targetMarkers;
 	}
@@ -59,6 +54,8 @@ public abstract class Projectile extends Effect {
 	protected boolean isCollide() {
 		posX += velocityX;
 		posY += velocityY;
+
+		regularAnimation.setPosition(posX, posY);
 
 		boolean collision = mapCollision.detectCollision(regularAnimation.getSize(), targets);
 		if (collision) dealDamage();
