@@ -21,6 +21,8 @@ public class UltimateAssasinAbility extends Ability{
 	private LinkedList<Entity> targets;
 	private LinkedList<Entity> markedTargets;
 
+	private Point entityOriginalPoint;
+
 	public UltimateAssasinAbility(Hero player) {
 		super(player, 3, Entity.EntityAbility.ULTIMATE);
 		this.targets = player.getTargets();
@@ -44,6 +46,7 @@ public class UltimateAssasinAbility extends Ability{
 			} else {
 				state = AbilityState.IS_DONE;
 				markedTargets.clear();
+				entity.setPoint(entityOriginalPoint);
 			}
 		}
 	}
@@ -53,6 +56,7 @@ public class UltimateAssasinAbility extends Ability{
 		super.setupAbility();
 		markedTargets = (targets.clone() instanceof LinkedList)? (LinkedList<Entity>)targets.clone() : null;
 		markTargets();
+		entityOriginalPoint = new Point(entity.getPosX(), entity.getPosY());
 	}
 
 	@Override
@@ -88,7 +92,7 @@ public class UltimateAssasinAbility extends Ability{
 	@Override
 	public int dealDamage(int baseDamage) {
 		//return Math.round(baseDamage*DAMAGE_MULTIPLIER);
-		return 1;
+		return baseDamage;
 	}
 
 	@Override
@@ -97,16 +101,29 @@ public class UltimateAssasinAbility extends Ability{
 	}
 
 	private void damageNextTarget() {
+		if (markedTargets == null || markedTargets.size() == 1) return;
+
 		state = AbilityState.CAN_DAMAGE;
 		canDamageAnimation.reset();
 		markedTargets.removeFirst();
 		entity.resetImmuneTo();
-		entity.setPoint(new Point(markedTargets.getFirst().getPosX()-entity.getEntitySize().width-DAGGER_WIDTH, markedTargets.getFirst().getPosY()));
-		canDamageAnimation.setPosition(markedTargets.getFirst().getPosX()-entity.getEntitySize().width-DAGGER_WIDTH, markedTargets.getFirst().getPosY());
+
+		int newX = 0;
+		int newY = markedTargets.getFirst().getPosY();
+
+		if (entity.getPosX() > markedTargets.getFirst().getPosX()) {
+			newX = markedTargets.getFirst().getPosX()+markedTargets.getFirst().getEntitySize().width+DAGGER_WIDTH;
+			entity.setFacingEast(false);
+		} else {
+			newX = markedTargets.getFirst().getPosX()-entity.getEntitySize().width-DAGGER_WIDTH;
+			entity.setFacingEast(true);
+		}
+
+		entity.setPoint(new Point(newX, newY));
+		canDamageAnimation.setPosition(newX, newY);
 	}
 
 	private void markTargets() {
-		//sort the shallow copy of targets
 		Collections.sort(markedTargets, new Comparator<Entity>() {
 			@Override
 			public int compare(Entity o1, Entity o2) {
