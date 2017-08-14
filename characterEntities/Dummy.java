@@ -1,5 +1,6 @@
 package characterEntities;
 
+import animation.abilities.Ability;
 import gui.DamageMarker;
 
 import java.awt.*;
@@ -23,6 +24,7 @@ public class Dummy extends Entity {
 		knockBackRight = attacker.getPosX() < posX;
 		setEntityState(EntityState.DAMAGED);
 		immuneTo.put(attacker, true);
+
 		return (new DamageMarker(damageTaken, posX, posY));
 	}
 
@@ -71,6 +73,11 @@ public class Dummy extends Entity {
 	@Override
 	public Rectangle getEntitySize() {
 		return new Rectangle(posX, posY, getImageIcon().getIconWidth(), getImageIcon().getIconHeight());
+	}
+
+	@Override
+	public void resetImmuneTo() {
+		//nothing
 	}
 
 	@Override

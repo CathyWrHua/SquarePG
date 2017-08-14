@@ -16,9 +16,10 @@ public class FireballAbility extends Ability {
 
 	@Override
 	public void update() {
-		if (state != AbilityState.INITIALIZING && initializeAnimation.isDone()) {
+		if (state == AbilityState.INITIALIZING && initializeAnimation.isDone()) {
 			projectiles.add(new FireballProjectile(entity, entity.getMapCollisionDetection()));
 		}
+
 		super.update();
 	}
 

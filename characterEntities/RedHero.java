@@ -2,6 +2,7 @@ package characterEntities;
 
 import animation.abilities.BladeWhirlAbility;
 import animation.abilities.LightningDrawAbility;
+import animation.abilities.UltimateAssassinAbility;
 import gameLogic.MapCollisionDetection;
 
 import java.util.LinkedList;
@@ -13,18 +14,20 @@ public class RedHero extends Hero {
 		setPlayerClass(PlayerClass.RED);
 		setAbility(1, new BladeWhirlAbility(this));
 		setImageIcon("src/assets/hero/redNeutral.png");
-		path[0] = CharacterProfile.Path.RED;
 	}
 
 	public boolean evolve(int pathIndex, CharacterProfile.Path path) {
 		if (!super.evolve(pathIndex, path)) return false;
 
 		//temp hack test code, will change in the future
-		if (pathIndex == 1) {
+		if (pathIndex == 0 && path == CharacterProfile.Path.RED) {
 			setAbility(2, new LightningDrawAbility(this)); //temp
-		} else if (pathIndex == 2) {
+		} else if (pathIndex == 1 && path == CharacterProfile.Path.RED) {
 			setAbility(3, new BladeWhirlAbility(this)); //temp
+		} else if (pathIndex == 2 && path == CharacterProfile.Path.RED) {
+			setAbility(4, new UltimateAssassinAbility(this)); //temp
 		}
+
 		return true;
 	}
 	

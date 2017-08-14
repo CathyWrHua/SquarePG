@@ -92,7 +92,7 @@ public class CharacterProfile {
 	public void attemptEvolution(int index, Path path) {
 		//hacky temp test code
 		//TODO: add error checking here
-		if (index > 2) return;
+		if (index > 3) return;
 
 		player.evolve(index, path);
 		abilityBar.updateAbilityIcons(player);

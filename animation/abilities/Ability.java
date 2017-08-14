@@ -4,10 +4,10 @@ import SquarePG.SquarePG;
 import animation.Animation;
 import animation.effects.Projectile;
 import characterEntities.Entity;
+import gameLogic.GameEngine;
 import screens.Drawable;
 
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.LinkedList;
 
 public abstract class Ability implements Drawable {
@@ -27,7 +27,6 @@ public abstract class Ability implements Drawable {
 	private Entity.EntityAbility entityAbility;
 	protected AbilityState state = AbilityState.INITIALIZING;
 	protected int cooldownTotal, cooldownCounter;
-	protected boolean restrictingMovement = false;
 
 	protected LinkedList<Projectile> projectiles = null;
 
@@ -78,15 +77,7 @@ public abstract class Ability implements Drawable {
 
 		if (currentAnimation != null) {
 			currentAnimation.update();
-			if (currentAnimation.isDone()) {
-				if (state == AbilityState.INITIALIZING) {
-					state = AbilityState.CAN_DAMAGE;
-				} else if (state == AbilityState.CAN_DAMAGE) {
-					state = AbilityState.HAS_EXPIRED;
-				} else {
-					state = AbilityState.IS_DONE;
-				}
-			} else {
+			if (!currentAnimation.isDone()) {
 				int additionalX = entity.getFacingEast()? 0: entity.getImageIcon().getIconWidth()-2*currentAnimation.getOffsetX()-currentAnimation.getSize().width;
 				currentAnimation.setPosition(entity.getPosX()+additionalX, entity.getPosY());
 				currentAnimation.shouldMirror(!entity.getFacingEast());
@@ -95,7 +86,11 @@ public abstract class Ability implements Drawable {
 	}
 
 	public boolean isRestrictingMovement() {
-		return restrictingMovement;
+		return false;
+	}
+
+	public GameEngine.GameEnemyUpdateState gameUpdateStateEffect() {
+		return GameEngine.GameEnemyUpdateState.REGULAR;
 	}
 
 	public AbilityState getState() {
@@ -145,6 +140,10 @@ public abstract class Ability implements Drawable {
 		if (currentAnimation != null) {
 			currentAnimation.draw(g);
 		}
+	}
+
+	public void setupAbility() {
+		reset();
 	}
 
 	public void reset() {

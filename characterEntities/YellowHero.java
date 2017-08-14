@@ -11,17 +11,18 @@ public class YellowHero extends Hero {
 		setPlayerClass(PlayerClass.YELLOW);
 		setAbility(1, new SingleArrowAbility(this));
 		setImageIcon("src/assets/hero/yellowNeutral.png");
-		path[0] = CharacterProfile.Path.YELLOW;
 	}
 
 	public boolean evolve (int pathIndex, CharacterProfile.Path path) {
 		if (!super.evolve(pathIndex, path)) return false;
 
 		//temp hack test code, will change in the future
-		if (pathIndex == 1) {
+		if (pathIndex == 0 && path == CharacterProfile.Path.YELLOW) {
 			setAbility(2, new SingleArrowAbility(this));
-		} else if (pathIndex == 2) {
+		} else if (pathIndex == 1 && path == CharacterProfile.Path.YELLOW) {
 			setAbility(3, new SingleArrowAbility(this));
+		} else if (pathIndex == 2 && path == CharacterProfile.Path.YELLOW) {
+			setAbility(4, new SingleArrowAbility(this));
 		}
 
 		return true;

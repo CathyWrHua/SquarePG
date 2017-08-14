@@ -11,19 +11,19 @@ public class BlueHero extends Hero {
 		setPlayerClass(PlayerClass.BLUE);
 		setAbility(1, new FireballAbility(this));
 		setImageIcon("src/assets/hero/blueNeutral.png");
-		path[0] = CharacterProfile.Path.BLUE;
 	}
 
 	public boolean evolve (int pathIndex, CharacterProfile.Path path) {
 		if (!super.evolve(pathIndex, path)) return false;
 
 		//temp hack test code, will change in the future
-		if (pathIndex == 1) {
+		if (pathIndex == 0 && path == CharacterProfile.Path.BLUE) {
 			setAbility(2, new FireballAbility(this));
-		} else if (pathIndex == 2) {
+		} else if (pathIndex == 1 && path == CharacterProfile.Path.BLUE) {
 			setAbility(3, new FireballAbility(this));
+		} else if (pathIndex == 2 && path == CharacterProfile.Path.BLUE) {
+			setAbility(4, new FireballAbility(this));
 		}
-
 		return true;
 	}
 	
