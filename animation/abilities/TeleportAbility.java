@@ -4,14 +4,20 @@ import animation.Animation;
 import animation.effects.TeleportMapEffect;
 import characterEntities.Entity;
 import characterEntities.Hero;
+import characterEntities.HitDetectionHelper;
+import javafx.scene.shape.Circle;
 
 import java.awt.*;
 
 public class TeleportAbility extends Ability {
 	static final String ABILITY_NAME = "teleport";
+	static final float DAMAGE_MULTIPLIER = 1.5f;
+	static final int BLAST_RADIUS = 200;
 
 	private Point teleportPoint;
 	private TeleportMapEffect teleportMark;
+	private boolean isTriggered = false;
+	private boolean setCoolDown = false;
 
 	public TeleportAbility(Hero player) {
 		super(player, 3, Entity.EntityAbility.THIRD);
@@ -26,7 +32,19 @@ public class TeleportAbility extends Ability {
 			teleportMark = new TeleportMapEffect(entity.getPosX()-20, entity.getPosY()-20);
 			effects.add(teleportMark);
 		}
+
 		super.update();
+
+		if (!setCoolDown) {
+			cooldownCounter = 0;
+		}
+
+		if (isTriggered) {
+			setCoolDown = true;
+			resetCooldown();
+			state = AbilityState.CAN_DAMAGE;
+			isTriggered = false;
+		}
 	}
 
 	public void setupAbility() {
@@ -35,6 +53,13 @@ public class TeleportAbility extends Ability {
 		super.setupAbility();
 		teleportMark = null;
 		teleportPoint = null;
+	}
+
+	public void decrementCooldownCounter() {
+		super.decrementCooldownCounter();
+		if (cooldownCounter == 0) {
+			setCoolDown = false;
+		}
 	}
 
 	public boolean isRestrictingMovement() {
@@ -52,17 +77,21 @@ public class TeleportAbility extends Ability {
 				teleportPoint = null;
 				teleportMark.killEffect();
 				teleportMark = null;
+				isTriggered = true;
 			}
 		}
 		teleportMark = null;
 	}
 
 	public boolean didHitTarget(Entity target) {
-		return false;
+		if (target == null) return false;
+
+		Circle hitArea = new Circle(entity.getCenterX(), entity.getCenterY(), BLAST_RADIUS);
+		return HitDetectionHelper.detectHit(hitArea, target.getEntitySize());
 	}
 
 	public int dealDamage(int baseDamage) {
-		return 0;
+		return Math.round(baseDamage*DAMAGE_MULTIPLIER);
 	}
 
 	public String getAbilityName() {

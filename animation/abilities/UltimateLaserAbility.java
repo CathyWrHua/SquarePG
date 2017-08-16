@@ -11,14 +11,14 @@ public class UltimateLaserAbility extends Ability {
 
 	static final int OFFSET_Y = -25;
 	static final String ABILITY_NAME = "laser";
-	static final int DAMAGE_INTERVAL = 5;
+	static final int DAMAGE_INTERVAL = 10;
 	private int damageCounter = 0;
 
 	public UltimateLaserAbility(Hero player) {
 		super(player, 3, Entity.EntityAbility.ULTIMATE);
 
 		initializeAnimation = new Animation(player.getPosX(), player.getPosY(), -62, -62, FILEPATH_ABILITY+"laserCharge", 1, 10);
-		canDamageAnimation = new Animation(player.getPosX(), player.getPosY(), player.getFacingEast()? 75 : -1000, OFFSET_Y, FILEPATH_ABILITY+"laserBeam", 1, 10);
+		canDamageAnimation = new Animation(player.getPosX(), player.getPosY(), player.getFacingEast()? 75 : -1000, OFFSET_Y, FILEPATH_ABILITY+"laserBeam", 1, 20);
 	}
 
 	public void update() {
@@ -52,8 +52,8 @@ public class UltimateLaserAbility extends Ability {
 	}
 
 	public int dealDamage(int baseDamage) {
-		//return (int)Math.round(baseDamage*1.5);
-		return 1;
+		return (int)Math.round(baseDamage*1.5);
+		//return 1;
 	}
 
 	public String getAbilityName() {

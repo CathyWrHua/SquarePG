@@ -1,6 +1,7 @@
 package characterEntities;
 
 import animation.abilities.Ability;
+import animation.abilities.EnergySwordAbility;
 import animation.effects.Effect;
 import gameLogic.MapCollisionDetection;
 import gui.DamageMarker;
@@ -165,8 +166,10 @@ public abstract class Entity implements Drawable {
 		Ability attemptedAbility = abilities.get(ability.getValue());
 		if (attemptedAbility == null) return;
 
-		if (attemptedAbility.shouldTrigger()) {
+		if (attemptedAbility.shouldTrigger() && entityState != EntityState.DAMAGED && entityState != EntityState.DEAD) {
 			attemptedAbility.didTrigger();
+			currentAbility = attemptedAbility;
+			setEntityState(EntityState.ATTACKING);
 		} else if (entityState == EntityState.NEUTRAL && attemptedAbility != null && attemptedAbility.isOffCooldown()) {
 			playAnimation(ability.getValue());
 			setEntityState(EntityState.ATTACKING);
