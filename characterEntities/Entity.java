@@ -28,7 +28,7 @@ public abstract class Entity implements Drawable {
 	protected Ability currentAbility;
 	protected ArrayList<Ability> abilities;
 	protected LinkedList<DamageMarker> targetMarkers;
-	protected LinkedList<Effect> Effects;
+	protected LinkedList<Effect> effects;
 	protected HashMap<Entity, Boolean> immuneTo;
 	protected ImageIcon imageIcon;
 	protected HealthBar healthBar;
@@ -88,7 +88,7 @@ public abstract class Entity implements Drawable {
 		udMotionState = MotionStateUpDown.IDLE;
 
 		targetMarkers = new LinkedList<>();
-		Effects = new LinkedList<>();
+		effects = new LinkedList<>();
 	}
 
 	public void update() {
@@ -129,9 +129,9 @@ public abstract class Entity implements Drawable {
 
 		if (currentAbility != null) {
 			currentAbility.update();
-			if (currentAbility.hasProjectiles()) {
-				Effects.addAll(currentAbility.getProjectiles());
-				currentAbility.clearProjectiles();
+			if (currentAbility.hasEffects()) {
+				effects.addAll(currentAbility.getEffects());
+				currentAbility.clearEffects();
 			}
 			if (currentAbility.getState() == Ability.AbilityState.IS_DONE) {
 				setEntityState(EntityState.NEUTRAL);
@@ -163,11 +163,13 @@ public abstract class Entity implements Drawable {
 
 	public void attack(EntityAbility ability) {
 		Ability attemptedAbility = abilities.get(ability.getValue());
-		if (entityState == EntityState.NEUTRAL && attemptedAbility != null && attemptedAbility.isOffCooldown()) {
+		if (attemptedAbility == null) return;
+
+		if (attemptedAbility.shouldTrigger()) {
+			attemptedAbility.didTrigger();
+		} else if (entityState == EntityState.NEUTRAL && attemptedAbility != null && attemptedAbility.isOffCooldown()) {
 			playAnimation(ability.getValue());
 			setEntityState(EntityState.ATTACKING);
-		} else if (entityState == EntityState.ATTACKING && currentAbility != null && currentAbility.getEntityAbility() == ability) {
-			currentAbility.didTrigger();
 		}
 	}
 	
@@ -341,15 +343,15 @@ public abstract class Entity implements Drawable {
 	}
 
 	public LinkedList<Effect> getEffects() {
-		return Effects;
+		return effects;
 	}
 
 	public void emptyTargetMarkers() {
 		targetMarkers.clear();
 	}
 
-	public void emptyProjectiles() {
-		Effects.clear();
+	public void emptyEffects() {
+		effects.clear();
 	}
 
 	public void notifyEnemyCreation(Entity enemy) {

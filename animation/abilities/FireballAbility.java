@@ -11,13 +11,13 @@ public class FireballAbility extends Ability {
 	public FireballAbility(Entity entity) {
 		super(entity, 0.5, Entity.EntityAbility.FIRST);
 		initializeAnimation = new Animation(entity.getPosX(), entity.getPosY(), 75, 0, FILEPATH_ABILITY+ABILITY_NAME, 3, 2);
-		setHasProjectiles(true);
+		setHasEffects(true);
 	}
 
 	@Override
 	public void update() {
 		if (state == AbilityState.INITIALIZING && initializeAnimation.isDone()) {
-			projectiles.add(new FireballProjectile(entity, entity.getMapCollisionDetection()));
+			effects.add(new FireballProjectile(entity, entity.getMapCollisionDetection()));
 		}
 
 		super.update();

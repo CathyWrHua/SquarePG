@@ -7,7 +7,7 @@ import java.awt.*;
 
 public abstract class Effect implements Drawable {
 	public enum EffectType {
-		MAP_EFFECT(3), PROJECTILE_EFFECT(3), DAMAGE(4);
+		BACKGROUND_EFFECT(1), MAP_EFFECT(4), PROJECTILE_EFFECT(4), DAMAGE(5);
 		private int value;
 
 		EffectType(int value) {
