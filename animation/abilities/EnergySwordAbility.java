@@ -54,7 +54,7 @@ public class EnergySwordAbility extends Ability {
 	}
 
 	public int dealDamage(int baseDamage) {
-		return 	(int)Math.round(baseDamage*DAMAGE_MULTIPLIER);
+		return Math.round(baseDamage*DAMAGE_MULTIPLIER);
 	}
 
 	public String getAbilityName() {
