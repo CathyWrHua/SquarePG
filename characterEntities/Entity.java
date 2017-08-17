@@ -34,6 +34,9 @@ public abstract class Entity implements Drawable {
 	protected HealthBar healthBar;
 	protected Random random;
 
+	//Character effects variables
+	private boolean isTransparent = false;
+
 	public enum EntityType {HERO, ENEMY, DUMMY}
 	public enum EntityState {NEUTRAL, ATTACKING, DAMAGED, DEAD}
 	public enum MotionStateUpDown {IDLE, UP, DOWN}
@@ -158,7 +161,17 @@ public abstract class Entity implements Drawable {
 			width = -width;
 		}
 
+		if (isTransparent) {
+			AlphaComposite alcom = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f);
+			g2d.setComposite(alcom);
+		}
+
 		g2d.drawImage(image, x, posY, width, image.getHeight(null), null);
+
+		if (isTransparent) {
+			AlphaComposite resetAlcom = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f);
+			g2d.setComposite(resetAlcom);
+		}
 	}
 
 	public void attack(EntityAbility ability) {
