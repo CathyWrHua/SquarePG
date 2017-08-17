@@ -11,13 +11,13 @@ public class SingleArrowAbility extends Ability {
 	public SingleArrowAbility(Entity entity) {
 		super(entity, 1, Entity.EntityAbility.FIRST);
 		canDamageAnimation = new Animation(entity.getPosX(), entity.getPosY(), 75, 0, FILEPATH_ABILITY+ABILITY_NAME, 3, 1);
-		setHasProjectiles(true);
+		setHasEffects(true);
 	}
 
 	@Override
 	public void update() {
 		if (state == AbilityState.INITIALIZING && (initializeAnimation == null || initializeAnimation.isDone())) {
-			projectiles.add(new ArrowProjectile(entity, entity.getMapCollisionDetection()));
+			effects.add(new ArrowProjectile(entity, entity.getMapCollisionDetection()));
 		}
 
 		super.update();

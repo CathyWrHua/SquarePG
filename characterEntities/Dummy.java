@@ -80,6 +80,8 @@ public class Dummy extends Entity {
 		//nothing
 	}
 
+	public void calculateTargetsDamage(Ability ability) {}
+
 	@Override
 	public void draw(Graphics g) {
 		Graphics2D g2d = (Graphics2D)g;

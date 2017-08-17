@@ -2,6 +2,7 @@ package animation.abilities;
 
 import SquarePG.SquarePG;
 import animation.Animation;
+import animation.effects.Effect;
 import animation.effects.Projectile;
 import characterEntities.Entity;
 import gameLogic.GameEngine;
@@ -28,7 +29,7 @@ public abstract class Ability implements Drawable {
 	protected AbilityState state = AbilityState.INITIALIZING;
 	protected int cooldownTotal, cooldownCounter;
 
-	protected LinkedList<Projectile> projectiles = null;
+	protected LinkedList<Effect> effects = null;
 
 	public Ability(Entity entity, double cooldownInSeconds, Entity.EntityAbility entityAbility) {
 		this.cooldownCounter = 0;
@@ -97,22 +98,22 @@ public abstract class Ability implements Drawable {
 		return state;
 	}
 
-	public void setHasProjectiles(boolean hasProjectiles) {
-		if (hasProjectiles) {
-			projectiles = new LinkedList<>();
+	public void setHasEffects(boolean hasEffects) {
+		if (hasEffects) {
+			effects = new LinkedList<>();
 		}
 	}
 
-	public boolean hasProjectiles() {
-		return projectiles != null;
+	public boolean hasEffects() {
+		return effects != null;
 	}
 
-	public LinkedList<Projectile> getProjectiles() {
-		return projectiles;
+	public LinkedList<Effect> getEffects() {
+		return effects;
 	}
 
-	public void clearProjectiles() {
-		projectiles.clear();
+	public void clearEffects() {
+		effects.clear();
 	}
 
 	public void setState(AbilityState state) {
@@ -183,6 +184,10 @@ public abstract class Ability implements Drawable {
 
 	public Entity.EntityAbility getEntityAbility() {
 		return entityAbility;
+	}
+
+	public boolean shouldTrigger() {
+		return false;
 	}
 
 	public abstract void didTrigger();

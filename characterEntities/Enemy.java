@@ -132,16 +132,21 @@ public abstract class Enemy extends Entity {
 			calculateNextMove();
 
 			if (entityState == EntityState.ATTACKING && currentAbility.getState() != Ability.AbilityState.IS_DONE) {
-				DamageMarker marker;
-				if (!targetEntity.immuneTo.get(this) && currentAbility.didHitTarget(targetEntity) && targetEntity.getEntityState() != EntityState.DEAD) {
-					marker = targetEntity.inflict(getDamage(), this);
-					if (marker != null) {
-						targetMarkers.add(marker);
-					}
-				}
+				calculateTargetsDamage(currentAbility);
 			}
 		}
 		setPoint(mapCollisionDetection.determineMotion(newPosX, newPosY, getEntitySize(), new LinkedList<>(Collections.singletonList(targetEntity))));
+	}
+
+	@Override
+	public void calculateTargetsDamage(Ability ability) {
+		DamageMarker marker;
+		if (!targetEntity.immuneTo.get(this) && ability.didHitTarget(targetEntity) && targetEntity.getEntityState() != EntityState.DEAD) {
+			marker = targetEntity.inflict(getDamage(), this);
+			if (marker != null) {
+				targetMarkers.add(marker);
+			}
+		}
 	}
 
 	@Override

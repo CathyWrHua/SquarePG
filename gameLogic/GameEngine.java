@@ -17,11 +17,12 @@ import java.util.LinkedList;
 public class GameEngine {
 	public enum MapLayer {
 		BACKGROUND(0),
-		ENTITY_LAYER(1),
-		ENTITY_EFFECTS_LAYER(2),
-		MAP_EFFECTS_LAYER(3),
-		DAMAGE_LAYER(4),
-		GUI_LAYER(5);
+		BACKGROUND_EFFECTS_LAYER(1),
+		ENTITY_LAYER(2),
+		ENTITY_EFFECTS_LAYER(3),
+		MAP_EFFECTS_LAYER(4),
+		DAMAGE_LAYER(5),
+		GUI_LAYER(6);
 
 		private int value;
 
@@ -39,7 +40,7 @@ public class GameEngine {
 		STOPPED
 	}
 
-	private final int TOTAL_MAP_LAYERS = 6;
+	private final int TOTAL_MAP_LAYERS = 7;
 
 	private GameMap gameMap;
 
@@ -53,12 +54,12 @@ public class GameEngine {
 	private Hero player;
 	private AbilityBar playerAbilityBar;
 	private LinkedList<Entity> targets;
-	private LinkedList<Effect> Effects;
+	private LinkedList<Effect> effects;
 	private ArrayList<LinkedList<Drawable>> layerRenderMap;
 
 	public GameEngine(Hero.PlayerClass playerClass) {
 		targets = new LinkedList<>();
-		Effects = new LinkedList<>();
+		effects = new LinkedList<>();
 
 		gameMap = new GameMap(level, map);
 		collisionMap = new MapCollisionDetection(gameMap.getCurrentCollisionMap());
@@ -79,6 +80,7 @@ public class GameEngine {
 		background.add(gameMap);
 
 		layerRenderMap.add(MapLayer.BACKGROUND.getValue(), background);
+		layerRenderMap.add(MapLayer.BACKGROUND_EFFECTS_LAYER.getValue(), new LinkedList<>());
 		layerRenderMap.add(MapLayer.ENTITY_LAYER.getValue(), new LinkedList<>());
 		layerRenderMap.add(MapLayer.ENTITY_EFFECTS_LAYER.getValue(), new LinkedList<>());
 		layerRenderMap.add(MapLayer.MAP_EFFECTS_LAYER.getValue(), new LinkedList<>());
@@ -104,12 +106,21 @@ public class GameEngine {
 			//do nothing for now (?)
 		} else {
 			layerRenderMap.get(MapLayer.DAMAGE_LAYER.getValue()).addAll(player.getTargetMarkers());
-			Effects.addAll(player.getTargetMarkers());
+			effects.addAll(player.getTargetMarkers());
 			player.emptyTargetMarkers();
 
-			layerRenderMap.get(MapLayer.MAP_EFFECTS_LAYER.getValue()).addAll(player.getEffects());
-			Effects.addAll(player.getEffects());
-			player.emptyProjectiles();
+			LinkedList<Effect> playerEffects = player.getEffects();
+			effects.addAll(playerEffects);
+			if (playerEffects != null && playerEffects.size() > 0) {
+				for (Effect effect : playerEffects) {
+					if (effect.getEffectType() == Effect.EffectType.BACKGROUND_EFFECT) {
+						layerRenderMap.get(MapLayer.BACKGROUND_EFFECTS_LAYER.getValue()).add(effect);
+					} else {
+						layerRenderMap.get(MapLayer.MAP_EFFECTS_LAYER.getValue()).add(effect);
+					}
+				}
+			}
+			player.emptyEffects();
 
 			updateEnemies();
 			updateEffects();
@@ -183,7 +194,7 @@ public class GameEngine {
 	//Temporary hack to damage the player in testing
 	public void playerWasAttacked() {
 		DamageMarker marker = player.inflict(3, new Dummy(-100, -100, true));
-		Effects.add(marker);
+		effects.add(marker);
 		layerRenderMap.get(MapLayer.DAMAGE_LAYER.getValue()).add(marker);
 	}
 
@@ -215,19 +226,28 @@ public class GameEngine {
 				}
 
 				layerRenderMap.get(MapLayer.DAMAGE_LAYER.getValue()).addAll(enemy.getTargetMarkers());
-				Effects.addAll(enemy.getTargetMarkers());
+				effects.addAll(enemy.getTargetMarkers());
 				target.emptyTargetMarkers();
 
-				layerRenderMap.get(MapLayer.MAP_EFFECTS_LAYER.getValue()).addAll(enemy.getEffects());
-				Effects.addAll(enemy.getEffects());
-				target.emptyProjectiles();
+				LinkedList<Effect> enemyEffects = enemy.getEffects();
+				effects.addAll(enemyEffects);
+				if (enemyEffects != null && enemyEffects.size() > 0) {
+					for (Effect effect : enemyEffects) {
+						if (effect.getEffectType() == Effect.EffectType.BACKGROUND_EFFECT) {
+							layerRenderMap.get(MapLayer.BACKGROUND_EFFECTS_LAYER.getValue()).add(effect);
+						} else {
+							layerRenderMap.get(MapLayer.MAP_EFFECTS_LAYER.getValue()).add(effect);
+						}
+					}
+				}
+				enemy.emptyEffects();
 
 				if (enemy.isDone()) {
 					player.notifyEnemyDeath(enemy);
 					layerRenderMap.get(MapLayer.ENTITY_LAYER.getValue()).remove(enemy);
 					Effect deathEffect = new EnemyDeathEffect(enemy.getCenterX(), enemy.getCenterY());
 					layerRenderMap.get(MapLayer.MAP_EFFECTS_LAYER.getValue()).add(deathEffect);
-					Effects.add(deathEffect);
+					effects.add(deathEffect);
 					iterator.remove();
 				}
 			} else if (target.getEntityType() == Entity.EntityType.DUMMY) {
@@ -239,7 +259,7 @@ public class GameEngine {
 	private void updateEffects() {
 		LinkedList<DamageMarker> damageMarkers = new LinkedList<>();
 
-		for (Iterator<Effect> iterator = Effects.iterator(); iterator.hasNext();) {
+		for (Iterator<Effect> iterator = effects.iterator(); iterator.hasNext();) {
 			Effect effect = iterator.next();
 			effect.update();
 
@@ -254,7 +274,7 @@ public class GameEngine {
 				iterator.remove();
 			}
 		}
-		Effects.addAll(damageMarkers);
+		effects.addAll(damageMarkers);
 		layerRenderMap.get(MapLayer.DAMAGE_LAYER.getValue()).addAll(damageMarkers);
 	}
 

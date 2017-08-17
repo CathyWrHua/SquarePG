@@ -1,6 +1,9 @@
 package characterEntities;
 
+import animation.abilities.EnergySwordAbility;
 import animation.abilities.FireballAbility;
+import animation.abilities.TeleportAbility;
+import animation.abilities.UltimateLaserAbility;
 import gameLogic.MapCollisionDetection;
 
 import java.util.LinkedList;
@@ -18,11 +21,11 @@ public class BlueHero extends Hero {
 
 		//temp hack test code, will change in the future
 		if (pathIndex == 0 && path == CharacterProfile.Path.BLUE) {
-			setAbility(2, new FireballAbility(this));
+			setAbility(2, new EnergySwordAbility(this));
 		} else if (pathIndex == 1 && path == CharacterProfile.Path.BLUE) {
-			setAbility(3, new FireballAbility(this));
+			setAbility(3, new TeleportAbility(this));
 		} else if (pathIndex == 2 && path == CharacterProfile.Path.BLUE) {
-			setAbility(4, new FireballAbility(this));
+			setAbility(4, new UltimateLaserAbility(this));
 		}
 		return true;
 	}
