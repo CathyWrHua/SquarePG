@@ -87,16 +87,21 @@ public abstract class Hero extends Entity {
 		}
 
 		if (entityState != EntityState.ATTACKING || currentAbility == null) return;
-		DamageMarker marker;
 		if (currentAbility.getState() == Ability.AbilityState.CAN_DAMAGE) {
-			for (Entity target : targets) {
-				if (!target.immuneTo.get(this) &&
-						currentAbility.didHitTarget(target) &&
-						target.getEntityState() != EntityState.DEAD) {
-					marker = target.inflict(currentAbility.dealDamage(getDamage()), this);
-					if (marker != null) {
-						targetMarkers.add(marker);
-					}
+			calculateTargetsDamage(currentAbility);
+		}
+	}
+
+	@Override
+	public void calculateTargetsDamage(Ability ability) {
+		DamageMarker marker;
+		for (Entity target : targets) {
+			if (!target.immuneTo.get(this) &&
+					ability.didHitTarget(target) &&
+					target.getEntityState() != EntityState.DEAD) {
+				marker = target.inflict(ability.dealDamage(getDamage()), this);
+				if (marker != null) {
+					targetMarkers.add(marker);
 				}
 			}
 		}

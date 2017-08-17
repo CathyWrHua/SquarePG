@@ -12,6 +12,8 @@ public class UltimateLaserAbility extends Ability {
 	static final int OFFSET_Y = -25;
 	static final String ABILITY_NAME = "laser";
 	static final int DAMAGE_INTERVAL = 10;
+	static final float DAMAGE_MULTIPLIER = 1.5f;
+
 	private int damageCounter = 0;
 
 	public UltimateLaserAbility(Hero player) {
@@ -52,8 +54,7 @@ public class UltimateLaserAbility extends Ability {
 	}
 
 	public int dealDamage(int baseDamage) {
-		return (int)Math.round(baseDamage*1.5);
-		//return 1;
+		return Math.round(baseDamage*DAMAGE_MULTIPLIER);
 	}
 
 	public String getAbilityName() {

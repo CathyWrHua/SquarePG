@@ -1,7 +1,6 @@
 package characterEntities;
 
 import animation.abilities.Ability;
-import animation.abilities.EnergySwordAbility;
 import animation.effects.Effect;
 import gameLogic.MapCollisionDetection;
 import gui.DamageMarker;
@@ -168,8 +167,6 @@ public abstract class Entity implements Drawable {
 
 		if (attemptedAbility.shouldTrigger() && entityState != EntityState.DAMAGED && entityState != EntityState.DEAD) {
 			attemptedAbility.didTrigger();
-			currentAbility = attemptedAbility;
-			setEntityState(EntityState.ATTACKING);
 		} else if (entityState == EntityState.NEUTRAL && attemptedAbility != null && attemptedAbility.isOffCooldown()) {
 			playAnimation(ability.getValue());
 			setEntityState(EntityState.ATTACKING);
@@ -194,7 +191,7 @@ public abstract class Entity implements Drawable {
 		damageMarker = (currentHealth <= 0) ? null : (new DamageMarker(damageTaken, posX, posY));
 		return damageMarker;
 	}
-	
+
 	public void heal(int amountHealed) {
 		if (entityState != EntityState.DEAD) {
 			currentHealth += amountHealed;
@@ -368,4 +365,6 @@ public abstract class Entity implements Drawable {
 			this.immuneTo.remove(enemy);
 		}
 	}
+
+	public abstract void calculateTargetsDamage(Ability ability);
 }

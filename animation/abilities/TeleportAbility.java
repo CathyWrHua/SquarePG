@@ -5,9 +5,11 @@ import animation.effects.TeleportMapEffect;
 import characterEntities.Entity;
 import characterEntities.Hero;
 import characterEntities.HitDetectionHelper;
+import gui.DamageMarker;
 import javafx.scene.shape.Circle;
 
 import java.awt.*;
+import java.util.LinkedList;
 
 public class TeleportAbility extends Ability {
 	static final String ABILITY_NAME = "teleport";
@@ -18,9 +20,12 @@ public class TeleportAbility extends Ability {
 	private TeleportMapEffect teleportMark;
 	private boolean isTriggered = false;
 	private boolean setCoolDown = false;
+	private LinkedList<Entity> targets;
 
 	public TeleportAbility(Hero player) {
 		super(player, 3, Entity.EntityAbility.THIRD);
+
+		targets = player.getTargets();
 
 		initializeAnimation = new Animation(player.getPosX(), player.getPosY(), -20, -20, FILEPATH_ABILITY+"teleportInit", 1, 10);
 		setHasEffects(true);
@@ -39,12 +44,12 @@ public class TeleportAbility extends Ability {
 			cooldownCounter = 0;
 		}
 
-		if (isTriggered) {
-			setCoolDown = true;
-			resetCooldown();
-			state = AbilityState.CAN_DAMAGE;
-			isTriggered = false;
-		}
+//		if (isTriggered) {
+//			setCoolDown = true;
+//			resetCooldown();
+//			state = AbilityState.CAN_DAMAGE;
+//			isTriggered = false;
+//		}
 	}
 
 	public void setupAbility() {
@@ -77,7 +82,11 @@ public class TeleportAbility extends Ability {
 				teleportPoint = null;
 				teleportMark.killEffect();
 				teleportMark = null;
-				isTriggered = true;
+
+				entity.calculateTargetsDamage(this);
+				setCoolDown = true;
+				resetCooldown();
+				//isTriggered = true;
 			}
 		}
 		teleportMark = null;
@@ -97,5 +106,4 @@ public class TeleportAbility extends Ability {
 	public String getAbilityName() {
 		return ABILITY_NAME;
 	}
-
 }
