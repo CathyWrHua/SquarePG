@@ -8,6 +8,7 @@ import java.util.HashMap;
 
 import java.awt.*;
 import java.util.LinkedList;
+import java.util.Random;
 
 public abstract class Enemy extends Entity {
 	public enum EnemyType {
@@ -91,7 +92,8 @@ public abstract class Enemy extends Entity {
 		if (targetEntity == null) return;
 
 		Point selfCenter = new Point(posX + getEntitySize().width / 2, posY + getEntitySize().height / 2);
-		Point targetCenter = new Point(targetEntity.getPosX() + targetEntity.getEntitySize().width / 2, targetEntity.getPosY() + targetEntity.getEntitySize().height / 2);
+
+		Point targetCenter = (targetEntity.isInvisible())? new Point(random.nextInt(900), random.nextInt(700)) : new Point(targetEntity.getPosX() + targetEntity.getEntitySize().width / 2, targetEntity.getPosY() + targetEntity.getEntitySize().height / 2);
 		Point motionVector = new Point(targetCenter.x - selfCenter.x, targetCenter.y - selfCenter.y);
 
 		double hypotenuse = Math.sqrt(motionVector.x * motionVector.x + motionVector.y * motionVector.y);
@@ -111,8 +113,9 @@ public abstract class Enemy extends Entity {
 			setFacingEast(motionVector.x > 0);
 		}
 
-		if (Math.abs(motionVector.x) < 100 && Math.abs(motionVector.y) < 100) {
+		if (targetEntity.isInvisible()) return;
 
+		if (Math.abs(motionVector.x) < 100 && Math.abs(motionVector.y) < 100) {
 			if (targetEntity.getEntityState() != EntityState.DEAD) {
 				attack(EntityAbility.DEFAULT);
 			}

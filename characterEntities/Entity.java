@@ -392,5 +392,21 @@ public abstract class Entity implements Drawable {
 		characterEffects.clear();
 	}
 
+	public void setTransparent(boolean transparent) {
+		this.isTransparent = transparent;
+	}
+
+	public boolean isInvisible() {
+		return isTransparent;
+	}
+
+	public double getVelocity() {
+		return velocity;
+	}
+
+	public void setVelocity(double velocity) {
+		this.velocity = velocity;
+	}
+
 	public abstract void calculateTargetsDamage(Ability ability);
 }
