@@ -113,8 +113,6 @@ public abstract class Enemy extends Entity {
 			setFacingEast(motionVector.x > 0);
 		}
 
-		if (targetEntity.isInvisible()) return;
-
 		if (Math.abs(motionVector.x) < 100 && Math.abs(motionVector.y) < 100) {
 			if (targetEntity.getEntityState() != EntityState.DEAD) {
 				attack(EntityAbility.DEFAULT);
