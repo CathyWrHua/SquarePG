@@ -2,6 +2,7 @@ package characterEntities;
 
 import animation.abilities.Ability;
 import animation.effects.Effect;
+import characterEntities.characterEffects.CharacterEffect;
 import gameLogic.MapCollisionDetection;
 import gui.DamageMarker;
 import gui.HealthBar;
@@ -34,8 +35,9 @@ public abstract class Entity implements Drawable {
 	protected HealthBar healthBar;
 	protected Random random;
 
-	//Character effects variables
+	//Character Effects eg. buffs, debuffs
 	private boolean isTransparent = false;
+	protected LinkedList<CharacterEffect> characterEffects;
 
 	public enum EntityType {HERO, ENEMY, DUMMY}
 	public enum EntityState {NEUTRAL, ATTACKING, DAMAGED, DEAD}
@@ -92,6 +94,7 @@ public abstract class Entity implements Drawable {
 
 		targetMarkers = new LinkedList<>();
 		effects = new LinkedList<>();
+		characterEffects = new LinkedList<>();
 	}
 
 	public void update() {
@@ -377,6 +380,16 @@ public abstract class Entity implements Drawable {
 		if (enemy != null && this.immuneTo.containsKey(enemy)) {
 			this.immuneTo.remove(enemy);
 		}
+	}
+
+	public void addCharacterEffect(CharacterEffect effect) {
+		if (effect != null) {
+			characterEffects.add(effect);
+		}
+	}
+
+	public void clearCharacterEffects() {
+		characterEffects.clear();
 	}
 
 	public abstract void calculateTargetsDamage(Ability ability);

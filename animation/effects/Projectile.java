@@ -69,12 +69,14 @@ public abstract class Projectile extends Effect {
 
 		for (Entity target : targets) {
 			if (HitDetectionHelper.detectHit(projectileSize, target.getEntitySize()) && (targetHit == null ||
-					(Math.abs(target.getPosX()-posX) < Math.abs(targetHit.getPosX()-posX)))) {
+					(target.getPosX() < targetHit.getPosX()))) {
 				targetHit = target;
 			}
 		}
 		if (targetHit == null) return;
-		marker = targetHit.inflict(damage, posX < targetHit.getPosX());
+
+		int x = (regularAnimation == null)? posX: posX+regularAnimation.getOffsetX();
+		marker = targetHit.inflict(damage, x < targetHit.getPosX());
 		if (marker != null) {
 			targetMarkers.add(marker);
 		}

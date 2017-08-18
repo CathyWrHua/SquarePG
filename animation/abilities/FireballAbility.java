@@ -10,7 +10,7 @@ public class FireballAbility extends Ability {
 
 	public FireballAbility(Entity entity) {
 		super(entity, 0.5, Entity.EntityAbility.FIRST);
-		initializeAnimation = new Animation(entity.getPosX(), entity.getPosY(), 75, 0, FILEPATH_ABILITY+ABILITY_NAME, 3, 2);
+		initializeAnimation = new Animation(entity.getPosX(), entity.getPosY(), 75, 0, FILEPATH_ABILITY+ABILITY_NAME, 3, 1);
 		setHasEffects(true);
 	}
 
