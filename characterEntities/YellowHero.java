@@ -1,5 +1,6 @@
 package characterEntities;
 
+import animation.abilities.HuntersCloakAbility;
 import animation.abilities.SingleArrowAbility;
 import gameLogic.MapCollisionDetection;
 
@@ -18,7 +19,7 @@ public class YellowHero extends Hero {
 
 		//temp hack test code, will change in the future
 		if (pathIndex == 0 && path == CharacterProfile.Path.YELLOW) {
-			setAbility(2, new SingleArrowAbility(this));
+			setAbility(2, new HuntersCloakAbility(this));
 		} else if (pathIndex == 1 && path == CharacterProfile.Path.YELLOW) {
 			setAbility(3, new SingleArrowAbility(this));
 		} else if (pathIndex == 2 && path == CharacterProfile.Path.YELLOW) {

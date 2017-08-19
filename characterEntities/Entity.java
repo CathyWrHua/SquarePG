@@ -10,10 +10,7 @@ import screens.Drawable;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Random;
+import java.util.*;
 
 public abstract class Entity implements Drawable {
 	protected int posX, posY;
@@ -149,6 +146,15 @@ public abstract class Entity implements Drawable {
 		for (animation.abilities.Ability ability : abilities) {
 			if (ability != null) ability.decrementCooldownCounter();
 		}
+
+		for (Iterator<CharacterEffect> iterator = characterEffects.iterator(); iterator.hasNext();) {
+			CharacterEffect effect = iterator.next();
+			effect.update();
+			if (effect.effectHasExpired()) {
+				effect.removeEffect();
+				iterator.remove();
+			}
+		}
 	}
 
 	public void draw(Graphics g) {
@@ -170,6 +176,10 @@ public abstract class Entity implements Drawable {
 		}
 
 		g2d.drawImage(image, x, posY, width, image.getHeight(null), null);
+
+		for (CharacterEffect characterEffect : characterEffects) {
+			characterEffect.draw(g);
+		}
 
 		if (isTransparent) {
 			AlphaComposite resetAlcom = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f);
@@ -385,6 +395,7 @@ public abstract class Entity implements Drawable {
 	public void addCharacterEffect(CharacterEffect effect) {
 		if (effect != null) {
 			characterEffects.add(effect);
+			effect.applyEffect();
 		}
 	}
 

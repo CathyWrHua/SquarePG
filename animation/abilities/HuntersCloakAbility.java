@@ -1,5 +1,6 @@
 package animation.abilities;
 
+import animation.Animation;
 import characterEntities.Entity;
 import characterEntities.characterEffects.InvisibilityBuff;
 import characterEntities.characterEffects.SpeedBuff;
@@ -11,18 +12,27 @@ public class HuntersCloakAbility extends Ability {
 
 	public HuntersCloakAbility(Entity entity) {
 		super(entity, 3, Entity.EntityAbility.SECOND);
-		// ..add initialization animation ..
+
+		initializeAnimation	= new Animation(entity.getPosX(), entity.getPosY(), -12, -12, FILEPATH_ABILITY+ABILITY_NAME, 1, 3);
 	}
 
 	public void update() {
+		if (state == AbilityState.INITIALIZING && initializeAnimation.isDone()) {
+			entity.addCharacterEffect(new InvisibilityBuff(ABILITY_DURATION, entity));
+			entity.addCharacterEffect(new SpeedBuff(ABILITY_DURATION, entity));
+		}
+
 		super.update();
+	}
+
+	@Override
+	public boolean isRestrictingMovement() {
+		return true;
 	}
 
 	@Override
 	public void setupAbility() {
 		super.setupAbility();
-		entity.addCharacterEffect(new InvisibilityBuff(ABILITY_DURATION, entity));
-		entity.addCharacterEffect(new SpeedBuff(ABILITY_DURATION, entity));
 	}
 
 	public void didTrigger() {
