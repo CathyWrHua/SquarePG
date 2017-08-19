@@ -21,6 +21,7 @@ public class UltimateLaserAbility extends Ability {
 
 		initializeAnimation = new Animation(player.getPosX(), player.getPosY(), -62, -62, FILEPATH_ABILITY+"laserCharge", 1, 10);
 		canDamageAnimation = new Animation(player.getPosX(), player.getPosY(), player.getFacingEast()? 75 : -1000, OFFSET_Y, FILEPATH_ABILITY+"laserBeam", 1, 20);
+		canDamageAnimation.shouldMirror(!player.getFacingEast());
 	}
 
 	public void update() {
