@@ -8,6 +8,7 @@ import java.util.HashMap;
 
 import java.awt.*;
 import java.util.LinkedList;
+import java.util.Random;
 
 public abstract class Enemy extends Entity {
 	public enum EnemyType {
@@ -29,6 +30,9 @@ public abstract class Enemy extends Entity {
 	protected HashMap<Integer, String> shapePath;
 	private Entity targetEntity;
 
+	//for when the enemy AI is targetting random target
+	private Point randomTargetPoint;
+
 	private static final int DELETION_TIME = 40;
 
 	Enemy(Entity targetEntity, MapCollisionDetection mapCollisionDetection, int maxHealth, int maxDamage, int minDamage, int posX, int posY, double velocity) {
@@ -40,6 +44,7 @@ public abstract class Enemy extends Entity {
 
 		done = false;
 		entityType = EntityType.ENEMY;
+		randomTargetPoint = new Point(random.nextInt(900), random.nextInt(700));
 	}
 
 	public boolean isDone() {
@@ -91,7 +96,8 @@ public abstract class Enemy extends Entity {
 		if (targetEntity == null) return;
 
 		Point selfCenter = new Point(posX + getEntitySize().width / 2, posY + getEntitySize().height / 2);
-		Point targetCenter = new Point(targetEntity.getPosX() + targetEntity.getEntitySize().width / 2, targetEntity.getPosY() + targetEntity.getEntitySize().height / 2);
+
+		Point targetCenter = (targetEntity.isInvisible())? randomTargetPoint : new Point(targetEntity.getPosX() + targetEntity.getEntitySize().width / 2, targetEntity.getPosY() + targetEntity.getEntitySize().height / 2);
 		Point motionVector = new Point(targetCenter.x - selfCenter.x, targetCenter.y - selfCenter.y);
 
 		double hypotenuse = Math.sqrt(motionVector.x * motionVector.x + motionVector.y * motionVector.y);
@@ -112,11 +118,15 @@ public abstract class Enemy extends Entity {
 		}
 
 		if (Math.abs(motionVector.x) < 100 && Math.abs(motionVector.y) < 100) {
-
 			if (targetEntity.getEntityState() != EntityState.DEAD) {
 				attack(EntityAbility.DEFAULT);
 			}
+			if (targetEntity.isInvisible()) {
+				randomTargetPoint = new Point(random.nextInt(900), random.nextInt(700));
+			}
 		}
+
+
 	}
 
 	public void update() {

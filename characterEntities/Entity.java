@@ -2,6 +2,7 @@ package characterEntities;
 
 import animation.abilities.Ability;
 import animation.effects.Effect;
+import characterEntities.characterEffects.CharacterEffect;
 import gameLogic.MapCollisionDetection;
 import gui.DamageMarker;
 import gui.HealthBar;
@@ -9,10 +10,7 @@ import screens.Drawable;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Random;
+import java.util.*;
 
 public abstract class Entity implements Drawable {
 	protected int posX, posY;
@@ -33,6 +31,10 @@ public abstract class Entity implements Drawable {
 	protected ImageIcon imageIcon;
 	protected HealthBar healthBar;
 	protected Random random;
+
+	//Character Effects eg. buffs, debuffs
+	private boolean isTransparent = false;
+	protected LinkedList<CharacterEffect> characterEffects;
 
 	public enum EntityType {HERO, ENEMY, DUMMY}
 	public enum EntityState {NEUTRAL, ATTACKING, DAMAGED, DEAD}
@@ -89,6 +91,7 @@ public abstract class Entity implements Drawable {
 
 		targetMarkers = new LinkedList<>();
 		effects = new LinkedList<>();
+		characterEffects = new LinkedList<>();
 	}
 
 	public void update() {
@@ -143,6 +146,15 @@ public abstract class Entity implements Drawable {
 		for (animation.abilities.Ability ability : abilities) {
 			if (ability != null) ability.decrementCooldownCounter();
 		}
+
+		for (Iterator<CharacterEffect> iterator = characterEffects.iterator(); iterator.hasNext();) {
+			CharacterEffect effect = iterator.next();
+			effect.update();
+			if (effect.effectHasExpired()) {
+				effect.removeEffect();
+				iterator.remove();
+			}
+		}
 	}
 
 	public void draw(Graphics g) {
@@ -158,7 +170,21 @@ public abstract class Entity implements Drawable {
 			width = -width;
 		}
 
+		if (isTransparent) {
+			AlphaComposite alcom = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f);
+			g2d.setComposite(alcom);
+		}
+
 		g2d.drawImage(image, x, posY, width, image.getHeight(null), null);
+
+		for (CharacterEffect characterEffect : characterEffects) {
+			characterEffect.draw(g);
+		}
+
+		if (isTransparent) {
+			AlphaComposite resetAlcom = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f);
+			g2d.setComposite(resetAlcom);
+		}
 	}
 
 	public void attack(EntityAbility ability) {
@@ -364,6 +390,33 @@ public abstract class Entity implements Drawable {
 		if (enemy != null && this.immuneTo.containsKey(enemy)) {
 			this.immuneTo.remove(enemy);
 		}
+	}
+
+	public void addCharacterEffect(CharacterEffect effect) {
+		if (effect != null) {
+			characterEffects.add(effect);
+			effect.applyEffect();
+		}
+	}
+
+	public void clearCharacterEffects() {
+		characterEffects.clear();
+	}
+
+	public void setTransparent(boolean transparent) {
+		this.isTransparent = transparent;
+	}
+
+	public boolean isInvisible() {
+		return isTransparent;
+	}
+
+	public double getVelocity() {
+		return velocity;
+	}
+
+	public void setVelocity(double velocity) {
+		this.velocity = velocity;
 	}
 
 	public abstract void calculateTargetsDamage(Ability ability);

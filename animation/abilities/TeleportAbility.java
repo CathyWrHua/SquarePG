@@ -14,7 +14,7 @@ import java.util.LinkedList;
 public class TeleportAbility extends Ability {
 	static final String ABILITY_NAME = "teleport";
 	static final float DAMAGE_MULTIPLIER = 1.5f;
-	static final int BLAST_RADIUS = 200;
+	static final int BLAST_RADIUS = 100;
 
 	private Point teleportPoint;
 	private TeleportMapEffect teleportMark;
@@ -43,13 +43,6 @@ public class TeleportAbility extends Ability {
 		if (!setCoolDown) {
 			cooldownCounter = 0;
 		}
-
-//		if (isTriggered) {
-//			setCoolDown = true;
-//			resetCooldown();
-//			state = AbilityState.CAN_DAMAGE;
-//			isTriggered = false;
-//		}
 	}
 
 	public void setupAbility() {

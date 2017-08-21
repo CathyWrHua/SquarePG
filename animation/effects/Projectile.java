@@ -11,12 +11,12 @@ import java.util.LinkedList;
 
 public abstract class Projectile extends Effect {
 	protected int velocityX, velocityY;
-	private int damage;
+	protected int damage;
 	protected boolean facingEast;
 	protected boolean done;
-	private MapCollisionDetection mapCollision;
-	private LinkedList<Entity> targets;
-	private LinkedList<DamageMarker> targetMarkers;
+	protected  MapCollisionDetection mapCollision;
+	protected LinkedList<Entity> targets;
+	protected LinkedList<DamageMarker> targetMarkers;
 
 	public Projectile(Entity entity, MapCollisionDetection mapCollision, Animation regular, Animation collision, int velocityX, int velocityY) {
 		super(entity.getPosX(), entity.getPosY(), regular, collision, EffectType.PROJECTILE_EFFECT);
@@ -69,12 +69,14 @@ public abstract class Projectile extends Effect {
 
 		for (Entity target : targets) {
 			if (HitDetectionHelper.detectHit(projectileSize, target.getEntitySize()) && (targetHit == null ||
-					(Math.abs(target.getPosX()-posX) < Math.abs(targetHit.getPosX()-posX)))) {
+					(target.getPosX() < targetHit.getPosX()))) {
 				targetHit = target;
 			}
 		}
 		if (targetHit == null) return;
-		marker = targetHit.inflict(damage, posX < targetHit.getPosX());
+
+		int x = (regularAnimation == null)? posX: posX+regularAnimation.getOffsetX();
+		marker = targetHit.inflict(damage, x < targetHit.getPosX());
 		if (marker != null) {
 			targetMarkers.add(marker);
 		}
