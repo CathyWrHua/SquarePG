@@ -1,24 +1,30 @@
 package animation.abilities;
 
+import animation.Animation;
+import animation.effects.ExplodingKnifeProjectile;
 import animation.effects.Projectile;
 import characterEntities.Entity;
+import characterEntities.Hero;
 
 import java.util.LinkedList;
 
 public class UltimateHuntersRequiemAbility extends Ability {
 
 	static final String ABILITY_NAME = "hunterRequiem";
-	static final int SHOOT_INTERVAL = 60;
+	static final int SHOOT_INTERVAL = 300;
 
-	private LinkedList<Projectile> knives;
-	private int countDown = SHOOT_INTERVAL;
+	private LinkedList<ExplodingKnifeProjectile> knives;
+	private int countDown = 0;
+	private Hero hero;
 
-	public UltimateHuntersRequiemAbility(Entity entity) {
+	public UltimateHuntersRequiemAbility(Hero entity) {
 		super(entity, 3, Entity.EntityAbility.ULTIMATE);
 		knives = new LinkedList<>();
 		setHasEffects(true);
 
-		// ..add initialization animation or not..
+		hero = entity;
+
+		initializeAnimation = new Animation(entity.getPosX(), entity.getPosY(), 60, -10, FILEPATH_ABILITY+ABILITY_NAME, 1, 400);
 	}
 
 	public void update() {
@@ -26,9 +32,14 @@ public class UltimateHuntersRequiemAbility extends Ability {
 
 		if (countDown > 0) {
 			countDown--;
-			setState(AbilityState.INITIALIZING);
+			initializeAnimation.shouldMirror(!entity.getFacingEast());
 		} else if (countDown == 0) {
-			// ..detonate all in list..
+			for (ExplodingKnifeProjectile knife : knives) {
+				knife.detonate();
+			}
+			knives.clear();
+			setState(AbilityState.IS_DONE);
+			resetCooldown();
 		}
 	}
 
@@ -36,18 +47,31 @@ public class UltimateHuntersRequiemAbility extends Ability {
 	public void setupAbility() {
 		super.setupAbility();
 		countDown = SHOOT_INTERVAL;
-		// ..create projectile here..
+		knives.clear();
 	}
 
 	public void didTrigger() {
 		if (countDown > 0) {
-			// ..create projectile..
+			ExplodingKnifeProjectile knife = new ExplodingKnifeProjectile(hero);
+			knives.add(knife);
+			effects.add(knife);
 		}
+	}
+
+	@Override
+	public void reset() {
+		super.reset();
+		countDown = 0;
 	}
 
 	@Override
 	public boolean shouldTrigger() {
 		return (countDown > 0);
+	}
+
+	@Override
+	public boolean allowsDirectionSwitching() {
+		return true;
 	}
 
 	public boolean didHitTarget(Entity target) {

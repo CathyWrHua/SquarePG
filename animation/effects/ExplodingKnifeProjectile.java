@@ -7,12 +7,13 @@ import characterEntities.HitDetectionHelper;
 import gui.DamageMarker;
 import javafx.scene.shape.Circle;
 
+import javax.annotation.PostConstruct;
 import java.awt.*;
 
 public class ExplodingKnifeProjectile extends Projectile {
 
 	static final int KNIFE_VELOCITY = 8;
-	private static int KNIFE_WIDTH = 100;
+	private static int KNIFE_WIDTH = 75;
 	private static int EXPLOSION_WIDTH = 75;
 	private static int EXPLOSION_RADIUS = 100;
 
@@ -23,17 +24,19 @@ public class ExplodingKnifeProjectile extends Projectile {
 	public ExplodingKnifeProjectile(Hero entity) {
 		super(entity,
 				entity.getMapCollisionDetection(),
-				null,
-				null,
+				new Animation(entity.getPosX(), entity.getPosY(), 75, 0, FILEPATH_EFFECTS+"explodingKnife", 1, 10),
+				new Animation(0, 0, 60,  10, FILEPATH_EFFECTS+"explodingKnifeCollided", 1, 10 ),
 				KNIFE_VELOCITY,
 				0);
+		posX += (entity.getFacingEast())? 0 : entity.getImageIcon().getIconWidth()-2*75-KNIFE_WIDTH;
+
 		this.detonationAnimation = new Animation(0, 0, 0, 0,FILEPATH_EFFECTS + "fireballExplosion", 4, 1);
 	}
 
 	public void detonate() {
 		hasDetonated = true;
-		posX = facingEast? regularAnimation.getSize().x+KNIFE_WIDTH/2 : regularAnimation.getSize().x-EXPLOSION_WIDTH/2;
-		posY = regularAnimation.getSize().y+regularAnimation.getSize().height/2 - EXPLOSION_WIDTH/2;
+		posX += facingEast? KNIFE_WIDTH/2 : -KNIFE_WIDTH/2;
+		posY += regularAnimation.getSize().height/2 - EXPLOSION_WIDTH/2;
 		this.detonationAnimation.setPosition(posX, posY);
 
 		findDetonationDamage();
@@ -46,6 +49,8 @@ public class ExplodingKnifeProjectile extends Projectile {
 				setHasCollided(true);
 
 				regularAnimation.killAnimation();
+
+				// ..calculate offset to make it look like it "sticks..
 				collisionAnimation.setPosition(posX, posY);
 			} else if (hasCollided) {
 				if (collidedTarget != null) {
@@ -53,8 +58,10 @@ public class ExplodingKnifeProjectile extends Projectile {
 					posY = collidedTarget.getPosY();
 				}
 				collisionAnimation.setPosition(posX, posY);
+				collisionAnimation.setNumLoops(10);
 			} else if (!hasCollided){
 				regularAnimation.setPosition(posX, posY);
+				regularAnimation.setNumLoops(10);
 			}
 		} else {
 			if (!detonationAnimation.isDone()) {
@@ -110,6 +117,14 @@ public class ExplodingKnifeProjectile extends Projectile {
 
 		if (damageMarker != null) {
 			targetMarkers.add(damageMarker);
+		}
+	}
+
+	@Override
+	public void draw(Graphics g) {
+		super.draw(g);
+		if (hasDetonated) {
+			detonationAnimation.draw(g);
 		}
 	}
 

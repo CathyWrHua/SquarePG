@@ -341,7 +341,7 @@ public abstract class Entity implements Drawable {
 	public void setLRMotionState(MotionStateLeftRight state) {
 		lrMotionState = state;
 
-		if (entityState != EntityState.NEUTRAL) return;
+		if (entityState != EntityState.NEUTRAL && !(entityState == EntityState.ATTACKING && currentAbility != null && currentAbility.allowsDirectionSwitching())) return;
 
 		if (state == MotionStateLeftRight.RIGHT) {
 			facingEast = true;
