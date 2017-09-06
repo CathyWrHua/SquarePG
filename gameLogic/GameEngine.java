@@ -91,7 +91,7 @@ public class GameEngine {
 	public void update() {
 		if (!isDoneRendering) return;
 
-		//TEMPORARY REMOVE WHEN WE HAVE LEGIT MAPS
+		//TEMPORARY: REMOVE WHEN WE HAVE LEGIT MAPS
 		//This is to avoid asynchronous heisenbugs of overwriting collision maps while a calculation is going on
 		//Can be removed once tests keys are removed (J and K)
 		collisionMap.setHitRectArray(gameMap.getCurrentCollisionMap());
@@ -263,8 +263,9 @@ public class GameEngine {
 			Effect effect = iterator.next();
 			effect.update();
 
-			if (effect.getEffectType() == Effect.EffectType.PROJECTILE_EFFECT) {
-				Projectile projectile = (Projectile) effect;
+			Projectile projectile = (effect instanceof Projectile ? (Projectile)effect : null);
+
+			if (projectile != null) {
 				damageMarkers.addAll(projectile.getTargetMarkers());
 				projectile.clearTargetMarkers();
 			}

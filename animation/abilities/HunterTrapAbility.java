@@ -1,5 +1,7 @@
 package animation.abilities;
 
+import animation.Animation;
+import animation.effects.HuntersTrapEffect;
 import characterEntities.Entity;
 
 public class HunterTrapAbility extends Ability {
@@ -8,12 +10,15 @@ public class HunterTrapAbility extends Ability {
 
 	public HunterTrapAbility(Entity entity) {
 		super(entity, 3, Entity.EntityAbility.THIRD);
-		// ..add initialization animation ..
+
+		setHasEffects(true);
+		//because cathy's lazy she's using the hunter's cloak init
+		initializeAnimation	= new Animation(entity.getPosX(), entity.getPosY(), -12, -12, FILEPATH_ABILITY+"huntersCloak", 1, 3);
 	}
 
 	public void update() {
 		if (state == AbilityState.INITIALIZING && (initializeAnimation != null && initializeAnimation.isDone())) {
-			// ..add effect here ..
+			effects.add(new HuntersTrapEffect(entity));
 		}
 
 		super.update();
@@ -26,6 +31,11 @@ public class HunterTrapAbility extends Ability {
 
 	public void didTrigger() {
 		//not a trigger ability
+	}
+
+	@Override
+	public boolean isRestrictingMovement() {
+		return true;
 	}
 
 	public boolean didHitTarget(Entity target) {

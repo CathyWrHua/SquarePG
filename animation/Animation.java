@@ -62,8 +62,16 @@ public class Animation implements Drawable {
 		return offsetX;
 	}
 
+	public void setOffsetX(int offsetX) {
+		this.offsetX = offsetX;
+	}
+
 	public int getOffsetY() {
 		return offsetY;
+	}
+
+	public void setOffsetY(int offsetY) {
+		this.offsetY = offsetY;
 	}
 
 	public void killAnimation() {

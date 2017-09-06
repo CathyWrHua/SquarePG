@@ -19,23 +19,23 @@ public class ExplodingKnifeProjectile extends Projectile {
 
 	private Animation detonationAnimation;
 	private boolean hasDetonated = false;
+	private boolean isFrontCollision = false;
 	private Entity collidedTarget;
 
 	public ExplodingKnifeProjectile(Hero entity) {
 		super(entity,
 				entity.getMapCollisionDetection(),
-				new Animation(entity.getPosX(), entity.getPosY(), 75, 0, FILEPATH_EFFECTS+"explodingKnife", 1, 10),
-				new Animation(0, 0, 60,  10, FILEPATH_EFFECTS+"explodingKnifeCollided", 1, 10 ),
+				new Animation(entity.getPosX(), entity.getPosY(), entity.getFacingEast()? 75: -75, 0, FILEPATH_EFFECTS+"explodingKnife", 1, 10),
+				new Animation(0, 0, (entity.getFacingEast())? 75 : -75,  0, FILEPATH_EFFECTS+"explodingKnifeCollided", 1, 10 ),
 				KNIFE_VELOCITY,
 				0);
-		posX += (entity.getFacingEast())? 0 : entity.getImageIcon().getIconWidth()-2*75-KNIFE_WIDTH;
 
 		this.detonationAnimation = new Animation(0, 0, 0, 0,FILEPATH_EFFECTS + "fireballExplosion", 4, 1);
 	}
 
 	public void detonate() {
 		hasDetonated = true;
-		posX += facingEast? KNIFE_WIDTH/2 : -KNIFE_WIDTH/2;
+		posX += facingEast? KNIFE_WIDTH : -KNIFE_WIDTH;
 		posY += regularAnimation.getSize().height/2 - EXPLOSION_WIDTH/2;
 		this.detonationAnimation.setPosition(posX, posY);
 
@@ -50,14 +50,22 @@ public class ExplodingKnifeProjectile extends Projectile {
 
 				regularAnimation.killAnimation();
 
-				// ..calculate offset to make it look like it "sticks..
+				if (collidedTarget != null) {
+					collisionAnimation.setOffsetY(posY - collidedTarget.getPosY());
+					collisionAnimation.setOffsetX(0);
+					isFrontCollision = findTargetCollideFront(collidedTarget);
+				}
+
 				collisionAnimation.setPosition(posX, posY);
 			} else if (hasCollided) {
 				if (collidedTarget != null) {
+					collisionAnimation.setOffsetX(!(collidedTarget.getFacingEast() ^ isFrontCollision)? collidedTarget.getEntitySize().width: -KNIFE_WIDTH);
+					collisionAnimation.shouldMirror(collidedTarget.getFacingEast());
+
 					posX = collidedTarget.getPosX();
 					posY = collidedTarget.getPosY();
+					collisionAnimation.setPosition(posX, posY);
 				}
-				collisionAnimation.setPosition(posX, posY);
 				collisionAnimation.setNumLoops(10);
 			} else if (!hasCollided){
 				regularAnimation.setPosition(posX, posY);
@@ -76,6 +84,8 @@ public class ExplodingKnifeProjectile extends Projectile {
 
 	@Override
 	protected boolean isCollide() {
+		// ..fix collision bugs/trigger points..
+
 		posX += velocityX;
 		posY += velocityY;
 
@@ -111,6 +121,15 @@ public class ExplodingKnifeProjectile extends Projectile {
 		}
 	}
 
+	@Override
+	public void draw(Graphics g) {
+		if (hasDetonated) {
+			detonationAnimation.draw(g);
+		} else {
+			super.draw(g);
+		}
+	}
+
 	private void dealDamage(int damage, Entity entity) {
 		DamageMarker damageMarker = null;
 		damageMarker = entity.inflict(damage, posX < entity.getPosX());
@@ -120,12 +139,7 @@ public class ExplodingKnifeProjectile extends Projectile {
 		}
 	}
 
-	@Override
-	public void draw(Graphics g) {
-		super.draw(g);
-		if (hasDetonated) {
-			detonationAnimation.draw(g);
-		}
+	private boolean findTargetCollideFront(Entity target) {
+		return (target.getPosX() > posX && !target.getFacingEast()) || (target.getPosX() < posX && target.getFacingEast());
 	}
-
 }

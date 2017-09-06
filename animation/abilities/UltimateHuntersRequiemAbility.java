@@ -34,12 +34,7 @@ public class UltimateHuntersRequiemAbility extends Ability {
 			countDown--;
 			initializeAnimation.shouldMirror(!entity.getFacingEast());
 		} else if (countDown == 0) {
-			for (ExplodingKnifeProjectile knife : knives) {
-				knife.detonate();
-			}
-			knives.clear();
 			setState(AbilityState.IS_DONE);
-			resetCooldown();
 		}
 	}
 
@@ -65,6 +60,15 @@ public class UltimateHuntersRequiemAbility extends Ability {
 	}
 
 	@Override
+	public void setState(AbilityState state) {
+		super.setState(state);
+
+		if (state == AbilityState.IS_DONE) {
+			detonateProjectiles();
+		}
+	}
+
+	@Override
 	public boolean shouldTrigger() {
 		return (countDown > 0);
 	}
@@ -83,5 +87,14 @@ public class UltimateHuntersRequiemAbility extends Ability {
 
 	public String getAbilityName() {
 		return ABILITY_NAME;
+	}
+
+	private void detonateProjectiles() {
+		for (ExplodingKnifeProjectile knife : knives) {
+			knife.detonate();
+		}
+		knives.clear();
+		resetCooldown();
+		countDown = 0;
 	}
 }

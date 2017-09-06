@@ -198,7 +198,8 @@ public abstract class Entity implements Drawable {
 			setEntityState(EntityState.ATTACKING);
 		}
 	}
-	
+
+	// ..require ability for inflict, to know whether it allows knockback or not (should default to true)..
 	public DamageMarker inflict(int damageTaken, Entity attacker) {
 		DamageMarker damageMarker;
 		this.damageTaken = damageTaken;
