@@ -1,7 +1,9 @@
 package characterEntities;
 
+import animation.abilities.HunterTrapAbility;
 import animation.abilities.HuntersCloakAbility;
 import animation.abilities.SingleArrowAbility;
+import animation.abilities.UltimateHuntersRequiemAbility;
 import gameLogic.MapCollisionDetection;
 
 import java.util.LinkedList;
@@ -21,9 +23,9 @@ public class YellowHero extends Hero {
 		if (pathIndex == 0 && path == CharacterProfile.Path.YELLOW) {
 			setAbility(2, new HuntersCloakAbility(this));
 		} else if (pathIndex == 1 && path == CharacterProfile.Path.YELLOW) {
-			setAbility(3, new SingleArrowAbility(this));
+			setAbility(3, new HunterTrapAbility(this));
 		} else if (pathIndex == 2 && path == CharacterProfile.Path.YELLOW) {
-			setAbility(4, new SingleArrowAbility(this));
+			setAbility(4, new UltimateHuntersRequiemAbility(this));
 		}
 
 		return true;

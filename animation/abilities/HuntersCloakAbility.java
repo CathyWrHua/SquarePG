@@ -8,7 +8,7 @@ import characterEntities.characterEffects.SpeedBuff;
 public class HuntersCloakAbility extends Ability {
 
 	static final String ABILITY_NAME = "huntersCloak";
-	static final double ABILITY_DURATION = 2.5;
+	static final double ABILITY_DURATION = 5;
 
 	public HuntersCloakAbility(Entity entity) {
 		super(entity, 3, Entity.EntityAbility.SECOND);

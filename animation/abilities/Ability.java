@@ -190,6 +190,10 @@ public abstract class Ability implements Drawable {
 		return false;
 	}
 
+	public boolean allowsDirectionSwitching() {
+		return false;
+	}
+
 	public abstract void didTrigger();
 	public abstract boolean didHitTarget(Entity target);
 	public abstract int dealDamage(int baseDamage);
