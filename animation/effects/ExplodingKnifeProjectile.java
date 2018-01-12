@@ -22,6 +22,7 @@ public class ExplodingKnifeProjectile extends Projectile {
 	private boolean isFrontCollision = false;
 	private Entity collidedTarget;
 
+	//TODO:fix location of knife when it is thrown near the border
 	public ExplodingKnifeProjectile(Hero entity) {
 		super(entity,
 				entity.getMapCollisionDetection(),
@@ -33,6 +34,8 @@ public class ExplodingKnifeProjectile extends Projectile {
 		this.detonationAnimation = new Animation(0, 0, 0, 0,FILEPATH_EFFECTS + "fireballExplosion", 4, 1);
 	}
 
+	//TODO:fix detonation animation location
+	//TODO:fix bug where sometimes animation does not show up (determine if it is a bug)
 	public void detonate() {
 		hasDetonated = true;
 		posX += facingEast? KNIFE_WIDTH : -KNIFE_WIDTH;
