@@ -301,10 +301,13 @@ public class GameEngine {
 	}
 
 	private void createEnemy(int health, int maxDamage, int minDamage, int posX, int posY, double velocity) {
-		Grunt grunt = new Grunt(player, collisionMap, health, maxDamage, minDamage, posX, posY, velocity);
+//		Grunt grunt = new Grunt(player, collisionMap, health, maxDamage, minDamage, posX, posY, velocity);
+
+		Enemy grunt = gameMap.creatNewEnemy(player, collisionMap);
 		targets.add(grunt);
 		player.notifyEnemyCreation(grunt);
 		layerRenderMap.get(MapLayer.ENTITY_LAYER.getValue()).add(grunt);
+
 	}
 
 	private void createDummy(int posX, int posY, boolean facingEast) {

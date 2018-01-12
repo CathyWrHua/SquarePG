@@ -1,5 +1,8 @@
 package gameLogic;
 
+import characterEntities.Enemy;
+import characterEntities.Grunt;
+
 public class GameMapPresets {
 	private static final int[][][] LEVEL_ONE_MAPS = {
 			{

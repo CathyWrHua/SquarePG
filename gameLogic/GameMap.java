@@ -1,5 +1,7 @@
 package gameLogic;
 
+import characterEntities.Enemy;
+import characterEntities.Hero;
 import screens.Drawable;
 
 import java.awt.*;
@@ -99,5 +101,22 @@ public class GameMap implements Drawable {
 			hitRectMap.add(new Rectangle(0, 775, 1000, 25));
 		}
 		return hitRectMap;
+	}
+
+	//Example of how to instantiate an enemy from preset
+	public Enemy creatNewEnemy(Hero hero, MapCollisionDetection map) {
+		EnemyGenInfo info = new EnemyGenInfo(EnemyGenInfo.EnemyType.GRUNT, 0);
+
+		Enemy grunt = null;
+
+		try {
+			grunt = (Enemy) info.getEnemyClass().getConstructor(Hero.class, MapCollisionDetection.class, int.class, int.class, int.class, int.class, int.class, double.class)
+					.newInstance(hero, map, 10, 6, 2, 100, 100, 1.2d);
+		} catch (Exception e) {
+
+		}
+
+		return grunt;
+
 	}
 }
