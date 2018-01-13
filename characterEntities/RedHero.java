@@ -1,5 +1,6 @@
 package characterEntities;
 
+import animation.abilities.BladeSwingAbility;
 import animation.abilities.BladeWhirlAbility;
 import animation.abilities.LightningDrawAbility;
 import animation.abilities.UltimateAssassinAbility;
@@ -12,7 +13,7 @@ public class RedHero extends Hero {
 	public RedHero(LinkedList<Entity> targets, MapCollisionDetection mapCollisionDetection) {
 		super(targets, mapCollisionDetection, 30, 15, 5, 100, 100, 5);
 		setPlayerClass(PlayerClass.RED);
-		setAbility(1, new BladeWhirlAbility(this));
+		setAbility(1, new BladeSwingAbility(this));
 		setImageIcon("src/assets/hero/redNeutral.png");
 	}
 
