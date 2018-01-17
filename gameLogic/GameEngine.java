@@ -13,6 +13,7 @@ import java.awt.*;
 import java.util.Iterator;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.Stack;
 
 public class GameEngine {
 	public enum MapLayer {
@@ -70,7 +71,6 @@ public class GameEngine {
 		createAbilityBar(player);
 		createDummy(400, 100, true);
 		createDummy(600, 100, false);
-		createEnemy(20, 2, 1, 500, 500 ,2);
 	}
 
 	private void createLayerRenderMap() {
@@ -127,9 +127,9 @@ public class GameEngine {
 		}
 
 		//TEMPORARY TEST CODE TO REGENERATE ENEMY
-		if (targets.size() == 2) {
-			createEnemy(20, 2, 1, 100, 100, 2);
-		}
+//		if (targets.size() == 2) {
+//			createEnemy(20, 2, 1, 100, 100, 2);
+//		}
 	}
 
 	public void paint(Graphics g) {
@@ -212,7 +212,6 @@ public class GameEngine {
 	}
 
 	// Private helper functions
-
 	private void updateEnemies() {
 		for (Iterator<Entity> iterator = targets.iterator(); iterator.hasNext();) {
 			Entity target = iterator.next();
@@ -254,6 +253,20 @@ public class GameEngine {
 				target.update();
 			}
 		}
+
+		//Generate enemies
+		Stack<EnemyGenInfo> enemyStack = GameMapPresets.getEnemyGenInfo()[level-1][map-1];
+		if (enemyStack != null && !enemyStack.empty()) {
+			if (enemyStack.peek().getSpawnDelayCounter() == 0) {
+				Enemy enemy = createEnemyFromInfo(enemyStack.pop());
+				targets.add(enemy);
+				player.notifyEnemyCreation(enemy);
+				layerRenderMap.get(MapLayer.ENTITY_LAYER.getValue()).add(enemy);
+			} else {
+				enemyStack.peek().decreaseSpawnDelayCounter();
+			}
+		}
+
 	}
 
 	private void updateEffects() {
@@ -300,11 +313,18 @@ public class GameEngine {
 		layerRenderMap.get(MapLayer.ENTITY_LAYER.getValue()).add(player);
 	}
 
-	private void createEnemy(int health, int maxDamage, int minDamage, int posX, int posY, double velocity) {
-		Grunt grunt = new Grunt(player, collisionMap, health, maxDamage, minDamage, posX, posY, velocity);
-		targets.add(grunt);
-		player.notifyEnemyCreation(grunt);
-		layerRenderMap.get(MapLayer.ENTITY_LAYER.getValue()).add(grunt);
+	private Enemy createEnemyFromInfo(EnemyGenInfo info) {
+		Enemy enemy = null;
+
+		try {
+			enemy = (Enemy) info.getEnemyClass().getConstructor(Hero.class, MapCollisionDetection.class, int.class, int.class, int.class, int.class, int.class, double.class)
+					.newInstance(player, collisionMap, info.getMaxHealth(), info.getMaxDamage(), info.getMinDamage(), info.getSpawnLocation().x, info.getSpawnLocation().y, info.getVelocity());
+		} catch (Exception e) {
+			System.out.print(e);
+			//todo lots of error catching
+		}
+
+		return enemy;
 	}
 
 	private void createDummy(int posX, int posY, boolean facingEast) {

@@ -125,8 +125,6 @@ public abstract class Enemy extends Entity {
 				randomTargetPoint = new Point(random.nextInt(900), random.nextInt(700));
 			}
 		}
-
-
 	}
 
 	public void update() {
