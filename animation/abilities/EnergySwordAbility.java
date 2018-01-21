@@ -19,7 +19,8 @@ public class EnergySwordAbility extends Ability {
 		super(player, 2, Entity.EntityAbility.FIRST);
 		targets = player.getTargets();
 
-		canDamageAnimation = new Animation(0, 0, -10, -50, FILEPATH_ABILITY+"energySword", 1, 3);
+		initializeAnimation = new Animation(0, 0, -10, -50, FILEPATH_ABILITY+ABILITY_NAME+"Charge", 4, 1);
+		canDamageAnimation = new Animation(0, 0, -10, -50, FILEPATH_ABILITY+ABILITY_NAME, 3, 1);
 	}
 
 	public void setupAbility() {
@@ -30,6 +31,7 @@ public class EnergySwordAbility extends Ability {
 		}
 
 		if (currentTarget != null) {
+			initializeAnimation.setPosition(currentTarget.getPosX(), currentTarget.getPosY());
 			canDamageAnimation.setPosition(currentTarget.getPosX(), currentTarget.getPosY());
 		}
 	}
@@ -38,6 +40,7 @@ public class EnergySwordAbility extends Ability {
 		super.update();
 
 		if (currentTarget != null) {
+			initializeAnimation.setPosition(currentTarget.getPosX(), currentTarget.getPosY());
 			canDamageAnimation.setPosition(currentTarget.getPosX(), currentTarget.getPosY());
 		}
 	}
