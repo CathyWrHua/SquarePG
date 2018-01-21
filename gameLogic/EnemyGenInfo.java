@@ -11,16 +11,13 @@ public class EnemyGenInfo {
 	}
 
 	private EnemyType enemyType;
+	private Point spawnLocation;
 
 	//Spawn delay represents the delay of spawn from previous enemy spawn
 	//Alternatively, the delay from when the obj becomes tos and when it should spawn
-	//TODO:decide where delay seconds gets converted to update cycles
-	private int spawnDelayCounter;
-	private Point spawnLocation;
 
-	public EnemyGenInfo (EnemyType type, int spawnDelay, Point location) {
+	public EnemyGenInfo (EnemyType type, Point location) {
 		enemyType = type;
-		spawnDelayCounter = spawnDelay;
 		spawnLocation = location;
 	}
 
@@ -30,16 +27,6 @@ public class EnemyGenInfo {
 				return Grunt.class;
 			default:
 				return Grunt.class;
-		}
-	}
-
-	public int getSpawnDelayCounter() {
-		return spawnDelayCounter;
-	}
-
-	public void decreaseSpawnDelayCounter() {
-		if (spawnDelayCounter > 0) {
-			spawnDelayCounter--;
 		}
 	}
 
