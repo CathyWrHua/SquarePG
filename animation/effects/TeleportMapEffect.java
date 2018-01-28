@@ -7,7 +7,7 @@ public class TeleportMapEffect extends Effect {
 	private boolean isKilled = false;
 
 	public TeleportMapEffect(int posX, int posY) {
-		super(posX, posY, new Animation(posX, posY, 0, 0, FILEPATH_EFFECTS+"teleportMark", 1, 2), null, EffectType.BACKGROUND_EFFECT);
+		super(posX, posY, new Animation(posX, posY, -20, -20, FILEPATH_EFFECTS+"teleportMark", 1, 2), null, EffectType.BACKGROUND_EFFECT);
 	}
 
 	public void killEffect() {
