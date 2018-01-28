@@ -11,6 +11,7 @@ import screens.Drawable;
 import javax.swing.*;
 import java.awt.*;
 import java.util.*;
+import java.util.function.Predicate;
 
 public abstract class Entity implements Drawable {
 	protected int posX, posY;
@@ -395,6 +396,13 @@ public abstract class Entity implements Drawable {
 
 	public void addCharacterEffect(CharacterEffect effect) {
 		if (effect != null) {
+			for(Iterator<CharacterEffect> iterator = characterEffects.iterator(); iterator.hasNext();) {
+				CharacterEffect characterEffect = iterator.next();
+				if (characterEffect.getClass().getName().equals(effect.getClass().getName())) {
+					characterEffect.removeEffect();
+					iterator.remove();
+				}
+			}
 			characterEffects.add(effect);
 			effect.applyEffect();
 		}

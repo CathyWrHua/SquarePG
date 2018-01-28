@@ -18,7 +18,7 @@ public class HuntersCloakAbility extends Ability {
 	public HuntersCloakAbility(Entity entity) {
 		super(entity, 3, Entity.EntityAbility.SECOND);
 
-		initializeAnimation	= new Animation(entity.getPosX(), entity.getPosY(), -12, -12, FILEPATH_ABILITY+ABILITY_NAME, 3, 1);
+		initializeAnimation	= new Animation(entity.getPosX(), entity.getPosY(), -12, -12, FILEPATH_ABILITY+ABILITY_NAME, 5, 1);
 		setHasEffects(true);
 	}
 

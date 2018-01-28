@@ -2,7 +2,7 @@ package characterEntities.characterEffects;
 
 import characterEntities.Entity;
 
-public class InvisibilityBuff extends Buff{
+public class InvisibilityBuff extends Buff {
 
 	public InvisibilityBuff(double seconds, Entity player) {
 		super(seconds, player, null);
