@@ -255,17 +255,17 @@ public class GameEngine {
 		}
 
 		//Generate enemies
-		Stack<EnemyGenInfo> enemyStack = GameMapPresets.getEnemyGenInfo()[level-1][map-1];
-		if (enemyStack != null && !enemyStack.empty()) {
-			if (enemyStack.peek().getSpawnDelayCounter() == 0) {
-				Enemy enemy = createEnemyFromInfo(enemyStack.pop());
-				targets.add(enemy);
-				player.notifyEnemyCreation(enemy);
-				layerRenderMap.get(MapLayer.ENTITY_LAYER.getValue()).add(enemy);
-			} else {
-				enemyStack.peek().decreaseSpawnDelayCounter();
-			}
-		}
+//		Stack<EnemyGenInfo> enemyStack = GameMapPresets.getEnemyGenInfo()[level-1][map-1];
+//		if (enemyStack != null && !enemyStack.empty()) {
+//			if (enemyStack.peek().getSpawnDelayCounter() == 0) {
+//				Enemy enemy = createEnemyFromInfo(enemyStack.pop());
+//				targets.add(enemy);
+//				player.notifyEnemyCreation(enemy);
+//				layerRenderMap.get(MapLayer.ENTITY_LAYER.getValue()).add(enemy);
+//			} else {
+//				enemyStack.peek().decreaseSpawnDelayCounter();
+//			}
+//		}
 
 	}
 
