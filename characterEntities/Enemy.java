@@ -1,8 +1,11 @@
 package characterEntities;
 
+import SquarePG.SquarePG;
 import animation.abilities.Ability;
 import gameLogic.MapCollisionDetection;
 import gui.DamageMarker;
+import screens.GameScreen;
+
 import java.util.Collections;
 import java.util.HashMap;
 
@@ -33,6 +36,8 @@ public abstract class Enemy extends Entity {
 
 	//for when the enemy AI is targetting random target
 	private Point randomTargetPoint;
+	private final int RANDOM_POINT_LIFETIME = 60; //updates target every 60 updates
+	private int randomTargetCounter = 0;
 
 	private static final int DELETION_TIME = 40;
 
@@ -48,7 +53,7 @@ public abstract class Enemy extends Entity {
 
 		done = false;
 		entityType = EntityType.ENEMY;
-		randomTargetPoint = new Point(random.nextInt(900), random.nextInt(700));
+		randomTargetPoint = new Point(random.nextInt(GameScreen.GAME_SCREEN_WIDTH), random.nextInt(GameScreen.GAME_SCREEN_HEIGHT));
 	}
 
 	public boolean isDone() {
@@ -125,9 +130,11 @@ public abstract class Enemy extends Entity {
 			if (targetEntity.getEntityState() != EntityState.DEAD) {
 				attack(EntityAbility.DEFAULT);
 			}
-			if (targetEntity.isInvisible()) {
-				randomTargetPoint = new Point(random.nextInt(900), random.nextInt(700));
-			}
+		}
+
+		if (targetEntity.isInvisible() && randomTargetCounter == 0) {
+			randomTargetPoint = new Point(random.nextInt(GameScreen.GAME_SCREEN_WIDTH), random.nextInt(GameScreen.GAME_SCREEN_HEIGHT));
+			randomTargetCounter = RANDOM_POINT_LIFETIME;
 		}
 	}
 
@@ -152,6 +159,8 @@ public abstract class Enemy extends Entity {
 		entityList.addAll(comrades);
 		entityList.add(targetEntity);
 		setPoint(mapCollisionDetection.determineMotion(newPosX, newPosY, getEntitySize(), entityList));
+
+		randomTargetCounter -= (randomTargetCounter > 0)? 1:0;
 	}
 
 	@Override

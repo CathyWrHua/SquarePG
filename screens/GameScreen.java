@@ -27,12 +27,15 @@ public class GameScreen extends Screen implements KeyListener, MouseListener {
 	private Queue<Entity.EntityAbility> attackKeys;
 	private GameState gameState = GameState.GAME_STATE_MAP;
 
+	public static final int GAME_SCREEN_WIDTH = 1000;
+	public static final int GAME_SCREEN_HEIGHT = 925;
+
 	//Member variable is to make any changes to gameMap synchronized with main thread. Delete in non-dev mode
 	private int toggleMap;
 	
 	public GameScreen(Hero.PlayerClass playerClass) {
 		super();
-		setPreferredSize(new Dimension(1000, 925));
+		setPreferredSize(new Dimension(GAME_SCREEN_WIDTH, GAME_SCREEN_HEIGHT));
 		addKeyListener(this);
 		setFocusable(true);
 		setFocusTraversalKeysEnabled(false);
