@@ -13,8 +13,7 @@ public class EnergySwordAbility extends Ability {
 	private LinkedList<Entity> targets;
 	private static final String ABILITY_NAME = "energySword";
 	private final double ENERGY_SWORD_RADIUS = 300;
-
-	//TODO: Animations should be projectiles
+	
 	public EnergySwordAbility(Hero player) {
 		super(player, 2, Entity.EntityAbility.FIRST);
 		targets = player.getTargets();
