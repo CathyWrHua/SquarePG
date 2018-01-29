@@ -13,6 +13,7 @@ import java.awt.*;
 import java.util.Iterator;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Stack;
 
 public class GameEngine {
@@ -57,6 +58,9 @@ public class GameEngine {
 	private LinkedList<Entity> targets;
 	private LinkedList<Effect> effects;
 	private ArrayList<LinkedList<Drawable>> layerRenderMap;
+
+	//For testing with dummies on the map, remove when dummies are removed
+	private final int NUMBER_DUMMIES = 2;
 
 	public GameEngine(Hero.PlayerClass playerClass) {
 		targets = new LinkedList<>();
@@ -251,17 +255,23 @@ public class GameEngine {
 			}
 		}
 
-		// Generate enemies
-		Stack<EnemyGenInfo> enemyStack = GameMapPresets.getEnemyGenInfo()[level-1][map-1];
-		if (enemyStack != null && !enemyStack.empty()) {
-			if (enemyStack.peek().getSpawnDelayCounter() == 0) {
-				Enemy enemy = createEnemyFromInfo(enemyStack.pop());
+		//Generate enemies
+		WaveGenInfo currentWave = GameMapPresets.getEnemyWaveInfo()[level-1][map-1].peek();
+		if (currentWave != null) {
+			if (currentWave.waveIsComplete()) {
+				if (targets.size() <= NUMBER_DUMMIES) {
+					GameMapPresets.getEnemyWaveInfo()[level-1][map-1].remove();
+				}
+			} else if (currentWave.shouldGenerateNextEnemy()){
+				Enemy enemy = createEnemyFromInfo(currentWave.getNextEnemyInfo());
 				targets.add(enemy);
 				player.notifyEnemyCreation(enemy);
 				layerRenderMap.get(MapLayer.ENTITY_LAYER.getValue()).add(enemy);
 			} else {
-				enemyStack.peek().decreaseSpawnDelayCounter();
+				currentWave.decrementCounter();
 			}
+		} else {
+			//This happens when either an error occurred or the current level is complete
 		}
 	}
 

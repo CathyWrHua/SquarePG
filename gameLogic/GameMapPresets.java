@@ -1,11 +1,14 @@
 package gameLogic;
 
 import java.awt.*;
-import java.util.Stack;
+import java.util.LinkedList;
+import java.util.Queue;
 
 public class GameMapPresets {
 
-	private static Stack<EnemyGenInfo>[][] enemyGenInfo;
+	private static Queue<WaveGenInfo>[][] waveGenInfo;
+	private static final int NUMBER_LEVELS = 1;
+	private static final int MAX_NUMBER_SUBLEVELS = 4;
 
 	private static final int[][][] LEVEL_ONE_MAPS = {
 			{
@@ -53,24 +56,27 @@ public class GameMapPresets {
 			}
 	};
 
-	public static Stack<EnemyGenInfo>[][] getEnemyGenInfo() {
-		if (enemyGenInfo == null) {
+	public static Queue<WaveGenInfo>[][] getEnemyWaveInfo() {
+		if (waveGenInfo == null) {
 			makeEnemyGenInfo();
 		}
 
-		return enemyGenInfo;
+		return waveGenInfo;
 	}
 
 	private static void makeEnemyGenInfo() {
-		enemyGenInfo = new Stack[GameMap.TOTAL_LEVELS][GameMap.MAPS_PER_LEVEL];
+		waveGenInfo = new LinkedList[GameMap.TOTAL_LEVELS][GameMap.MAPS_PER_LEVEL];
 
 		//Sample map 1.1 enemy generation information
-		Stack<EnemyGenInfo> mapOneOne = new Stack<>();
-		mapOneOne.push(new EnemyGenInfo(EnemyGenInfo.EnemyType.GRUNT, 500, new Point(70, 70)));
-		mapOneOne.push(new EnemyGenInfo(EnemyGenInfo.EnemyType.GRUNT, 200, new Point(500, 500)));
-		mapOneOne.push(new EnemyGenInfo(EnemyGenInfo.EnemyType.GRUNT, 0, new Point(300, 300)));
+		Queue<EnemyGenInfo> mapOneOneFirst = new LinkedList<>();
+		mapOneOneFirst.add(new EnemyGenInfo(EnemyGenInfo.EnemyType.GRUNT, new Point(70, 70)));
+		mapOneOneFirst.add(new EnemyGenInfo(EnemyGenInfo.EnemyType.GRUNT, new Point(500, 500)));
+		mapOneOneFirst.add(new EnemyGenInfo(EnemyGenInfo.EnemyType.GRUNT, new Point(300, 300)));
 
-		enemyGenInfo[0][0] = mapOneOne;
+		LinkedList<WaveGenInfo> mapOneOne = new LinkedList<>();
+		mapOneOne.add(new WaveGenInfo(mapOneOneFirst));
+
+		waveGenInfo[0][0] = mapOneOne;
 	}
 
 	public static final int[][][][] LEVEL_MAPS = {
