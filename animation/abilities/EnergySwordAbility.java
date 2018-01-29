@@ -19,8 +19,6 @@ public class EnergySwordAbility extends Ability {
 		super(player, 2, Entity.EntityAbility.FIRST);
 		targets = player.getTargets();
 		setHasEffects(true);
-		//initializeAnimation = new Animation(0, 0, -10, -50, FILEPATH_ABILITY+ABILITY_NAME+"Charge", 4, 1);
-		//canDamageAnimation = new Animation(0, 0, -10, -50, FILEPATH_ABILITY+ABILITY_NAME, 3, 1);
 	}
 
 	@Override
@@ -30,11 +28,6 @@ public class EnergySwordAbility extends Ability {
 		if (targets != null) {
 			findTargets();
 		}
-
-//		if (currentTarget != null) {
-//			initializeAnimation.setPosition(currentTarget.getPosX(), currentTarget.getPosY());
-//			canDamageAnimation.setPosition(currentTarget.getPosX(), currentTarget.getPosY());
-//		}
 	}
 
 	@Override
@@ -42,25 +35,10 @@ public class EnergySwordAbility extends Ability {
 		super.update();
 	}
 
-
-
 	@Override
 	public int dealDamage(int baseDamage) {
 		return baseDamage;
 	}
-
-//	public void update() {
-//		super.update();
-//
-//		if (currentTarget != null) {
-//			initializeAnimation.setPosition(currentTarget.getPosX(), currentTarget.getPosY());
-//			canDamageAnimation.setPosition(currentTarget.getPosX(), currentTarget.getPosY());
-//		}
-//	}
-//
-//	public void reset() {
-//		super.reset();
-//	}
 
 	@Override
 	public void didTrigger() {}
@@ -68,15 +46,6 @@ public class EnergySwordAbility extends Ability {
 	public boolean hasEffects() {
 		return super.hasEffects();
 	}
-
-
-//	public boolean didHitTarget(Entity target) {
-//		return (target != null && currentTarget != null && target == currentTarget);
-//	}
-
-//	public int dealDamage(int baseDamage) {
-//		return Math.round(baseDamage*DAMAGE_MULTIPLIER);
-//	}
 
 	@Override
 	public String getAbilityName() {
@@ -90,23 +59,10 @@ public class EnergySwordAbility extends Ability {
 				effects.add(new EnergySwordProjectile((Hero) entity, target));
 			}
 		}
-
-
-//		double minDistance = HitDetectionHelper.calculateDistance(targets.getFirst().getEntitySize(), entity.getEntitySize());
-//		currentTarget = targets.getFirst();
-//
-//		for (Entity target:targets) {
-//			double distance = HitDetectionHelper.calculateDistance(target.getEntitySize(), entity.getEntitySize());
-//			if (distance < minDistance) {
-//				currentTarget = target;
-//				minDistance = distance;
-//			}
-//		}
 	}
 
 	@Override
 	public boolean didHitTarget(Entity target) {
 		return false;
 	}
-
 }
