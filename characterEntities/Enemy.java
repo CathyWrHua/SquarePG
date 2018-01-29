@@ -29,6 +29,7 @@ public abstract class Enemy extends Entity {
 	protected EnemyType enemyType;
 	protected HashMap<Integer, String> shapePath;
 	private Entity targetEntity;
+	private LinkedList<Entity> comrades;
 
 	//for when the enemy AI is targetting random target
 	private Point randomTargetPoint;
@@ -38,6 +39,9 @@ public abstract class Enemy extends Entity {
 	Enemy(Entity targetEntity, MapCollisionDetection mapCollisionDetection, int maxHealth, int maxDamage, int minDamage, int posX, int posY, double velocity) {
 		super(mapCollisionDetection, maxHealth, maxDamage, minDamage, posX, posY, velocity);
 		this.targetEntity = targetEntity;
+
+		//Assume binary logic: Target's enemies are my friends
+		comrades = targetEntity.getTargets();
 
 		immuneTo.put(targetEntity, false);
 		createEnemyHashMap();
@@ -143,7 +147,11 @@ public abstract class Enemy extends Entity {
 				calculateTargetsDamage(currentAbility);
 			}
 		}
-		setPoint(mapCollisionDetection.determineMotion(newPosX, newPosY, getEntitySize(), new LinkedList<>(Collections.singletonList(targetEntity))));
+
+		LinkedList<Entity> entityList = new LinkedList<>();
+		entityList.addAll(comrades);
+		entityList.add(targetEntity);
+		setPoint(mapCollisionDetection.determineMotion(newPosX, newPosY, getEntitySize(), entityList));
 	}
 
 	@Override
