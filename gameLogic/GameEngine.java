@@ -178,12 +178,9 @@ public class GameEngine {
 	}
 
 	public void toggleMap(int change) {
-		this.map += change;
-		if (map > GameMap.MAPS_PER_LEVEL) {
-			map = GameMap.MAPS_PER_LEVEL;
-		} else if (map < 1) {
-			map = 1;
-		}
+		map--;
+		map = Math.floorMod(map+change, GameMap.MAPS_PER_LEVEL);
+		map++;
 		gameMap.setStage(level, map);
 	}
 
@@ -254,19 +251,18 @@ public class GameEngine {
 			}
 		}
 
-		//Generate enemies
-//		Stack<EnemyGenInfo> enemyStack = GameMapPresets.getEnemyGenInfo()[level-1][map-1];
-//		if (enemyStack != null && !enemyStack.empty()) {
-//			if (enemyStack.peek().getSpawnDelayCounter() == 0) {
-//				Enemy enemy = createEnemyFromInfo(enemyStack.pop());
-//				targets.add(enemy);
-//				player.notifyEnemyCreation(enemy);
-//				layerRenderMap.get(MapLayer.ENTITY_LAYER.getValue()).add(enemy);
-//			} else {
-//				enemyStack.peek().decreaseSpawnDelayCounter();
-//			}
-//		}
-
+		// Generate enemies
+		Stack<EnemyGenInfo> enemyStack = GameMapPresets.getEnemyGenInfo()[level-1][map-1];
+		if (enemyStack != null && !enemyStack.empty()) {
+			if (enemyStack.peek().getSpawnDelayCounter() == 0) {
+				Enemy enemy = createEnemyFromInfo(enemyStack.pop());
+				targets.add(enemy);
+				player.notifyEnemyCreation(enemy);
+				layerRenderMap.get(MapLayer.ENTITY_LAYER.getValue()).add(enemy);
+			} else {
+				enemyStack.peek().decreaseSpawnDelayCounter();
+			}
+		}
 	}
 
 	private void updateEffects() {

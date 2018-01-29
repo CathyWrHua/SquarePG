@@ -6,8 +6,6 @@ import java.util.Stack;
 public class GameMapPresets {
 
 	private static Stack<EnemyGenInfo>[][] enemyGenInfo;
-	private static final int NUMBER_LEVELS = 1;
-	private static final int MAX_NUMBER_SUBLEVELS = 4;
 
 	private static final int[][][] LEVEL_ONE_MAPS = {
 			{
@@ -64,7 +62,7 @@ public class GameMapPresets {
 	}
 
 	private static void makeEnemyGenInfo() {
-		enemyGenInfo = new Stack[NUMBER_LEVELS][MAX_NUMBER_SUBLEVELS];
+		enemyGenInfo = new Stack[GameMap.TOTAL_LEVELS][GameMap.MAPS_PER_LEVEL];
 
 		//Sample map 1.1 enemy generation information
 		Stack<EnemyGenInfo> mapOneOne = new Stack<>();

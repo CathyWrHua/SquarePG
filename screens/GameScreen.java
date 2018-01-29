@@ -26,6 +26,9 @@ public class GameScreen extends Screen implements KeyListener, MouseListener {
 	private HashSet<Integer> motionKeys;
 	private Queue<Entity.EntityAbility> attackKeys;
 	private GameState gameState = GameState.GAME_STATE_MAP;
+
+	//Member variable is to make any changes to gameMap synchronized with main thread. Delete in non-dev mode
+	private int toggleMap;
 	
 	public GameScreen(Hero.PlayerClass playerClass) {
 		super();
@@ -52,6 +55,7 @@ public class GameScreen extends Screen implements KeyListener, MouseListener {
 	public void update() {
 		switch (gameState) {
 			case GAME_STATE_MAP:
+				consumeToggleMap();
 				consumeAttack();
 				gameEngine.update();
 				break;
@@ -88,9 +92,9 @@ public class GameScreen extends Screen implements KeyListener, MouseListener {
 		}
 
 		if (e.getKeyCode() == KeyEvent.VK_J) {
-			gameEngine.toggleMap(-1);
+			toggleMap = -1;
 		} else if (e.getKeyCode() == KeyEvent.VK_K) {
-			gameEngine.toggleMap(1);
+			toggleMap = 1;
 		} else if (e.getKeyCode() == KeyEvent.VK_A) {
 			attackKeys.add(Entity.EntityAbility.DEFAULT);
 		} else if (e.getKeyCode() == KeyEvent.VK_Q) {
@@ -195,6 +199,13 @@ public class GameScreen extends Screen implements KeyListener, MouseListener {
 	private void consumeAttack() {
 		if (attackKeys != null && attackKeys.peek() != null) {
 			gameEngine.playerDidAttack(attackKeys.remove());
+		}
+	}
+
+	private void consumeToggleMap() {
+		if (toggleMap != 0) {
+			gameEngine.toggleMap(toggleMap);
+			toggleMap = 0;
 		}
 	}
 
