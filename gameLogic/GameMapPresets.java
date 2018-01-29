@@ -65,7 +65,7 @@ public class GameMapPresets {
 	}
 
 	private static void makeEnemyGenInfo() {
-		waveGenInfo = new LinkedList[NUMBER_LEVELS][MAX_NUMBER_SUBLEVELS];
+		waveGenInfo = new LinkedList[GameMap.TOTAL_LEVELS][GameMap.MAPS_PER_LEVEL];
 
 		//Sample map 1.1 enemy generation information
 		Queue<EnemyGenInfo> mapOneOneFirst = new LinkedList<>();

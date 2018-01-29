@@ -182,12 +182,9 @@ public class GameEngine {
 	}
 
 	public void toggleMap(int change) {
-		this.map += change;
-		if (map > GameMap.MAPS_PER_LEVEL) {
-			map = GameMap.MAPS_PER_LEVEL;
-		} else if (map < 1) {
-			map = 1;
-		}
+		map--;
+		map = Math.floorMod(map+change, GameMap.MAPS_PER_LEVEL);
+		map++;
 		gameMap.setStage(level, map);
 	}
 
@@ -259,7 +256,8 @@ public class GameEngine {
 		}
 
 		//Generate enemies
-		WaveGenInfo currentWave = GameMapPresets.getEnemyWaveInfo()[level-1][map-1].peek();
+		Queue<WaveGenInfo> queue = GameMapPresets.getEnemyWaveInfo()[level-1][map-1];
+		WaveGenInfo currentWave = (queue != null)? queue.peek(): null;
 		if (currentWave != null) {
 			if (currentWave.waveIsComplete()) {
 				if (targets.size() <= NUMBER_DUMMIES) {
@@ -274,7 +272,8 @@ public class GameEngine {
 				currentWave.decrementCounter();
 			}
 		} else {
-			//This is happens when either an error occurred or the current level is complete
+			//This happens when either an error occurred or the current level is complete
+			//TODO: if level is complete, take action
 		}
 	}
 
