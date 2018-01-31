@@ -34,7 +34,7 @@ public class TeleportAbility extends Ability {
 	public void update() {
 		if (state == AbilityState.INITIALIZING && initializeAnimation.isDone()) {
 			teleportPoint = new Point(entity.getPosX(), entity.getPosY());
-			teleportMark = new TeleportMapEffect(entity.getPosX()-20, entity.getPosY()-20);
+			teleportMark = new TeleportMapEffect(entity.getPosX(), entity.getPosY());
 			effects.add(teleportMark);
 		}
 

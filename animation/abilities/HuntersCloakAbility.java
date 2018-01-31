@@ -1,25 +1,33 @@
 package animation.abilities;
 
 import animation.Animation;
+import animation.effects.SmokeBombEffect;
 import characterEntities.Entity;
 import characterEntities.characterEffects.InvisibilityBuff;
 import characterEntities.characterEffects.SpeedBuff;
+
+import java.awt.*;
 
 public class HuntersCloakAbility extends Ability {
 
 	static final String ABILITY_NAME = "huntersCloak";
 	static final double ABILITY_DURATION = 5;
 
+	private SmokeBombEffect smokeBombEffect;
+
 	public HuntersCloakAbility(Entity entity) {
 		super(entity, 3, Entity.EntityAbility.SECOND);
 
-		initializeAnimation	= new Animation(entity.getPosX(), entity.getPosY(), -12, -12, FILEPATH_ABILITY+ABILITY_NAME, 1, 3);
+		initializeAnimation	= new Animation(entity.getPosX(), entity.getPosY(), -12, -12, FILEPATH_ABILITY+ABILITY_NAME, 5, 1);
+		setHasEffects(true);
 	}
 
 	public void update() {
 		if (state == AbilityState.INITIALIZING && initializeAnimation.isDone()) {
 			entity.addCharacterEffect(new InvisibilityBuff(ABILITY_DURATION, entity));
 			entity.addCharacterEffect(new SpeedBuff(ABILITY_DURATION, entity));
+			smokeBombEffect = new SmokeBombEffect(entity.getPosX(), entity.getPosY());
+			effects.add(smokeBombEffect);
 		}
 
 		super.update();
@@ -27,7 +35,7 @@ public class HuntersCloakAbility extends Ability {
 
 	@Override
 	public boolean isRestrictingMovement() {
-		return true;
+		return state == AbilityState.INITIALIZING;
 	}
 
 	@Override
