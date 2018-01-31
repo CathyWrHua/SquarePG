@@ -16,7 +16,7 @@ public class GameMap implements Drawable {
 	private HashMap<String, Rectangle[]> hitRectangleMapping = new HashMap<>();
 
 	public static final int TOTAL_LEVELS = 1;
-	public static final int MAPS_PER_LEVEL = 4;
+	public static final int MAPS_PER_LEVEL = 10;
 	private static final int MAP_WIDTH_TILES = 10;
 	private static final int MAP_HEIGHT_TILES = 8;
 	private static final int NUM_TILE_TYPES = 10;
