@@ -72,14 +72,14 @@ public class TeleportAbility extends Ability {
 		if (teleportPoint != null) {
 			if (teleportMark != null && !teleportMark.isDone()) {
 				entity.setPoint(teleportPoint);
+				entity.calculateTargetsDamage(this);
+
 				teleportPoint = null;
 				teleportMark.killEffect();
 				teleportMark = null;
 
-				entity.calculateTargetsDamage(this);
 				setCoolDown = true;
 				resetCooldown();
-				//isTriggered = true;
 			}
 		}
 		teleportMark = null;
