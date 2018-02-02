@@ -13,23 +13,9 @@ import java.awt.*;
 import java.util.LinkedList;
 
 public abstract class Enemy extends Entity {
-	public enum EnemyType {
-		CIRCLE(0);
-		private int value;
-
-		EnemyType(int value) {
-			this.value = value;
-		}
-
-		public int getValue() {
-			return value;
-		}
-	}
 
 	protected int deletionCounter = DELETION_TIME;
 	protected boolean done;
-	protected EnemyType enemyType;
-	protected HashMap<Integer, String> shapePath;
 	private Entity targetEntity;
 	private LinkedList<Entity> comrades;
 
@@ -48,7 +34,6 @@ public abstract class Enemy extends Entity {
 		comrades = targetEntity.getTargets();
 
 		immuneTo.put(targetEntity, false);
-		createEnemyHashMap();
 
 		done = false;
 		entityType = EntityType.ENEMY;
@@ -57,10 +42,6 @@ public abstract class Enemy extends Entity {
 
 	public boolean isDone() {
 		return done;
-	}
-
-	void setEnemyType(EnemyType enemyType) {
-		this.enemyType = enemyType;
 	}
 
 	@Override
@@ -77,7 +58,7 @@ public abstract class Enemy extends Entity {
 	public void setEntityState(EntityState entityState) {
 		super.setEntityState(entityState);
 		String filepath = "src/assets/enemies/";
-		filepath += shapePath.get(enemyType.getValue());
+		filepath += getShapePath();
 		switch (entityState) {
 			case NEUTRAL:
 				filepath += "Neutral";
@@ -178,8 +159,5 @@ public abstract class Enemy extends Entity {
 		targetEntity.setImmuneTo(this, false);
 	}
 
-	private void createEnemyHashMap() {
-		shapePath = new HashMap<>();
-		shapePath.put(0, "circle");
-	}
+	public abstract String getShapePath();
 }
