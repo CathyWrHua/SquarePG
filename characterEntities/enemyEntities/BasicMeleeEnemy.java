@@ -1,6 +1,7 @@
 package characterEntities.enemyEntities;
 
 import animation.abilities.EggplantAbility;
+import animation.abilities.enemyAbilities.EnemyBladeSwingAbility;
 import characterEntities.Hero;
 import gameLogic.MapCollisionDetection;
 
@@ -11,7 +12,7 @@ public class BasicMeleeEnemy extends Enemy {
 		setImageIcon("src/assets/enemies/basicMeleeNeutral.png");
 
 		//temp, make another ability
-		setAbility(0, new EggplantAbility(this));
+		setAbility(0, new EnemyBladeSwingAbility(this));
 	}
 
 	@Override

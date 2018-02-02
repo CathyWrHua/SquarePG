@@ -1,6 +1,6 @@
 package characterEntities.enemyEntities;
 
-import animation.abilities.EggplantAbility;
+import animation.abilities.enemyAbilities.EnemySingleArrowAbility;
 import characterEntities.Hero;
 import gameLogic.MapCollisionDetection;
 
@@ -10,7 +10,7 @@ public class BasicArcherEnemy extends Enemy{
 		setImageIcon("src/assets/enemies/circleNeutral.png");
 
 		//Temp code until enemy attack is determined
-		setAbility(0, new EggplantAbility(this));
+		setAbility(0, new EnemySingleArrowAbility(this));
 	}
 
 	@Override
