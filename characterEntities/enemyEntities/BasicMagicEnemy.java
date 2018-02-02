@@ -7,7 +7,7 @@ import gameLogic.MapCollisionDetection;
 public class BasicMagicEnemy extends Enemy {
 	public BasicMagicEnemy(Hero hero, MapCollisionDetection mapCollisionDetection, int maxHealth, int maxDamage, int minDamage, int posX, int posY, double velocity) {
 		super(hero, mapCollisionDetection, maxHealth, maxDamage, minDamage, posX, posY, velocity);
-		setImageIcon("src/assets/enemies/circleNeutral.png");
+		setImageIcon("src/assets/enemies/basicMageNeutral.png");
 
 		//Temp code until enemy attack is determined
 		setAbility(0, new EnemySingleFireballAbility(this));
@@ -15,6 +15,6 @@ public class BasicMagicEnemy extends Enemy {
 
 	@Override
 	public String getShapePath() {
-		return "circle";
+		return "basicMage";
 	}
 }
