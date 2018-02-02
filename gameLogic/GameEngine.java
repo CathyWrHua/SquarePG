@@ -5,6 +5,8 @@ import animation.effects.Effect;
 import animation.effects.EnemyDeathEffect;
 import animation.effects.Projectile;
 import characterEntities.*;
+import characterEntities.enemyEntities.Dummy;
+import characterEntities.enemyEntities.Enemy;
 import gui.AbilityBar;
 import gui.DamageMarker;
 import screens.Drawable;
@@ -14,7 +16,6 @@ import java.util.Iterator;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
-import java.util.Stack;
 
 public class GameEngine {
 	public enum MapLayer {

@@ -1,18 +1,19 @@
-package animation.abilities;
+package animation.abilities.enemyAbilities;
 
 import animation.Animation;
+import animation.abilities.Ability;
 import characterEntities.Entity;
 import characterEntities.HitDetectionHelper;
 
 import java.awt.*;
 
-public class BladeSwingAbility extends Ability {
+public class EnemyBladeSwingAbility extends Ability {
 
 	//TODO: replace with actual resource name (icon and animation) with increased attack range
 	private final String ABILITY_NAME = "eggplant";
 	private final int ATTACK_RANGE = 75;
 
-	public BladeSwingAbility(Entity entity) {
+	public EnemyBladeSwingAbility(Entity entity) {
 		super(entity, 2, Entity.EntityAbility.DEFAULT);
 		canDamageAnimation = new Animation(entity.getPosX(), entity.getPosY(), 75, 0, FILEPATH_ABILITY+ABILITY_NAME, 4, 1);
 	}

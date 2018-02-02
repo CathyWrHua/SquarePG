@@ -1,13 +1,19 @@
 package gameLogic;
 
-import characterEntities.Grunt;
+import characterEntities.enemyEntities.BasicArcherEnemy;
+import characterEntities.enemyEntities.BasicMagicEnemy;
+import characterEntities.enemyEntities.BasicMeleeEnemy;
+import characterEntities.enemyEntities.Grunt;
 
 import java.awt.*;
 
 public class EnemyGenInfo {
 	//Type presets
 	public enum EnemyType {
-		GRUNT
+		GRUNT,
+		BASIC_MELEE,
+		BASIC_ARCHER,
+		BASIC_MAGE
 	}
 
 	private EnemyType enemyType;
@@ -25,6 +31,12 @@ public class EnemyGenInfo {
 		switch (enemyType) {
 			case GRUNT:
 				return Grunt.class;
+			case BASIC_MELEE:
+				return BasicMeleeEnemy.class;
+			case BASIC_ARCHER:
+				return BasicArcherEnemy.class;
+			case BASIC_MAGE:
+				return BasicMagicEnemy.class;
 			default:
 				return Grunt.class;
 		}
@@ -37,18 +49,30 @@ public class EnemyGenInfo {
 	public int getMaxDamage() {
 		switch (enemyType) {
 			case GRUNT:
+				return 5;
+			case BASIC_MELEE:
+				return 8;
+			case BASIC_ARCHER:
+				return 7;
+			case BASIC_MAGE:
 				return 10;
 			default:
-				return 10;
+				return 5;
 		}
 	}
 
 	public int getMinDamage() {
 		switch (enemyType) {
 			case GRUNT:
+				return 3;
+			case BASIC_MELEE:
+				return 5;
+			case BASIC_ARCHER:
+				return 6;
+			case BASIC_MAGE:
 				return 8;
 			default:
-				return 8;
+				return 3;
 		}
 	}
 
@@ -56,14 +80,26 @@ public class EnemyGenInfo {
 		switch (enemyType) {
 			case GRUNT:
 				return 20;
+			case BASIC_MELEE:
+				return 30;
+			case BASIC_ARCHER:
+				return 20;
+			case BASIC_MAGE:
+				return 15;
 			default:
-				return 100;
+				return 20;
 		}
 	}
 
 	public double getVelocity() {
 		switch (enemyType) {
 			case GRUNT:
+				return 1.5;
+			case BASIC_MELEE:
+				return 1.5;
+			case BASIC_ARCHER:
+				return 2.0;
+			case BASIC_MAGE:
 				return 1.5;
 			default:
 				return 1.5;

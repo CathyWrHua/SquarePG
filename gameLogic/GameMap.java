@@ -1,7 +1,5 @@
 package gameLogic;
 
-import characterEntities.Enemy;
-import characterEntities.Hero;
 import screens.Drawable;
 
 import java.awt.*;
