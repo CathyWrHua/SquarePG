@@ -1,6 +1,8 @@
-package characterEntities;
+package characterEntities.enemyEntities;
 
 import animation.abilities.EggplantAbility;
+import characterEntities.Hero;
+import characterEntities.enemyEntities.Enemy;
 import gameLogic.MapCollisionDetection;
 
 public class Grunt extends Enemy {

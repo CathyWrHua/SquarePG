@@ -1,7 +1,7 @@
-package characterEntities;
+package characterEntities.enemyEntities;
 
-import SquarePG.SquarePG;
 import animation.abilities.Ability;
+import characterEntities.Entity;
 import gameLogic.MapCollisionDetection;
 import gui.DamageMarker;
 import screens.GameScreen;
@@ -11,7 +11,6 @@ import java.util.HashMap;
 
 import java.awt.*;
 import java.util.LinkedList;
-import java.util.Random;
 
 public abstract class Enemy extends Entity {
 	public enum EnemyType {
@@ -166,7 +165,7 @@ public abstract class Enemy extends Entity {
 	@Override
 	public void calculateTargetsDamage(Ability ability) {
 		DamageMarker marker;
-		if (!targetEntity.immuneTo.get(this) && ability.didHitTarget(targetEntity) && targetEntity.getEntityState() != EntityState.DEAD) {
+		if (!targetEntity.getImmuneTo(this) && ability.didHitTarget(targetEntity) && targetEntity.getEntityState() != EntityState.DEAD) {
 			marker = targetEntity.inflict(getDamage(), this);
 			if (marker != null) {
 				targetMarkers.add(marker);
@@ -176,7 +175,7 @@ public abstract class Enemy extends Entity {
 
 	@Override
 	public void resetImmuneTo() {
-		targetEntity.immuneTo.put(this, false);
+		targetEntity.setImmuneTo(this, false);
 	}
 
 	private void createEnemyHashMap() {

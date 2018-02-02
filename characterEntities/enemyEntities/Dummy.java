@@ -1,6 +1,7 @@
-package characterEntities;
+package characterEntities.enemyEntities;
 
 import animation.abilities.Ability;
+import characterEntities.Entity;
 import gui.DamageMarker;
 
 import java.awt.*;

@@ -1,6 +1,6 @@
 package gameLogic;
 
-import characterEntities.Grunt;
+import characterEntities.enemyEntities.Grunt;
 
 import java.awt.*;
 

@@ -242,6 +242,17 @@ public abstract class Entity implements Drawable {
 		}
 	}
 
+	public boolean getImmuneTo(Entity entity) {
+		return (immuneTo != null)? immuneTo.get(entity): false;
+	}
+
+	public void setImmuneTo(Entity entity, boolean immune) {
+		if (immuneTo != null) {
+			immuneTo.put(entity, immune);
+		}
+	}
+
+
 	public ImageIcon getImageIcon() {
 		return imageIcon;
 	}
