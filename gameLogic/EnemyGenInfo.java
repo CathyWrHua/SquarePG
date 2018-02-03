@@ -1,9 +1,6 @@
 package gameLogic;
 
-import characterEntities.enemyEntities.BasicArcherEnemy;
-import characterEntities.enemyEntities.BasicMagicEnemy;
-import characterEntities.enemyEntities.BasicMeleeEnemy;
-import characterEntities.enemyEntities.Grunt;
+import characterEntities.enemyEntities.*;
 
 import java.awt.*;
 
@@ -38,6 +35,8 @@ public class EnemyGenInfo {
 				return BasicArcherEnemy.class;
 			case BASIC_MAGE:
 				return BasicMagicEnemy.class;
+			case LEVEL_ONE_BOSS:
+				return EvilTreeDude.class;
 			default:
 				return Grunt.class;
 		}
@@ -57,6 +56,8 @@ public class EnemyGenInfo {
 				return 7;
 			case BASIC_MAGE:
 				return 10;
+			case LEVEL_ONE_BOSS:
+				return 15;
 			default:
 				return 5;
 		}
@@ -72,6 +73,8 @@ public class EnemyGenInfo {
 				return 6;
 			case BASIC_MAGE:
 				return 8;
+			case LEVEL_ONE_BOSS:
+				return 10;
 			default:
 				return 3;
 		}
@@ -87,6 +90,8 @@ public class EnemyGenInfo {
 				return 30;
 			case BASIC_MAGE:
 				return 25;
+			case LEVEL_ONE_BOSS:
+				return 100;
 			default:
 				return 20;
 		}
@@ -102,6 +107,8 @@ public class EnemyGenInfo {
 				return 2.0;
 			case BASIC_MAGE:
 				return 1.5;
+			case LEVEL_ONE_BOSS:
+				return 0.1;
 			default:
 				return 1.5;
 		}

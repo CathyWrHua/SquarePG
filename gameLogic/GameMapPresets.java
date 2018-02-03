@@ -304,9 +304,10 @@ public class GameMapPresets {
 	}
 
 	private static LinkedList<WaveGenInfo> generateEnemyInfoMapOneBoss() {
-		Queue<EnemyGenInfo> genInfos = new LinkedList<>();
-		genInfos.add(new EnemyGenInfo(EnemyGenInfo.EnemyType.LEVEL_ONE_BOSS, new Point(500, 500)));
 		LinkedList<WaveGenInfo> waveInfo = new LinkedList<>();
+
+		Queue<EnemyGenInfo> genInfos = new LinkedList<>();
+		genInfos.add(new EnemyGenInfo(EnemyGenInfo.EnemyType.LEVEL_ONE_BOSS, new Point(400, 300)));
 		waveInfo.add(new WaveGenInfo(genInfos));
 
 		return waveInfo;
