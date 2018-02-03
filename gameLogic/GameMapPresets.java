@@ -7,8 +7,6 @@ import java.util.Queue;
 public class GameMapPresets {
 
 	private static Queue<WaveGenInfo>[][] waveGenInfo;
-	private static final int NUMBER_LEVELS = 1;
-	private static final int MAX_NUMBER_SUBLEVELS = 4;
 
 	private static final int[][][] LEVEL_ONE_MAPS = {
 			{
@@ -19,6 +17,17 @@ public class GameMapPresets {
 					{7, 0, 0, 0, 0, 0, 0, 0, 0, 8},
 					{7, 0, 9, 9, 0, 0, 9, 9, 0, 8},
 					{7, 0, 9, 9, 0, 0, 9, 9, 0, 8},
+					{3, 6, 6, 6, 6, 6, 6, 6, 6, 4}
+			},
+
+			{
+					{1, 5, 5, 5, 5, 5, 5, 5, 5, 2},
+					{7, 0, 0, 0, 9, 9, 0, 0, 0, 8},
+					{7, 0, 0, 0, 0, 0, 0, 0, 0, 8},
+					{7, 0, 9, 0, 0, 0, 0, 9, 0, 8},
+					{7, 0, 9, 0, 0, 0, 0, 9, 0, 8},
+					{7, 0, 0, 0, 0, 0, 0, 0, 0, 8},
+					{7, 0, 0, 0, 9, 9, 0, 0, 0, 8},
 					{3, 6, 6, 6, 6, 6, 6, 6, 6, 4}
 			},
 
@@ -46,17 +55,6 @@ public class GameMapPresets {
 
 			{
 					{1, 5, 5, 5, 5, 5, 5, 5, 5, 2},
-					{7, 9, 0, 0, 0, 0, 0, 0, 9, 8},
-					{7, 0, 9, 9, 0, 0, 9, 9, 0, 8},
-					{7, 9, 0, 0, 0, 0, 0, 0, 9, 8},
-					{7, 0, 9, 9, 0, 0, 9, 9, 0, 8},
-					{7, 9, 0, 0, 0, 0, 0, 0, 9, 8},
-					{7, 0, 9, 0, 9, 9, 0, 9, 0, 8},
-					{3, 6, 6, 6, 6, 6, 6, 6, 6, 4}
-			},
-
-			{
-					{1, 5, 5, 5, 5, 5, 5, 5, 5, 2},
 					{7, 9, 9, 9, 9, 0, 9, 9, 9, 8},
 					{7, 9, 0, 0, 9, 0, 9, 0, 0, 8},
 					{7, 9, 0, 0, 9, 0, 9, 0, 9, 8},
@@ -79,6 +77,17 @@ public class GameMapPresets {
 
 			{
 					{1, 5, 5, 5, 5, 5, 5, 5, 5, 2},
+					{7, 0, 0, 0, 0, 0, 0, 0, 0, 8},
+					{7, 0, 0, 9, 9, 9, 9, 0, 0, 8},
+					{7, 0, 0, 9, 0, 0, 9, 0, 0, 8},
+					{7, 0, 0, 9, 0, 0, 9, 0, 0, 8},
+					{7, 0, 0, 9, 9, 9, 9, 0, 0, 8},
+					{7, 0, 0, 0, 0, 0, 0, 0, 0, 8},
+					{3, 6, 6, 6, 6, 6, 6, 6, 6, 4}
+			},
+
+			{
+					{1, 5, 5, 5, 5, 5, 5, 5, 5, 2},
 					{7, 9, 9, 0, 9, 0, 9, 9, 9, 8},
 					{7, 9, 0, 0, 9, 0, 0, 0, 9, 8},
 					{7, 0, 0, 0, 0, 0, 9, 0, 9, 8},
@@ -90,12 +99,12 @@ public class GameMapPresets {
 
 			{
 					{1, 5, 5, 5, 5, 5, 5, 5, 5, 2},
-					{7, 0, 0, 0, 0, 0, 0, 0, 0, 8},
-					{7, 0, 0, 9, 9, 9, 9, 0, 0, 8},
-					{7, 0, 0, 9, 0, 0, 9, 0, 0, 8},
-					{7, 0, 0, 9, 0, 0, 9, 0, 0, 8},
-					{7, 0, 0, 9, 9, 9, 9, 0, 0, 8},
-					{7, 0, 0, 0, 0, 0, 0, 0, 0, 8},
+					{7, 9, 0, 0, 0, 0, 0, 0, 9, 8},
+					{7, 0, 9, 9, 0, 0, 9, 9, 0, 8},
+					{7, 9, 0, 0, 0, 0, 0, 0, 9, 8},
+					{7, 0, 9, 9, 0, 0, 9, 9, 0, 8},
+					{7, 9, 0, 0, 0, 0, 0, 0, 9, 8},
+					{7, 0, 9, 0, 9, 9, 0, 9, 0, 8},
 					{3, 6, 6, 6, 6, 6, 6, 6, 6, 4}
 			},
 
@@ -107,17 +116,6 @@ public class GameMapPresets {
 					{7, 0, 0, 0, 0, 0, 0, 0, 0, 8},
 					{7, 9, 9, 0, 0, 0, 0, 9, 9, 8},
 					{7, 0, 9, 0, 0, 0, 0, 9, 0, 8},
-					{3, 6, 6, 6, 6, 6, 6, 6, 6, 4}
-			},
-
-			{
-					{1, 5, 5, 5, 5, 5, 5, 5, 5, 2},
-					{7, 0, 0, 0, 9, 9, 0, 0, 0, 8},
-					{7, 0, 0, 0, 0, 0, 0, 0, 0, 8},
-					{7, 0, 9, 0, 0, 0, 0, 9, 0, 8},
-					{7, 0, 9, 0, 0, 0, 0, 9, 0, 8},
-					{7, 0, 0, 0, 0, 0, 0, 0, 0, 8},
-					{7, 0, 0, 0, 9, 9, 0, 0, 0, 8},
 					{3, 6, 6, 6, 6, 6, 6, 6, 6, 4}
 			}
 	};
@@ -133,10 +131,10 @@ public class GameMapPresets {
 	private static void makeEnemyGenInfo() {
 		waveGenInfo = new LinkedList[GameMap.TOTAL_LEVELS][GameMap.MAPS_PER_LEVEL];
 
-		waveGenInfo[0][0] = generateEnemyInfoMapOneOne();
-		waveGenInfo[0][1] = generateEnemyInfoMapOneTwo();
-		waveGenInfo[0][2] = generateEnemyInfoMapOneThree();
-		waveGenInfo[0][3] = generateEnemyInfoMapOneFour();
+//		waveGenInfo[0][0] = generateEnemyInfoMapOneOne();
+//		waveGenInfo[0][1] = generateEnemyInfoMapOneTwo();
+//		waveGenInfo[0][2] = generateEnemyInfoMapOneThree();
+//		waveGenInfo[0][3] = generateEnemyInfoMapOneFour();
 	}
 
 	public static final int[][][][] LEVEL_MAPS = {
