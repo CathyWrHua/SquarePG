@@ -14,6 +14,16 @@ public class BasicMagicEnemy extends Enemy {
 	}
 
 	@Override
+	protected void calculateNextMove() {
+		super.calculateNextMove();
+
+		if (Math.abs(targetEntity.getPosY()-getPosY()) <= 75 &&
+				targetEntity.getEntityState() != EntityState.DEAD) {
+			attack(EntityAbility.DEFAULT);
+		}
+	}
+
+	@Override
 	public String getShapePath() {
 		return "basicMage";
 	}

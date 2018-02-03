@@ -16,7 +16,7 @@ public abstract class Enemy extends Entity {
 
 	protected int deletionCounter = DELETION_TIME;
 	protected boolean done;
-	private Entity targetEntity;
+	protected Entity targetEntity;
 	private LinkedList<Entity> comrades;
 
 	//for when the enemy AI is targetting random target
@@ -81,7 +81,7 @@ public abstract class Enemy extends Entity {
 
 	//Simple motion detection (pythagorean locating)
 	//Default attack pattern, override in child classes for custom moves
-	private void calculateNextMove() {
+	protected void calculateNextMove() {
 		if (targetEntity == null) return;
 
 		Point selfCenter = new Point(posX + getEntitySize().width / 2, posY + getEntitySize().height / 2);
