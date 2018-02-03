@@ -10,7 +10,7 @@ import java.util.LinkedList;
 
 public class BlueHero extends Hero {
 	public BlueHero(LinkedList<Entity> targets, MapCollisionDetection mapCollisionDetection) {
-		super(targets, mapCollisionDetection, 10, 8, 7, 100, 100, 5);
+		super(targets, mapCollisionDetection, 20, 10, 8, 100, 100, 5);
 		setPlayerClass(PlayerClass.BLUE);
 		setAbility(1, new FireballAbility(this));
 		setImageIcon("src/assets/hero/blueNeutral.png");
