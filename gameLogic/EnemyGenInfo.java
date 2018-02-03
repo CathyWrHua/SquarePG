@@ -13,7 +13,8 @@ public class EnemyGenInfo {
 		GRUNT,
 		BASIC_MELEE,
 		BASIC_ARCHER,
-		BASIC_MAGE
+		BASIC_MAGE,
+		LEVEL_ONE_BOSS
 	}
 
 	private EnemyType enemyType;
@@ -81,11 +82,11 @@ public class EnemyGenInfo {
 			case GRUNT:
 				return 20;
 			case BASIC_MELEE:
-				return 30;
+				return 40;
 			case BASIC_ARCHER:
-				return 20;
+				return 30;
 			case BASIC_MAGE:
-				return 15;
+				return 25;
 			default:
 				return 20;
 		}
