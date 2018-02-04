@@ -31,8 +31,6 @@ public abstract class Hero extends Entity {
 	protected PlayerClass playerClass;
 	protected CharacterProfile.Path[] path;
 
-	public static final int SQUARE_LENGTH = 75;
-
 	Hero(LinkedList<Entity> targets, MapCollisionDetection mapCollisionDetection, int maxHealth, int maxDamage, int minDamage, int posX, int posY, double velocity) {
 		super(mapCollisionDetection, maxHealth, maxDamage, minDamage, posX, posY, velocity);
 		this.targets = targets;
@@ -135,7 +133,7 @@ public abstract class Hero extends Entity {
 
 	@Override
 	public Rectangle getEntitySize() {
-		return new Rectangle(posX, posY, SQUARE_LENGTH, SQUARE_LENGTH);
+		return new Rectangle(posX, posY, DEFAULT_ENTITY_LENGTH, DEFAULT_ENTITY_LENGTH);
 	}
 
 	public boolean evolve(int pathIndex, CharacterProfile.Path path) {
@@ -153,11 +151,21 @@ public abstract class Hero extends Entity {
 		}
 	}
 
+	@Override
+	public int getCenterX() {
+		return posX + DEFAULT_ENTITY_LENGTH/2;
+	}
+
+	@Override
+	public int getCenterY() {
+		return posY + DEFAULT_ENTITY_LENGTH/2;
+	}
+
 //	protected boolean isHit(EntityAbility ability, Entity target) {
 //		int targetPosX = target.getPosX();
 //		int targetPosY = target.getPosY();
-//		return (((getFacingEast() && targetPosX > posX && targetPosX < posX+SQUARE_LENGTH+DEFAULT_RANGE) ||
-//				(!getFacingEast() && targetPosX < posX && targetPosX > posX-SQUARE_LENGTH-DEFAULT_RANGE)) &&
+//		return (((getFacingEast() && targetPosX > posX && targetPosX < posX+DEFAULT_ENTITY_LENGTH+DEFAULT_RANGE) ||
+//				(!getFacingEast() && targetPosX < posX && targetPosX > posX-DEFAULT_ENTITY_LENGTH-DEFAULT_RANGE)) &&
 //				targetPosY > posY-DEFAULT_RANGE && targetPosY < posY+DEFAULT_RANGE && ability == Entity.Ability.DEFAULT);
 //	}
 	

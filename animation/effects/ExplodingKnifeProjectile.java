@@ -7,7 +7,6 @@ import characterEntities.HitDetectionHelper;
 import gui.DamageMarker;
 import javafx.scene.shape.Circle;
 
-import javax.annotation.PostConstruct;
 import java.awt.*;
 
 public class ExplodingKnifeProjectile extends Projectile {
@@ -26,8 +25,8 @@ public class ExplodingKnifeProjectile extends Projectile {
 	public ExplodingKnifeProjectile(Hero entity) {
 		super(entity,
 				entity.getMapCollisionDetection(),
-				new Animation(entity.getPosX(), entity.getPosY(), entity.getFacingEast()? 75: -75, 0, FILEPATH_EFFECTS+"explodingKnife", 1, 10),
-				new Animation(0, 0, (entity.getFacingEast())? 75 : -75,  0, FILEPATH_EFFECTS+"explodingKnifeCollided", 1, 10 ),
+				new Animation(entity.getPosX(), entity.getPosY(), entity.getFacingEast()? Entity.DEFAULT_ENTITY_LENGTH: -Entity.DEFAULT_ENTITY_LENGTH, 0, FILEPATH_EFFECTS+"explodingKnife", 1, 10),
+				new Animation(0, 0, (entity.getFacingEast())? Entity.DEFAULT_ENTITY_LENGTH : -Entity.DEFAULT_ENTITY_LENGTH,  0, FILEPATH_EFFECTS+"explodingKnifeCollided", 1, 10 ),
 				KNIFE_VELOCITY,
 				0);
 

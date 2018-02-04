@@ -2,6 +2,7 @@ package animation.abilities;
 
 import animation.Animation;
 import characterEntities.Entity;
+import characterEntities.Hero;
 import characterEntities.HitDetectionHelper;
 import javafx.scene.shape.Circle;
 
@@ -12,7 +13,7 @@ public class BladeWhirlAbility extends Ability {
 
 	public BladeWhirlAbility(Entity entity) {
 		super(entity, 2, Entity.EntityAbility.FIRST);
-		canDamageAnimation = new Animation(entity.getPosX(), entity.getPosY(), -75, -75, FILEPATH_ABILITY+ABILITY_NAME, 3, 2);
+		canDamageAnimation = new Animation(entity.getPosX(), entity.getPosY(), -Entity.DEFAULT_ENTITY_LENGTH, -Entity.DEFAULT_ENTITY_LENGTH, FILEPATH_ABILITY+ABILITY_NAME, 3, 2);
 	}
 
 	@Override

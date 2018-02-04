@@ -4,6 +4,7 @@ import animation.Animation;
 import animation.abilities.Ability;
 import animation.effects.ArrowProjectile;
 import characterEntities.Entity;
+import characterEntities.Hero;
 
 public class EnemySingleArrowAbility extends Ability{
 
@@ -11,7 +12,7 @@ public class EnemySingleArrowAbility extends Ability{
 
 	public EnemySingleArrowAbility(Entity entity) {
 		super(entity, 1.5, Entity.EntityAbility.FIRST);
-		canDamageAnimation = new Animation(entity.getPosX(), entity.getPosY(), 75, 0, FILEPATH_ABILITY+ABILITY_NAME, 3, 1);
+		canDamageAnimation = new Animation(entity.getPosX(), entity.getPosY(), Entity.DEFAULT_ENTITY_LENGTH, 0, FILEPATH_ABILITY+ABILITY_NAME, 3, 1);
 		setHasEffects(true);
 	}
 

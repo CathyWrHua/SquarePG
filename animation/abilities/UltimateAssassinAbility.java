@@ -29,7 +29,7 @@ public class UltimateAssassinAbility extends Ability{
 		markedTargets = new LinkedList<>();
 
 		initializeAnimation = new Animation(player.getPosX(), player.getPosY(), -62, -62, FILEPATH_ABILITY+"darkAura", 1, 10);
-		canDamageAnimation = new Animation(player.getPosX(), player.getPosY(), 75, 0, FILEPATH_ABILITY+ABILITY_NAME, 4, 1);
+		canDamageAnimation = new Animation(player.getPosX(), player.getPosY(), Entity.DEFAULT_ENTITY_LENGTH, 0, FILEPATH_ABILITY+ABILITY_NAME, 4, 1);
 	}
 
 	public void update() {
