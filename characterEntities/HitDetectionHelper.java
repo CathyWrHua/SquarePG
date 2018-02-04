@@ -5,6 +5,14 @@ import javafx.scene.shape.Circle;
 import java.awt.*;
 
 public class HitDetectionHelper {
+	public static boolean detectSemicircleHit(Circle hitArea, Rectangle targetRect, boolean rightHalfOfCircle) {
+		if (!detectHit(hitArea, targetRect))
+			return false;
+
+		return (rightHalfOfCircle && targetRect.x >= hitArea.getCenterX() ||
+				!rightHalfOfCircle && targetRect.x+targetRect.width <= hitArea.getCenterX());
+	}
+
 	public static boolean detectHit(Circle hitArea, Rectangle targetRect) {
 		if (hitArea == null || targetRect == null) return false;
 

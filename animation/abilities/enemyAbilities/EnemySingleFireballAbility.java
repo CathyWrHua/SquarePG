@@ -4,6 +4,7 @@ import animation.Animation;
 import animation.abilities.Ability;
 import animation.effects.FireballProjectile;
 import characterEntities.Entity;
+import characterEntities.Hero;
 
 public class EnemySingleFireballAbility extends Ability {
 
@@ -11,7 +12,7 @@ public class EnemySingleFireballAbility extends Ability {
 
 	public EnemySingleFireballAbility(Entity entity) {
 		super(entity, 1.5, Entity.EntityAbility.FIRST);
-		initializeAnimation = new Animation(entity.getPosX(), entity.getPosY(), 75, 0, FILEPATH_ABILITY+ABILITY_NAME, 3, 1);
+		initializeAnimation = new Animation(entity.getPosX(), entity.getPosY(), Entity.DEFAULT_ENTITY_LENGTH, 0, FILEPATH_ABILITY+ABILITY_NAME, 3, 1);
 		setHasEffects(true);
 	}
 

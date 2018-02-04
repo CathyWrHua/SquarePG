@@ -3,19 +3,21 @@ package animation.abilities.enemyAbilities;
 import animation.Animation;
 import animation.abilities.Ability;
 import characterEntities.Entity;
+import characterEntities.Hero;
 import characterEntities.HitDetectionHelper;
+import javafx.scene.shape.Circle;
 
 import java.awt.*;
 
 public class EnemyBladeSwingAbility extends Ability {
 
 	//TODO: replace with actual resource name (icon and animation) with increased attack range
-	private final String ABILITY_NAME = "eggplant";
-	private final int ATTACK_RANGE = 75;
+	private final String ABILITY_NAME = "bladeSwing";
+	private final int ATTACK_RANGE = 100;
 
 	public EnemyBladeSwingAbility(Entity entity) {
 		super(entity, 2, Entity.EntityAbility.DEFAULT);
-		canDamageAnimation = new Animation(entity.getPosX(), entity.getPosY(), 75, 0, FILEPATH_ABILITY+ABILITY_NAME, 4, 1);
+		canDamageAnimation = new Animation(entity.getPosX(), entity.getPosY(), Entity.DEFAULT_ENTITY_LENGTH, Entity.DEFAULT_ENTITY_LENGTH/2-ATTACK_RANGE, FILEPATH_ABILITY+ABILITY_NAME, 4, 1);
 	}
 
 	@Override
@@ -33,12 +35,10 @@ public class EnemyBladeSwingAbility extends Ability {
 
 		if (entity == null) return false;
 		//Dependent on update for ability being called first
-		Rectangle swordRect = new Rectangle(entity.getFacingEast()? entity.getPosX()+entity.getEntitySize().width : entity.getPosX()-ATTACK_RANGE,
-				entity.getPosY(),
-				ATTACK_RANGE,
-				ATTACK_RANGE);
+		int swordRectCenterX = entity.getCenterX() + (entity.getFacingEast() ? Entity.DEFAULT_ENTITY_LENGTH/2 : -Entity.DEFAULT_ENTITY_LENGTH/2 );
+		Circle swordRect = new Circle(swordRectCenterX, entity.getCenterY(), ATTACK_RANGE);
 
-		return HitDetectionHelper.detectHit(swordRect, target.getEntitySize());
+		return HitDetectionHelper.detectSemicircleHit(swordRect, target.getEntitySize(), entity.getFacingEast());
 	}
 
 	//TODO: figure out a better damage calculation

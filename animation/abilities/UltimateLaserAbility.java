@@ -20,7 +20,7 @@ public class UltimateLaserAbility extends Ability {
 		super(player, 3, Entity.EntityAbility.ULTIMATE);
 
 		initializeAnimation = new Animation(player.getPosX(), player.getPosY(), -62, -62, FILEPATH_ABILITY+"laserCharge", 1, 10);
-		canDamageAnimation = new Animation(player.getPosX(), player.getPosY(), player.getFacingEast()? 75 : -1000, OFFSET_Y, FILEPATH_ABILITY+"laserBeam", 1, 20);
+		canDamageAnimation = new Animation(player.getPosX(), player.getPosY(), player.getFacingEast()? Entity.DEFAULT_ENTITY_LENGTH: -1000, OFFSET_Y, FILEPATH_ABILITY+"laserBeam", 1, 20);
 		canDamageAnimation.shouldMirror(player.getFacingEast());
 	}
 
@@ -49,7 +49,7 @@ public class UltimateLaserAbility extends Ability {
 	public boolean didHitTarget(Entity target) {
 		if (target == null) return false;
 
-		Rectangle hitRect = (entity.getFacingEast())? new Rectangle(entity.getPosX()+75, entity.getPosY()+OFFSET_Y, 1000, 100) :
+		Rectangle hitRect = (entity.getFacingEast())? new Rectangle(entity.getPosX()+Entity.DEFAULT_ENTITY_LENGTH, entity.getPosY()+OFFSET_Y, 1000, 100) :
 				new Rectangle(0, entity.getPosY()+OFFSET_Y, entity.getPosX(), 100);
 		return HitDetectionHelper.detectHit(hitRect, target.getEntitySize());
 	}

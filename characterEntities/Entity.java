@@ -63,6 +63,8 @@ public abstract class Entity implements Drawable {
 	protected static final int STUN_TIME = 20;
 	protected static final int KNOCK_BACK_TIME = 15;
 	protected static final int KNOCK_BACK_DUR = 2;
+
+	public static final int DEFAULT_ENTITY_LENGTH = 75;
 	
 	public Entity(MapCollisionDetection mapCollisionDetection, int maxHealth, int maxDamage, int minDamage, int posX, int posY, double velocity) {
 		this.mapCollisionDetection = mapCollisionDetection;

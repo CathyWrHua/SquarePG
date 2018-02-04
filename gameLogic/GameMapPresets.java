@@ -131,16 +131,16 @@ public class GameMapPresets {
 	private static void makeEnemyGenInfo() {
 		waveGenInfo = new LinkedList[GameMap.TOTAL_LEVELS][GameMap.MAPS_PER_LEVEL];
 
-		waveGenInfo[0][0] = generateEnemyInfoMapOneOne();
-		waveGenInfo[0][1] = generateEnemyInfoMapOneTwo();
-		waveGenInfo[0][2] = generateEnemyInfoMapOneThree();
-		waveGenInfo[0][3] = generateEnemyInfoMapOneFour();
-		waveGenInfo[0][4] = generateEnemyInfoMapOneFive();
-		waveGenInfo[0][5] = generateEnemyInfoMapOneSix();
-		waveGenInfo[0][6] = generateEnemyInfoMapOneSeven();
-		waveGenInfo[0][7] = generateEnemyInfoMapOneEight();
-		waveGenInfo[0][8] = generateEnemyInfoMapOneNine();
-		waveGenInfo[0][9] = generateEnemyInfoMapOneBoss();
+//		waveGenInfo[0][0] = generateEnemyInfoMapOneOne();
+//		waveGenInfo[0][1] = generateEnemyInfoMapOneTwo();
+//		waveGenInfo[0][2] = generateEnemyInfoMapOneThree();
+//		waveGenInfo[0][3] = generateEnemyInfoMapOneFour();
+//		waveGenInfo[0][4] = generateEnemyInfoMapOneFive();
+//		waveGenInfo[0][5] = generateEnemyInfoMapOneSix();
+//		waveGenInfo[0][6] = generateEnemyInfoMapOneSeven();
+//		waveGenInfo[0][7] = generateEnemyInfoMapOneEight();
+//		waveGenInfo[0][8] = generateEnemyInfoMapOneNine();
+//		waveGenInfo[0][9] = generateEnemyInfoMapOneBoss();
 	}
 
 	public static final int[][][][] LEVEL_MAPS = {
