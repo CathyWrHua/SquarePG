@@ -12,7 +12,7 @@ public class BlueHero extends Hero {
 	public BlueHero(LinkedList<Entity> targets, MapCollisionDetection mapCollisionDetection) {
 		super(targets, mapCollisionDetection, 20, 10, 8, 100, 100, 5);
 		setPlayerClass(PlayerClass.BLUE);
-		setAbility(1, new FireballAbility(this));
+		setAbility(0, new FireballAbility(this));
 		setImageIcon("src/assets/hero/blueNeutral.png");
 	}
 
@@ -21,11 +21,11 @@ public class BlueHero extends Hero {
 
 		//temp hack test code, will change in the future
 		if (pathIndex == 0 && path == CharacterProfile.Path.BLUE) {
-			setAbility(2, new EnergySwordAbility(this));
+			setAbility(1, new EnergySwordAbility(this));
 		} else if (pathIndex == 1 && path == CharacterProfile.Path.BLUE) {
-			setAbility(3, new TeleportAbility(this));
+			setAbility(2, new TeleportAbility(this));
 		} else if (pathIndex == 2 && path == CharacterProfile.Path.BLUE) {
-			setAbility(4, new UltimateLaserAbility(this));
+			setAbility(3, new UltimateLaserAbility(this));
 		}
 		return true;
 	}

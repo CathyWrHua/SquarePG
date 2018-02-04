@@ -18,7 +18,7 @@ public class BasicArcherEnemy extends Enemy{
 
 		if (Math.abs(targetEntity.getPosY()-getPosY()) <= 75 &&
 				targetEntity.getEntityState() != EntityState.DEAD) {
-				attack(EntityAbility.DEFAULT);
+				attack(EntityAbility.FIRST);
 		}
 	}
 

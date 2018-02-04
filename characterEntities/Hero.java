@@ -39,7 +39,7 @@ public abstract class Hero extends Entity {
 		}
 
 		createHeroHashMap();
-		setAbility(0, new EggplantAbility(this));
+		//setAbility(0, new EggplantAbility(this));
 		path = new CharacterProfile.Path[3];
 		setEntityType(EntityType.HERO);
 	}

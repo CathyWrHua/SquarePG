@@ -13,7 +13,7 @@ public class RedHero extends Hero {
 	public RedHero(LinkedList<Entity> targets, MapCollisionDetection mapCollisionDetection) {
 		super(targets, mapCollisionDetection, 30, 15, 5, 100, 100, 5);
 		setPlayerClass(PlayerClass.RED);
-		setAbility(1, new BladeSwingAbility(this));
+		setAbility(0, new BladeSwingAbility(this));
 		setImageIcon("src/assets/hero/redNeutral.png");
 	}
 
@@ -22,11 +22,11 @@ public class RedHero extends Hero {
 
 		//temp hack test code, will change in the future
 		if (pathIndex == 0 && path == CharacterProfile.Path.RED) {
-			setAbility(2, new LightningDrawAbility(this)); //temp
+			setAbility(1, new LightningDrawAbility(this));
 		} else if (pathIndex == 1 && path == CharacterProfile.Path.RED) {
-			setAbility(3, new BladeWhirlAbility(this)); //temp
+			setAbility(2, new BladeWhirlAbility(this));
 		} else if (pathIndex == 2 && path == CharacterProfile.Path.RED) {
-			setAbility(4, new UltimateAssassinAbility(this)); //temp
+			setAbility(3, new UltimateAssassinAbility(this));
 		}
 
 		return true;

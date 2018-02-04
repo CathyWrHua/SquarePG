@@ -12,7 +12,7 @@ public class YellowHero extends Hero {
 	public YellowHero(LinkedList<Entity> targets, MapCollisionDetection mapCollisionDetection) {
 		super(targets, mapCollisionDetection, 20, 12, 6, 100, 100, 5);
 		setPlayerClass(PlayerClass.YELLOW);
-		setAbility(1, new SingleArrowAbility(this));
+		setAbility(0, new SingleArrowAbility(this));
 		setImageIcon("src/assets/hero/yellowNeutral.png");
 	}
 
@@ -21,11 +21,11 @@ public class YellowHero extends Hero {
 
 		//temp hack test code, will change in the future
 		if (pathIndex == 0 && path == CharacterProfile.Path.YELLOW) {
-			setAbility(2, new HuntersCloakAbility(this));
+			setAbility(1, new HuntersCloakAbility(this));
 		} else if (pathIndex == 1 && path == CharacterProfile.Path.YELLOW) {
-			setAbility(3, new HunterTrapAbility(this));
+			setAbility(2, new HunterTrapAbility(this));
 		} else if (pathIndex == 2 && path == CharacterProfile.Path.YELLOW) {
-			setAbility(4, new UltimateHuntersRequiemAbility(this));
+			setAbility(3, new UltimateHuntersRequiemAbility(this));
 		}
 
 		return true;
