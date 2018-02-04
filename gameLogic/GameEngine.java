@@ -75,7 +75,6 @@ public class GameEngine {
 
 		createPlayer(playerClass);
 		createAbilityBar(player);
-		createDummy(500, 500, true);
 	}
 
 	private void createLayerRenderMap() {
