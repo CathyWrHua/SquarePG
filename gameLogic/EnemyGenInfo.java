@@ -104,7 +104,7 @@ public class EnemyGenInfo {
 			case BASIC_MELEE:
 				return 1.5;
 			case BASIC_ARCHER:
-				return 2.0;
+				return 1.8;
 			case BASIC_MAGE:
 				return 1.5;
 			case LEVEL_ONE_BOSS:

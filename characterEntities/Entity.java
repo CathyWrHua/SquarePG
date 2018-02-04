@@ -60,7 +60,7 @@ public abstract class Entity implements Drawable {
 	protected MotionStateUpDown udMotionState;
 
 	protected static final int NUM_ANIMATIONS = 5;
-	protected static final int STUN_TIME = 40;
+	protected static final int STUN_TIME = 20;
 	protected static final int KNOCK_BACK_TIME = 15;
 	protected static final int KNOCK_BACK_DUR = 2;
 	

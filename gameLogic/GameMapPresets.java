@@ -132,9 +132,9 @@ public class GameMapPresets {
 		waveGenInfo = new LinkedList[GameMap.TOTAL_LEVELS][GameMap.MAPS_PER_LEVEL];
 
 		//waveGenInfo[0][0] = generateEnemyInfoMapOneOne();
-		waveGenInfo[0][1] = generateEnemyInfoMapOneTwo();
-		waveGenInfo[0][2] = generateEnemyInfoMapOneThree();
-		waveGenInfo[0][3] = generateEnemyInfoMapOneFour();
+		//waveGenInfo[0][1] = generateEnemyInfoMapOneTwo();
+		//waveGenInfo[0][2] = generateEnemyInfoMapOneThree();
+		//waveGenInfo[0][3] = generateEnemyInfoMapOneFour();
 		waveGenInfo[0][4] = generateEnemyInfoMapOneFive();
 		waveGenInfo[0][5] = generateEnemyInfoMapOneSix();
 		waveGenInfo[0][6] = generateEnemyInfoMapOneSeven();
@@ -217,7 +217,6 @@ public class GameMapPresets {
 
 		genInfos = new LinkedList<>();
 		genInfos.add(new EnemyGenInfo(EnemyGenInfo.EnemyType.BASIC_MELEE, new Point(20, 20)));
-		genInfos.add(new EnemyGenInfo(EnemyGenInfo.EnemyType.BASIC_ARCHER, new Point(20, 20)));
 		genInfos.add(new EnemyGenInfo(EnemyGenInfo.EnemyType.BASIC_MELEE, new Point(700, 700)));
 		genInfos.add(new EnemyGenInfo(EnemyGenInfo.EnemyType.BASIC_ARCHER, new Point(700, 700)));
 		waveInfo.add(new WaveGenInfo(genInfos));
@@ -226,26 +225,55 @@ public class GameMapPresets {
 	}
 
 	private static LinkedList<WaveGenInfo> generateEnemyInfoMapOneFour() {
-		//Sample map 1.4 enemy generation information
-		Queue<EnemyGenInfo> genInfos = new LinkedList<>();
-		genInfos.add(new EnemyGenInfo(EnemyGenInfo.EnemyType.BASIC_MAGE, new Point(100, 100)));
-		genInfos.add(new EnemyGenInfo(EnemyGenInfo.EnemyType.BASIC_MAGE, new Point(500, 500)));
-		genInfos.add(new EnemyGenInfo(EnemyGenInfo.EnemyType.BASIC_MAGE, new Point(300, 300)));
-
 		LinkedList<WaveGenInfo> waveInfo = new LinkedList<>();
+
+		Queue<EnemyGenInfo> genInfos = new LinkedList<>();
+		genInfos.add(new EnemyGenInfo(EnemyGenInfo.EnemyType.GRUNT, new Point(800, 700)));
+		genInfos.add(new EnemyGenInfo(EnemyGenInfo.EnemyType.GRUNT, new Point(800, 700)));
+		genInfos.add(new EnemyGenInfo(EnemyGenInfo.EnemyType.BASIC_MELEE, new Point(800, 700)));
+		genInfos.add(new EnemyGenInfo(EnemyGenInfo.EnemyType.BASIC_ARCHER, new Point(800, 700)));
+		waveInfo.add(new WaveGenInfo(genInfos));
+
+		genInfos = new LinkedList<>();
+		genInfos.add(new EnemyGenInfo(EnemyGenInfo.EnemyType.GRUNT, new Point(20, 20)));
+		genInfos.add(new EnemyGenInfo(EnemyGenInfo.EnemyType.BASIC_MELEE, new Point(20, 20)));
+		genInfos.add(new EnemyGenInfo(EnemyGenInfo.EnemyType.BASIC_MELEE, new Point(500, 500)));
+		genInfos.add(new EnemyGenInfo(EnemyGenInfo.EnemyType.BASIC_MAGE, new Point(500, 500)));
+		waveInfo.add(new WaveGenInfo(genInfos));
+
+		genInfos = new LinkedList<>();
+		genInfos.add(new EnemyGenInfo(EnemyGenInfo.EnemyType.BASIC_MELEE, new Point(20, 20)));
+		genInfos.add(new EnemyGenInfo(EnemyGenInfo.EnemyType.BASIC_ARCHER, new Point(20, 20)));
+		genInfos.add(new EnemyGenInfo(EnemyGenInfo.EnemyType.BASIC_MAGE, new Point(500, 500)));
+		waveInfo.add(new WaveGenInfo(genInfos));
+
+		genInfos = new LinkedList<>();
+		genInfos.add(new EnemyGenInfo(EnemyGenInfo.EnemyType.GRUNT, new Point(20, 20)));
+		genInfos.add(new EnemyGenInfo(EnemyGenInfo.EnemyType.BASIC_MAGE, new Point(20, 20)));
+		genInfos.add(new EnemyGenInfo(EnemyGenInfo.EnemyType.GRUNT, new Point(500, 500)));
+		genInfos.add(new EnemyGenInfo(EnemyGenInfo.EnemyType.BASIC_MAGE, new Point(500, 500)));
+		genInfos.add(new EnemyGenInfo(EnemyGenInfo.EnemyType.BASIC_MELEE, new Point(500, 500)));
 		waveInfo.add(new WaveGenInfo(genInfos));
 
 		return waveInfo;
 	}
 
 	private static LinkedList<WaveGenInfo> generateEnemyInfoMapOneFive() {
-		//Sample map 1.5 enemy generation information
+		LinkedList<WaveGenInfo> waveInfo = new LinkedList<>();
+
 		Queue<EnemyGenInfo> genInfos = new LinkedList<>();
 		genInfos.add(new EnemyGenInfo(EnemyGenInfo.EnemyType.BASIC_MAGE, new Point(100, 100)));
 		genInfos.add(new EnemyGenInfo(EnemyGenInfo.EnemyType.BASIC_MAGE, new Point(500, 500)));
 		genInfos.add(new EnemyGenInfo(EnemyGenInfo.EnemyType.BASIC_MAGE, new Point(300, 300)));
 
-		LinkedList<WaveGenInfo> waveInfo = new LinkedList<>();
+		genInfos = new LinkedList<>();
+		genInfos.add(new EnemyGenInfo(EnemyGenInfo.EnemyType.GRUNT, new Point(500, 500)));
+		genInfos.add(new EnemyGenInfo(EnemyGenInfo.EnemyType.BASIC_MAGE, new Point(20, 20)));
+		genInfos.add(new EnemyGenInfo(EnemyGenInfo.EnemyType.BASIC_MELEE, new Point(500, 500)));
+		genInfos.add(new EnemyGenInfo(EnemyGenInfo.EnemyType.BASIC_MAGE, new Point(500, 500)));
+		genInfos.add(new EnemyGenInfo(EnemyGenInfo.EnemyType.BASIC_ARCHER, new Point(20, 20)));
+		waveInfo.add(new WaveGenInfo(genInfos));
+
 		waveInfo.add(new WaveGenInfo(genInfos));
 
 		return waveInfo;
