@@ -20,9 +20,6 @@ public class TreeDudeBoss extends Enemy {
 
 	@Override
 	public void update() {
-		newPosX = posX;
-		newPosY = posY;
-
 		//Entity takes damage logic
 		if (damageTaken > 0) {
 			currentHealth -= damageTaken;
