@@ -9,7 +9,6 @@ public class BasicMagicEnemy extends Enemy {
 		super(hero, mapCollisionDetection, maxHealth, maxDamage, minDamage, posX, posY, velocity);
 		setImageIcon("src/assets/enemies/basicMageNeutral.png");
 
-		//Temp code until enemy attack is determined
 		setAbility(0, new EnemySingleFireballAbility(this));
 	}
 

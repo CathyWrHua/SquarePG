@@ -5,7 +5,7 @@ import SquarePG.SquarePG;
 import java.util.Queue;
 
 public class WaveGenInfo {
-	public static final int GENERATION_DELAY = SquarePG.FPS*2;
+	public static final int GENERATION_DELAY = Math.round(SquarePG.FPS*1.5f);
 	private Queue<EnemyGenInfo> enemyGenInfoQueue;
 	private int delayCounter;
 
