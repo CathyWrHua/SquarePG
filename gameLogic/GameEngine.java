@@ -54,6 +54,7 @@ public class GameEngine {
 	private int level = 1;
 	private int map = 1;
 	private boolean isDoneRendering = true;
+	private boolean isCurrentWaveFinished = false;
 	private Hero player;
 	private AbilityBar playerAbilityBar;
 	private LinkedList<Entity> targets;
@@ -61,7 +62,7 @@ public class GameEngine {
 	private ArrayList<LinkedList<Drawable>> layerRenderMap;
 
 	//For testing with dummies on the map, remove when dummies are removed
-	private final int NUMBER_DUMMIES = 2;
+	private final int NUMBER_DUMMIES = 0;
 
 	public GameEngine(Hero.PlayerClass playerClass) {
 		targets = new LinkedList<>();
@@ -74,8 +75,6 @@ public class GameEngine {
 
 		createPlayer(playerClass);
 		createAbilityBar(player);
-		createDummy(400, 100, true);
-		createDummy(600, 100, false);
 	}
 
 	private void createLayerRenderMap() {
