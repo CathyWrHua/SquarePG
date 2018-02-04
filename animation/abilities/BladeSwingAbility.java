@@ -2,11 +2,8 @@ package animation.abilities;
 
 import animation.Animation;
 import characterEntities.Entity;
-import characterEntities.Hero;
 import characterEntities.HitDetectionHelper;
 import javafx.scene.shape.Circle;
-
-import java.awt.*;
 
 public class BladeSwingAbility extends Ability {
 

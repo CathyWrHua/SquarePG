@@ -3,11 +3,8 @@ package animation.abilities.enemyAbilities;
 import animation.Animation;
 import animation.abilities.Ability;
 import characterEntities.Entity;
-import characterEntities.Hero;
 import characterEntities.HitDetectionHelper;
 import javafx.scene.shape.Circle;
-
-import java.awt.*;
 
 public class EnemyBladeSwingAbility extends Ability {
 
