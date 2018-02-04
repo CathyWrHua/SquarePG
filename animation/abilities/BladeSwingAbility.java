@@ -12,7 +12,7 @@ public class BladeSwingAbility extends Ability {
 	private final int ATTACK_RANGE = 100;
 
 	public BladeSwingAbility(Entity entity) {
-		super(entity, 2, Entity.EntityAbility.DEFAULT);
+		super(entity, 0.5, Entity.EntityAbility.FIRST);
 		canDamageAnimation = new Animation(entity.getPosX(), entity.getPosY(), Entity.DEFAULT_ENTITY_LENGTH, Entity.DEFAULT_ENTITY_LENGTH/2-ATTACK_RANGE, FILEPATH_ABILITY+ABILITY_NAME, 3, 1);
 	}
 
@@ -40,7 +40,7 @@ public class BladeSwingAbility extends Ability {
 	//TODO: figure out a better damage calculation
 	@Override
 	public int dealDamage(int baseDamage) {
-		return baseDamage*2;
+		return baseDamage;
 	}
 
 	@Override

@@ -12,7 +12,7 @@ public class EggplantAbility extends Ability {
 	private final int ATTACK_RANGE = 75;
 
 	public EggplantAbility(Entity entity) {
-		super(entity, 2, Entity.EntityAbility.DEFAULT);
+		super(entity, 2, Entity.EntityAbility.FIRST);
 		canDamageAnimation = new Animation(entity.getPosX(), entity.getPosY(), 75, 0, FILEPATH_ABILITY+ABILITY_NAME, 4, 1);
 	}
 

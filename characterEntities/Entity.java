@@ -42,7 +42,7 @@ public abstract class Entity implements Drawable {
 	public enum MotionStateUpDown {IDLE, UP, DOWN}
 	public enum MotionStateLeftRight {IDLE, LEFT, RIGHT}
 	public enum EntityAbility {
-		DEFAULT(0), FIRST(1), SECOND(2), THIRD(3), ULTIMATE(4);
+		FIRST(0), SECOND(1), THIRD(2), ULTIMATE(3);
 		private int value;
 
 		EntityAbility(int value) {

@@ -98,8 +98,6 @@ public class GameScreen extends Screen implements KeyListener, MouseListener {
 			toggleMap = -1;
 		} else if (e.getKeyCode() == KeyEvent.VK_K) {
 			toggleMap = 1;
-		} else if (e.getKeyCode() == KeyEvent.VK_A) {
-			attackKeys.add(Entity.EntityAbility.DEFAULT);
 		} else if (e.getKeyCode() == KeyEvent.VK_Q) {
 			attackKeys.add(Entity.EntityAbility.FIRST);
 		} else if (e.getKeyCode() == KeyEvent.VK_W){

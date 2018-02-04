@@ -35,7 +35,7 @@ public class AbilityBar implements Drawable {
 
 		for (int i = 0; i < NUM_ABILITIES; i++) {
 			if (i+1 < abilities.size()) {
-				this.abilities.add(i, abilities.get(i+1));
+				this.abilities.add(i, abilities.get(i));
 			} else {
 				this.abilities.add(i, null);
 			}
