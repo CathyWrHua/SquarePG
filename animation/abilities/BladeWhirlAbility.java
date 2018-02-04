@@ -2,7 +2,6 @@ package animation.abilities;
 
 import animation.Animation;
 import characterEntities.Entity;
-import characterEntities.Hero;
 import characterEntities.HitDetectionHelper;
 import javafx.scene.shape.Circle;
 

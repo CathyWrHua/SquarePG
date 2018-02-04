@@ -6,8 +6,6 @@ import characterEntities.Entity;
 import characterEntities.characterEffects.InvisibilityBuff;
 import characterEntities.characterEffects.SpeedBuff;
 
-import java.awt.*;
-
 public class HuntersCloakAbility extends Ability {
 
 	static final String ABILITY_NAME = "huntersCloak";

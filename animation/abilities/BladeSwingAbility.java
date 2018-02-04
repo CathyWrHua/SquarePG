@@ -31,10 +31,10 @@ public class BladeSwingAbility extends Ability {
 
 		if (entity == null) return false;
 		//Dependent on update for ability being called first
-		int swordRectCenterX = entity.getCenterX() + (entity.getFacingEast() ? Entity.DEFAULT_ENTITY_LENGTH/2 : -Entity.DEFAULT_ENTITY_LENGTH/2 );
+		int swordRectCenterX = entity.getCenterX() + (entity.getFacingEast() ? Entity.DEFAULT_ENTITY_LENGTH/2 : -Entity.DEFAULT_ENTITY_LENGTH/2);
 		Circle swordRect = new Circle(swordRectCenterX, entity.getCenterY(), ATTACK_RANGE);
 
-		return HitDetectionHelper.detectHit(swordRect, target.getEntitySize());
+		return HitDetectionHelper.detectSemicircleHit(swordRect, target.getEntitySize(), entity.getFacingEast());
 	}
 
 	//TODO: figure out a better damage calculation

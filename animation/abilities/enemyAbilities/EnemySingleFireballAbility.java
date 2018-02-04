@@ -4,7 +4,6 @@ import animation.Animation;
 import animation.abilities.Ability;
 import animation.effects.FireballProjectile;
 import characterEntities.Entity;
-import characterEntities.Hero;
 
 public class EnemySingleFireballAbility extends Ability {
 

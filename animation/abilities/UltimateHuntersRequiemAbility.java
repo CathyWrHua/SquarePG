@@ -2,7 +2,6 @@ package animation.abilities;
 
 import animation.Animation;
 import animation.effects.ExplodingKnifeProjectile;
-import animation.effects.Projectile;
 import characterEntities.Entity;
 import characterEntities.Hero;
 
