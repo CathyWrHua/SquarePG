@@ -1,6 +1,5 @@
 package animation.abilities;
 
-import animation.Animation;
 import animation.effects.EnergySwordProjectile;
 import characterEntities.Entity;
 import characterEntities.Hero;

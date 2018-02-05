@@ -4,7 +4,6 @@ import animation.Animation;
 import animation.abilities.Ability;
 import animation.effects.ArrowProjectile;
 import characterEntities.Entity;
-import characterEntities.Hero;
 
 public class EnemySingleArrowAbility extends Ability{
 

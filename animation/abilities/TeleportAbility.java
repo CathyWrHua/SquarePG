@@ -5,7 +5,6 @@ import animation.effects.TeleportMapEffect;
 import characterEntities.Entity;
 import characterEntities.Hero;
 import characterEntities.HitDetectionHelper;
-import gui.DamageMarker;
 import javafx.scene.shape.Circle;
 
 import java.awt.*;

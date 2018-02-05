@@ -3,7 +3,6 @@ package animation.abilities;
 import SquarePG.SquarePG;
 import animation.Animation;
 import animation.effects.Effect;
-import animation.effects.Projectile;
 import characterEntities.Entity;
 import gameLogic.GameEngine;
 import screens.Drawable;

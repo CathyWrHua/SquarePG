@@ -36,7 +36,7 @@ public class EnemyGenInfo {
 			case BASIC_MAGE:
 				return BasicMagicEnemy.class;
 			case LEVEL_ONE_BOSS:
-				return EvilTreeDude.class;
+				return TreeDudeBoss.class;
 			default:
 				return Grunt.class;
 		}

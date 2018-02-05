@@ -3,7 +3,6 @@ package animation.abilities;
 import animation.Animation;
 import animation.effects.ArrowProjectile;
 import characterEntities.Entity;
-import characterEntities.Hero;
 
 public class SingleArrowAbility extends Ability {
 

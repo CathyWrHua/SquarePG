@@ -229,7 +229,7 @@ public abstract class Entity implements Drawable {
 		}
 	}
 
-	void playAnimation(int index) {
+	private void playAnimation(int index) {
 		if (index >= 0 && index < abilities.size()) {
 			currentAbility = abilities.get(index);
 			currentAbility.setupAbility();
