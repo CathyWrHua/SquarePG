@@ -9,7 +9,7 @@ import java.util.NoSuchElementException;
 
 public class SeedlingAbility extends Ability {
 
-	static final String ABILITY_NAME = "teleport";
+	static final String ABILITY_NAME = "fireball";
 	private Entity target;
 
 	public SeedlingAbility(Entity entity) {

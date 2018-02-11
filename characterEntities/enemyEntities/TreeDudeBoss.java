@@ -2,6 +2,7 @@ package characterEntities.enemyEntities;
 
 import animation.abilities.Ability;
 import animation.abilities.enemyAbilities.bossAbilities.BulletSeedAbility;
+import animation.abilities.enemyAbilities.bossAbilities.SeedlingAbility;
 import characterEntities.Hero;
 import characterEntities.characterEffects.CharacterEffect;
 import gameLogic.MapCollisionDetection;
@@ -15,6 +16,7 @@ public class TreeDudeBoss extends Enemy {
 
 		//temp, make another ability
 		setAbility(0, new BulletSeedAbility(this));
+		setAbility(1, new SeedlingAbility(this));
 	}
 
 	@Override
