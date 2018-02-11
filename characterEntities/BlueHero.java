@@ -4,6 +4,7 @@ import animation.abilities.EnergySwordAbility;
 import animation.abilities.FireballAbility;
 import animation.abilities.TeleportAbility;
 import animation.abilities.UltimateLaserAbility;
+import animation.abilities.enemyAbilities.bossAbilities.BulletSeedAbility;
 import gameLogic.MapCollisionDetection;
 
 import java.util.LinkedList;
@@ -12,7 +13,8 @@ public class BlueHero extends Hero {
 	public BlueHero(LinkedList<Entity> targets, MapCollisionDetection mapCollisionDetection) {
 		super(targets, mapCollisionDetection, 20, 10, 8, 100, 100, 5);
 		setPlayerClass(PlayerClass.BLUE);
-		setAbility(0, new FireballAbility(this));
+		//setAbility(0, new FireballAbility(this));
+		setAbility(0, new BulletSeedAbility(this));
 		setImageIcon("src/assets/hero/blueNeutral.png");
 	}
 

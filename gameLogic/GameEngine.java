@@ -2,7 +2,7 @@ package gameLogic;
 
 import animation.abilities.Ability;
 import animation.effects.Effect;
-import animation.effects.EnemyDeathEffect;
+import animation.effects.enemyEffects.EnemyDeathEffect;
 import animation.effects.Projectile;
 import characterEntities.*;
 import characterEntities.enemyEntities.Dummy;

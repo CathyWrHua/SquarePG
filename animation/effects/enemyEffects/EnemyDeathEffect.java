@@ -1,6 +1,7 @@
-package animation.effects;
+package animation.effects.enemyEffects;
 
 import animation.Animation;
+import animation.effects.Effect;
 
 public class EnemyDeathEffect extends Effect {
 
