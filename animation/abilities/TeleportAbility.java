@@ -30,6 +30,7 @@ public class TeleportAbility extends Ability {
 		setHasEffects(true);
 	}
 
+	@Override
 	public void update() {
 		if (state == AbilityState.INITIALIZING && initializeAnimation.isDone()) {
 			teleportPoint = new Point(entity.getPosX(), entity.getPosY());
@@ -44,6 +45,7 @@ public class TeleportAbility extends Ability {
 		}
 	}
 
+	@Override
 	public void setupAbility() {
 		if (teleportMark != null && !teleportMark.isDone()) return;
 
@@ -52,6 +54,7 @@ public class TeleportAbility extends Ability {
 		teleportPoint = null;
 	}
 
+	@Override
 	public void decrementCooldownCounter() {
 		super.decrementCooldownCounter();
 		if (cooldownCounter == 0) {
@@ -59,14 +62,17 @@ public class TeleportAbility extends Ability {
 		}
 	}
 
+	@Override
 	public boolean isRestrictingMovement() {
 		return true;
 	}
 
+	@Override
 	public boolean shouldTrigger() {
 		return (teleportMark != null && !teleportMark.isDone());
 	}
 
+	@Override
 	public void didTrigger() {
 		if (teleportPoint != null) {
 			if (teleportMark != null && !teleportMark.isDone()) {
@@ -84,6 +90,7 @@ public class TeleportAbility extends Ability {
 		teleportMark = null;
 	}
 
+	@Override
 	public boolean didHitTarget(Entity target) {
 		if (target == null) return false;
 
@@ -91,10 +98,12 @@ public class TeleportAbility extends Ability {
 		return HitDetectionHelper.detectHit(hitArea, target.getEntitySize());
 	}
 
+	@Override
 	public int dealDamage(int baseDamage) {
 		return Math.round(baseDamage*DAMAGE_MULTIPLIER);
 	}
 
+	@Override
 	public String getAbilityName() {
 		return ABILITY_NAME;
 	}

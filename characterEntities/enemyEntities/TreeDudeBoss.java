@@ -1,7 +1,8 @@
 package characterEntities.enemyEntities;
 
 import animation.abilities.Ability;
-import animation.abilities.enemyAbilities.EnemyBladeSwingAbility;
+import animation.abilities.enemyAbilities.bossAbilities.BulletSeedAbility;
+import animation.abilities.enemyAbilities.bossAbilities.SeedlingAbility;
 import characterEntities.Hero;
 import characterEntities.characterEffects.CharacterEffect;
 import gameLogic.MapCollisionDetection;
@@ -11,11 +12,11 @@ import java.util.Iterator;
 public class TreeDudeBoss extends Enemy {
 	public TreeDudeBoss(Hero hero, MapCollisionDetection mapCollisionDetection, int maxHealth, int maxDamage, int minDamage, int posX, int posY, double velocity) {
 		super(hero, mapCollisionDetection, maxHealth, maxDamage, minDamage, posX, posY, velocity);
-		//Temp icon
 		setImageIcon("src/assets/enemies/treeDudeNeutral.png");
 
 		//temp, make another ability
-		setAbility(0, new EnemyBladeSwingAbility(this));
+		setAbility(0, new BulletSeedAbility(this));
+		setAbility(1, new SeedlingAbility(this));
 	}
 
 	@Override
