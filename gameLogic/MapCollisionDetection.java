@@ -12,6 +12,8 @@ import java.util.LinkedList;
 public class MapCollisionDetection {
 	private Rectangle[] hitRectArray;
 
+	private static final int COLLISION_REBOUND_SPEED = 4;
+
 	public MapCollisionDetection(Rectangle[] hitRectArray) {
 		this.hitRectArray = hitRectArray;
 	}
@@ -36,12 +38,14 @@ public class MapCollisionDetection {
 		int displacementX = newX - objectSize.x;
 		int displacementY = newY - objectSize.y;
 
+		// Object is not attempting motion, assume by recursion that it is in a valid spot
 		if (displacementX == 0 && displacementY == 0) {
 			return new Point(newX, newY);
 		}
 
 		Rectangle[] detectionList = addEnemiesToHitArray(hitRectArray, currentEntityList);
 
+		// Hack to reverse arraylist to correctly calculate new x and y
 		if (displacementX < 0 && displacementY < 0) {
 			ArrayList<Rectangle> tempList = new ArrayList<>(Arrays.asList(detectionList));
 			Collections.reverse(tempList);
@@ -62,7 +66,7 @@ public class MapCollisionDetection {
 				//collision was detected
 
 				if (displacementX > 0) {
-					if (objectLeft < hitRectLeft) {
+					if (objectLeft <= hitRectLeft) {
 						if (displacementY == 0) {
 							newX = rect.x - objectSize.width;
 						} else if (displacementY > 0) {
@@ -92,8 +96,8 @@ public class MapCollisionDetection {
 
 						continue;
 					}
-				} else if (displacementX < 0) {
-					if (objectRight > hitRectRight) {
+				} else {
+					if (objectRight >= hitRectRight) {
 						if (displacementY == 0) {
 							newX = hitRectRight;
 						} else if (displacementY > 0) {
