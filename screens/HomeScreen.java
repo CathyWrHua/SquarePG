@@ -9,10 +9,11 @@ import java.awt.event.ActionListener;
 import javax.swing.*;
 
 import SquarePG.*;
+import gameLogic.GameMode;
 
 public class HomeScreen extends Screen implements ActionListener{
 
-	private JButton play, options, about, back;
+	private JButton play, options, about, back, debug;
 	
 	public HomeScreen() {
 		super();
@@ -20,11 +21,13 @@ public class HomeScreen extends Screen implements ActionListener{
 		options = new JButton("Options");
 		about = new JButton("About");
 		back = new JButton("Back");
+		debug = new JButton("Debug");
 
 		play.addActionListener(this);
 		options.addActionListener(this);
 		about.addActionListener(this);
 		back.addActionListener(this);
+		debug.addActionListener(this);
 
 		setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
@@ -37,6 +40,8 @@ public class HomeScreen extends Screen implements ActionListener{
 		add(options, c);
 		c.gridy = 2;
 		add(about, c);
+		c.gridy = 3;
+		add(debug, c);
 
 	}
 
@@ -59,6 +64,10 @@ public class HomeScreen extends Screen implements ActionListener{
 		}
 		if (event.getSource() == about) {
 			SquarePG.screenState = ScreenState.ABOUT;
+		}
+		if (event.getSource() == debug) {
+			SquarePG.gameMode = GameMode.DEBUG;
+			SquarePG.screenState = ScreenState.CHARACTER_SELECT;
 		}
 		
 	}

@@ -1,5 +1,6 @@
 package gameLogic;
 
+import SquarePG.SquarePG;
 import animation.abilities.Ability;
 import animation.effects.Effect;
 import animation.effects.enemyEffects.EnemyDeathEffect;
@@ -129,11 +130,6 @@ public class GameEngine {
 			updateEnemies();
 			updateEffects();
 		}
-
-		//TEMPORARY TEST CODE TO REGENERATE ENEMY
-//		if (targets.size() == 2) {
-//			createEnemy(20, 2, 1, 100, 100, 2);
-//		}
 	}
 
 	public void paint(Graphics g) {
@@ -181,6 +177,7 @@ public class GameEngine {
 		player.setLRMotionState(containsLeft? Entity.MotionStateLeftRight.LEFT : Entity.MotionStateLeftRight.IDLE);
 	}
 
+	//Debug mode only for changing maps
 	public void toggleMap(int change) {
 		map--;
 		map = Math.floorMod(map+change, GameMap.MAPS_PER_LEVEL);
@@ -192,14 +189,14 @@ public class GameEngine {
 		player.attack(ability);
 	}
 
-	//Temporary hack to damage the player in testing
+	//Debug mode only for taking damage
 	public void playerWasAttacked() {
 		DamageMarker marker = player.inflict(3, new Dummy(-100, -100, true));
 		effects.add(marker);
 		layerRenderMap.get(MapLayer.DAMAGE_LAYER.getValue()).add(marker);
 	}
 
-	//Temporary hack to test healing
+	//Debug mode onle for healing
 	public void playerDidHeal(int heal) {
 		player.heal(heal);
 	}
@@ -272,8 +269,11 @@ public class GameEngine {
 				currentWave.decrementCounter();
 			}
 		} else {
-			//This happens when either an error occurred or the current level is complete
-			//TODO: if level is complete, take action
+			if (SquarePG.gameMode == GameMode.PLAY) {
+				//TODO: level is complete, take action
+			} else if (SquarePG.gameMode == GameMode.DEBUG){
+				//Nothing?
+			}
 		}
 	}
 
