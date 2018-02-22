@@ -136,7 +136,11 @@ public abstract class Enemy extends Entity {
 		}
 
 		LinkedList<Entity> entityList = new LinkedList<>();
-		entityList.addAll(comrades);
+		for (Entity entity:comrades) {
+			if (entity != this) {
+				entityList.add(entity);
+			}
+		}
 		entityList.add(targetEntity);
 		setPoint(mapCollisionDetection.determineMotion(newPosX, newPosY, getEntitySize(), entityList));
 
