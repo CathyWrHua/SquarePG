@@ -7,11 +7,13 @@ import java.util.Stack;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
+import gameLogic.GameMode;
 import screens.*;
 import characterEntities.*;
 
 public class SquarePG extends JFrame {
 	public static ScreenState screenState = ScreenState.WAIT;
+	public static GameMode gameMode = GameMode.PLAY;
 	public static Hero.PlayerClass heroClass;
 	private Screen currentScreen; 
 	private Stack<Screen> screenStack = new Stack<>();

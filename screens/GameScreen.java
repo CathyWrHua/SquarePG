@@ -7,8 +7,10 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.*;
 
+import SquarePG.SquarePG;
 import gameLogic.GameEngine;
 import characterEntities.*;
+import gameLogic.GameMode;
 
 import javax.swing.*;
 
@@ -94,11 +96,7 @@ public class GameScreen extends Screen implements KeyListener, MouseListener {
 			}
 		}
 
-		if (e.getKeyCode() == KeyEvent.VK_J) {
-			toggleMap = -1;
-		} else if (e.getKeyCode() == KeyEvent.VK_K) {
-			toggleMap = 1;
-		} else if (e.getKeyCode() == KeyEvent.VK_Q) {
+		if (e.getKeyCode() == KeyEvent.VK_Q) {
 			attackKeys.add(Entity.EntityAbility.FIRST);
 		} else if (e.getKeyCode() == KeyEvent.VK_W){
 			attackKeys.add(Entity.EntityAbility.SECOND);
@@ -106,18 +104,27 @@ public class GameScreen extends Screen implements KeyListener, MouseListener {
 			attackKeys.add(Entity.EntityAbility.THIRD);
 		} else if (e.getKeyCode() == KeyEvent.VK_R){
 			attackKeys.add(Entity.EntityAbility.ULTIMATE);
-		} else if (e.getKeyCode() == KeyEvent.VK_Z) {
-			gameEngine.playerWasAttacked();
-		} else if (e.getKeyCode() == KeyEvent.VK_X) {
-			gameEngine.playerDidHeal(3);
 		} else if (e.getKeyCode() == KeyEvent.VK_P) {
 			gameState = (gameState == GameState.GAME_STATE_PAUSED)? GameState.GAME_STATE_MAP : GameState.GAME_STATE_PAUSED;
-		} else if (e.getKeyCode() == KeyEvent.VK_M) {
-			gameState = GameState.GAME_STATE_MAP;
 		} else if (e.getKeyCode() == KeyEvent.VK_H) {
 			gameState = GameState.GAME_STATE_HELP;
-		} else if (e.getKeyCode() == KeyEvent.VK_C) {
-			gameState = GameState.GAME_STATE_PROFILE;
+		}
+
+		// Debug only controls
+		if (SquarePG.gameMode == GameMode.DEBUG) {
+			if (e.getKeyCode() == KeyEvent.VK_Z) {
+				gameEngine.playerWasAttacked();
+			} else if (e.getKeyCode() == KeyEvent.VK_X) {
+				gameEngine.playerDidHeal(3);
+			} else if (e.getKeyCode() == KeyEvent.VK_M) {
+				gameState = GameState.GAME_STATE_MAP;
+			} else if (e.getKeyCode() == KeyEvent.VK_C) {
+				gameState = GameState.GAME_STATE_PROFILE;
+			} else if (e.getKeyCode() == KeyEvent.VK_J) {
+				toggleMap = -1;
+			} else if (e.getKeyCode() == KeyEvent.VK_K) {
+				toggleMap = 1;
+			}
 		}
 	}
 
@@ -142,29 +149,34 @@ public class GameScreen extends Screen implements KeyListener, MouseListener {
 	public void keyTyped(KeyEvent arg0) { }
 
 	//mouse events
+	@Override
 	public void mousePressed(MouseEvent e) {
 		if (gameState == GameState.GAME_STATE_PROFILE) {
 
 		}
 	}
 
+	@Override
 	public void mouseReleased(MouseEvent e) {
 		if (gameState == GameState.GAME_STATE_PROFILE) {
 			findPath(e.getX(), e.getY());
 		}
 	}
 
+	@Override
 	public void mouseEntered(MouseEvent e) { }
 
+	@Override
 	public void mouseExited(MouseEvent e) { }
 
+	@Override
 	public void mouseClicked(MouseEvent e) {
 		if (gameState == GameState.GAME_STATE_PROFILE) {
 			findPath(e.getX(), e.getY());
 		}
 	}
 
-	//Temporary hack code for evolution tree debug
+	//Evolution Debug method
 	private void findPath(int mouseX, int mouseY) {
 		if (mouseX > 100 && mouseX < 300) {
 			if (mouseY > 100 && mouseY < 300) {
