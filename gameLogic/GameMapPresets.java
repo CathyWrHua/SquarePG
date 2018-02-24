@@ -128,19 +128,54 @@ public class GameMapPresets {
 		return waveGenInfo;
 	}
 
+	public static void regenerateEnemyForMap(int level, int map) {
+		if (waveGenInfo == null) {
+			makeEnemyGenInfo();
+		} else {
+			waveGenInfo[level-1][map-1] = generateEnemyInfo(level, map);
+		}
+	}
+
 	private static void makeEnemyGenInfo() {
 		waveGenInfo = new LinkedList[GameMap.TOTAL_LEVELS][GameMap.MAPS_PER_LEVEL];
 
-		waveGenInfo[0][0] = generateEnemyInfoMapOneOne();
-		waveGenInfo[0][1] = generateEnemyInfoMapOneTwo();
-		waveGenInfo[0][2] = generateEnemyInfoMapOneThree();
-		waveGenInfo[0][3] = generateEnemyInfoMapOneFour();
-		waveGenInfo[0][4] = generateEnemyInfoMapOneFive();
-		waveGenInfo[0][5] = generateEnemyInfoMapOneSix();
-		waveGenInfo[0][6] = generateEnemyInfoMapOneSeven();
-		waveGenInfo[0][7] = generateEnemyInfoMapOneEight();
-		waveGenInfo[0][8] = generateEnemyInfoMapOneNine();
-		waveGenInfo[0][9] = generateEnemyInfoMapOneBoss();
+		for (int l = 0; l < GameMap.TOTAL_LEVELS; l++) {
+			for (int m = 0; m < GameMap.MAPS_PER_LEVEL; m++) {
+				waveGenInfo[l][m] = generateEnemyInfo(l+1, m+1);
+			}
+		}
+	}
+
+	private static LinkedList<WaveGenInfo> generateEnemyInfo(int level, int map) {
+		switch(level) {
+			case 1:
+				switch (map) {
+					case 1:
+						return generateEnemyInfoMapOneOne();
+					case 2:
+						return generateEnemyInfoMapOneTwo();
+					case 3:
+						return generateEnemyInfoMapOneThree();
+					case 4:
+						return generateEnemyInfoMapOneFour();
+					case 5:
+						return generateEnemyInfoMapOneFive();
+					case 6:
+						return generateEnemyInfoMapOneSix();
+					case 7:
+						return generateEnemyInfoMapOneSeven();
+					case 8:
+						return generateEnemyInfoMapOneEight();
+					case 9:
+						return generateEnemyInfoMapOneNine();
+					case 10:
+						return generateEnemyInfoMapOneBoss();
+					default:
+				}
+				break;
+			default:
+		}
+		return null;
 	}
 
 	public static final int[][][][] LEVEL_MAPS = {

@@ -10,7 +10,9 @@ import characterEntities.enemyEntities.Dummy;
 import characterEntities.enemyEntities.Enemy;
 import gui.AbilityBar;
 import gui.DamageMarker;
+import javafx.util.Pair;
 import screens.Drawable;
+import screens.GameScreen;
 
 import java.awt.*;
 import java.util.Iterator;
@@ -45,6 +47,7 @@ public class GameEngine {
 	}
 
 	private final int TOTAL_MAP_LAYERS = 7;
+	private final int FINISHED_MAP_COUNDOWN = SquarePG.FPS;
 
 	private GameMap gameMap;
 
@@ -54,8 +57,10 @@ public class GameEngine {
 
 	private int level = 1;
 	private int map = 1;
-	private boolean isDoneRendering = true;
-	private boolean isCurrentWaveFinished = false;
+	private boolean doneRendering = true;
+	private boolean currentWaveFinished = false;
+	private boolean currentMapFinished = false;
+	private int mapFinishedCounter = FINISHED_MAP_COUNDOWN;
 	private Hero player;
 	private AbilityBar playerAbilityBar;
 	private LinkedList<Entity> targets;
@@ -72,7 +77,7 @@ public class GameEngine {
 		gameMap = new GameMap(level, map);
 		collisionMap = new MapCollisionDetection(gameMap.getCurrentCollisionMap());
 		createLayerRenderMap();
-		isDoneRendering = true;
+		doneRendering = true;
 
 		createPlayer(playerClass);
 		createAbilityBar(player);
@@ -94,7 +99,7 @@ public class GameEngine {
 	}
 
 	public void update() {
-		if (!isDoneRendering) return;
+		if (!doneRendering) return;
 
 		//TEMPORARY: REMOVE WHEN WE HAVE LEGIT MAPS
 		//This is to avoid asynchronous heisenbugs of overwriting collision maps while a calculation is going on
@@ -133,7 +138,7 @@ public class GameEngine {
 	}
 
 	public void paint(Graphics g) {
-		isDoneRendering = false;
+		doneRendering = false;
 		for (int layer = 0; layer < TOTAL_MAP_LAYERS; layer++) {
 			LinkedList<Drawable> drawables = layerRenderMap.get(layer);
 			if (drawables != null && drawables.size() > 0) {
@@ -142,7 +147,7 @@ public class GameEngine {
 				}
 			}
 		}
-		isDoneRendering = true;
+		doneRendering = true;
 	}
 
 	public void playerDidMoveUp() {
@@ -209,6 +214,52 @@ public class GameEngine {
 		return playerAbilityBar;
 	}
 
+	public boolean isCurrentMapFinished() {
+		return currentMapFinished;
+	}
+
+	public void setCurrentMapFinished(boolean mapFinished) {
+		currentMapFinished = mapFinished;
+	}
+
+	public void reset() {
+		if (layerRenderMap != null) {
+			layerRenderMap.get(MapLayer.BACKGROUND_EFFECTS_LAYER.getValue()).clear();
+			layerRenderMap.get(MapLayer.ENTITY_LAYER.getValue()).clear();
+			layerRenderMap.get(MapLayer.ENTITY_EFFECTS_LAYER.getValue()).clear();
+			layerRenderMap.get(MapLayer.MAP_EFFECTS_LAYER.getValue()).clear();
+			layerRenderMap.get(MapLayer.DAMAGE_LAYER.getValue()).clear();
+			if (player != null) {
+				player.heal(player.getMaxHealth());
+				player.resetAbilities();
+				player.setPoint(new Point(GameScreen.GAME_SCREEN_LEFT_BOUNDARY, GameScreen.GAME_SCREEN_TOP_BOUNDARY));
+				layerRenderMap.get(MapLayer.ENTITY_LAYER.getValue()).add(player);
+			}
+		}
+	}
+
+	public void setMap(int map) {
+		if (map > 0 && map <= GameMap.MAPS_PER_LEVEL) {
+			this.map = map;
+			gameMap.setStage(level, this.map);
+		}
+	}
+
+	public Pair<Integer, Integer> unlockNext() {
+		int nextLevel = map == 10 ? level + 1: level;
+		int nextMap = map == 10 ? 1 : map + 1;
+		return new Pair<>(nextLevel, nextMap);
+	}
+
+	// Debug method to quickly clear level
+	public void killAllEnemies() {
+		for (Entity target: targets) {
+			DamageMarker marker = target.inflict(99999, true);
+			effects.add(marker);
+			layerRenderMap.get(MapLayer.DAMAGE_LAYER.getValue()).add(marker);
+		}
+	}
+
 	// Private helper functions
 	private void updateEnemies() {
 		for (Iterator<Entity> iterator = targets.iterator(); iterator.hasNext();) {
@@ -270,7 +321,11 @@ public class GameEngine {
 			}
 		} else {
 			if (SquarePG.gameMode == GameMode.PLAY) {
-				//TODO: level is complete, take action
+				if (mapFinishedCounter > 0) {
+					mapFinishedCounter--;
+				} else {
+					currentMapFinished = true;
+				}
 			} else if (SquarePG.gameMode == GameMode.DEBUG){
 				//Nothing?
 			}

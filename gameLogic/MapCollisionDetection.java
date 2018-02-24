@@ -2,6 +2,7 @@ package gameLogic;
 
 import characterEntities.Entity;
 import characterEntities.HitDetectionHelper;
+import screens.GameScreen;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -143,6 +144,12 @@ public class MapCollisionDetection {
 				}
 			}
 		}
+
+		newX = (newX < GameScreen.GAME_SCREEN_LEFT_BOUNDARY) ? GameScreen.GAME_SCREEN_LEFT_BOUNDARY : newX;
+		newX = (newX > GameScreen.GAME_SCREEN_RIGHT_BOUNDARY) ? GameScreen.GAME_SCREEN_RIGHT_BOUNDARY : newX;
+		newY = (newY < GameScreen.GAME_SCREEN_TOP_BOUNDARY) ? GameScreen.GAME_SCREEN_TOP_BOUNDARY : newY;
+		newY = (newY > GameScreen.GAME_SCREEN_BOTTOM_BOUNDARY) ? GameScreen.GAME_SCREEN_BOTTOM_BOUNDARY : newY;
+
 		return new Point(newX, newY);
 	}
 

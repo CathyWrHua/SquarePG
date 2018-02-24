@@ -11,6 +11,7 @@ import SquarePG.SquarePG;
 import gameLogic.GameEngine;
 import characterEntities.*;
 import gameLogic.GameMode;
+import javafx.util.Pair;
 
 import javax.swing.*;
 
@@ -19,18 +20,27 @@ public class GameScreen extends Screen implements KeyListener, MouseListener {
 		GAME_STATE_MAP,
 		GAME_STATE_PAUSED,
 		GAME_STATE_HELP,
-		GAME_STATE_PROFILE //For now
+		GAME_STATE_PROFILE,
+		GAME_STATE_MAP_SELECT
 	}
 
 	private GameEngine gameEngine;
 	private CharacterProfile profilePage;
+	private MapSelectScreen mapSelectScreen;
 	private ImageIcon helpPage;
 	private HashSet<Integer> motionKeys;
 	private Queue<Entity.EntityAbility> attackKeys;
-	private GameState gameState = GameState.GAME_STATE_MAP;
+	private GameState gameState = GameState.GAME_STATE_MAP_SELECT;
+
+	private boolean shouldKillAll = false;
 
 	public static final int GAME_SCREEN_WIDTH = 1000;
 	public static final int GAME_SCREEN_HEIGHT = 925;
+
+	public static final int GAME_SCREEN_LEFT_BOUNDARY = 25;
+	public static final int GAME_SCREEN_RIGHT_BOUNDARY = 975;
+	public static final int GAME_SCREEN_TOP_BOUNDARY = 25;
+	public static final int GAME_SCREEN_BOTTOM_BOUNDARY = 775;
 
 	//Member variable is to make any changes to gameMap synchronized with main thread. Delete in non-dev mode
 	private int toggleMap;
@@ -49,6 +59,13 @@ public class GameScreen extends Screen implements KeyListener, MouseListener {
 		helpPage = new ImageIcon("src/assets/maps/helpPage.png");
 		motionKeys = new LinkedHashSet<>();
 		attackKeys = new LinkedList<>();
+		mapSelectScreen = new MapSelectScreen();
+		mapSelectScreen.setUnlockedLevel(1);
+		mapSelectScreen.setUnlockedMap(1);
+
+		mapSelectScreen.init();
+		mapSelectScreen.setVisible(false);
+		add(mapSelectScreen);
 	}
 
 	@Override
@@ -63,6 +80,11 @@ public class GameScreen extends Screen implements KeyListener, MouseListener {
 				consumeToggleMap();
 				consumeAttack();
 				gameEngine.update();
+
+				if (SquarePG.gameMode == GameMode.DEBUG && shouldKillAll) {
+					gameEngine.killAllEnemies();
+					shouldKillAll = false;
+				}
 				break;
 			case GAME_STATE_HELP:
 				//something
@@ -70,9 +92,31 @@ public class GameScreen extends Screen implements KeyListener, MouseListener {
 			case GAME_STATE_PROFILE:
 				profilePage.update();
 				break;
+			case GAME_STATE_MAP_SELECT:
+				if (!mapSelectScreen.isVisible()) {
+					mapSelectScreen.setVisible(true);
+				}
+				if (mapSelectScreen.getMap() != -1) {
+					gameEngine.reset();
+					gameEngine.setMap(mapSelectScreen.getMap());
+					gameState = GameState.GAME_STATE_MAP;
+					mapSelectScreen.resetSelection();
+					mapSelectScreen.setVisible(false);
+				}
+				break;
 			default:
 				//error?
 				break;
+		}
+
+		if (gameEngine.isCurrentMapFinished() && SquarePG.gameMode == GameMode.PLAY) {
+			gameState = GameState.GAME_STATE_MAP_SELECT;
+			gameEngine.setCurrentMapFinished(false);
+
+			Pair<Integer, Integer> next = gameEngine.unlockNext();
+			mapSelectScreen.setUnlockedLevel(next.getKey());
+			mapSelectScreen.setUnlockedMap(next.getValue());
+			mapSelectScreen.update();
 		}
 	}
 
@@ -120,10 +164,14 @@ public class GameScreen extends Screen implements KeyListener, MouseListener {
 				gameState = GameState.GAME_STATE_MAP;
 			} else if (e.getKeyCode() == KeyEvent.VK_C) {
 				gameState = GameState.GAME_STATE_PROFILE;
+			} else if (e.getKeyCode() == KeyEvent.VK_T) {
+				shouldKillAll = true;
 			} else if (e.getKeyCode() == KeyEvent.VK_J) {
 				toggleMap = -1;
 			} else if (e.getKeyCode() == KeyEvent.VK_K) {
 				toggleMap = 1;
+			} else if (e.getKeyCode() == KeyEvent.VK_L) {
+				gameState = GameState.GAME_STATE_MAP_SELECT;
 			}
 		}
 	}
@@ -236,6 +284,8 @@ public class GameScreen extends Screen implements KeyListener, MouseListener {
 				break;
 			case GAME_STATE_PROFILE:
 				profilePage.paint(g);
+				break;
+			case GAME_STATE_MAP_SELECT:
 				break;
 			default:
 				break;
