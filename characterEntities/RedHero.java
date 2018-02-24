@@ -5,13 +5,14 @@ import animation.abilities.BladeWhirlAbility;
 import animation.abilities.LightningDrawAbility;
 import animation.abilities.UltimateAssassinAbility;
 import gameLogic.MapCollisionDetection;
+import screens.GameScreen;
 
 import java.util.LinkedList;
 
 public class RedHero extends Hero {
 
 	public RedHero(LinkedList<Entity> targets, MapCollisionDetection mapCollisionDetection) {
-		super(targets, mapCollisionDetection, 30, 15, 5, 100, 100, 5);
+		super(targets, mapCollisionDetection, 30, 15, 5, GameScreen.GAME_SCREEN_LEFT_BOUNDARY, GameScreen.GAME_SCREEN_TOP_BOUNDARY, 5);
 		setPlayerClass(PlayerClass.RED);
 		setAbility(0, new BladeSwingAbility(this));
 		setImageIcon("src/assets/hero/redNeutral.png");

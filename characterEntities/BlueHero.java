@@ -5,12 +5,13 @@ import animation.abilities.FireballAbility;
 import animation.abilities.TeleportAbility;
 import animation.abilities.UltimateLaserAbility;
 import gameLogic.MapCollisionDetection;
+import screens.GameScreen;
 
 import java.util.LinkedList;
 
 public class BlueHero extends Hero {
 	public BlueHero(LinkedList<Entity> targets, MapCollisionDetection mapCollisionDetection) {
-		super(targets, mapCollisionDetection, 20, 10, 8, 100, 100, 5);
+		super(targets, mapCollisionDetection, 20, 10, 8, GameScreen.GAME_SCREEN_LEFT_BOUNDARY, GameScreen.GAME_SCREEN_TOP_BOUNDARY, 5);
 		setPlayerClass(PlayerClass.BLUE);
 		setAbility(0, new FireballAbility(this));
 		setImageIcon("src/assets/hero/blueNeutral.png");

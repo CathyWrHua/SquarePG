@@ -1,6 +1,7 @@
 package gameLogic;
 
 import screens.Drawable;
+import screens.GameScreen;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -37,6 +38,7 @@ public class GameMap implements Drawable {
 			currentLevel = 1;
 			currentMap = 1;
 		}
+		GameMapPresets.regenerateEnemyForMap(currentLevel, currentMap);
 	}
 
 	public Rectangle[] getCurrentCollisionMap () {
@@ -93,10 +95,10 @@ public class GameMap implements Drawable {
 
 	private ArrayList<Rectangle> addBorder(ArrayList<Rectangle> hitRectMap) {
 		if (hitRectMap != null) {
-			hitRectMap.add(new Rectangle(0, 0, 25, 800));
-			hitRectMap.add(new Rectangle(0, 0, 1000, 25));
-			hitRectMap.add(new Rectangle(975, 0, 25, 800));
-			hitRectMap.add(new Rectangle(0, 775, 1000, 25));
+			hitRectMap.add(new Rectangle(0, 0, GameScreen.GAME_SCREEN_LEFT_BOUNDARY, 800));
+			hitRectMap.add(new Rectangle(0, 0, GameScreen.GAME_SCREEN_WIDTH, GameScreen.GAME_SCREEN_TOP_BOUNDARY));
+			hitRectMap.add(new Rectangle(GameScreen.GAME_SCREEN_RIGHT_BOUNDARY, 0, 25, 800));
+			hitRectMap.add(new Rectangle(0, GameScreen.GAME_SCREEN_BOTTOM_BOUNDARY, GameScreen.GAME_SCREEN_WIDTH, 25));
 		}
 		return hitRectMap;
 	}

@@ -254,7 +254,6 @@ public abstract class Entity implements Drawable {
 		}
 	}
 
-
 	public ImageIcon getImageIcon() {
 		return imageIcon;
 	}
@@ -423,6 +422,17 @@ public abstract class Entity implements Drawable {
 
 	public void clearCharacterEffects() {
 		characterEffects.clear();
+	}
+
+	public void resetAbilities() {
+		for (int i = 0; i < abilities.size(); i++) {
+			Ability ability = abilities.get(i);
+			if (ability != null) {
+				ability.reset();
+				ability.resetCooldown();
+			}
+		}
+		currentAbility = null;
 	}
 
 	public void setTransparent(boolean transparent) {

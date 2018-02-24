@@ -5,12 +5,13 @@ import animation.abilities.HuntersCloakAbility;
 import animation.abilities.SingleArrowAbility;
 import animation.abilities.UltimateHuntersRequiemAbility;
 import gameLogic.MapCollisionDetection;
+import screens.GameScreen;
 
 import java.util.LinkedList;
 
 public class YellowHero extends Hero {
 	public YellowHero(LinkedList<Entity> targets, MapCollisionDetection mapCollisionDetection) {
-		super(targets, mapCollisionDetection, 20, 12, 6, 100, 100, 5);
+		super(targets, mapCollisionDetection, 20, 12, 6, GameScreen.GAME_SCREEN_LEFT_BOUNDARY, GameScreen.GAME_SCREEN_TOP_BOUNDARY, 5);
 		setPlayerClass(PlayerClass.YELLOW);
 		setAbility(0, new SingleArrowAbility(this));
 		setImageIcon("src/assets/hero/yellowNeutral.png");
