@@ -1,15 +1,12 @@
 package characterEntities.enemyEntities;
 
-import animation.abilities.Ability;
 import animation.abilities.enemyAbilities.bossAbilities.BulletSeedAbility;
 import animation.abilities.enemyAbilities.bossAbilities.SeedlingAbility;
 import characterEntities.Hero;
-import characterEntities.characterEffects.CharacterEffect;
 import gameLogic.MapCollisionDetection;
 import screens.GameScreen;
 
 import java.awt.*;
-import java.util.Iterator;
 
 public class TreeDudeBoss extends Enemy {
 	public TreeDudeBoss(Hero hero, MapCollisionDetection mapCollisionDetection, int maxHealth, int maxDamage, int minDamage, int posX, int posY, double velocity) {
@@ -28,7 +25,10 @@ public class TreeDudeBoss extends Enemy {
 		updateAbilities();
 		updateEffects();
 		updateAttack();
-		updateEnemyMisc();
+		if (currentAbility == null) {
+			resetImmuneTo();
+		}
+		randomTargetCounter -= (randomTargetCounter > 0)? 1:0;
 	}
 
 	@Override

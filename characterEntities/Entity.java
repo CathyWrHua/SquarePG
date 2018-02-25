@@ -11,7 +11,6 @@ import screens.Drawable;
 import javax.swing.*;
 import java.awt.*;
 import java.util.*;
-import java.util.function.Predicate;
 
 public abstract class Entity implements Drawable {
 	protected int posX, posY;

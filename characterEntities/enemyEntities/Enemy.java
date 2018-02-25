@@ -7,7 +7,6 @@ import gui.DamageMarker;
 import screens.GameScreen;
 
 import java.util.Collections;
-import java.util.HashMap;
 
 import java.awt.*;
 import java.util.LinkedList;
@@ -140,18 +139,14 @@ public abstract class Enemy extends Entity {
 		setPoint(mapCollisionDetection.determineMotion(newPosX, newPosY, getEntitySize(), entityHitDetectionList));
 	}
 
-	protected void updateEnemyMisc() {
-		if (currentAbility == null) {
-			resetImmuneTo();
-		}
-		randomTargetCounter -= (randomTargetCounter > 0)? 1:0;
-	}
-
 	public void update() {
 		super.update();
 		updateAttack();
 		updateMovement();
-		updateEnemyMisc();
+		if (currentAbility == null) {
+			resetImmuneTo();
+		}
+		randomTargetCounter -= (randomTargetCounter > 0)? 1:0;
 	}
 
 	@Override
