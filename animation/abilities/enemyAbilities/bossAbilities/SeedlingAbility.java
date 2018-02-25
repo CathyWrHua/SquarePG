@@ -15,7 +15,7 @@ public class SeedlingAbility extends Ability {
 	public SeedlingAbility(Entity entity) {
 		super(entity, 5, Entity.EntityAbility.SECOND);
 
-		initializeAnimation = new Animation(entity.getPosX(), entity.getPosY(), 75, 0, FILEPATH_ABILITY+ABILITY_NAME, 2, 1);
+		initializeAnimation = new Animation(entity.getPosX(), entity.getPosY(), 75, 15, FILEPATH_ABILITY+ABILITY_NAME, 7, 1);
 		setHasEffects(true);
 	}
 
