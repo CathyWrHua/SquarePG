@@ -60,6 +60,7 @@ public class GameEngine {
 	private boolean doneRendering = true;
 	private boolean currentWaveFinished = false;
 	private boolean currentMapFinished = false;
+	private boolean failCurrentMap = false;
 	private int mapFinishedCounter = FINISHED_MAP_COUNDOWN;
 	private Hero player;
 	private AbilityBar playerAbilityBar;
@@ -134,6 +135,10 @@ public class GameEngine {
 
 			updateEnemies();
 			updateEffects();
+		}
+
+		if (player.getEntityState() == Entity.EntityState.DEAD) {
+			failCurrentMap = true;
 		}
 	}
 
@@ -229,9 +234,12 @@ public class GameEngine {
 			layerRenderMap.get(MapLayer.ENTITY_EFFECTS_LAYER.getValue()).clear();
 			layerRenderMap.get(MapLayer.MAP_EFFECTS_LAYER.getValue()).clear();
 			layerRenderMap.get(MapLayer.DAMAGE_LAYER.getValue()).clear();
+
+			targets.clear();
+			effects.clear();
+
 			if (player != null) {
-				player.heal(player.getMaxHealth());
-				player.resetAbilities();
+				player.resetEntity();
 				player.setPoint(new Point(GameScreen.GAME_SCREEN_LEFT_BOUNDARY, GameScreen.GAME_SCREEN_TOP_BOUNDARY));
 				layerRenderMap.get(MapLayer.ENTITY_LAYER.getValue()).add(player);
 			}
@@ -249,6 +257,18 @@ public class GameEngine {
 		int nextLevel = map == 10 ? level + 1: level;
 		int nextMap = map == 10 ? 1 : map + 1;
 		return new Pair<>(nextLevel, nextMap);
+	}
+
+	public Pair<Integer, Integer> getCurrentLevel() {
+		return new Pair<>(level, map);
+	}
+
+	public boolean getFailCurrentMap() {
+		return failCurrentMap;
+	}
+
+	public void setFailCurrentMap(boolean currentMap) {
+		this.failCurrentMap = currentMap;
 	}
 
 	// Debug method to quickly clear level

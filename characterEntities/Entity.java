@@ -424,7 +424,7 @@ public abstract class Entity implements Drawable {
 		characterEffects.clear();
 	}
 
-	public void resetAbilities() {
+	public void resetEntity() {
 		for (int i = 0; i < abilities.size(); i++) {
 			Ability ability = abilities.get(i);
 			if (ability != null) {
@@ -433,6 +433,10 @@ public abstract class Entity implements Drawable {
 			}
 		}
 		currentAbility = null;
+		setEntityState(EntityState.NEUTRAL);
+
+		currentHealth = maxHealth;
+		immuneTo.clear();
 	}
 
 	public void setTransparent(boolean transparent) {

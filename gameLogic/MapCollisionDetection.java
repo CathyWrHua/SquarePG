@@ -146,7 +146,7 @@ public class MapCollisionDetection {
 		}
 
 		newX = (newX < GameScreen.GAME_SCREEN_LEFT_BOUNDARY) ? GameScreen.GAME_SCREEN_LEFT_BOUNDARY : newX;
-		newX = (newX > GameScreen.GAME_SCREEN_RIGHT_BOUNDARY) ? GameScreen.GAME_SCREEN_RIGHT_BOUNDARY : newX;
+		newX = (newX > GameScreen.GAME_SCREEN_RIGHT_BOUNDARY-objectSize.getWidth()) ? (int) (GameScreen.GAME_SCREEN_RIGHT_BOUNDARY-objectSize.getWidth()) : newX;
 		newY = (newY < GameScreen.GAME_SCREEN_TOP_BOUNDARY) ? GameScreen.GAME_SCREEN_TOP_BOUNDARY : newY;
 		newY = (newY > GameScreen.GAME_SCREEN_BOTTOM_BOUNDARY) ? GameScreen.GAME_SCREEN_BOTTOM_BOUNDARY : newY;
 

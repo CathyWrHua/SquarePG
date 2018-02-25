@@ -1,13 +1,9 @@
 package screens;
 
-import com.sun.istack.internal.NotNull;
 import gameLogic.GameMap;
-import gameLogic.GameMapPresets;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 public class MapSelectScreen extends Screen{
@@ -51,7 +47,6 @@ public class MapSelectScreen extends Screen{
 	}
 
 	private void setMap(int map) {
-		System.out.println(map);
 		if (map <= unlockedMap) {
 			this.map = map;
 		}
