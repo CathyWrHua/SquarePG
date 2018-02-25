@@ -9,15 +9,13 @@ import java.util.NoSuchElementException;
 
 public class SeedlingAbility extends Ability {
 
-	static final String ABILITY_NAME = "fireball";
+	static final String ABILITY_NAME = "seedling";
 	private Entity target;
 
 	public SeedlingAbility(Entity entity) {
 		super(entity, 5, Entity.EntityAbility.SECOND);
 
-		//TODO:create initializationAnimation
-		//initializeAnimation = new Animation();
-		initializeAnimation = new Animation(entity.getPosX(), entity.getPosY(), 75, 0, FILEPATH_ABILITY+ABILITY_NAME, 3, 1);
+		initializeAnimation = new Animation(entity.getPosX(), entity.getPosY(), 75, 0, FILEPATH_ABILITY+ABILITY_NAME, 2, 1);
 		setHasEffects(true);
 	}
 

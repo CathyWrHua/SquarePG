@@ -201,7 +201,7 @@ public class GameEngine {
 		layerRenderMap.get(MapLayer.DAMAGE_LAYER.getValue()).add(marker);
 	}
 
-	//Debug mode onle for healing
+	//Debug mode only for healing
 	public void playerDidHeal(int heal) {
 		player.heal(heal);
 	}

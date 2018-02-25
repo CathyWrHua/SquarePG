@@ -31,7 +31,7 @@ public abstract class Ability implements Drawable {
 	protected LinkedList<Effect> effects = null;
 
 	public Ability(Entity entity, double cooldownInSeconds, Entity.EntityAbility entityAbility) {
-		this.cooldownCounter = 0;
+		clearCooldown();
 		this.entity = entity;
 		this.cooldownTotal = (int)Math.round(cooldownInSeconds * SquarePG.FPS);
 		this.entityAbility = entityAbility;
@@ -161,6 +161,10 @@ public abstract class Ability implements Drawable {
 
 	public void resetCooldown() {
 		cooldownCounter = cooldownTotal;
+	}
+
+	public void clearCooldown() {
+		cooldownCounter = 0;
 	}
 
 	public void decrementCooldownCounter() {
