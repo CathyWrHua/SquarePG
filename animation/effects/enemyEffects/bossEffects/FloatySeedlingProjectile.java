@@ -38,7 +38,7 @@ public class FloatySeedlingProjectile extends Projectile {
 		//TODO: create channelAnimation that channels for long enough to be fair
 		//channelAnimation = new Animation();
 		channelAnimation = new Animation(entity.getPosX(),
-				entity.getPosY(), SPAWN_OFFSET_X, SPAWN_OFFSET_Y, FILEPATH_EFFECTS + "seedlingCharge", 2, 5);
+				entity.getPosY(), SPAWN_OFFSET_X, SPAWN_OFFSET_Y, FILEPATH_EFFECTS + "seedlingCharge", 2, 4);
 	}
 
 	@Override
