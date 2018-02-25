@@ -429,7 +429,7 @@ public abstract class Entity implements Drawable {
 			Ability ability = abilities.get(i);
 			if (ability != null) {
 				ability.reset();
-				ability.resetCooldown();
+				ability.clearCooldown();
 			}
 		}
 		currentAbility = null;

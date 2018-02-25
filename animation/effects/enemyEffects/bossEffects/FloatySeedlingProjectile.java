@@ -14,12 +14,14 @@ import java.awt.*;
 public class FloatySeedlingProjectile extends Projectile {
 
 	private final int DAMAGE_MULTIPLIER = 2;
-	private final int BLAST_RADIUS = 100;
-	private final int ATTACK_RANGE = 70;
+	private final int BLAST_RADIUS = 75;
+	private final int ATTACK_RANGE = 50;
 	private Animation channelAnimation;
 
-	private static int OFFSET_X = 75;
-	private static int OFFSET_Y = 15;
+	private static int SPAWN_OFFSET_X = 75;
+	private static int SPAWN_OFFSET_Y = 15;
+	private static int EXPLOSION_OFFSET_X = 37;
+	private static int EXPLOSION_OFFSET_Y = -23;
 
 	private double velocity = 2;
 	private int confusedCounter = 0;
@@ -28,15 +30,15 @@ public class FloatySeedlingProjectile extends Projectile {
 		super(entity,
 				mapCollision,
 				new Animation(entity.getPosX(),
-						entity.getPosY(), OFFSET_X, OFFSET_Y, FILEPATH_EFFECTS + "fireball", 3, 1000),
-				new Animation(0, 0, 0, 0,FILEPATH_EFFECTS + "fireballExplosion", 4, 1),
+						entity.getPosY(), SPAWN_OFFSET_X, SPAWN_OFFSET_Y, FILEPATH_EFFECTS + "seedling", 2, 1000),
+				new Animation(0, 0, EXPLOSION_OFFSET_X, EXPLOSION_OFFSET_Y,FILEPATH_EFFECTS + "seedlingExplosion", 5, 1),
 				0,
 				0);
 
 		//TODO: create channelAnimation that channels for long enough to be fair
 		//channelAnimation = new Animation();
 		channelAnimation = new Animation(entity.getPosX(),
-				entity.getPosY(), OFFSET_X, OFFSET_Y, FILEPATH_EFFECTS + "fireball", 3, 5);
+				entity.getPosY(), SPAWN_OFFSET_X, SPAWN_OFFSET_Y, FILEPATH_EFFECTS + "seedlingCharge", 2, 4);
 	}
 
 	@Override
@@ -66,7 +68,7 @@ public class FloatySeedlingProjectile extends Projectile {
 	private void findNewPosition() {
 		Entity targetEntity = targets.getFirst();
 
-		Point selfCenter = new Point(posX + regularAnimation.getSize().width / 2, posY + regularAnimation.getSize().height / 2);
+		Point selfCenter = new Point((posX + SPAWN_OFFSET_X) + regularAnimation.getSize().width / 2, (posY + SPAWN_OFFSET_Y) + regularAnimation.getSize().height / 2);
 
 		Point targetCenter = (targetEntity.isInvisible())? selfCenter : new Point(targetEntity.getPosX() + targetEntity.getEntitySize().width / 2, targetEntity.getPosY() + targetEntity.getEntitySize().height / 2);
 		Point motionVector = new Point(targetCenter.x - selfCenter.x, targetCenter.y - selfCenter.y);
@@ -101,7 +103,7 @@ public class FloatySeedlingProjectile extends Projectile {
 		Entity targetEntity = targets.getFirst();
 		boolean shouldExplode = false;
 		if (!targetEntity.isInvisible()) {
-			Point selfCenter = new Point(posX + regularAnimation.getSize().width / 2, posY + regularAnimation.getSize().height / 2);
+			Point selfCenter = new Point((posX + SPAWN_OFFSET_X) + regularAnimation.getSize().width / 2, (posY + SPAWN_OFFSET_Y) + regularAnimation.getSize().height / 2);
 			Point targetCenter = new Point(targetEntity.getPosX() + targetEntity.getEntitySize().width / 2, targetEntity.getPosY() + targetEntity.getEntitySize().height / 2);
 			Point motionVector = new Point(targetCenter.x - selfCenter.x, targetCenter.y - selfCenter.y);
 

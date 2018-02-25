@@ -6,7 +6,9 @@ import animation.abilities.enemyAbilities.bossAbilities.SeedlingAbility;
 import characterEntities.Hero;
 import characterEntities.characterEffects.CharacterEffect;
 import gameLogic.MapCollisionDetection;
+import screens.GameScreen;
 
+import java.awt.*;
 import java.util.Iterator;
 
 public class TreeDudeBoss extends Enemy {
@@ -70,11 +72,41 @@ public class TreeDudeBoss extends Enemy {
 				iterator.remove();
 			}
 		}
+
+		if (currentAbility == null) {
+			resetImmuneTo();
+		}
+
+		if (entityState == EntityState.DEAD && deletionCounter-- <= 0) {
+			done = true;
+		} else if (entityState == EntityState.NEUTRAL || entityState == EntityState.ATTACKING) {
+			calculateNextMove();
+
+			if (entityState == EntityState.ATTACKING && currentAbility.getState() != Ability.AbilityState.IS_DONE) {
+				calculateTargetsDamage(currentAbility);
+			}
+		}
+
+		randomTargetCounter -= (randomTargetCounter > 0)? 1:0;
 	}
 
 	@Override
 	protected void calculateNextMove() {
-		//TODO: no motion logic, only attack logic
+		if (targetEntity == null) return;
+
+		Point selfCenter = new Point(posX + getEntitySize().width / 2, posY + getEntitySize().height / 2);
+
+		Point targetCenter = (targetEntity.isInvisible())? randomTargetPoint : new Point(targetEntity.getPosX() + targetEntity.getEntitySize().width / 2, targetEntity.getPosY() + targetEntity.getEntitySize().height / 2);
+		Point motionVector = new Point(targetCenter.x - selfCenter.x, targetCenter.y - selfCenter.y);
+
+		if (targetEntity.getEntityState() != EntityState.DEAD) {
+			attack(EntityAbility.SECOND);
+		}
+
+		if (targetEntity.isInvisible() && randomTargetCounter == 0) {
+			randomTargetPoint = new Point(random.nextInt(GameScreen.GAME_SCREEN_WIDTH), random.nextInt(GameScreen.GAME_SCREEN_HEIGHT));
+			randomTargetCounter = RANDOM_POINT_LIFETIME;
+		}
 	}
 
 	@Override
