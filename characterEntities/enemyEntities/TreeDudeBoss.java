@@ -24,7 +24,7 @@ public class TreeDudeBoss extends Enemy {
 		updateStun();
 		updateAbilities();
 		updateEffects();
-		updateAttack();
+		updateAttackAndMovement();
 		if (currentAbility == null) {
 			resetImmuneTo();
 		}

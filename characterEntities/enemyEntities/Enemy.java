@@ -127,7 +127,7 @@ public abstract class Enemy extends Entity {
 		targetEntity.setImmuneTo(this, false);
 	}
 
-	protected void updateAttack() {
+	protected void updateAttackAndMovement() {
 		if (entityState == EntityState.DEAD && deletionCounter-- <= 0) {
 			done = true;
 		} else if (entityState == EntityState.NEUTRAL || entityState == EntityState.ATTACKING) {
@@ -140,7 +140,7 @@ public abstract class Enemy extends Entity {
 
 	}
 
-	protected void updateMovement() {
+	protected void updateCollision() {
 		entityHitDetectionList.clear();
 		for (Entity entity : targetEntity.getTargets()) {
 			if (entity != this) {
@@ -157,8 +157,8 @@ public abstract class Enemy extends Entity {
 
 	public void update() {
 		super.update();
-		updateAttack();
-		updateMovement();
+		updateAttackAndMovement();
+		updateCollision();
 		if (currentAbility == null) {
 			resetImmuneTo();
 		}
