@@ -19,10 +19,10 @@ public abstract class Enemy extends Entity {
 	protected Entity targetEntity;
 	private LinkedList<Entity> comrades;
 
-	//for when the enemy AI is targetting random target
-	private Point randomTargetPoint;
-	private final int RANDOM_POINT_LIFETIME = 60; //updates target every 60 updates
-	private int randomTargetCounter = 0;
+	//for when the enemy AI is targeting random target
+	protected Point randomTargetPoint;
+	protected final int RANDOM_POINT_LIFETIME = 60; //updates target every 60 updates
+	protected int randomTargetCounter = 0;
 
 	private static final int DELETION_TIME = 40;
 
