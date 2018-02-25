@@ -64,7 +64,8 @@ public abstract class Entity implements Drawable {
 	protected static final int KNOCK_BACK_DUR = 2;
 
 	public static final int DEFAULT_ENTITY_LENGTH = 75;
-	
+
+	/**--CONSTRUCTOR--**/
 	public Entity(MapCollisionDetection mapCollisionDetection, int maxHealth, int maxDamage, int minDamage, int posX, int posY, double velocity) {
 		this.mapCollisionDetection = mapCollisionDetection;
 		this.currentHealth = this.maxHealth = maxHealth;
@@ -96,6 +97,7 @@ public abstract class Entity implements Drawable {
 		characterEffects = new LinkedList<>();
 	}
 
+	/**--UPDATE HELPER FUNCTIONS--**/
 	protected void updateDamageTaken() {
 		//Entity takes damage logic
 		if (damageTaken > 0) {
@@ -172,46 +174,7 @@ public abstract class Entity implements Drawable {
 		}
 	}
 
-	public void update() {
-		newPosX = posX;
-		newPosY = posY;
-
-		updateDamageTaken();
-		updateStunAndKnockBack();
-		updateAbilities();
-		updateEffects();
-	}
-
-	public void draw(Graphics g) {
-		Graphics2D g2d = (Graphics2D)g;
-		Image image = imageIcon.getImage();
-		int x = posX;
-		int width = image.getWidth(null);
-
-		healthBar.draw(g);
-
-		if (!facingEast) {
-			x += width;
-			width = -width;
-		}
-
-		if (isTransparent) {
-			AlphaComposite alcom = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f);
-			g2d.setComposite(alcom);
-		}
-
-		g2d.drawImage(image, x, posY, width, image.getHeight(null), null);
-
-		for (CharacterEffect characterEffect : characterEffects) {
-			characterEffect.draw(g);
-		}
-
-		if (isTransparent) {
-			AlphaComposite resetAlcom = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f);
-			g2d.setComposite(resetAlcom);
-		}
-	}
-
+	/**--ENTITY ACTIONS--**/
 	public void attack(EntityAbility ability) {
 		Ability attemptedAbility = abilities.get(ability.getValue());
 		if (attemptedAbility == null) return;
@@ -266,6 +229,22 @@ public abstract class Entity implements Drawable {
 		}
 	}
 
+	public void resetEntity() {
+		for (int i = 0; i < abilities.size(); i++) {
+			Ability ability = abilities.get(i);
+			if (ability != null) {
+				ability.reset();
+				ability.clearCooldown();
+			}
+		}
+		currentAbility = null;
+		setEntityState(EntityState.NEUTRAL);
+
+		currentHealth = maxHealth;
+		immuneTo.clear();
+	}
+
+	/**--ACCESSORS AND MUTATORS--**/
 	public boolean getImmuneTo(Entity entity) {
 		return (immuneTo != null)? immuneTo.get(entity): false;
 	}
@@ -291,8 +270,6 @@ public abstract class Entity implements Drawable {
 	public ArrayList<Ability> getAbilities() {
 		return abilities;
 	}
-
-	public abstract LinkedList<Entity> getTargets();
 
 	public int getDamage() {
 		return (minDamage+random.nextInt(maxDamage-minDamage));
@@ -341,8 +318,6 @@ public abstract class Entity implements Drawable {
 		abilities.add(index, ability);
 	}
 
-	public abstract Rectangle getEntitySize();
-
 	public MapCollisionDetection getMapCollisionDetection() {
 		return mapCollisionDetection;
 	}
@@ -385,8 +360,6 @@ public abstract class Entity implements Drawable {
 			facingEast = false;
 		}
 	}
-
-	public abstract void resetImmuneTo();
 
 	public animation.abilities.Ability getCurrentAbility() {
 		return currentAbility;
@@ -446,21 +419,6 @@ public abstract class Entity implements Drawable {
 		characterEffects.clear();
 	}
 
-	public void resetEntity() {
-		for (int i = 0; i < abilities.size(); i++) {
-			Ability ability = abilities.get(i);
-			if (ability != null) {
-				ability.reset();
-				ability.clearCooldown();
-			}
-		}
-		currentAbility = null;
-		setEntityState(EntityState.NEUTRAL);
-
-		currentHealth = maxHealth;
-		immuneTo.clear();
-	}
-
 	public void setTransparent(boolean transparent) {
 		this.isTransparent = transparent;
 	}
@@ -477,5 +435,50 @@ public abstract class Entity implements Drawable {
 		this.velocity = velocity;
 	}
 
+	/**--UPDATE AND DRAW--**/
+	public void update() {
+		newPosX = posX;
+		newPosY = posY;
+
+		updateDamageTaken();
+		updateStunAndKnockBack();
+		updateAbilities();
+		updateEffects();
+	}
+
+	public void draw(Graphics g) {
+		Graphics2D g2d = (Graphics2D)g;
+		Image image = imageIcon.getImage();
+		int x = posX;
+		int width = image.getWidth(null);
+
+		healthBar.draw(g);
+
+		if (!facingEast) {
+			x += width;
+			width = -width;
+		}
+
+		if (isTransparent) {
+			AlphaComposite alcom = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f);
+			g2d.setComposite(alcom);
+		}
+
+		g2d.drawImage(image, x, posY, width, image.getHeight(null), null);
+
+		for (CharacterEffect characterEffect : characterEffects) {
+			characterEffect.draw(g);
+		}
+
+		if (isTransparent) {
+			AlphaComposite resetAlcom = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f);
+			g2d.setComposite(resetAlcom);
+		}
+	}
+
+	/**--ABSTRACT METHODS--**/
 	public abstract void calculateTargetsDamage(Ability ability);
+	public abstract LinkedList<Entity> getTargets();
+	public abstract void resetImmuneTo();
+	public abstract Rectangle getEntitySize();
 }

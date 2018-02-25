@@ -37,45 +37,6 @@ public abstract class Enemy extends Entity {
 		randomTargetPoint = new Point(random.nextInt(GameScreen.GAME_SCREEN_WIDTH), random.nextInt(GameScreen.GAME_SCREEN_HEIGHT));
 	}
 
-	public boolean isDone() {
-		return done;
-	}
-
-	@Override
-	public LinkedList<Entity> getTargets() {
-		return (new LinkedList<>(Collections.singletonList(targetEntity)));
-	}
-
-	@Override
-	public Rectangle getEntitySize() {
-		return new Rectangle(posX, posY, getImageIcon().getIconWidth(), getImageIcon().getIconHeight());
-	}
-
-	@Override
-	public void setEntityState(EntityState entityState) {
-		super.setEntityState(entityState);
-		String filepath = "src/assets/enemies/";
-		filepath += getShapePath();
-		switch (entityState) {
-			case NEUTRAL:
-				filepath += "Neutral";
-				break;
-			case ATTACKING:
-				filepath += "Attacking";
-				break;
-			case DAMAGED:
-				filepath += "Damaged";
-				break;
-			case DEAD:
-				filepath += "Dead";
-				break;
-			default:
-				break;
-		}
-		filepath += ".png";
-		this.setImageIcon(filepath);
-	}
-
 	//Simple motion detection (pythagorean locating)
 	//Default attack pattern, override in child classes for custom moves
 	protected void calculateNextMove() {
@@ -115,6 +76,57 @@ public abstract class Enemy extends Entity {
 		}
 	}
 
+	@Override
+	public LinkedList<Entity> getTargets() {
+		return (new LinkedList<>(Collections.singletonList(targetEntity)));
+	}
+
+	@Override
+	public Rectangle getEntitySize() {
+		return new Rectangle(posX, posY, getImageIcon().getIconWidth(), getImageIcon().getIconHeight());
+	}
+
+	@Override
+	public void setEntityState(EntityState entityState) {
+		super.setEntityState(entityState);
+		String filepath = "src/assets/enemies/";
+		filepath += getShapePath();
+		switch (entityState) {
+			case NEUTRAL:
+				filepath += "Neutral";
+				break;
+			case ATTACKING:
+				filepath += "Attacking";
+				break;
+			case DAMAGED:
+				filepath += "Damaged";
+				break;
+			case DEAD:
+				filepath += "Dead";
+				break;
+			default:
+				break;
+		}
+		filepath += ".png";
+		this.setImageIcon(filepath);
+	}
+
+	@Override
+	public void calculateTargetsDamage(Ability ability) {
+		DamageMarker marker;
+		if (!targetEntity.getImmuneTo(this) && ability.didHitTarget(targetEntity) && targetEntity.getEntityState() != EntityState.DEAD) {
+			marker = targetEntity.inflict(getDamage(), this);
+			if (marker != null) {
+				targetMarkers.add(marker);
+			}
+		}
+	}
+
+	@Override
+	public void resetImmuneTo() {
+		targetEntity.setImmuneTo(this, false);
+	}
+
 	protected void updateAttack() {
 		if (entityState == EntityState.DEAD && deletionCounter-- <= 0) {
 			done = true;
@@ -139,6 +151,10 @@ public abstract class Enemy extends Entity {
 		setPoint(mapCollisionDetection.determineMotion(newPosX, newPosY, getEntitySize(), entityHitDetectionList));
 	}
 
+	public boolean isDone() {
+		return done;
+	}
+
 	public void update() {
 		super.update();
 		updateAttack();
@@ -147,22 +163,6 @@ public abstract class Enemy extends Entity {
 			resetImmuneTo();
 		}
 		randomTargetCounter -= (randomTargetCounter > 0)? 1:0;
-	}
-
-	@Override
-	public void calculateTargetsDamage(Ability ability) {
-		DamageMarker marker;
-		if (!targetEntity.getImmuneTo(this) && ability.didHitTarget(targetEntity) && targetEntity.getEntityState() != EntityState.DEAD) {
-			marker = targetEntity.inflict(getDamage(), this);
-			if (marker != null) {
-				targetMarkers.add(marker);
-			}
-		}
-	}
-
-	@Override
-	public void resetImmuneTo() {
-		targetEntity.setImmuneTo(this, false);
 	}
 
 	public abstract String getShapePath();
