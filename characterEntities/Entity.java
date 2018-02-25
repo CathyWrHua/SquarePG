@@ -97,10 +97,7 @@ public abstract class Entity implements Drawable {
 		characterEffects = new LinkedList<>();
 	}
 
-	public void update() {
-		newPosX = posX;
-		newPosY = posY;
-
+	protected void updateDamageTaken() {
 		//Entity takes damage logic
 		if (damageTaken > 0) {
 			currentHealth -= damageTaken;
@@ -117,7 +114,9 @@ public abstract class Entity implements Drawable {
 			stunCounter = 0;
 			damageTaken = 0;
 		}
+	}
 
+	protected void updateStunAndKnockBack() {
 		//Entity stagger + knockback
 		if ((entityState == EntityState.DAMAGED || entityState == EntityState.DEAD) && stunCounter < STUN_TIME) {
 			if (stunCounter < KNOCK_BACK_TIME) {
@@ -132,7 +131,19 @@ public abstract class Entity implements Drawable {
 			setEntityState(EntityState.NEUTRAL);
 			stunCounter = 0;
 		}
+	}
 
+	protected void updateStun() {
+		//Entity stun
+		if ((entityState == EntityState.DAMAGED || entityState == EntityState.DEAD) && stunCounter < STUN_TIME) {
+			stunCounter++;
+		} else if (stunCounter >= STUN_TIME && entityState == EntityState.DAMAGED) {
+			setEntityState(EntityState.NEUTRAL);
+			stunCounter = 0;
+		}
+	}
+
+	protected void updateAbilities() {
 		if (currentAbility != null) {
 			currentAbility.update();
 			if (currentAbility.hasEffects()) {
@@ -149,7 +160,9 @@ public abstract class Entity implements Drawable {
 		for (animation.abilities.Ability ability : abilities) {
 			if (ability != null) ability.decrementCooldownCounter();
 		}
+	}
 
+	protected void updateEffects() {
 		for (Iterator<CharacterEffect> iterator = characterEffects.iterator(); iterator.hasNext();) {
 			CharacterEffect effect = iterator.next();
 			effect.update();
@@ -158,6 +171,16 @@ public abstract class Entity implements Drawable {
 				iterator.remove();
 			}
 		}
+	}
+
+	public void update() {
+		newPosX = posX;
+		newPosY = posY;
+
+		updateDamageTaken();
+		updateStunAndKnockBack();
+		updateAbilities();
+		updateEffects();
 	}
 
 	public void draw(Graphics g) {

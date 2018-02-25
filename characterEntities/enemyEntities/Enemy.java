@@ -17,7 +17,7 @@ public abstract class Enemy extends Entity {
 	protected int deletionCounter = DELETION_TIME;
 	protected boolean done;
 	protected Entity targetEntity;
-	private LinkedList<Entity> comrades;
+	private LinkedList<Entity> entityHitDetectionList;
 
 	//for when the enemy AI is targeting random target
 	protected Point randomTargetPoint;
@@ -29,9 +29,7 @@ public abstract class Enemy extends Entity {
 	Enemy(Entity targetEntity, MapCollisionDetection mapCollisionDetection, int maxHealth, int maxDamage, int minDamage, int posX, int posY, double velocity) {
 		super(mapCollisionDetection, maxHealth, maxDamage, minDamage, posX, posY, velocity);
 		this.targetEntity = targetEntity;
-
-		//Assume binary logic: Target's enemies are my friends
-		comrades = targetEntity.getTargets();
+		this.entityHitDetectionList = new LinkedList<>();
 
 		immuneTo.put(targetEntity, false);
 
@@ -118,13 +116,7 @@ public abstract class Enemy extends Entity {
 		}
 	}
 
-	public void update() {
-		super.update();
-
-		if (currentAbility == null) {
-			resetImmuneTo();
-		}
-
+	protected void updateAttack() {
 		if (entityState == EntityState.DEAD && deletionCounter-- <= 0) {
 			done = true;
 		} else if (entityState == EntityState.NEUTRAL || entityState == EntityState.ATTACKING) {
@@ -135,16 +127,31 @@ public abstract class Enemy extends Entity {
 			}
 		}
 
-		LinkedList<Entity> entityList = new LinkedList<>();
-		for (Entity entity:comrades) {
+	}
+
+	protected void updateMovement() {
+		entityHitDetectionList.clear();
+		for (Entity entity : targetEntity.getTargets()) {
 			if (entity != this) {
-				entityList.add(entity);
+				entityHitDetectionList.add(entity);
 			}
 		}
-		entityList.add(targetEntity);
-		setPoint(mapCollisionDetection.determineMotion(newPosX, newPosY, getEntitySize(), entityList));
+		entityHitDetectionList.add(targetEntity);
+		setPoint(mapCollisionDetection.determineMotion(newPosX, newPosY, getEntitySize(), entityHitDetectionList));
+	}
 
+	protected void updateEnemyMisc() {
+		if (currentAbility == null) {
+			resetImmuneTo();
+		}
 		randomTargetCounter -= (randomTargetCounter > 0)? 1:0;
+	}
+
+	public void update() {
+		super.update();
+		updateAttack();
+		updateMovement();
+		updateEnemyMisc();
 	}
 
 	@Override

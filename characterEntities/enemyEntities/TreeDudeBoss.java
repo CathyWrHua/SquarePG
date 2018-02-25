@@ -23,71 +23,12 @@ public class TreeDudeBoss extends Enemy {
 
 	@Override
 	public void update() {
-		//Entity takes damage logic
-		if (damageTaken > 0) {
-			currentHealth -= damageTaken;
-			currentHealth = (currentHealth < 0) ? 0 : currentHealth;
-			if (currentAbility != null) {
-				currentAbility.setState(Ability.AbilityState.IS_DONE);
-				currentAbility = null;
-			}
-			if (currentHealth > 0) {
-				setEntityState(EntityState.DAMAGED);
-			} else {
-				setEntityState(EntityState.DEAD);
-			}
-			stunCounter = 0;
-			damageTaken = 0;
-		}
-
-		//Entity stun
-		if ((entityState == EntityState.DAMAGED || entityState == EntityState.DEAD) && stunCounter < STUN_TIME) {
-			stunCounter++;
-		} else if (stunCounter >= STUN_TIME && entityState == EntityState.DAMAGED) {
-			setEntityState(EntityState.NEUTRAL);
-			stunCounter = 0;
-		}
-
-		if (currentAbility != null) {
-			currentAbility.update();
-			if (currentAbility.hasEffects()) {
-				effects.addAll(currentAbility.getEffects());
-				currentAbility.clearEffects();
-			}
-			if (currentAbility.getState() == Ability.AbilityState.IS_DONE) {
-				setEntityState(EntityState.NEUTRAL);
-				currentAbility.reset();
-				currentAbility = null;
-			}
-		}
-		for (animation.abilities.Ability ability : abilities) {
-			if (ability != null) ability.decrementCooldownCounter();
-		}
-
-		for (Iterator<CharacterEffect> iterator = characterEffects.iterator(); iterator.hasNext();) {
-			CharacterEffect effect = iterator.next();
-			effect.update();
-			if (effect.effectHasExpired()) {
-				effect.removeEffect();
-				iterator.remove();
-			}
-		}
-
-		if (currentAbility == null) {
-			resetImmuneTo();
-		}
-
-		if (entityState == EntityState.DEAD && deletionCounter-- <= 0) {
-			done = true;
-		} else if (entityState == EntityState.NEUTRAL || entityState == EntityState.ATTACKING) {
-			calculateNextMove();
-
-			if (entityState == EntityState.ATTACKING && currentAbility.getState() != Ability.AbilityState.IS_DONE) {
-				calculateTargetsDamage(currentAbility);
-			}
-		}
-
-		randomTargetCounter -= (randomTargetCounter > 0)? 1:0;
+		updateDamageTaken();
+		updateStun();
+		updateAbilities();
+		updateEffects();
+		updateAttack();
+		updateEnemyMisc();
 	}
 
 	@Override
