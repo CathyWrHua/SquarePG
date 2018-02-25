@@ -14,6 +14,7 @@ import gameLogic.GameMode;
 import javafx.util.Pair;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 
 public class GameScreen extends Screen implements KeyListener, MouseListener {
 	public enum GameState {
@@ -27,6 +28,7 @@ public class GameScreen extends Screen implements KeyListener, MouseListener {
 	private GameEngine gameEngine;
 	private CharacterProfile profilePage;
 	private MapSelectScreen mapSelectScreen;
+	private JPanel deathPanel;
 	private ImageIcon helpPage;
 	private HashSet<Integer> motionKeys;
 	private Queue<Entity.EntityAbility> attackKeys;
@@ -36,6 +38,7 @@ public class GameScreen extends Screen implements KeyListener, MouseListener {
 
 	public static final int GAME_SCREEN_WIDTH = 1000;
 	public static final int GAME_SCREEN_HEIGHT = 925;
+	public static final int GAME_MAP_HEIGHT = 800;
 
 	public static final int GAME_SCREEN_LEFT_BOUNDARY = 25;
 	public static final int GAME_SCREEN_RIGHT_BOUNDARY = 975;
@@ -66,6 +69,8 @@ public class GameScreen extends Screen implements KeyListener, MouseListener {
 		mapSelectScreen.init();
 		mapSelectScreen.setVisible(false);
 		add(mapSelectScreen);
+
+		createAddDeathPanel();
 	}
 
 	@Override
@@ -80,6 +85,11 @@ public class GameScreen extends Screen implements KeyListener, MouseListener {
 				consumeToggleMap();
 				consumeAttack();
 				gameEngine.update();
+				if (gameEngine.getFailCurrentMap()) {
+					deathPanel.setVisible(true);
+					gameEngine.setFailCurrentMap(false);
+					gameState = GameState.GAME_STATE_PAUSED;
+				}
 
 				if (SquarePG.gameMode == GameMode.DEBUG && shouldKillAll) {
 					gameEngine.killAllEnemies();
@@ -118,6 +128,55 @@ public class GameScreen extends Screen implements KeyListener, MouseListener {
 			mapSelectScreen.setUnlockedMap(next.getValue());
 			mapSelectScreen.update();
 		}
+	}
+
+	private void createAddDeathPanel() {
+		deathPanel = new JPanel();
+		deathPanel.setPreferredSize(new Dimension(GAME_SCREEN_WIDTH, GAME_MAP_HEIGHT));
+		deathPanel.setBorder(BorderFactory.createEmptyBorder());
+		deathPanel.setBackground(new Color(0.0f, 0.0f, 0.0f, 0.4f));
+		deathPanel.setLocation(0, 0);
+
+		FlowLayout flow = new FlowLayout(FlowLayout.CENTER, 0, 0);
+		setLayout(flow);
+
+		JLabel failLabel = new JLabel("YOU DIED");
+		failLabel.setFont(new Font("Comic Sans MS", Font.BOLD, 50));
+		failLabel.setForeground(Color.white);
+		failLabel.setBackground(Color.blue);
+		failLabel.setHorizontalAlignment(SwingConstants.CENTER);
+
+		JButton tryAgain = new JButton("Try Again");
+		tryAgain.setFont(new Font("Comic Sans MS", Font.BOLD, 50));
+		tryAgain.addActionListener(l -> {
+			gameEngine.reset();
+			gameEngine.setMap(gameEngine.getCurrentLevel().getValue());
+			deathPanel.setVisible(false);
+			gameState = GameState.GAME_STATE_MAP;
+		});
+
+		JButton mainMap = new JButton("Return to Main Map");
+		mainMap.setFont(new Font("Comic Sans MS", Font.BOLD, 50));
+		mainMap.addActionListener(l -> {
+			deathPanel.setVisible(false);
+			gameState = GameState.GAME_STATE_MAP_SELECT;
+		});
+
+		deathPanel.setLayout(new GridBagLayout());
+		GridBagConstraints c = new GridBagConstraints();
+		c.insets = new Insets(0, 0, 10, 0);
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.gridx = 0;
+		c.gridy = 0;
+
+		deathPanel.add(failLabel, c);
+		c.gridy = 1;
+		deathPanel.add(tryAgain, c);
+		c.gridy = 2;
+		deathPanel.add(mainMap, c);
+
+		deathPanel.setVisible(false);
+		add(deathPanel);
 	}
 
 	@Override

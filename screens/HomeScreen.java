@@ -42,7 +42,6 @@ public class HomeScreen extends Screen implements ActionListener{
 		add(about, c);
 		c.gridy = 3;
 		add(debug, c);
-
 	}
 
 	@Override
