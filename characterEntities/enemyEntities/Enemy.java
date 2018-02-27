@@ -7,7 +7,6 @@ import gui.DamageMarker;
 import screens.GameScreen;
 
 import java.util.Collections;
-import java.util.HashMap;
 
 import java.awt.*;
 import java.util.LinkedList;
@@ -17,7 +16,7 @@ public abstract class Enemy extends Entity {
 	protected int deletionCounter = DELETION_TIME;
 	protected boolean done;
 	protected Entity targetEntity;
-	private LinkedList<Entity> comrades;
+	private LinkedList<Entity> entityHitDetectionList;
 
 	//for when the enemy AI is targeting random target
 	protected Point randomTargetPoint;
@@ -29,54 +28,13 @@ public abstract class Enemy extends Entity {
 	Enemy(Entity targetEntity, MapCollisionDetection mapCollisionDetection, int maxHealth, int maxDamage, int minDamage, int posX, int posY, double velocity) {
 		super(mapCollisionDetection, maxHealth, maxDamage, minDamage, posX, posY, velocity);
 		this.targetEntity = targetEntity;
-
-		//Assume binary logic: Target's enemies are my friends
-		comrades = targetEntity.getTargets();
+		this.entityHitDetectionList = new LinkedList<>();
 
 		immuneTo.put(targetEntity, false);
 
 		done = false;
 		entityType = EntityType.ENEMY;
 		randomTargetPoint = new Point(random.nextInt(GameScreen.GAME_SCREEN_WIDTH), random.nextInt(GameScreen.GAME_SCREEN_HEIGHT));
-	}
-
-	public boolean isDone() {
-		return done;
-	}
-
-	@Override
-	public LinkedList<Entity> getTargets() {
-		return (new LinkedList<>(Collections.singletonList(targetEntity)));
-	}
-
-	@Override
-	public Rectangle getEntitySize() {
-		return new Rectangle(posX, posY, getImageIcon().getIconWidth(), getImageIcon().getIconHeight());
-	}
-
-	@Override
-	public void setEntityState(EntityState entityState) {
-		super.setEntityState(entityState);
-		String filepath = "src/assets/enemies/";
-		filepath += getShapePath();
-		switch (entityState) {
-			case NEUTRAL:
-				filepath += "Neutral";
-				break;
-			case ATTACKING:
-				filepath += "Attacking";
-				break;
-			case DAMAGED:
-				filepath += "Damaged";
-				break;
-			case DEAD:
-				filepath += "Dead";
-				break;
-			default:
-				break;
-		}
-		filepath += ".png";
-		this.setImageIcon(filepath);
 	}
 
 	//Simple motion detection (pythagorean locating)
@@ -118,33 +76,39 @@ public abstract class Enemy extends Entity {
 		}
 	}
 
-	public void update() {
-		super.update();
+	@Override
+	public LinkedList<Entity> getTargets() {
+		return (new LinkedList<>(Collections.singletonList(targetEntity)));
+	}
 
-		if (currentAbility == null) {
-			resetImmuneTo();
+	@Override
+	public Rectangle getEntitySize() {
+		return new Rectangle(posX, posY, getImageIcon().getIconWidth(), getImageIcon().getIconHeight());
+	}
+
+	@Override
+	public void setEntityState(EntityState entityState) {
+		super.setEntityState(entityState);
+		String filepath = "src/assets/enemies/";
+		filepath += getShapePath();
+		switch (entityState) {
+			case NEUTRAL:
+				filepath += "Neutral";
+				break;
+			case ATTACKING:
+				filepath += "Attacking";
+				break;
+			case DAMAGED:
+				filepath += "Damaged";
+				break;
+			case DEAD:
+				filepath += "Dead";
+				break;
+			default:
+				break;
 		}
-
-		if (entityState == EntityState.DEAD && deletionCounter-- <= 0) {
-			done = true;
-		} else if (entityState == EntityState.NEUTRAL || entityState == EntityState.ATTACKING) {
-			calculateNextMove();
-
-			if (entityState == EntityState.ATTACKING && currentAbility.getState() != Ability.AbilityState.IS_DONE) {
-				calculateTargetsDamage(currentAbility);
-			}
-		}
-
-		LinkedList<Entity> entityList = new LinkedList<>();
-		for (Entity entity:comrades) {
-			if (entity != this) {
-				entityList.add(entity);
-			}
-		}
-		entityList.add(targetEntity);
-		setPoint(mapCollisionDetection.determineMotion(newPosX, newPosY, getEntitySize(), entityList));
-
-		randomTargetCounter -= (randomTargetCounter > 0)? 1:0;
+		filepath += ".png";
+		this.setImageIcon(filepath);
 	}
 
 	@Override
@@ -161,6 +125,44 @@ public abstract class Enemy extends Entity {
 	@Override
 	public void resetImmuneTo() {
 		targetEntity.setImmuneTo(this, false);
+	}
+
+	protected void updateAttackAndMovement() {
+		if (entityState == EntityState.DEAD && deletionCounter-- <= 0) {
+			done = true;
+		} else if (entityState == EntityState.NEUTRAL || entityState == EntityState.ATTACKING) {
+			calculateNextMove();
+
+			if (entityState == EntityState.ATTACKING && currentAbility.getState() != Ability.AbilityState.IS_DONE) {
+				calculateTargetsDamage(currentAbility);
+			}
+		}
+
+	}
+
+	protected void updateCollision() {
+		entityHitDetectionList.clear();
+		for (Entity entity : targetEntity.getTargets()) {
+			if (entity != this) {
+				entityHitDetectionList.add(entity);
+			}
+		}
+		entityHitDetectionList.add(targetEntity);
+		setPoint(mapCollisionDetection.determineMotion(newPosX, newPosY, getEntitySize(), entityHitDetectionList));
+	}
+
+	public boolean isDone() {
+		return done;
+	}
+
+	public void update() {
+		super.update();
+		updateAttackAndMovement();
+		updateCollision();
+		if (currentAbility == null) {
+			resetImmuneTo();
+		}
+		randomTargetCounter -= (randomTargetCounter > 0)? 1:0;
 	}
 
 	public abstract String getShapePath();
